@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo tocioRegles::widget(['regle' => 'grandeurDefinition']); ?>
     <?php echo messageAlerte::widget(['type' => "todo", "message" => "Transformer le séparateur en virgule."]); ?>
     <?php echo messageAlerte::widget(['type' => "todo", "message" => "Faire une auto-completion sur le libellé de la grandeur."]);?>
+    <?php echo messageAlerte::widget(['type' => "todo", "message" => "Afficher un message si la Grandeur sasie existe ET qu'elle a un type différent."]);?>
 
     <?= $this->render('_form', [
         'model' => $model,
