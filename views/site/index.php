@@ -12,7 +12,6 @@ $grandeurs 	= Grandeur::findBySql("SELECT * FROM grandeur")->all();
 $capteurs 	= Capteur::findBySql("SELECT * FROM capteur")->all();
 $modules	= Module::findBySql("SELECT * FROM module")->all();
 $localisationModule	= Module::findBySql("SELECT * FROM localisationmodule")->all();
-$l_INT_Tables = Yii::$app->db->createCommand('SELECT COUNT(id) FROM tablemesure')->queryScalar();
 ?>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -87,16 +86,7 @@ $l_INT_Tables = Yii::$app->db->createCommand('SELECT COUNT(id) FROM tablemesure'
 					</div>
 				</div>
             </div>
-            <div class="col-lg-3">
-            	<div class="card text-white bg-info mb-3" style="max-width: 20rem;">
-	            	<div class="card-header">Nombre de table de mesure</div>
-						<div class="card-body">
-							<h1 class="card-text text-center"><?= $l_INT_Tables ;?></h1>
-			                <a class="card-link" href="/tablemesure/index">Voir les tables &raquo;</a>
-						</div>
-					</div>
-				</div>
-            </div>
+
             <div class="col-lg-3">
             	<div class="card text-white bg-info mb-3" style="max-width: 20rem;">
 	            	<div class="card-header">Nombre de mesures</div>
