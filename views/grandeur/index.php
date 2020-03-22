@@ -18,7 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 	<?= tocioRegles::widget(["regle" => "grandeurDefinition"])?>
-	<?php echo messageAlerte::widget(['type' => "todo", "message" => "Si on supprime une Grandeur, il faut supprimer la table MySQL (ou au moins demander si on le fait)"]);?>
 
     <p>
         <?= Html::a('Nouvelle Grandeur', ['create'], ['class' => 'btn btn-success']) ?>
@@ -46,3 +45,5 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
+
+<?php echo messageAlerte::widget(['type' => "todo", "message" => "Si on supprime une Grandeur, il faut supprimer la table MySQL (ou au moins demander si on le fait)"]);?>

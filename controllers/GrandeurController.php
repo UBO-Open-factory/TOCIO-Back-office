@@ -76,41 +76,23 @@ class GrandeurController extends Controller
         */
         // SI LA SAISIE EST VALIDE
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-        	// Nettoyage du nom de table saisie
-        	$l_STR_NomClean	= str_replace("'/", "", strtolower($model->nature));
-        	$l_STR_NomClean = preg_replace('#[^A-Za-z0-9]+#', '', $l_STR_NomClean);
-        	$l_STR_NomClean = "tm_".$this->_stripAccents($l_STR_NomClean);
-        	$model->tablename = $l_STR_NomClean;
+        	// NETTOYAGE DU FORMATTAGE SAISIE
+        	$model->formatCapteur = $this->_FormattageFormatCapteur($model);
         	
-        	// ON VÉRIFIE QUE LE NOM DE LA TABLE N'EXISTE PAS DANS LA BASE
-        	// Récupération des noms de tables.
-        	$l_TAB_Noms	= array();
-        	$l_STR_requete = "SHOW TABLES LIKE 'tm_%'";
-        	$l_TAB_NomTables	= Yii::$app->db->createCommand($l_STR_requete)->queryAll();
-        	foreach( $l_TAB_NomTables as $l_TAB_NomTable){
-        		foreach( $l_TAB_NomTable as $key => $l_STR_Nom){
-        			$l_TAB_Noms[]= $l_STR_Nom;
-        		}
-        	}
-        	// Si le nom de table n'est pas utilisé ................................................
-        	if( !in_array($model->tablename, $l_TAB_Noms)){
-        		// Requete de creation de la table
-        		$l_STR_requete = "CREATE TABLE `".$l_STR_NomClean."` (
-							  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
-							  `valeur` ".$model->type." NOT NULL,
-							  `posX` int(3) NOT NULL,
-							  `posY` int(3) NOT NULL,
-							  `posZ` int(3) NOT NULL,
-							  `idModule` int(3) NOT NULL
-							) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table des mesures :nom';
-							ALTER TABLE ".$l_STR_NomClean."
-							  ADD PRIMARY KEY (`timestamp`),
-							  ADD KEY `timestamp` (`timestamp`);
-							COMMIT;";
-        		// Bind des valeurs saisie dans la requète + Creation de la table
-        		Yii::$app->db->createCommand($l_STR_requete)
-	        		->bindValue(':nom', $model->nature)
-	        		->execute();
+        	
+        	// FORMATTAGE DE LA NATURE (premiere caractère en majuscule )
+        	$model->nature = ucfirst( $model->nature );
+        	
+        	
+        	// NETTOYAGE DU NOM DE TABLE SAISIE
+        	$this->_ConstruitNomTable($model);
+        	
+        	
+        	// SI LE NOM DE TABLE N'EST PAS UTILISÉ DANS LA BASE ...................................
+        	if ($this->_tableMesureExiste($model->tablename)) {
+        		// REQUETE DE CREATION DE LA TABLE
+        		$this->_createTableMesure($model);
+        		
 
 	        		
 	        	// SAUVEGARDE LA SAISIE
@@ -119,7 +101,9 @@ class GrandeurController extends Controller
 	        	// ON RETOURNE SUR LA LISTE
 	        	return $this->redirect(['view', 'id' => $model->id]);
 	        		
-      		// Le nom de cette table existe déjà ...................................................
+	        	
+	        	
+      		// LE NOM DE CETTE TABLE EXISTE DÉJÀ ...................................................
         	} else {
         		// Affiche un message sur la page de la saisie.
         		
@@ -131,10 +115,17 @@ class GrandeurController extends Controller
         		'model' => $model,
         ]);
     }
+    
+    
+    
+
+    
 
     /**
      * Updates an existing Grandeur model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     * 
+     * @todo à finir
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -143,7 +134,25 @@ class GrandeurController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        	// NETTOYAGE DU FORMATTAGE SAISIE
+        	$model->formatCapteur = str_replace(".", ",", $model->formatCapteur);
+        	
+        	
+        	// FORMATTAGE DE LA NATURE (premiere caractère en majuscule )
+        	$model->nature = ucfirst( $model->nature );
+        	
+        	
+        	// ADAPTATION DU TYPE DE LA TABLE
+        	$l_STR_Requete = "ALTER TABLE `".$model->tablename."` CHANGE `valeur` `valeur` ".$model->type." NOT NULL;";
+        	Yii::$app->db->createCommand($l_STR_Requete)
+	        	->execute();
+        	
+        	
+        	// SAUVEGARDE LA SAISIE
+        	$model->save();
+        	
+        	// REDIRECTION 
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -183,6 +192,81 @@ class GrandeurController extends Controller
     }
     
     
+    
+    
+    
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Fait une requète MySQL pour créer une table de mesure pour le modèle et renvoie le résultat.
+     * @param $model
+     * @return Retour Yii de la requète
+     */
+    private function _createTableMesure($model){
+    	$l_STR_requete = "CREATE TABLE `".$model->tablename."` (
+							  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+							  `valeur` ".$model->type." NOT NULL,
+							  `posX` int(3) NOT NULL,
+							  `posY` int(3) NOT NULL,
+							  `posZ` int(3) NOT NULL,
+							  `idModule` int(3) NOT NULL
+							) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table des mesures :nom';
+							ALTER TABLE ".$model->tablename."
+							  ADD PRIMARY KEY (`timestamp`),
+							  ADD KEY `timestamp` (`timestamp`);
+							COMMIT;";
+    	// Bind des valeurs saisie dans la requète + Creation de la table
+    	return Yii::$app->db->createCommand($l_STR_requete)
+    	->bindValue(':nom', $model->nature)
+    	->execute();
+    }
+    
+    
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Vérifie qu'un nom de table de mesure existe dans la base.
+     * Les nom de ces tables commencent pas tm_
+     * @param $p_STR_NomTable
+     * @return BOOLEAN
+     */
+    private function _tableMesureExiste($p_STR_NomTable){
+    	// Récupération des noms de tables commencant par tm_
+    	$l_TAB_Noms	= array();
+    	$l_STR_requete = "SHOW TABLES LIKE 'tm_%'";
+    	$l_TAB_NomTables	= Yii::$app->db->createCommand($l_STR_requete)->queryAll();
+    	
+    	// Construction d'un tableau avec les noms de table.
+    	foreach( $l_TAB_NomTables as $l_TAB_NomTable){
+    		foreach( $l_TAB_NomTable as $key => $l_STR_Nom){
+    			$l_TAB_Noms[]= $l_STR_Nom;
+    		}
+    	}
+    	return in_array($p_STR_NomTable, $l_TAB_Noms);
+    }
+    
+    
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Vérifie le formattage du format de la mesure d'une Grandeur.
+     * @param unknown $model
+     */
+    private function _FormattageFormatCapteur($model){
+    	$model->formatCapteur = str_replace(".", ",", $model->formatCapteur);
+    }
+    
+    
+    
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Génère le nom de la table en fonction de la nature de la Grandeur.
+     * @param $model : ARRAY contenant le modele d'une Grandeur.
+     */
+    private function _ConstruitNomTable($model){
+    	// NETTOYAGE DU NOM DE TABLE SAISIE
+    	$l_STR_NomClean	= str_replace("'/", "", strtolower($model->nature));
+    	$l_STR_NomClean = preg_replace('#[^A-Za-z0-9]+#', '', $l_STR_NomClean);
+    	$l_STR_NomClean = "tm_".$this->_stripAccents($l_STR_NomClean);
+    	$model->tablename = $l_STR_NomClean;
+    }
     
     
     

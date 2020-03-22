@@ -14,7 +14,6 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="grandeur-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php echo messageAlerte::widget(['type' => "todo", "message" => "Faire cette partie."]); ?>
 
     <?= $this->render('_form', [
         'model' => $model,
