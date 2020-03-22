@@ -1,17 +1,23 @@
 <?php
-
-/* @var $this yii\web\View */
+/**
+ * 
+* @var $this yii\web\View 
+* @todo : revoir mise en page 
+*/
 
 $this->title = 'TOCIO : Data';
 
 use app\models\Grandeur;
 use app\models\Capteur;
 use app\models\Module;
+use app\components\messageAlerte;
 
 $grandeurs 	= Grandeur::findBySql("SELECT * FROM grandeur")->all();
 $capteurs 	= Capteur::findBySql("SELECT * FROM capteur")->all();
 $modules	= Module::findBySql("SELECT * FROM module")->all();
-$localisationModule	= Module::findBySql("SELECT * FROM localisationmodule")->all();
+$l_INT_LocalisationModule	= Module::find()->indexBy('id')->count();
+$l_INT_NombreTableMesure = Grandeur::find()->where(['like', 'tablename' , 'tm_'])->count();
+
 ?>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -23,7 +29,7 @@ $localisationModule	= Module::findBySql("SELECT * FROM localisationmodule")->all
 			['Task', 'Nombre'],
 			['Capteurs',	<?= count($capteurs);?>],
 			['Grandeurs',	<?= count($grandeurs);?>],
-			['Localisation de module',	<?= count($localisationModule);?>],
+			['Localisation de module',	<?= $l_INT_LocalisationModule;?>],
 			['Modules',		<?= count($modules);?>]
         ]);
 
@@ -51,56 +57,58 @@ $localisationModule	= Module::findBySql("SELECT * FROM localisationmodule")->all
 
     <div class="body-content">
         <div class="row">
-        	<div class="col-xs-4">
+        	<div class="col-sm-4">
         		<h1 class="text-center">Répartition des données de paramétrage</h1>
         		<p class="text-center">(Grandeurs, Capteurs, Modules & localisation de modules)</p>
         		<div id="donutchart" style="width: 100%; height: 400px;"></div>
         	</div>
-            <div class="col-lg-3">
-            	<div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+            <div class="col-sm-2">
+            	<div class="card text-white bg-secondary " >
 	            	<div class="card-header">Nombre de modules</div>
-						<div class="card-body">
-							<h1 class="card-text text-center"><?= count($modules);?></h1>
-			                <a class="card-link" href="/module/index">Voir les Modules &raquo;</a>
-						</div>
+					<div class="card-body">
+						<h1 class="card-text text-center"><?= $l_INT_LocalisationModule;?></h1>
+		                <a class="card-link" href="/module/index">Voir les Modules &raquo;</a>
 					</div>
 				</div>
             </div>
-            <div class="col-lg-3">
-				<div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+            <div class="col-lg-2">
+				<div class="card text-white bg-secondary " ">
 	            	<div class="card-header">Nombre de grandeurs</div>
-						<div class="card-body">
-							<h1 class="card-text text-center"><?= count($grandeurs);?></h1>
-			                <a class="card-link" href="/grandeur/index">Voir les grandeurs &raquo;</a>
-						</div>
+					<div class="card-body">
+						<h1 class="card-text text-center"><?= count($grandeurs);?></h1>
+		                <a class="card-link" href="/grandeur/index">Voir les grandeurs &raquo;</a>
 					</div>
 				</div>
 			</div>
-            <div class="col-lg-3">
-            	<div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+            <div class="col-lg-2">
+            	<div class="card text-white bg-secondary " >
 	            	<div class="card-header">Nombre de capteur</div>
-						<div class="card-body">
-							<h1 class="card-text text-center"><?= count($capteurs);?></h1>
-			                <a class="card-link" href="/capteur/index">Voir les Capteurs &raquo;</a>
-						</div>
+					<div class="card-body">
+						<h1 class="card-text text-center"><?= count($capteurs);?></h1>
+		                <a class="card-link" href="/capteur/index">Voir les Capteurs &raquo;</a>
+					</div>
+				</div>
+            </div>
+            <div class="col-lg-2">
+            	<div class="card text-white bg-secondary " >
+            	<div class="card-header">Nombre de table de mesure</div>
+					<div class="card-body">
+						<h1 class="card-text text-center"><?php echo $l_INT_NombreTableMesure; ?></h1>
+		                <a class="card-link" href="/grandeur/index">Voir les table de mesures &raquo;</a>
 					</div>
 				</div>
             </div>
 
-            <div class="col-lg-3">
-            	<div class="card text-white bg-info mb-3" style="max-width: 20rem;">
-	            	<div class="card-header">Nombre de mesures</div>
-						<div class="card-body">
-							<p>A faire</p>
-						</div>
+            <div class="col-lg-2">
+            	<div class="card text-white bg-secondary " >
+            	<div class="card-header">Nombre de mesures</div>
+					<div class="card-body">
+						<p>A faire</p>
 					</div>
 				</div>
                 
             </div>
         </div>
-
-
-    
-
     </div>
 </div>
+<?php echo messageAlerte::widget(['type' => "todo", "message" => "Revoir la mise en page"]);?>
