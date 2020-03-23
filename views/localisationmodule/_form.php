@@ -11,15 +11,20 @@ use yii\widgets\ActiveForm;
 <div class="localisationmodule-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'coordX')->textInput() ?>
-
-    <?= $form->field($model, 'coordY')->textInput() ?>
-
-    <?= $form->field($model, 'coordZ')->textInput() ?>
-
+	<div class="row">
+		<div class="col-sm-12">
+		    <?= $form->field($model, 'description')->textarea(['rows' => 2]) ?>
+		</div>
+		<div class="col-sm-4">
+		    <?= $form->field($model, 'coordX')->textInput() ?>
+		</div>
+		<div class="col-sm-4">
+		    <?= $form->field($model, 'coordY')->textInput() ?>
+		</div>
+		<div class="col-sm-4">
+		    <?= $form->field($model, 'coordZ')->textInput() ?>
+		</div>
+	</div>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Localisationmodule */
 
-$this->title = 'Create Localisationmodule';
+$this->title = "Création d'une Localisation de module";
 $this->params['breadcrumbs'][] = ['label' => 'Localisationmodules', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

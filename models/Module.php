@@ -35,6 +35,7 @@ class Module extends \yii\db\ActiveRecord
             [['idCapteur', 'description', 'positionCapteur'], 'string'],
             [['idLocalisationModule', 'actif'], 'integer'],
             [['identifiantReseau'], 'string', 'max' => 10],
+            [['nom'], 'string', 'max' => 50],
         ];
     }
 
@@ -45,11 +46,12 @@ class Module extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'identifiantReseau' => 'Identifiant Reseau',
+            'identifiantReseau' => 'Identifiant réseau',
             'description' => 'Description',
-            'idCapteur' => 'Plusieurs id de capteur sont possible, le séparateur est un point virgule (;)',
-            'idLocalisationModule' => 'Plusieurs id de localisation de module sont possible, le séparateur est un point virgule (;)',
-            'positionCapteur' => 'Position Capteur',
+            'idCapteur' => 'CapteursID. Le séparateur est un point virgule (;)',
+            'idLocalisationModule' => 'Localisation',
+            'positionCapteur' => "Position des capteurs. Position relative à la position du module. Sous la forme (0,0,0);(0,0,1)",
+            'nom' => 'Nom du module',
             'actif' => 'Actif',
         ];
     }
