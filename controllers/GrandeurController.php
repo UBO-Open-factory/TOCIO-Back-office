@@ -11,9 +11,51 @@ use yii\filters\VerbFilter;
 
 /**
  * GrandeurController implements the CRUD actions for Grandeur model.
+ * 
+ * 	@file GrandeurController.php
  */
-class GrandeurController extends Controller
-{
+class GrandeurController extends Controller{
+	
+	
+	
+	
+	
+	// ---------------------------------------------------------------------------------------------
+	/**
+	 * Renvoie la liste des grandeurs au format JSON.
+	 *
+	 * @return string JSON
+	 * @see https://www.yiiframework.com/doc/guide/2.0/fr/output-data-providers
+	 */
+	public function actionGetgrandeurs(){
+		// Le format de l'affichage du modele serra en JSON
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		
+		// Renvoie tout ce qui est dans la table "Grandeur"
+		return Grandeur::find()->all();
+	}
+	
+	
+	
+	// ---------------------------------------------------------------------------------------------
+	/**
+	 * Renvoie une Grandeur dont l'ID est passé en paramètre au format JSON.
+	 *
+	 * @param integer $id : l'ID de la grandeur dont on veut la définition.
+	 * @return string  JSON
+	 */
+	public function actionGetgrandeur($id){
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		
+		return Grandeur::find()
+		->where(['id' => $id])
+		->one();
+	}
+	
+	
+	
+	
+	
     /**
      * {@inheritdoc}
      */
@@ -125,7 +167,6 @@ class GrandeurController extends Controller
      * Updates an existing Grandeur model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * 
-     * @todo à finir
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -199,7 +240,7 @@ class GrandeurController extends Controller
     /**
      * Fait une requète MySQL pour créer une table de mesure pour le modèle et renvoie le résultat.
      * @param $model
-     * @return Retour Yii de la requète
+     * @return Yii de la requète
      */
     private function _createTableMesure($model){
     	$l_STR_requete = "CREATE TABLE `".$model->tablename."` (

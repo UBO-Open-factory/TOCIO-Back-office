@@ -47,6 +47,22 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+            		[
+            				'class' => 'yii\rest\UrlRule',
+            				'controller' => 'capteur',
+            				'pluralize' => false,
+            				'patterns' => [
+            						'GET getcapteur/<id:\d+>' => 'getcapteur',
+            				],
+            		],
+            		[
+            				'class' => 'yii\rest\UrlRule',
+            				'controller' => 'grandeur',
+            				'pluralize' => false,
+            				'patterns' => [
+            						'GET getgrandeur/<id:\d+>' => 'getgrandeur',
+            				],
+            		],
             ],
         ],
     ],

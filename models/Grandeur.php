@@ -40,12 +40,12 @@ class Grandeur extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-    	return [
-    			'id' => 'ID',
-    			'nature' => 'Libellé',
-    			'formatCapteur' => 'Formattage : [signe +] nombreDeCaracteresAvantVirgule , nombreDeCaracteresApresVirgule',
-    			'tablename' => 'Nom interne de la table des mesures',
-    			'type' => 'Type de la grandeur',
-    	];
+        return [
+            'id' => 'ID',
+            'nature' => 'nature en toutes lettres (Unité)',
+            'formatCapteur' => 'signe + nombreDeCaracteresAvantVirgule, nombreDeCaracteresApresVirgule',
+            'tablename' => 'Nom interne de la table',
+            'type' => 'Type des valeurs dans la table des mesures (Float, int, text, etc...)',
+        ];
     }
 }

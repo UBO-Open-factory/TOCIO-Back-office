@@ -1,8 +1,6 @@
 <?php
 /**
- * 
 * @var $this yii\web\View 
-* @todo : revoir mise en page 
 */
 
 $this->title = 'TOCIO : Data';
@@ -111,4 +109,5 @@ $l_INT_NombreTableMesure = Grandeur::find()->where(['like', 'tablename' , 'tm_']
         </div>
     </div>
 </div>
-<?php echo messageAlerte::widget(['type' => "todo", "message" => "Revoir la mise en page"]);?>
+<?php echo /*@todo  Calculer le nombre de mesure stocké en base*/messageAlerte::widget(['type' => "todo", "message" => "Calculer le nombre de mesure stocké en base"]); ?>
+<?php echo messageAlerte::widget(['type' => "todo", "message" => "Revoir la mise en page"]); // @todo  Revoir la mise en page?>
