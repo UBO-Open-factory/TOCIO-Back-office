@@ -43,9 +43,9 @@ class Localisationmodule extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'description' => 'Description',
-            'coordX' => 'Coordonnées x dans le système de repérage',
-            'coordY' => 'Coordonnées y dans le système de repérage',
-            'coordZ' => 'Coordonnées z dans le système de repérage',
+            'coordX' => 'Coordonnée X dans le système de repérage',
+            'coordY' => 'Coordonnée Y dans le système de repérage',
+            'coordZ' => 'Coordonnée Z dans le système de repérage',
         ];
     }
 }
