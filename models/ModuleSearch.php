@@ -17,8 +17,8 @@ class ModuleSearch extends Module
     public function rules()
     {
         return [
-            [['id', 'idLocalisationModule', 'actif'], 'integer'],
-            [['idCapteur', 'identifiantReseau', 'description', 'positionCapteur'], 'safe'],
+            [['nom', 'idCapteur', 'identifiantReseau', 'description', 'positionCapteur'], 'safe'],
+            [['idLocalisationModule', 'actif'], 'integer'],
         ];
     }
 
@@ -58,12 +58,12 @@ class ModuleSearch extends Module
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'idLocalisationModule' => $this->idLocalisationModule,
             'actif' => $this->actif,
         ]);
 
-        $query->andFilterWhere(['like', 'idCapteur', $this->idCapteur])
+        $query->andFilterWhere(['like', 'nom', $this->nom])
+            ->andFilterWhere(['like', 'idCapteur', $this->idCapteur])
             ->andFilterWhere(['like', 'identifiantReseau', $this->identifiantReseau])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'positionCapteur', $this->positionCapteur]);

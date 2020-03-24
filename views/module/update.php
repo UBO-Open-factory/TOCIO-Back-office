@@ -5,9 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Module */
 
-$this->title = 'Update Module: ' . $model->id;
+$this->title = 'Update Module: ' . $model->identifiantReseau;
 $this->params['breadcrumbs'][] = ['label' => 'Modules', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->identifiantReseau, 'url' => ['view', 'id' => $model->identifiantReseau]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="module-update">

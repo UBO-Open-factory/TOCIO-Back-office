@@ -46,7 +46,7 @@ class ModuleController extends Controller
 
     /**
      * Displays a single Module model.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -71,7 +71,7 @@ class ModuleController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        	return $this->redirect(['view', 'id' => $model->identifiantReseau]);
         }
 
         return $this->render('create', [
@@ -82,7 +82,7 @@ class ModuleController extends Controller
     /**
      * Updates an existing Module model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -91,7 +91,7 @@ class ModuleController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        	return $this->redirect(['view', 'id' => $model->identifiantReseau]);
         }
 
         return $this->render('update', [
@@ -102,7 +102,7 @@ class ModuleController extends Controller
     /**
      * Deletes an existing Module model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -116,7 +116,7 @@ class ModuleController extends Controller
     /**
      * Finds the Module model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param string $id
      * @return Module the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

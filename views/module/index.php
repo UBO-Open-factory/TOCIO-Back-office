@@ -28,12 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            'nom',
             'idCapteur:ntext',
             'identifiantReseau',
             'description:ntext',
             'idLocalisationModule',
-            //'positoinCapteur:ntext',
+            //'positionCapteur:ntext',
             //'actif',
 
             ['class' => 'yii\grid\ActionColumn'],
@@ -44,4 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 <?php /*@todo  Afficher la localisation en toutes lettre plutôt que l'ID*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Afficher la localisation en toutes lettre plutôt que l'ID"]); ?>
+echo messageAlerte::widget(['type' => "todo", "message" => "Afficher la localisation en toutes lettre plutôt que l'ID"]); 
+?>
+<?php /*@todo  Afficher le nom des catpeurs plutôt que leur ID*/
+echo messageAlerte::widget(['type' => "todo", "message" => "Afficher le nom des catpeurs plutôt que leur ID"]); ?>
