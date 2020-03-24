@@ -19,5 +19,5 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-<?= messageAlerte::widget(['type' => "Warning", 'message' => "Attention Pour l'instant les ID des grandeurs sont à saisir à la main"])?>
 </div>
+<?php echo /*@todo  Faire un système de saisie des Grandeurs. Pour l'instant il faut saisir les ID à la main*/messageAlerte::widget(['type' => "todo", "message" => "Faire un système de saisie des Grandeurs. Pour l'instant il faut saisir les ID à la main"]); ?>

@@ -12,17 +12,23 @@ use app\models\Tablemesure;
 <div class="grandeur-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'nature')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'formatCapteur')->textInput(['maxlength' => true]) ?>
-
-	<?= /* liste déroulante pour les types de valeurs*/
-		$form->field($model, 'type')->dropDownList(["float(5,3)" => "Float",
-    		"int(10)" => "Integer",
-    		"real" => "Réel",
-    		"text" => "Text",
-    		"varchar" => "Varchar",
-    ]) ?>
+	<div class="row">
+		<div class="col-sm-4">
+	    	<?= $form->field($model, 'nature')->textInput(['maxlength' => true]) ?>
+		</div>
+    	<div class="col-sm-4">
+	    	<?= $form->field($model, 'formatCapteur')->textInput(['maxlength' => true]) ?>
+	    </div>
+		<div class="col-sm-4">
+			<?= /* liste déroulante pour les types de valeurs*/
+				$form->field($model, 'type')->dropDownList(["float(5,3)" => "Float",
+		    		"int(10)" => "Integer",
+		    		"real" => "Réel",
+		    		"text" => "Text",
+		    		"varchar" => "Varchar",
+		    ]) ?>
+		</div>
+	</div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

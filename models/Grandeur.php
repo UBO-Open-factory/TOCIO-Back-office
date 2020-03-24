@@ -42,8 +42,8 @@ class Grandeur extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nature' => 'nature en toutes lettres (Unité)',
-            'formatCapteur' => 'signe + nombreDeCaracteresAvantVirgule, nombreDeCaracteresApresVirgule',
+            'nature' => 'Nature en toutes lettres (Unité)',
+            'formatCapteur' => 'Formattage : signe - nombreDeCaracteresAvantVirgule, nombreDeCaracteresApresVirgule',
             'tablename' => 'Nom interne de la table',
             'type' => 'Type des valeurs dans la table des mesures (Float, int, text, etc...)',
         ];
