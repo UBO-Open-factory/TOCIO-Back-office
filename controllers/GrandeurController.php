@@ -103,7 +103,7 @@ class GrandeurController extends Controller{
      * Creates a new Grandeur model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
-     * @todo Afficher un message si la Grandeur et le Type existent déjà.
+     * @todo Afficher un message si le coupple (Nature,Type) existent déjà.
      */
     public function actionCreate() {
         $model = new Grandeur();
@@ -119,26 +119,26 @@ class GrandeurController extends Controller{
         // SI LA SAISIE EST VALIDE
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
         	// NETTOYAGE DU FORMATTAGE SAISIE
-        	$model->formatCapteur = $this->_FormattageFormatCapteur($model);
+        	$this->_FormattageFormatCapteur($model);
         	
         	
         	// FORMATTAGE DE LA NATURE (premiere caractère en majuscule )
         	$model->nature = ucfirst( $model->nature );
         	
         	
-        	// NETTOYAGE DU NOM DE TABLE SAISIE
+        	// CONSTRUCTION DU NOM DE TABLE SAISIE
         	$this->_ConstruitNomTable($model);
         	
         	
         	// SI LE NOM DE TABLE N'EST PAS UTILISÉ DANS LA BASE ...................................
-        	if ($this->_tableMesureExiste($model->tablename)) {
+        	if (! $this->_tableMesureExiste($model->tablename)) {
         		// REQUETE DE CREATION DE LA TABLE
         		$this->_createTableMesure($model);
         		
-
 	        		
 	        	// SAUVEGARDE LA SAISIE
 	        	$model->save();
+
 	        	
 	        	// ON RETOURNE SUR LA LISTE
 	        	return $this->redirect(['view', 'id' => $model->id]);
@@ -148,6 +148,9 @@ class GrandeurController extends Controller{
       		// LE NOM DE CETTE TABLE EXISTE DÉJÀ ...................................................
         	} else {
         		// Affiche un message sur la page de la saisie.
+        		$model->addError('nature', "La table <".$model->tablename."> existe déjà");
+        		
+        		// @todo traiter le cas de l'existance de la table pour cette grandeur
         		
         	}
         	
@@ -180,7 +183,7 @@ class GrandeurController extends Controller{
         	$model->formatCapteur = str_replace(".", ",", $model->formatCapteur);
         	
         	
-        	// FORMATTAGE DE LA NATURE (premiere caractère en majuscule )
+        	// FORMATTAGE DE LA NATURE (premier caractère en majuscule )
         	$model->nature = ucfirst( $model->nature );
         	
         	
@@ -244,16 +247,20 @@ class GrandeurController extends Controller{
      */
     private function _createTableMesure($model){
     	$l_STR_requete = "CREATE TABLE `".$model->tablename."` (
+							  `id` int(11) NOT NULL,
 							  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
 							  `valeur` ".$model->type." NOT NULL,
 							  `posX` int(3) NOT NULL,
 							  `posY` int(3) NOT NULL,
 							  `posZ` int(3) NOT NULL,
-							  `idModule` int(3) NOT NULL
+							  `identifiantModule` varchar(10) NOT NULL
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table des mesures :nom';
 							ALTER TABLE ".$model->tablename."
-							  ADD PRIMARY KEY (`timestamp`),
-							  ADD KEY `timestamp` (`timestamp`);
+								ADD PRIMARY KEY (`id`),
+  								ADD UNIQUE KEY `id` (`id`);
+							COMMIT;
+							ALTER TABLE ".$model->tablename."
+								MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 							COMMIT;";
     	// Bind des valeurs saisie dans la requète + Creation de la table
     	return Yii::$app->db->createCommand($l_STR_requete)
@@ -275,12 +282,17 @@ class GrandeurController extends Controller{
     	$l_STR_requete = "SHOW TABLES LIKE 'tm_%'";
     	$l_TAB_NomTables	= Yii::$app->db->createCommand($l_STR_requete)->queryAll();
     	
+    	
+    	
+    	
     	// Construction d'un tableau avec les noms de table.
     	foreach( $l_TAB_NomTables as $l_TAB_NomTable){
     		foreach( $l_TAB_NomTable as $key => $l_STR_Nom){
     			$l_TAB_Noms[]= $l_STR_Nom;
     		}
     	}
+
+
     	return in_array($p_STR_NomTable, $l_TAB_Noms);
     }
     
@@ -306,6 +318,7 @@ class GrandeurController extends Controller{
     	$l_STR_NomClean	= str_replace("'/", "", strtolower($model->nature));
     	$l_STR_NomClean = preg_replace('#[^A-Za-z0-9]+#', '', $l_STR_NomClean);
     	$l_STR_NomClean = "tm_".$this->_stripAccents($l_STR_NomClean);
+    	
     	$model->tablename = $l_STR_NomClean;
     }
     

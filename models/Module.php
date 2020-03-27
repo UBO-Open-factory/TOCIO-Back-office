@@ -7,15 +7,17 @@ use Yii;
 /**
  * This is the model class for table "module".
  *
+ * @property string $identifiantReseau
  * @property string $nom Le nom du module
  * @property string $idCapteur Plusieurs id de capteur sont possible, le séparateur est un point virgule (;)
- * @property string $identifiantReseau
  * @property string $description
  * @property int $idLocalisationModule
  * @property string $positionCapteur
  * @property int $actif 1 = Actif, 0 = Innactif
  *
  * @property Localisationmodule $idLocalisationModule0
+ * @property RelModulecapteur[] $relModulecapteurs 
+ * @property Capteur[] $idCapteurs
  */
 class Module extends \yii\db\ActiveRecord
 {
@@ -67,5 +69,25 @@ class Module extends \yii\db\ActiveRecord
     public function getIdLocalisationModule0()
     {
         return $this->hasOne(Localisationmodule::className(), ['id' => 'idLocalisationModule']);
+    }
+    
+    /**
+     * Gets query for [[RelModulecapteurs]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRelModulecapteurs()
+    {
+    	return $this->hasMany(RelModulecapteur::className(), ['idModule' => 'identifiantReseau']);
+    } 
+    
+    /**
+     * Gets query for [[IdCapteurs]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdCapteurs()
+    {
+    	return $this->hasMany(Capteur::className(), ['id' => 'idCapteur'])->viaTable('rel_modulecapteur', ['idModule' => 'identifiantReseau']);
     }
 }

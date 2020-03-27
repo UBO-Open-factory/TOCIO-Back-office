@@ -48,3 +48,6 @@ echo messageAlerte::widget(['type' => "todo", "message" => "Afficher la localisa
 ?>
 <?php /*@todo  Afficher le nom des catpeurs plutôt que leur ID*/
 echo messageAlerte::widget(['type' => "todo", "message" => "Afficher le nom des catpeurs plutôt que leur ID"]); ?>
+
+<?php /*@todo  Supprimer la colonne CapteurID*/
+echo messageAlerte::widget(['type' => "todo", "message" => "Supprimer la colonne CapteurID"]); ?>

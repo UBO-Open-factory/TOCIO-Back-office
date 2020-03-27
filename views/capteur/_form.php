@@ -11,11 +11,15 @@ use yii\widgets\ActiveForm;
 <div class="capteur-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'nom')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'idGrandeur')->textarea(['rows' => 6]) ?>
-
+	<div class="row">
+		<div class="col-sm-4 bottom-align">
+		    <?= $form->field($model, 'nom')->textarea(['rows' => 2]) ?>
+		</div>
+		<div class="col-sm-4 bottom-align">
+		    <?= $form->field($model, 'idGrandeur')->textarea(['rows' => 2]) ?>
+		</div>
+	</div>
+		
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

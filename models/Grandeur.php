@@ -9,9 +9,12 @@ use Yii;
  *
  * @property int $id
  * @property string $nature nature en toutes lettres (Unité)
- * @property string $formatCapteur signe + nombreDeCaracteresAvantVirgule, nombreDeCaracteresApresVirgule
+ * @property string $formatCapteur signe - nombreDeCaracteresAvantVirgule, nombreDeCaracteresApresVirgule
  * @property string|null $tablename Nom interne de la table
  * @property string $type Type des valeurs dans la table des mesures (Float, int, text, etc...)
+ *
+ * @property RelCapteurgrandeur[] $relCapteurgrandeurs
+ * @property Capteur[] $idCapteurs
  */
 class Grandeur extends \yii\db\ActiveRecord
 {
@@ -25,13 +28,14 @@ class Grandeur extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
+     * @see https://www.yiiframework.com/doc/guide/2.0/fr/input-validation
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['nature', 'formatCapteur', 'type'], 'required'],
             [['nature', 'tablename'], 'string', 'max' => 50],
             [['formatCapteur', 'type'], 'string', 'max' => 10],
+        	[['nature'], 'trim'],	// Supprimer les espaces avant et après la saisie.
         ];
     }
 
@@ -42,10 +46,30 @@ class Grandeur extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nature' => 'Nature en toutes lettres (Unité)',
-            'formatCapteur' => 'Formattage : signe - nombreDeCaracteresAvantVirgule, nombreDeCaracteresApresVirgule',
-            'tablename' => 'Nom interne de la table',
-            'type' => 'Type des valeurs dans la table des mesures (Float, int, text, etc...)',
+            'nature' => 'Nature',
+            'formatCapteur' => 'Format Capteur',
+            'tablename' => 'Nom de la table de stockage des valeurs',
+            'type' => 'Type des valeurs',
         ];
+    }
+
+    /**
+     * Gets query for [[RelCapteurgrandeurs]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRelCapteurgrandeurs()
+    {
+        return $this->hasMany(RelCapteurgrandeur::className(), ['idGrandeur' => 'id']);
+    }
+
+    /**
+     * Gets query for [[IdCapteurs]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdCapteurs()
+    {
+    	return $this->hasMany(Capteur::className(), ['id' => 'idCapteur'])->viaTable('rel_capteurgrandeur', ['idGrandeur' => 'id']);
     }
 }

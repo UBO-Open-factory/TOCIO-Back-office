@@ -39,9 +39,9 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+        	['label' => 'Modules', 'url' => ['/module/index'], 'linkOptions' => ['class' => 'nav-link'] ],
         	['label' => 'Capteurs', 'url' => ['/capteur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
         	['label' => 'Grandeurs', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-        	['label' => 'Modules', 'url' => ['/module/index'], 'linkOptions' => ['class' => 'nav-link'] ],
         	['label' => 'Localisation de modules', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ],
         	['label' => 'Contact', 'url' => ['/site/contact'], 'linkOptions' => ['class' => 'nav-link'] ],
             Yii::$app->user->isGuest ? (
