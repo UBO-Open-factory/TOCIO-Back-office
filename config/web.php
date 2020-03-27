@@ -7,6 +7,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+	'timeZone' => 'Europe/Paris',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -33,9 +34,16 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+
+		// le composant "log" traite les messages avec un horodatage (timestamp).
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
+				[
+					'class' => 'yii\log\DbTarget',
+					'levels' => ['error'],
+					'categories' => ['tocio'],
+				],
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
@@ -47,6 +55,14 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+            		[
+            				'class' => 'yii\rest\UrlRule',
+            				'controller' => 'mesure',
+            				'pluralize' => false,
+            				'patterns' => [
+            						'GET add/<moduleid>/<mesures>' => 'add',
+            				],
+            		],
             		[
             				'class' => 'yii\rest\UrlRule',
             				'controller' => 'capteur',
