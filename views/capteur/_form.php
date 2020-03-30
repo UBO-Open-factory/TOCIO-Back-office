@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\Grandeur;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Capteur */
@@ -16,7 +17,10 @@ use yii\widgets\ActiveForm;
 		    <?= $form->field($model, 'nom')->textarea(['rows' => 2]) ?>
 		</div>
 		<div class="col-sm-4 bottom-align">
-		    <?= $form->field($model, 'idGrandeur')->textarea(['rows' => 2]) ?>
+			Afficher la liste déroulante des grandeurs ici
+		    <? /* liste déroulante des Grandeurs*/
+						
+		    ?>
 		</div>
 	</div>
 		

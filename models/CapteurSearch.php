@@ -18,7 +18,7 @@ class CapteurSearch extends Capteur
     {
         return [
             [['id'], 'integer'],
-            [['nom', 'idGrandeur'], 'safe'],
+            [['nom'], 'safe'],
         ];
     }
 
@@ -61,8 +61,7 @@ class CapteurSearch extends Capteur
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'nom', $this->nom])
-            ->andFilterWhere(['like', 'idGrandeur', $this->idGrandeur]);
+        $query->andFilterWhere(['like', 'nom', $this->nom]);
 
         return $dataProvider;
     }

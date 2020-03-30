@@ -8,45 +8,12 @@ use app\models\CapteurSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\YiiAsset;
 
 /**
  * CapteurController implements the CRUD actions for Capteur model.
  */
-class CapteurController extends Controller {
-	
-	
-	// ---------------------------------------------------------------------------------------------
-	/**
-	 * Renvoie un capteur dont l'ID est passé en paramètre au format JSON.
-	 * 
-	 * @param integer $id : l'ID du capteur dont on veut la définition.
-	 * @return string  JSON
-	 */
-	public function actionGetcapteur($id){
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		
-		return Capteur::find()
-			->where(['id' => $id])
-			->one();
-	}
-	
-	
-	
-	
-	// ---------------------------------------------------------------------------------------------
-	/**
-	 * Renvoie la liste des capteurs au format JSON.
-	 * 
-	 * @return string JSON
-	 */
-	public function actionGetcapteurs(){
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		return Capteur::find()->all();
-	}
-	
-	
-	
+class CapteurController extends Controller
+{
     /**
      * {@inheritdoc}
      */

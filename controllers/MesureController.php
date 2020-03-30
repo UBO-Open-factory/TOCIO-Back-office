@@ -171,6 +171,8 @@ class MesureController extends \yii\web\Controller {
 		// RETOUR ----------------------------------------------------------------------------------
 		// Le format de l'affichage du message sera en JSON
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$l_TAB_Retour['error']	= "";
+		$l_TAB_Retour['success']	= "ok";
 		
 		return json_encode($l_TAB_Retour);
 	}
