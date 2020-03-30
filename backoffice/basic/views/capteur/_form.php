@@ -19,7 +19,6 @@ use app\models\Grandeur;
 		<div class="col-sm-4 bottom-align">
 			Afficher la liste déroulante des grandeurs ici
 		    <? /* liste déroulante des Grandeurs*/
-						
 		    ?>
 		</div>
 	</div>

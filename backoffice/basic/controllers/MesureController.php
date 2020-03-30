@@ -5,6 +5,7 @@ use app\models\Module;
 use app\models\Capteur;
 use app\models\Grandeur;
 use yii\db\Query;
+use yii\debug\models\search\Debug;
 
 
 /**
@@ -14,6 +15,73 @@ use yii\db\Query;
  * @author Alex
  */
 class MesureController extends \yii\web\Controller {
+	
+	
+	//==============================================================================================
+	/**
+	 * Renvoie les 100 dernières mesures d'un modules.
+	 */
+	public function actionGet(){
+		// RECUPERATION DU PARAMETRE PASSÉ EN GET --------------------------------------------------
+		// @see https://www.yiiframework.com/doc/guide/2.0/fr/runtime-requests
+		$request = Yii::$app->request;
+		
+		$get	= $request->get();
+		$moduleID = $get['moduleid'];
+		
+		
+		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
+		if( ! $this::_moduleIdIsValid($moduleID)){
+			return json_encode( array('error', "Module ".$moduleID." not declared.") );
+		}
+		
+		// RÉCUPÉRATION DE LA LISTE DES TABLES UTILISÉE PAR CE MODULE ------------------------------
+		/*
+			SELECT DISTINCT g.tablename
+			FROM module as m
+			INNER JOIN rel_modulecapteur as mc ON mc.idModule = m.identifiantReseau
+			INNER JOIN capteur as c ON c.id = mc.idCapteur
+			INNER JOIN rel_capteurgrandeur as cg ON cg.idCapteur = c.id
+			INNER JOIN grandeur as g ON g.id = cg.idGrandeur
+			WHERE m.identifiantReseau = "AA01"
+		 */
+		$l_OBJ_Query = new Query();
+		$l_TAB_TableNames = $l_OBJ_Query->select("g.tablename")
+							->distinct()
+							->from("module as m")
+							->innerJoin("rel_modulecapteur as mc", "mc.idModule = m.identifiantReseau")
+							->innerJoin("capteur as c", "c.id = mc.idCapteur")
+							->innerJoin("rel_capteurgrandeur as cg", "cg.idCapteur = c.id")
+							->innerJoin("grandeur as g", "g.id = cg.idGrandeur")
+							->where('m.identifiantReseau = :identifiantModule', ['identifiantModule' => $moduleID])
+							->all();
+
+
+		// RECUPERATION DES DONNÉES DU MODULES DANS LES TABLES DE MESURES --------------------------
+		$l_TAB_Retour	= array();
+		foreach( $l_TAB_TableNames as $l_TAB_Temp){
+			foreach( $l_TAB_Temp as $l_STR_TableName)
+				$l_OBJ_Query = new Query();
+				
+				$l_TAB_Retour[$l_STR_TableName] = $l_OBJ_Query->select(" timestamp, valeur, posX, posY, posY")
+							->from( $l_STR_TableName )
+							->where('identifiantModule = :identifiantModule', ['identifiantModule' => $moduleID])
+							->limit(100)
+							->all();
+			
+		}
+		// RETOUR ----------------------------------------------------------------------------------
+		// Le format de l'affichage du message sera en JSON
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$l_TAB_Retour['error']	= "";
+		$l_TAB_Retour['success']	= "ok";
+		
+		return json_encode($l_TAB_Retour);
+	}
+	
+	
+	
+	
 	
 	//==============================================================================================
 	/**
@@ -32,19 +100,14 @@ class MesureController extends \yii\web\Controller {
 
 		
 		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
-		$module = Module::findOne($moduleID);
-		if( is_null($module)) {
+		if( ! $this::_moduleIdIsValid($moduleID)){
 			$l_TAB_Retour['error']	= "Module ".$moduleID." not declared.";
-			
-			// TRACE DANS LA BASE QUE LE MODULE N'EXISTE PAS
-			Yii::error("Le module <".$moduleID."> N'existe pas en base", "tocio");
-			
-			
-			// RENVOIE LE RÉSULTAT EN JSON
-			return json_encode($l_TAB_Retour);
+			return json_encode( $l_TAB_Retour );
 		}
 		
-		// CONSTRUCTION DE LA REQUETE POUR RÉCUPERE LE NOM DES TABLES OU STOCKER LES DATA A PARTIR DE L'ID DU MODULE 
+		
+		
+		// CONSTRUCTION DE LA REQUETE POUR RÉCUPERER LE NOM DES TABLES OU STOCKER LES DATA A PARTIR DE L'ID DU MODULE 
 		/*	Select m.nom, m.identifiantReseau, m.description, m.positionCapteur, c.nom, g.nature, g.tablename, p.x, p.y, p.z
 			FROM module as m
 			INNER JOIN rel_modulecapteur as rmc ON m.identifiantReseau = rmc.idModule
@@ -178,6 +241,29 @@ class MesureController extends \yii\web\Controller {
 	}
 	
 	
+	
+	//==============================================================================================
+	/**
+	 * Test si le moduleID passé en paramètre existe en base.
+	 *
+	 * @param string $moduleID = Identifiant unique d'un module
+	 * @return true si le résultat est valide, tableau json sinon.
+	 */
+	private function _moduleIdIsValid($moduleID){
+		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
+		$module = Module::findOne($moduleID);
+		if( is_null($module)) {
+			
+			// TRACE DANS LA BASE QUE LE MODULE N'EXISTE PAS
+			Yii::error("Le module <".$moduleID."> N'existe pas en base", "tocio");
+			
+			
+			// RENVOIE LE RÉSULTAT EN JSON
+			return false;
+		} else {
+			return true;
+		}
+	}
 	
 }
 ?>

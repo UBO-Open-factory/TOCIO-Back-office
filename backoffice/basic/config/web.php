@@ -65,6 +65,14 @@ $config = [
             		],
             		[
             				'class' => 'yii\rest\UrlRule',
+            				'controller' => 'mesure',
+            				'pluralize' => false,
+            				'patterns' => [
+            						'GET get/<moduleid>' => 'get',
+            				],
+            		],
+            		[
+            				'class' => 'yii\rest\UrlRule',
             				'controller' => 'capteur',
             				'pluralize' => false,
             				'patterns' => [
@@ -77,6 +85,14 @@ $config = [
             				'pluralize' => false,
             				'patterns' => [
             						'GET getgrandeur/<id:\d+>' => 'getgrandeur',
+            				],
+            		],
+            		[
+            				'class' => 'yii\rest\UrlRule',
+            				'controller' => 'grandeur',
+            				'pluralize' => false,
+            				'patterns' => [
+            						'GET getgrandeurs' => 'getgrandeurs',
             				],
             		],
             ],
