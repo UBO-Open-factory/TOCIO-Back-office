@@ -1,0 +1,30 @@
+openapi: 3.0.1
+info:
+  title: Add mesure
+  description: Enregistre les mesures d'un module.
+  version: '0.1'
+servers:
+  - url: 'http://192.168.0.40:8888'
+paths:
+  /mesure/add:
+    get:
+      description: Enregistre les mesures d'un module. Il est également possible d'écrire la requète sous la forme condensée http://..../mesure/add/[moduleid]/[mesures].
+      parameters:
+        - name: moduleid
+          in: query
+          schema:
+            type: string
+          example: AA01
+        - name: mesures
+          in: query
+          schema:
+            type: string
+          example: 052055-00112
+      responses:
+        '200':
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: string
+              examples: {}
