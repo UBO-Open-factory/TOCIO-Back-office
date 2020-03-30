@@ -1,14 +1,55 @@
 openapi: 3.0.1
 info:
-  title: Add mesure
-  description: Enregistre les mesures d'un module.
+  title: TOCIO API
+  description: Acces aux données du projet TOCIO
   version: '0.1'
 servers:
   - url: 'http://192.168.0.40:8888'
 paths:
+  /mesure/get:
+    get:
+      description: |-
+        il est également possible de faire la requète en mode condensé sous la forme :
+        **http://.../mesure/get/AA01**
+      parameters:
+        - name: moduleid
+          in: query
+          schema:
+            type: string
+          example: AA01
+      responses:
+        '200':
+          description: Auto generated using Swagger Inspector
+      tags:
+        - Mesures
+      summary: Renvoie les mesures faites par un module
+
+  /grandeur/getgrandeur:
+    get:
+      description: Renvoie une Grandeur dont l'ID est passé en paramètre.
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+          example: '2'
+      responses:
+        '200':
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: string
+              examples: {}
+      tags:
+        - Grandeurs
+      summary: Renvoie une Grandeur
+
   /mesure/add:
     get:
-      description: Enregistre les mesures d'un module. Il est également possible d'écrire la requète sous la forme condensée http://..../mesure/add/[moduleid]/[mesures].
+      description: |-
+        Il est également possible d'écrire la requète sous la forme condensée :
+        **http://..../mesure/add/[moduleid]/[mesures].**
       parameters:
         - name: moduleid
           in: query
@@ -28,3 +69,6 @@ paths:
               schema:
                 type: string
               examples: {}
+      tags:
+        - Mesures
+      summary: "Enregistre les mesures d'un module. "
