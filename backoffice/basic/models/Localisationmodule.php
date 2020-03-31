@@ -12,6 +12,8 @@ use Yii;
  * @property int $coordX Coordonnées x dans le système de repérage
  * @property int $coordY Coordonnées y dans le système de repérage
  * @property int $coordZ Coordonnées z dans le système de repérage
+ *
+ * @property Module[] $modules
  */
 class Localisationmodule extends \yii\db\ActiveRecord
 {
@@ -42,10 +44,20 @@ class Localisationmodule extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'description' => 'Description',
-            'coordX' => 'Coordonnée X dans le système de repérage',
-            'coordY' => 'Coordonnée Y dans le système de repérage',
-            'coordZ' => 'Coordonnée Z dans le système de repérage',
+            'description' => 'Localisation',
+            'coordX' => 'Coord X',
+            'coordY' => 'Coord Y',
+            'coordZ' => 'Coord Z',
         ];
+    }
+
+    /**
+     * Gets query for [[Modules]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getModules()
+    {
+        return $this->hasMany(Module::className(), ['idLocalisationModule' => 'id']);
     }
 }

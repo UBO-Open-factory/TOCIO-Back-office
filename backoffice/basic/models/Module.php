@@ -9,14 +9,12 @@ use Yii;
  *
  * @property string $identifiantReseau
  * @property string $nom Le nom du module
- * @property string $idCapteur Plusieurs id de capteur sont possible, le séparateur est un point virgule (;)
  * @property string $description
  * @property int $idLocalisationModule
- * @property string $positionCapteur
  * @property int $actif 1 = Actif, 0 = Innactif
  *
  * @property Localisationmodule $idLocalisationModule0
- * @property RelModulecapteur[] $relModulecapteurs 
+ * @property RelModulecapteur[] $relModulecapteurs
  * @property Capteur[] $idCapteurs
  */
 class Module extends \yii\db\ActiveRecord
@@ -35,11 +33,11 @@ class Module extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nom', 'idCapteur', 'identifiantReseau', 'description', 'idLocalisationModule', 'positionCapteur', 'actif'], 'required'],
-            [['idCapteur', 'description', 'positionCapteur'], 'string'],
+            [['identifiantReseau', 'nom', 'description', 'idLocalisationModule', 'actif'], 'required'],
+            [['description'], 'string'],
             [['idLocalisationModule', 'actif'], 'integer'],
-            [['nom'], 'string', 'max' => 50],
             [['identifiantReseau'], 'string', 'max' => 10],
+            [['nom'], 'string', 'max' => 50],
             [['identifiantReseau'], 'unique'],
             [['idLocalisationModule'], 'exist', 'skipOnError' => true, 'targetClass' => Localisationmodule::className(), 'targetAttribute' => ['idLocalisationModule' => 'id']],
         ];
@@ -50,15 +48,13 @@ class Module extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-    	return [
-    			'identifiantReseau' => 'Identifiant réseau',
-    			'description' => 'Description',
-    			'idCapteur' => 'CapteursID. Le séparateur est un point virgule (;)',
-    			'idLocalisationModule' => 'Localisation',
-    			'positionCapteur' => "Position des capteurs. Position relative à la position du module. Sous la forme (0,0,0);(0,0,1)",
-    			'nom' => 'Nom du module',
-    			'actif' => 'Actif',
-    	];
+        return [
+            'identifiantReseau' => 'Identifiant Reseau',
+            'nom' => 'Nom',
+            'description' => 'Description',
+            'idLocalisationModule' => 'Id Localisation Module',
+            'actif' => 'Actif',
+        ];
     }
 
     /**
@@ -66,21 +62,21 @@ class Module extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdLocalisationModule0()
+    public function getLocalisationModule()
     {
         return $this->hasOne(Localisationmodule::className(), ['id' => 'idLocalisationModule']);
     }
-    
+
     /**
-     * Gets query for [[RelModulecapteurs]].
+     * Gets query for [[RelModulecapteur]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRelModulecapteurs()
+    public function getRelModulecapteur()
     {
-    	return $this->hasMany(RelModulecapteur::className(), ['idModule' => 'identifiantReseau']);
-    } 
-    
+        return $this->hasMany(RelModulecapteur::className(), ['idModule' => 'identifiantReseau']);
+    }
+
     /**
      * Gets query for [[IdCapteurs]].
      *
@@ -88,6 +84,6 @@ class Module extends \yii\db\ActiveRecord
      */
     public function getIdCapteurs()
     {
-    	return $this->hasMany(Capteur::className(), ['id' => 'idCapteur'])->viaTable('rel_modulecapteur', ['idModule' => 'identifiantReseau']);
+        return $this->hasMany(Capteur::className(), ['id' => 'idCapteur'])->viaTable('rel_modulecapteur', ['idModule' => 'identifiantReseau']);
     }
 }

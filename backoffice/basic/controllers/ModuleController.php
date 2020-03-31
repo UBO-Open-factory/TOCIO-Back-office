@@ -62,16 +62,12 @@ class ModuleController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $model = new Module();
-        
-        // SI LA SAISIE EST VALIDE
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-        	$this->_FormattageSeparateur($model);
-        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	return $this->redirect(['view', 'id' => $model->identifiantReseau]);
+            return $this->redirect(['view', 'id' => $model->identifiantReseau]);
         }
 
         return $this->render('create', [
@@ -91,7 +87,7 @@ class ModuleController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	return $this->redirect(['view', 'id' => $model->identifiantReseau]);
+            return $this->redirect(['view', 'id' => $model->identifiantReseau]);
         }
 
         return $this->render('update', [
@@ -127,17 +123,5 @@ class ModuleController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-    
-    // ---------------------------------------------------------------------------------------------
-    /**
-     * Vérifie le formattage du format de la mesure d'une Grandeur.
-     * @param unknown $model
-     */
-    private function _FormattageSeparateur($model){
-    	$model->idCapteur = str_replace(".", ";", $model->idCapteur);
-    	$model->idCapteur = str_replace(",", ";", $model->idCapteur);
-    	$model->idCapteur = str_replace("/", ";", $model->idCapteur);
-    	$model->idCapteur = str_replace("/", ";", $model->idCapteur);
     }
 }

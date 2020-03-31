@@ -18,9 +18,6 @@ use app\models\Localisationmodule;
 		    <?= $form->field($model, 'nom')->textInput(['maxlength' => true]) ?>
 		</div>
 		<div class="col-sm-6">
-		    <?= $form->field($model, 'idCapteur')->textarea(['rows' => 2]) ?>
-		</div>
-		<div class="col-sm-6">
 		    <?= $form->field($model, 'identifiantReseau')->textInput(['maxlength' => true]) ?>
 		</div>
 		<div class="col-sm-6">
@@ -33,9 +30,7 @@ use app\models\Localisationmodule;
 		    ) 
 		    ?>
 		</div>		
-		<div class="col-sm-6">
-		    <?= $form->field($model, 'positionCapteur')->textarea(['rows' => 6]) ?>
-		</div>
+
 		<div class="col-sm-6">
 		    	<?= /* liste déroulante pour les types de valeurs*/
 				$form->field($model, 'actif')->dropDownList(["1" => "Oui",

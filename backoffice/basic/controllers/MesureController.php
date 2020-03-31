@@ -20,6 +20,8 @@ class MesureController extends \yii\web\Controller {
 	//==============================================================================================
 	/**
 	 * Renvoie les 100 dernières mesures d'un modules.
+	 * 
+	 * @return array au format JSON.
 	 */
 	public function actionGet(){
 		// RECUPERATION DU PARAMETRE PASSÉ EN GET --------------------------------------------------
@@ -35,7 +37,7 @@ class MesureController extends \yii\web\Controller {
 			return json_encode( array('error', "Module ".$moduleID." not declared.") );
 		}
 		
-		// RÉCUPÉRATION DE LA LISTE DES TABLES UTILISÉE PAR CE MODULE ------------------------------
+		// RÉCUPÉRATION DE LA LISTE DES TABLES UTILISÉES PAR CE MODULE -----------------------------
 		/*
 			SELECT DISTINCT g.tablename
 			FROM module as m

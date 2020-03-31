@@ -18,23 +18,19 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'nom') ?>
-
-    <?= $form->field($model, 'idCapteur') ?>
-
     <?= $form->field($model, 'identifiantReseau') ?>
+
+    <?= $form->field($model, 'nom') ?>
 
     <?= $form->field($model, 'description') ?>
 
     <?= $form->field($model, 'idLocalisationModule') ?>
 
-    <?php // echo $form->field($model, 'positionCapteur') ?>
-
-    <?php // echo $form->field($model, 'actif') ?>
+    <?= $form->field($model, 'actif') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Rechercher', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Annuler', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
