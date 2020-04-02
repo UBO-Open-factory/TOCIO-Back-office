@@ -253,7 +253,7 @@ class GrandeurController extends Controller{
 							  `posX` int(3) NOT NULL,
 							  `posY` int(3) NOT NULL,
 							  `posZ` int(3) NOT NULL,
-							  `identifiantModule` varchar(10) NOT NULL
+							  `identifiantModule` varchar(50) NOT NULL
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table des mesures :nom';
 							ALTER TABLE ".$model->tablename."
 								ADD PRIMARY KEY (`id`),
