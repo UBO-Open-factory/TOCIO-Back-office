@@ -14,6 +14,40 @@ use yii\filters\VerbFilter;
  */
 class CapteurController extends Controller
 {
+	
+	
+	// ---------------------------------------------------------------------------------------------
+	/**
+	 * Renvoie la liste des Capteur au format JSON.
+	 *
+	 * @return string JSON
+	 * @see https://www.yiiframework.com/doc/guide/2.0/fr/output-data-providers
+	 */
+	public function actionGetcapteurs(){
+		// Le format de l'affichage du modele serra en JSON
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		
+		// Renvoie tout ce qui est dans la table "Grandeur"
+		return Capteur::find()->all();
+	}
+	
+	
+	// ---------------------------------------------------------------------------------------------
+	/**
+	 * Renvoie une Grandeur dont l'ID est passé en paramètre au format JSON.
+	 *
+	 * @param integer $id : l'ID de la grandeur dont on veut la définition.
+	 * @return string  JSON
+	 */
+	public function actionGetcapteur($id){
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		
+		return Capteur::find()
+		->where(['id' => $id])
+		->one();
+	}
+	
+	
     /**
      * {@inheritdoc}
      */

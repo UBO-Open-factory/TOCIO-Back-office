@@ -1,13 +1,10 @@
 <?php
-/**
- * @todo : Faire une liste déroulante avec les grandeurs. pur ne pas à avoir à saisir les ID.
- */
-
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\components\tocioRegles;
 use app\components\messageAlerte;
+use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\CapteurSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -31,12 +28,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'nom:ntext',
+        	['attribute' => 'relModulecapteur.idCapteur',
+        	'format' => 'html',
+        	'label' => "Capteurs rattachés",
+        	'value' => function($model){
+        					return implode(',<br/> ', ArrayHelper::map($model->idGrandeurs, 'id', 'nature'));
+        				}
+        	],
 
-            ['class' => 'yii\grid\ActionColumn'],
+        	['class' => 'yii\grid\ActionColumn',
+        			'visibleButtons' => ['view' => false,'update' => true, 'delete' => true]
+        	],
         ],
     ]); ?>
 

@@ -17,8 +17,9 @@ use app\models\Grandeur;
 		    <?= $form->field($model, 'nom')->textarea(['rows' => 2]) ?>
 		</div>
 		<div class="col-sm-4 bottom-align">
-			Afficher la liste déroulante des grandeurs ici
-		    <? /* liste déroulante des Grandeurs*/
+		    <?php /* liste déroulante des Grandeurs */
+		    	echo $form->field($model, 'idGrandeurs')->dropDownList(
+		    		Grandeur::find()->select(['nature','id'])->indexBy('id')->column() );
 		    ?>
 		</div>
 	</div>

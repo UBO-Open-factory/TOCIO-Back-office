@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use app\components\messageAlerte;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Capteur */
@@ -19,3 +20,5 @@ $this->params['breadcrumbs'][] = 'Update';
     ]) ?>
 
 </div>
+<?php /*@todo  Attention, pour  l'instant la grandeur n'est pas enregistrée !*/
+echo messageAlerte::widget(['type' => "todo", "message" => "Attention, pour  l'instant la grandeur n'est pas enregistrée !"]); ?>
