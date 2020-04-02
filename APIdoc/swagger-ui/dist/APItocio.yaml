@@ -84,3 +84,41 @@ paths:
       tags:
         - Mesures
       summary: "Enregistre les mesures d'un module. "
+  /capteur/getcapteur:
+    get:
+      description: |-
+        Renvoie un Capteur dont l'ID est passé en paramètre. 
+
+        Il est également possible d'écrire la requète sous la forme condensée :
+        **http://..../capteur/getcapteur/[capteurid].**
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+          example: '1'
+      responses:
+        '200':
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: string
+              examples: {}
+      tags:
+        - Capteurs
+      summary: Renvoie un Capteur
+  /capteur/getcapteurs:
+    get:
+      description: Auto generated using Swagger Inspector
+      responses:
+        '200':
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: string
+              examples: {}
+      tags:
+        - Capteurs
+      summary: Renvoie touts les Capteurs
