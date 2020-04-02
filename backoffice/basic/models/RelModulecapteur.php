@@ -31,7 +31,7 @@ class RelModulecapteur extends \yii\db\ActiveRecord
         return [
             [['idModule', 'idCapteur'], 'required'],
             [['idCapteur'], 'integer'],
-            [['idModule'], 'string', 'max' => 10],
+            [['idModule'], 'string', 'max' => 50],
             [['idModule', 'idCapteur'], 'unique', 'targetAttribute' => ['idModule', 'idCapteur']],
             [['idCapteur'], 'exist', 'skipOnError' => true, 'targetClass' => Capteur::className(), 'targetAttribute' => ['idCapteur' => 'id']],
             [['idModule'], 'exist', 'skipOnError' => true, 'targetClass' => Module::className(), 'targetAttribute' => ['idModule' => 'identifiantReseau']],

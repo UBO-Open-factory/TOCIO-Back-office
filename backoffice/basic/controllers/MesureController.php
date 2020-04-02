@@ -1,11 +1,12 @@
 <?php
 namespace app\controllers;
 use Yii;
+
+use yii\rest\ActiveController;
 use app\models\Module;
-use app\models\Capteur;
-use app\models\Grandeur;
 use yii\db\Query;
-use yii\debug\models\search\Debug;
+use yii\filters\VerbFilter;
+use function GuzzleHttp\Psr7\str;
 
 
 /**
@@ -14,8 +15,10 @@ use yii\debug\models\search\Debug;
  * @file MesureController.php 
  * @author Alex
  */
-class MesureController extends \yii\web\Controller {
+class MesureController extends ActiveController {
+	public $modelClass = 'app\models\mesure';
 	
+
 	
 	//==============================================================================================
 	/**
@@ -87,6 +90,104 @@ class MesureController extends \yii\web\Controller {
 	
 	//==============================================================================================
 	/**
+	 * Permet d'ajouter une trame provenant de Lora dans la base.
+	 * Exemple de parametres recus:
+	 * {
+		   "metadata": {
+		      "connector": "lora",
+		      "source": "urn:lo:nsid:lora:70B3D54999F0552D",
+		      "group": {
+		         "path": "/",
+		         "id": "root"
+		      },
+		      "network": {
+		         "lora": {
+		            "signalLevel": 3,
+		            "rssi": -113,
+		            "gatewayCnt": 2,
+		            "esp": -116.01,
+		            "sf": 7,
+		            "messageType": "UNCONFIRMED_DATA_UP",
+		            "port": 2,
+		            "snr": 0,
+		            "ack": false,
+		            "location": {
+		               "alt": 0,
+		               "accuracy": 10000,
+		               "lon": -4.438382,
+		               "lat": 48.498604
+		            },
+		            "fcnt": 0,
+		            "devEUI": "70B3D54999F0552D"
+		         }
+		      }
+		   },
+		   "streamId": "urn:lo:nsid:lora:70B3D54999F0552D",
+		   "created": "2020-04-01T15:21:44.996Z",
+		   "extra": {},
+		   "location": {
+		      "provider": "lora",
+		      "alt": 0,
+		      "accuracy": 10000,
+		      "lon": -4.438382,
+		      "lat": 48.498604
+		   },
+		   "model": "lora_v0",
+		   "id": "5e84b188b112b25b2cb6d638",
+		   "value": {
+		      "payload": "53616c75742021"
+		   },
+		   "timestamp": "2020-04-01T15:21:29.683Z",
+		   "tags": []
+		}
+	 */
+	public function actionAddlora(){
+		//on recupere les données du json envoyé
+		$json 	= \Yii::$app->request->getRawBody();
+		$params	= json_decode( $json, true );
+		
+		// Recuperation du streamId envoyé par LORA en quise d'ID unique de module.
+		$moduleID 	= $params['metadata']['network']['lora']['devEUI'];
+		
+
+		// SI L'ID DU MODULE N'EST PAS RÉFÉRENCÉ DANS LA BASE --------------------------------------
+		if( !$this->_moduleIdIsValid($moduleID)){
+			// On fait une trace dans la base
+			Yii::error("Trame <".$moduleID."> inconnu dans la base.", "tocio");
+			
+			$l_TAB_Retour['error']	= "Module ".$moduleID." not declared.";
+			return json_encode( $l_TAB_Retour );
+		}
+		
+		$timestamp	= $params['timestamp'];
+		$payloadBrute	= $params['value']['payload'];
+		$mesures		= $this->_hex2str($payloadBrute);
+
+		
+		// ENREGISTRE LA MESURE --------------------------------------------------------------------
+		return $this->_storeMesure($moduleID, $mesures);
+
+	}
+	
+	
+	//==============================================================================================
+	/**
+	 * Empèche l'accès à l'action addlora en GET ( le fait que l'on soit en GET ou en POST est géré 
+	 * dans l'urlManager au niveau des rules dans le fichier config/web.php. 
+	 * 
+	 * @return unknown
+	 */
+	public function actionAddloraget(){
+		return json_encode(['erreur' => 'POST uniquement']);
+	}
+
+	
+	
+	
+	
+	
+	//==============================================================================================
+	/**
 	 * Permet d'ajouter une mesure dans la base.
 	 * La trame doit être sous la forme : AA01/*2018-203703100
 	 * 
@@ -99,16 +200,34 @@ class MesureController extends \yii\web\Controller {
 		$get	= $request->get();
 		$moduleID = $get['moduleid'];
 		$mesures = $get['mesures'];
-
+		
 		
 		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
 		if( ! $this::_moduleIdIsValid($moduleID)){
+			// On fait une trace dans la base
+			Yii::error("Trame <".$moduleID."> inconnu dans la base.", "tocio");
+			
 			$l_TAB_Retour['error']	= "Module ".$moduleID." not declared.";
 			return json_encode( $l_TAB_Retour );
 		}
+
+		
+		// ENREGISTRE LA MESURE
+		return $this->_storeMesure($moduleID, $mesures);
+	}
+	
+	
+
 		
 		
-		
+	//==============================================================================================
+	/**
+	 * Enregistre en base unemesure envoyée par un capteur.
+	 * @param unknown $moduleID
+	 * @param unknown $mesures
+	 * @return unknown
+	 */
+	private function _storeMesure($moduleID, $mesures){
 		// CONSTRUCTION DE LA REQUETE POUR RÉCUPERER LE NOM DES TABLES OU STOCKER LES DATA A PARTIR DE L'ID DU MODULE 
 		/*	Select m.nom, m.identifiantReseau, m.description, m.positionCapteur, c.nom, g.nature, g.tablename, p.x, p.y, p.z
 			FROM module as m
@@ -134,12 +253,6 @@ class MesureController extends \yii\web\Controller {
 					->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
 					->all();
 					
-		
-		$l_TAB_Retour['module']['nom'] 				= $module->nom;
-		$l_TAB_Retour['module']['description'] 		= $module->description;
-		$l_TAB_Retour['module']['positionCapteurs'] = $module->positionCapteur;
-		$l_TAB_CapteursID	= explode(";", $module->idCapteur);
-
 		
 		
 		// CALCUL DU NOMBRE DE CARACTÈRES ATTENDU DANS LA TRAME ------------------------------------
@@ -188,7 +301,6 @@ class MesureController extends \yii\web\Controller {
 		
 		
 		// ENREGISTREMENT DE LA TRAME DANS LES TABLES DE MESURES -----------------------------------
-		// 218203-70310
 		// On découpe la partie des mesures de la trame selon le formattage récupéré
 		$l_TAB_ChaineMesure = str_split($mesures, 1);	// Convertion de la chaine en array
 		foreach ( $l_TAB_Results as $l_INT_IndiceMesure => $l_TAB_Capteur){
@@ -265,6 +377,21 @@ class MesureController extends \yii\web\Controller {
 		} else {
 			return true;
 		}
+	}
+	
+	
+	
+	//==============================================================================================
+	/**
+	 * Convertie une chaine hexadécimale en caractères ASCII.
+	 * 
+	 * @param string $hex 
+	 * @return string
+	 */
+	private function _hex2str($hex) {
+		$str = '';
+		for($i=0;$i<strlen($hex);$i+=2) $str .= chr(hexdec(substr($hex,$i,2)));
+		return $str;
 	}
 	
 }
