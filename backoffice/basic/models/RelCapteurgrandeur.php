@@ -63,7 +63,7 @@ class RelCapteurgrandeur extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdGrandeur0()
+    public function getIdGrandeurs()
     {
         return $this->hasOne(Grandeur::className(), ['id' => 'idGrandeur']);
     }

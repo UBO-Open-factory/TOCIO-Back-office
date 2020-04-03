@@ -17,7 +17,7 @@ class CapteurSearch extends Capteur
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'idPosition'], 'integer'],
             [['nom'], 'safe'],
         ];
     }
@@ -59,6 +59,7 @@ class CapteurSearch extends Capteur
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'idPosition' => $this->idPosition,
         ]);
 
         $query->andFilterWhere(['like', 'nom', $this->nom]);

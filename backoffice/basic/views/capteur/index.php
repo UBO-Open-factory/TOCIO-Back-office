@@ -5,6 +5,7 @@ use yii\widgets\Pjax;
 use app\components\tocioRegles;
 use app\components\messageAlerte;
 use yii\helpers\ArrayHelper;
+use app\models\Position;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\CapteurSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -32,6 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'nom:ntext',
+        	['attribute' => 'position.id',
+        	'format' => 'html',
+        	'label' => "Position",
+        	'value' => function($model){
+        		return $model->position['x'].";".$model->position['y'].";".$model->position['z'];
+        				}
+        	],
         	['attribute' => 'relModulecapteur.idCapteur',
         	'format' => 'html',
         	'label' => "Capteurs rattachés",
