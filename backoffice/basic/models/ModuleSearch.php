@@ -58,7 +58,7 @@ class ModuleSearch extends Module
         
         
         // RELATION MODULE-CAPTEUR POUR AFFICHER LE NOM DES CAPTEURS LIÉS
-        $query->joinWith(['relModulecapteur as relModulecapteur']);
+        $query->joinWith(['relmodulecapteur as relmodulecapteur']);
         $query->joinWith(['idCapteurs as idCapteurs']);
 
         

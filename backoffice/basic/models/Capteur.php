@@ -9,12 +9,10 @@ use Yii;
  *
  * @property int $id
  * @property string $nom
- * @property int $idPosition
  *
- * @property Position $position
  * @property RelCapteurgrandeur[] $relCapteurgrandeurs
  * @property Grandeur[] $idGrandeurs
- * @property RelModulecapteur[] $relModulecapteurs
+ * @property Relmodulecapteur[] $relmodulecapteurs
  * @property Module[] $idModules
  */
 class Capteur extends \yii\db\ActiveRecord
@@ -33,9 +31,8 @@ class Capteur extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nom', 'idPosition'], 'required'],
+            [['nom'], 'required'],
             [['nom'], 'string'],
-            [['idPosition'], 'integer'],
         ];
     }
 
@@ -47,18 +44,7 @@ class Capteur extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nom' => 'Nom',
-            'idPosition' => 'Id Position',
         ];
-    }
-
-    /**
-     * Gets query for [[Position]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPosition()
-    {
-        return $this->hasOne(Position::className(), ['id' => 'id']);
     }
 
     /**
@@ -88,7 +74,7 @@ class Capteur extends \yii\db\ActiveRecord
      */
     public function getRelModulecapteurs()
     {
-        return $this->hasMany(RelModulecapteur::className(), ['idCapteur' => 'id']);
+        return $this->hasMany(Relmodulecapteur::className(), ['idCapteur' => 'id']);
     }
 
     /**

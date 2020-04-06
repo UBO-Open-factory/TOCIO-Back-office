@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Capteur;
+use app\models\Relmodulecapteur;
 
 /**
- * CapteurSearch represents the model behind the search form of `app\models\Capteur`.
+ * RelmodulecapteurSearch represents the model behind the search form of `app\models\Relmodulecapteur`.
  */
-class CapteurSearch extends Capteur
+class RelmodulecapteurSearch extends Relmodulecapteur
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class CapteurSearch extends Capteur
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['nom'], 'safe'],
+            [['idModule', 'nomcapteur'], 'safe'],
+            [['idCapteur', 'x', 'y', 'z'], 'integer'],
         ];
     }
 
@@ -40,7 +40,7 @@ class CapteurSearch extends Capteur
      */
     public function search($params)
     {
-        $query = Capteur::find();
+        $query = Relmodulecapteur::find();
 
         // add conditions that should always apply here
 
@@ -58,10 +58,14 @@ class CapteurSearch extends Capteur
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'idCapteur' => $this->idCapteur,
+            'x' => $this->x,
+            'y' => $this->y,
+            'z' => $this->z,
         ]);
 
-        $query->andFilterWhere(['like', 'nom', $this->nom]);
+        $query->andFilterWhere(['like', 'idModule', $this->idModule])
+            ->andFilterWhere(['like', 'nomcapteur', $this->nomcapteur]);
 
         return $dataProvider;
     }

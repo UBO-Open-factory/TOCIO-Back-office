@@ -14,7 +14,7 @@ use Yii;
  * @property int $actif 1 = Actif, 0 = Innactif
  *
  * @property Localisationmodule $idLocalisationModule0
- * @property RelModulecapteur[] $relModulecapteurs
+ * @property Relmodulecapteur[] $relmodulecapteurs
  * @property Capteur[] $idCapteurs
  */
 class Module extends \yii\db\ActiveRecord
@@ -37,7 +37,6 @@ class Module extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['idLocalisationModule', 'actif'], 'integer'],
             [['identifiantReseau'], 'string', 'max' => 50],
-            [['nom'], 'string', 'max' => 50],
             [['identifiantReseau'], 'unique'],
             [['idLocalisationModule'], 'exist', 'skipOnError' => true, 'targetClass' => Localisationmodule::className(), 'targetAttribute' => ['idLocalisationModule' => 'id']],
         ];
@@ -72,9 +71,9 @@ class Module extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRelModulecapteur()
+    public function getRelmodulecapteur()
     {
-        return $this->hasMany(RelModulecapteur::className(), ['idModule' => 'identifiantReseau']);
+    	return $this->hasMany(Relmodulecapteur::className(), ['idModule' => 'identifiantReseau']);
     }
 
     /**

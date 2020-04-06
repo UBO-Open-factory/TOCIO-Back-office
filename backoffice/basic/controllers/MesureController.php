@@ -222,36 +222,33 @@ class MesureController extends ActiveController {
 		
 	//==============================================================================================
 	/**
-	 * Enregistre en base unemesure envoyée par un capteur.
+	 * Enregistre en base une mesure envoyée par un capteur.
 	 * @param unknown $moduleID
 	 * @param unknown $mesures
 	 * @return unknown
 	 */
 	private function _storeMesure($moduleID, $mesures){
 		// CONSTRUCTION DE LA REQUETE POUR RÉCUPERER LE NOM DES TABLES OU STOCKER LES DATA A PARTIR DE L'ID DU MODULE 
-		/*	Select m.nom, m.identifiantReseau, m.description, m.positionCapteur, c.nom, g.nature, g.tablename, p.x, p.y, p.z
+		/*	Select m.nom, m.identifiantReseau, m.description, c.nom, g.nature, g.tablename, rmc.x, rmc.y, rmc.z
 			FROM module as m
 			INNER JOIN rel_modulecapteur as rmc ON m.identifiantReseau = rmc.idModule
 			INNER JOIN capteur as c ON rmc.idCapteur = c.id
 			INNER JOIN rel_capteurgrandeur as rcg ON rcg.idCapteur = c.id
 			INNER JOIN grandeur as g ON g.id = rcg.idGrandeur
-			INNER JOIN rel_positionCapteur as rpc ON rpc.idCapteur = c.id
-			INNER JOIN position as p ON p.id = rpc.idPosition
-			WHERE m.identifiantReseau = "AA01"
+			INNER JOIN position as p ON p.id = c.idPosition
+			WHERE m.identifiantReseau = "70B3D54999F0552D"
 			
 			@see https://www.yiiframework.com/doc/guide/2.0/fr/db-query-builder
 		 */
 		$l_OBJ_Query= new Query();
-		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom, g.nature, g.tablename, g.formatCapteur, p.x, p.y, p.z')
-					->from('module as m')
-					->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
-					->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
-					->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
-					->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
-					->innerJoin('rel_positionCapteur as rpc', 'rpc.idCapteur = c.id')
-					->innerJoin('position as p', 'p.id = rpc.idPosition')
-					->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
-					->all();
+		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z')
+									->from('module as m')
+									->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
+									->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
+									->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
+									->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
+									->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
+									->all();
 					
 		
 		

@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="module-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-	<p> Un module est un ensemble de capteurs</p>
+	<p>Un module est un ensemble de capteurs</p>
     <p>
         <?= Html::a('Nouveau Module', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -39,7 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
         	'nom',
             'identifiantReseau',
             'description:ntext',
-        	'idLocalisationModule:integer',
         	'localisationModule.description',
         	['attribute' => 'actif',
        			'format' => 'html',
@@ -47,11 +46,11 @@ $this->params['breadcrumbs'][] = $this->title;
         			return $model->actif == "1" ? "oui" : "non";
        			}
         	],
-        	['attribute' => 'relModulecapteur.idCapteur',
+        	['attribute' => 'relmodulecapteur.idCapteur',
        			'format' => 'html',
-       			'label' => "Capteurs rattachés", 
+       			'label' => "Capteurs attachés", 
        			'value' => function($model){
-        			return implode(', ', ArrayHelper::map($model->idCapteurs, 'id', 'nom'));
+        			return implode('<br/>', ArrayHelper::map($model->idCapteurs, 'id', 'nom'));
        			}
         	],
 

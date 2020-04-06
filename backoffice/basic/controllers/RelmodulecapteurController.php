@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Capteur;
-use app\models\CapteurSearch;
+use app\models\Relmodulecapteur;
+use app\models\RelmodulecapteurSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CapteurController implements the CRUD actions for Capteur model.
+ * RelmodulecapteurController implements the CRUD actions for Relmodulecapteur model.
  */
-class CapteurController extends Controller
+class RelmodulecapteurController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class CapteurController extends Controller
     }
 
     /**
-     * Lists all Capteur models.
+     * Lists all Relmodulecapteur models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CapteurSearch();
+        $searchModel = new RelmodulecapteurSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,29 +45,30 @@ class CapteurController extends Controller
     }
 
     /**
-     * Displays a single Capteur model.
-     * @param integer $id
+     * Displays a single Relmodulecapteur model.
+     * @param string $idModule
+     * @param integer $idCapteur
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($idModule, $idCapteur)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($idModule, $idCapteur),
         ]);
     }
 
     /**
-     * Creates a new Capteur model.
+     * Creates a new Relmodulecapteur model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Capteur();
+        $model = new Relmodulecapteur();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur]);
         }
 
         return $this->render('create', [
@@ -76,18 +77,19 @@ class CapteurController extends Controller
     }
 
     /**
-     * Updates an existing Capteur model.
+     * Updates an existing Relmodulecapteur model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $idModule
+     * @param integer $idCapteur
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($idModule, $idCapteur)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($idModule, $idCapteur);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur]);
         }
 
         return $this->render('update', [
@@ -96,29 +98,31 @@ class CapteurController extends Controller
     }
 
     /**
-     * Deletes an existing Capteur model.
+     * Deletes an existing Relmodulecapteur model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $idModule
+     * @param integer $idCapteur
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($idModule, $idCapteur)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($idModule, $idCapteur)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Capteur model based on its primary key value.
+     * Finds the Relmodulecapteur model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Capteur the loaded model
+     * @param string $idModule
+     * @param integer $idCapteur
+     * @return Relmodulecapteur the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($idModule, $idCapteur)
     {
-        if (($model = Capteur::findOne($id)) !== null) {
+        if (($model = Relmodulecapteur::findOne(['idModule' => $idModule, 'idCapteur' => $idCapteur])) !== null) {
             return $model;
         }
 

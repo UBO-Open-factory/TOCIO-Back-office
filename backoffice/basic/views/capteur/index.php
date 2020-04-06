@@ -33,14 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'nom:ntext',
-        	['attribute' => 'position.id',
-        	'format' => 'html',
-        	'label' => "Position",
-        	'value' => function($model){
-        		return $model->position['x'].";".$model->position['y'].";".$model->position['z'];
-        				}
-        	],
-        	['attribute' => 'relModulecapteur.idCapteur',
+        	['attribute' => 'relmodulecapteur.idCapteur',
         	'format' => 'html',
         	'label' => "Capteurs rattachés",
         	'value' => function($model){

@@ -9,11 +9,15 @@ use Yii;
  *
  * @property string $idModule
  * @property int $idCapteur
+ * @property string $nomcapteur
+ * @property int $x Coordonnées X
+ * @property int $y Coordonnées Y
+ * @property int $z Coordonnées Z
  *
  * @property Capteur $idCapteur0
  * @property Module $idModule0
  */
-class RelModulecapteur extends \yii\db\ActiveRecord
+class Relmodulecapteur extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -29,8 +33,9 @@ class RelModulecapteur extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idModule', 'idCapteur'], 'required'],
-            [['idCapteur'], 'integer'],
+            [['idModule', 'idCapteur', 'nomcapteur', 'x', 'y', 'z'], 'required'],
+            [['idCapteur', 'x', 'y', 'z'], 'integer'],
+            [['nomcapteur'], 'string'],
             [['idModule'], 'string', 'max' => 50],
             [['idModule', 'idCapteur'], 'unique', 'targetAttribute' => ['idModule', 'idCapteur']],
             [['idCapteur'], 'exist', 'skipOnError' => true, 'targetClass' => Capteur::className(), 'targetAttribute' => ['idCapteur' => 'id']],
@@ -46,6 +51,10 @@ class RelModulecapteur extends \yii\db\ActiveRecord
         return [
             'idModule' => 'Id Module',
             'idCapteur' => 'Id Capteur',
+            'nomcapteur' => 'Nom du capteur',
+            'x' => 'X',
+            'y' => 'Y',
+            'z' => 'Z',
         ];
     }
 
