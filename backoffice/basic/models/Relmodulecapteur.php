@@ -33,8 +33,9 @@ class Relmodulecapteur extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idModule', 'idCapteur', 'nomcapteur', 'x', 'y', 'z'], 'required'],
+            [['idModule', 'idCapteur', 'nomcapteur'], 'required'],
             [['idCapteur', 'x', 'y', 'z'], 'integer'],
+            [['x', 'y', 'z'], 'default', 'value' => 0],	// Valeur par défault des coordoonées.
             [['nomcapteur'], 'string'],
             [['idModule'], 'string', 'max' => 50],
             [['idModule', 'idCapteur'], 'unique', 'targetAttribute' => ['idModule', 'idCapteur']],
@@ -49,12 +50,12 @@ class Relmodulecapteur extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idModule' => 'Id Module',
-            'idCapteur' => 'Id Capteur',
-            'nomcapteur' => 'Nom du capteur',
-            'x' => 'X',
-            'y' => 'Y',
-            'z' => 'Z',
+        		'idModule' => 'Id Module',
+        		'idCapteur' => 'Capteur',
+        		'nomcapteur' => 'Nom du capteur',
+        		'x' => 'X',
+        		'y' => 'Y',
+        		'z' => 'Z',
         ];
     }
 

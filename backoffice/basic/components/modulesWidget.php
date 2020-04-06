@@ -24,6 +24,7 @@ class modulesWidget extends Widget
 	}
 	
 
+	// _____________________________________________________________________________________________
 	/**
 	 * Génération du code HTML pour l'affichage des modules.
 	 * 
@@ -67,28 +68,30 @@ class modulesWidget extends Widget
 			// RECUPERATION DES CAPTEURS RATTACHÉS À CE MODULE -------------------------------------
 			$capteurs = [];
 			foreach( $l_OBJ_Module->idCapteurs as $l_OBJ_Capteur){
-				
-				// Boutons d'édition du capteur
-				$l_TAB_BtnEdition	= [];
-				$l_TAB_BtnEdition[]	= $this->_btnEdition("capteur/delete", "glyphicon glyphicon-trash", $l_OBJ_Capteur->id);
+				// Boutons d'édition du capteur custom
+				$l_TAB_BtnCustomCapteur	= [];
 
-				
-				// Le nom officiel du capteur
-				$l_STR_Nom	= $l_OBJ_Capteur->nom. " ".implode(" ", $l_TAB_BtnEdition);
-				
 				
 				// La customisation de ce capteur pour ce module
 				$l_STR_Position				= "";
-				$l_STR_NomCustomiseCapteur 	="";
+				$l_STR_CustomCapteurName 	="";
 				foreach( $l_OBJ_Capteur->relModulecapteurs as $l_OBJ_ModuleCapteur){
 					// On trouve le Capteur de notre module dans la table des relation module/capteurs					
 					if( $l_OBJ_ModuleCapteur->idModule == $l_OBJ_Module->identifiantReseau) {
-						$l_STR_Position 			= $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
-						$l_STR_NomCustomiseCapteur	= $l_OBJ_ModuleCapteur['nomcapteur'];
+						$l_STR_Position 				= $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
+						$l_STR_CustomCapteurName		= $l_OBJ_ModuleCapteur['nomcapteur'];
+						
+						// Bouton d'édition du capteur
+						$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("relmodulecapteur/update", "glyphicon glyphicon-pencil", $l_OBJ_ModuleCapteur['idModule'], $l_OBJ_ModuleCapteur['idCapteur']);
+						$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("relmodulecapteur/delete", "glyphicon glyphicon-trash", $l_OBJ_ModuleCapteur['idModule'], $l_OBJ_ModuleCapteur['idCapteur']);
 					}
 				}
 				$l_STR_Position	= $this->_legende($l_STR_Position, "Coordonnées");
 
+				
+				// Le nom officiel du capteur
+				$l_STR_Nom	= $l_OBJ_Capteur->nom;
+				
 				
 				// Contenu de la boite du capteur sur 2 colonnes
 				$contents = []; 					
@@ -113,9 +116,9 @@ class modulesWidget extends Widget
 
 					
 					// Boutons d'édition du format
-					$l_TAB_BtnEdition	= [];
-					$l_TAB_BtnEdition[]	= $this->_btnEdition("grandeur/update", "glyphicon glyphicon-pencil", $l_STR_GrandeurID);
-					$l_TAB_BtnEdition[]	= $this->_btnEdition("grandeur/delete", "glyphicon glyphicon-trash", $l_STR_GrandeurID);
+					$l_TAB_BtnFormat	= [];
+					$l_TAB_BtnFormat[]	= $this->_btnEdition("grandeur/update", "glyphicon glyphicon-pencil", $l_STR_GrandeurID);
+					$l_TAB_BtnFormat[]	= $this->_btnEdition("grandeur/delete", "glyphicon glyphicon-trash", $l_STR_GrandeurID);
 					
 					
 					
@@ -131,7 +134,7 @@ class modulesWidget extends Widget
 											$l_STR_Format,
 											["class" => "col-md-2"]);
 					$contents[] = Html::tag("div",
-											implode(" ", $l_TAB_BtnEdition),
+							implode(" ", $l_TAB_BtnFormat),
 											["class" => "col-md-2"]);
 				}
 				$contents[] = "		</div>";
@@ -141,8 +144,7 @@ class modulesWidget extends Widget
 				
 				
 				// Boite autour du capteur
-				// @todo Modifier la bdd pour pouvoir customiser le nom du capteur dans un module
-				$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_NomCustomiseCapteur,
+				$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_CustomCapteurName. " ".implode(" ", $l_TAB_BtnCustomCapteur),
 												"content"	=> implode("", $contents),
 												"class"		=> "border-light mb-3 px-0 Capteur",
 												"style" 	=> null,
@@ -156,6 +158,12 @@ class modulesWidget extends Widget
 			$l_STR_Nom 					= $this->_toolTip($l_OBJ_Module->nom, "Nom du module");
 			$l_STR_IdentifiantReseau 	= $this->_toolTip($l_OBJ_Module->identifiantReseau, "Identifiant réseau du module");
 			$l_STR_Description			= $this->_toolTip($l_OBJ_Module->description, "Description du module");
+
+			
+			// Bouton d'ajout d'un capteur
+			$l_STR_Temp	 = '<button type="button" class="btn btn-info pull-right"><span class="glyphicon glyphicon-plus"></span> Capteur</button>';
+			$l_STR_BtnAjoutCapteur = Html::a($l_STR_Temp, ['relmodulecapteur/create', 'idModule' => $l_OBJ_Module['identifiantReseau']], ['class' => 'profile-link']);
+			
 			
 			// Construction du contenu de la boite sur 3 colonnes.
 			$contents = [];
@@ -168,6 +176,7 @@ class modulesWidget extends Widget
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-9'>";
 			$contents[] = implode("", $capteurs);
+			$contents[] = $l_STR_BtnAjoutCapteur;
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
 			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrame), "Format de la trame"));
@@ -178,7 +187,8 @@ class modulesWidget extends Widget
 			
 			
 			// CONSTRUCTION DE LA BOITE DU MODULE --------------------------------------------------
-			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Nom ." ". implode(" ", $l_TAB_BtnEditionModule),
+			$l_STR_BtnPliage = '<span class="toggleAffichage pull-right glyphicon glyphicon-triangle-bottom"></span>';
+			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Nom ." ". implode(" ", $l_TAB_BtnEditionModule).$l_STR_BtnPliage,
 											"titre" 	=> $l_STR_Description,
 											"content"	=> implode("", $contents),
 											"class"		=> "text-white bg-primary mb-3 px-0 Module",
@@ -192,7 +202,7 @@ class modulesWidget extends Widget
 	
 	
 	
-	// ---------------------------------------------------------------------------------------------
+	// _____________________________________________________________________________________________
 	/**
 	 * Permet d'afficher une boite (Cards) au format bootstrap, comme ci-dessous :
 	  	<div class="card border-secondary mb-3" style="max-width: 20rem;">
@@ -244,7 +254,7 @@ class modulesWidget extends Widget
 	
 	
 	
-	// ---------------------------------------------------------------------------------------------
+	// _____________________________________________________________________________________________
 	/**
 	 * Retourne un exemeple de formattage de grandeur en fonctoin du format fourni en paramètre.
 	 * @param string $format le format tel que défini dans le BDD pour la grandeur.
@@ -275,7 +285,7 @@ class modulesWidget extends Widget
 	}
 	
 	
-	// ---------------------------------------------------------------------------------------------
+	// _____________________________________________________________________________________________
 	/**
 	 * Permet de générer le code HTML pour l'affichage d'un tool tip.
 	 * 
@@ -290,7 +300,7 @@ class modulesWidget extends Widget
 	
 	
 	
-	// ---------------------------------------------------------------------------------------------
+	// _____________________________________________________________________________________________
 	/**
 	 * Permet d'afficher un filedset autour d'un mot avec une légende.
 	 * @param string $mot : le mot sur lequel va être mis le tool tip
@@ -306,7 +316,7 @@ class modulesWidget extends Widget
 	}
 	
 	
-	// ---------------------------------------------------------------------------------------------
+	// _____________________________________________________________________________________________
 	/**
 	 * Génère le code HTML pour un bouton d'édition.
 	 * @param string $link 	à déclancher lorsque l'on clique sur le bouton
@@ -317,6 +327,20 @@ class modulesWidget extends Widget
 	private function _btnEdition($link,$icon, $id){
 		$btn = Html::tag("span ", "",["class" => $icon]);
 		return Html::a($btn, [$link, 'id' => $id]);
+	}
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Génère le code HTML pour un bouton d'édition.
+	 * @param string $link 	à déclancher lorsque l'on clique sur le bouton
+	 * @param string $icon	du bouton.
+	 * @param string $id	de l'objhet à passer en paramètre.
+	 * @return string
+	 */
+	private function _btnEditionCustomCapteur($link,$icon, $idModule, $idCapteur){
+		$btn = Html::tag("span ", "",["class" => $icon]);
+		return Html::a($btn, [$link, 'idModule' => $idModule, 'idCapteur' => $idCapteur]);
 	}
 }
 ?>

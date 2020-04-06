@@ -63,7 +63,11 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 
+<?php /*@todo  Pouvoir supprimer un capteur*/
+echo messageAlerte::widget(['type' => "todo", "message" => "Pouvoir supprimer un capteur"]); ?>
 
+<?php /*@todo  Mettre en place le toggle sur le triangle à droite du nom du module.*/
+echo messageAlerte::widget(['type' => "todo", "message" => "Mettre en place le toggle sur le triangle à droite du nom du module."]); ?>
 <?php 
 	echo modulesWidget::widget([
 			'dataProvider' => $dataProvider,
