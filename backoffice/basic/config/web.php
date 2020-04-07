@@ -13,6 +13,11 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+		// Gestion des ressources ( les assets )
+		// On rajoute un timestamp pour que cette ressources ne soient pas mise en cache
+    	'assetManager' => [
+    		'appendTimestamp' => true,
+    	],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'keW0Qn2MixxqzkfRxEWni-Frzm3VJoFim',

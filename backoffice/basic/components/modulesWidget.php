@@ -32,6 +32,10 @@ class modulesWidget extends Widget
 	 * @see \yii\base\Widget::run()
 	 */
 	public function run() {
+		// Le bouton pour plier/déplier les boites.
+		$l_STR_BtnPliage = Html::tag("span","", ['class'	=> "triangle pull-right glyphicon glyphicon-triangle-bottom"]);
+		
+		
 		$models = array_values($this->dataProvider->getModels());
 		$modules = [];
 		
@@ -67,6 +71,7 @@ class modulesWidget extends Widget
 			
 			// RECUPERATION DES CAPTEURS RATTACHÉS À CE MODULE -------------------------------------
 			$capteurs = [];
+			$capteursNames = [];
 			foreach( $l_OBJ_Module->idCapteurs as $l_OBJ_Capteur){
 				// Boutons d'édition du capteur custom
 				$l_TAB_BtnCustomCapteur	= [];
@@ -90,14 +95,15 @@ class modulesWidget extends Widget
 
 				
 				// Le nom officiel du capteur
-				$l_STR_Nom	= $l_OBJ_Capteur->nom;
+				$l_STR_NomCapteur	= $l_OBJ_Capteur->nom;
+				$capteursNames[]	= $l_OBJ_Capteur->nom;
 				
 				
 				// Contenu de la boite du capteur sur 2 colonnes
 				$contents = []; 					
 				$contents[] = "<div class='row'>";
 				$contents[] = "<div class='col-md-3'>";
-				$contents[] = Html::tag("h4", $l_STR_Nom,["class" => "card-title"]);
+				$contents[] = Html::tag("h4", $l_STR_NomCapteur,["class" => "card-title"]);
 				$contents[] = "</div>";
 				$contents[] = "<div class='col-md-2'>";
 				$contents[] = $l_STR_Position;
@@ -144,7 +150,7 @@ class modulesWidget extends Widget
 				
 				
 				// Boite autour du capteur
-				$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_CustomCapteurName. " ".implode(" ", $l_TAB_BtnCustomCapteur),
+				$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_CustomCapteurName. " ".implode(" ", $l_TAB_BtnCustomCapteur)." ".$l_STR_BtnPliage,
 												"content"	=> implode("", $contents),
 												"class"		=> "border-light mb-3 px-0 Capteur",
 												"style" 	=> null,
@@ -169,7 +175,7 @@ class modulesWidget extends Widget
 			$contents = [];
 			$contents[] = "<div class='row'>";
 			$contents[] = "<div class='col-md-3'>";
-			$contents[] = Html::tag("h4", $l_STR_Nom,["class" => "card-title"]);
+			$contents[] = Html::tag("h4", $l_STR_Nom." ". implode(" ", $l_TAB_BtnEditionModule),["class" => "card-title"]);
 			$contents[] = Html::tag("p", $this->_legende($l_STR_Description, "Description"));
 			$contents[] = Html::tag("p", $this->_legende($l_STR_localisationModule, "Localisation"));
 			$contents[] = Html::tag("p", $this->_legende($l_STR_IdentifiantReseau, "Identifiant réseau"));
@@ -187,12 +193,12 @@ class modulesWidget extends Widget
 			
 			
 			// CONSTRUCTION DE LA BOITE DU MODULE --------------------------------------------------
-			$l_STR_BtnPliage = '<span class="toggleAffichage pull-right glyphicon glyphicon-triangle-bottom"></span>';
-			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Nom ." ". implode(" ", $l_TAB_BtnEditionModule).$l_STR_BtnPliage,
+			// @todo Ajouter une feuille de style pour transformer le cursor en pointer
+			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Nom." ".implode(" | ", $capteursNames) .$l_STR_BtnPliage,
 											"titre" 	=> $l_STR_Description,
 											"content"	=> implode("", $contents),
-											"class"		=> "text-white bg-primary mb-3 px-0 Module",
-											"style" 	=> "",
+											"class"		=> "card border-primary  mb-3 px-0 Module",
+											"style" 	=> "max-width: 90rem",
 										]);
 		}
 		
@@ -229,7 +235,7 @@ class modulesWidget extends Widget
 	 */
 	private function _cardBox($params) {
 		// ENTETE		
-		$header 	= ($params['header'] !== null) ? Html::tag("div", $params['header'], array("class" => "card-header")):"";
+		$header 	= ($params['header'] !== null) ? Html::tag("div", $params['header'], array("class" => "card-header toggleAffichage")):"";
 		
 		// CONTENU
 		if( !isset($params['content']) ){

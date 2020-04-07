@@ -5,18 +5,20 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\components\messageAlerte;
 use app\components\modulesWidget;
-use Codeception\Module;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use yii\helpers\VarDumper;
+use app\assets\ModuleAsset;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ModuleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Modules';
 $this->params['breadcrumbs'][] = $this->title;
-?>
 
+// Utilisaiton des ressources pour les modules (JS + CSS)
+ModuleAsset::register($this);
+
+?>
 
 <div class="module-index">
 
@@ -29,45 +31,44 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= 
-    GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-       		// ['class' => 'yii\grid\SerialColumn'], // Colonne série
-			// 'id',
-        	'nom',
-            'identifiantReseau',
-            'description:ntext',
-        	'localisationModule.description',
-        	['attribute' => 'actif',
-       			'format' => 'html',
-       			'value' => function($model){
-        			return $model->actif == "1" ? "oui" : "non";
-       			}
-        	],
-        	['attribute' => 'relmodulecapteur.idCapteur',
-       			'format' => 'html',
-       			'label' => "Capteurs attachés", 
-       			'value' => function($model){
-        			return implode('<br/>', ArrayHelper::map($model->idCapteurs, 'id', 'nom'));
-       			}
-        	],
+    <?php
+//     	echo
+//     GridView::widget([
+//         'dataProvider' => $dataProvider,
+//         'filterModel' => $searchModel,
+//         'columns' => [
+//        		// ['class' => 'yii\grid\SerialColumn'], // Colonne série
+// 			// 'id',
+//         	'nom',
+//             'identifiantReseau',
+//             'description:ntext',
+//         	'localisationModule.description',
+//         	['attribute' => 'actif',
+//        			'format' => 'html',
+//        			'value' => function($model){
+//         			return $model->actif == "1" ? "oui" : "non";
+//        			}
+//         	],
+//         	['attribute' => 'relmodulecapteur.idCapteur',
+//        			'format' => 'html',
+//        			'label' => "Capteurs attachés", 
+//        			'value' => function($model){
+//         			return implode('<br/>', ArrayHelper::map($model->idCapteurs, 'id', 'nom'));
+//        			}
+//         	],
 
-        	['class' => 'yii\grid\ActionColumn', 
-        		'visibleButtons' => ['view' => false,'update' => true, 'delete' => true]
-        	],
-        ],
-    ]); ?>
+//         	['class' => 'yii\grid\ActionColumn', 
+//         		'visibleButtons' => ['view' => false,'update' => true, 'delete' => true]
+//         	],
+//         ],
+//     ]); 
+	?>
     <?php Pjax::end(); ?>
 </div>
-
 
 <?php /*@todo  Pouvoir supprimer un capteur*/
 echo messageAlerte::widget(['type' => "todo", "message" => "Pouvoir supprimer un capteur"]); ?>
 
-<?php /*@todo  Mettre en place le toggle sur le triangle à droite du nom du module.*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Mettre en place le toggle sur le triangle à droite du nom du module."]); ?>
 <?php 
 	echo modulesWidget::widget([
 			'dataProvider' => $dataProvider,
