@@ -24,9 +24,7 @@ ModuleAsset::register($this);
 
     <h1><?= Html::encode($this->title) ?></h1>
 	<p>Un module est un ensemble de capteurs</p>
-    <p>
-        <?= Html::a('Nouveau Module', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -62,15 +60,17 @@ ModuleAsset::register($this);
 //         	],
 //         ],
 //     ]); 
+// 	?>
+
+
+	<?php 
+		echo modulesWidget::widget([
+				'dataProvider' => $dataProvider,
+		]);
 	?>
+	
+	<p>
+	<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un module', ['create'], ['class' => 'btn btn-success pull-right'])?>
+	</p>
     <?php Pjax::end(); ?>
 </div>
-
-<?php /*@todo  Pouvoir supprimer un capteur*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Pouvoir supprimer un capteur"]); ?>
-
-<?php 
-	echo modulesWidget::widget([
-			'dataProvider' => $dataProvider,
-	]);
-?>

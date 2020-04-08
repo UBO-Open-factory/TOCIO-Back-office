@@ -34,6 +34,7 @@ class modulesWidget extends Widget
 	public function run() {
 		// Le bouton pour plier/déplier les boites.
 		$l_STR_BtnPliage = Html::tag("span","", ['class'	=> "triangle pull-right glyphicon glyphicon-triangle-bottom"]);
+		$l_STR_BtnDelete = Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
 		
 		
 		$models = array_values($this->dataProvider->getModels());
@@ -66,6 +67,7 @@ class modulesWidget extends Widget
 			$l_TAB_BtnEditionModule 	= [];
 			$l_TAB_BtnEditionModule[]	= $this->_btnEdition("module/update", "glyphicon glyphicon-pencil", $l_OBJ_Module->identifiantReseau);
 			$l_TAB_BtnEditionModule[]	= $this->_btnEdition("module/delete", "glyphicon glyphicon-trash", $l_OBJ_Module->identifiantReseau);
+			$l_TAB_BtnEditionModule[]	= $this->_getModuleDeleteButton([	'action' => "/module/delete",'id' => $l_OBJ_Module->identifiantReseau]);
 			
 		
 			
@@ -88,7 +90,13 @@ class modulesWidget extends Widget
 						
 						// Bouton d'édition du capteur
 						$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("relmodulecapteur/update", "glyphicon glyphicon-pencil", $l_OBJ_ModuleCapteur['idModule'], $l_OBJ_ModuleCapteur['idCapteur']);
-						$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("relmodulecapteur/delete", "glyphicon glyphicon-trash", $l_OBJ_ModuleCapteur['idModule'], $l_OBJ_ModuleCapteur['idCapteur']);
+						$l_TAB_BtnCustomCapteur[]	= Html::a($l_STR_BtnDelete,
+															["relmodulecapteur/delete", "idModule" => $l_OBJ_ModuleCapteur['idModule'], "idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']],
+															['data-pjax' => "0",
+																	"aria-label" => "Supprimer",
+																	"title" => "Supprimer",
+																	"data-confirm" => "Êtes-vous sûr de vouloir détacher ce Capteur de ce Module ?",
+																	"data-method"=>"post"]);
 					}
 				}
 				$l_STR_Position	= $this->_legende($l_STR_Position, "Coordonnées");
@@ -152,7 +160,7 @@ class modulesWidget extends Widget
 				// Boite autour du capteur
 				$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_CustomCapteurName. " ".implode(" ", $l_TAB_BtnCustomCapteur)." ".$l_STR_BtnPliage,
 												"content"	=> implode("", $contents),
-												"class"		=> "border-light mb-3 px-0 Capteur",
+												"class"		=> "border-info mb-3 px-0 Capteur",
 												"style" 	=> null,
 										]);
 			}
@@ -167,7 +175,8 @@ class modulesWidget extends Widget
 
 			
 			// Bouton d'ajout d'un capteur
-			$l_STR_Temp	 = '<button type="button" class="btn btn-info pull-right"><span class="glyphicon glyphicon-plus"></span> Capteur</button>';
+			$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
+			$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter un capteur", ["class" => "btn btn-info pull-right"]);
 			$l_STR_BtnAjoutCapteur = Html::a($l_STR_Temp, ['relmodulecapteur/create', 'idModule' => $l_OBJ_Module['identifiantReseau']], ['class' => 'profile-link']);
 			
 			
@@ -193,11 +202,10 @@ class modulesWidget extends Widget
 			
 			
 			// CONSTRUCTION DE LA BOITE DU MODULE --------------------------------------------------
-			// @todo Ajouter une feuille de style pour transformer le cursor en pointer
 			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Nom." ".implode(" | ", $capteursNames) .$l_STR_BtnPliage,
 											"titre" 	=> $l_STR_Description,
 											"content"	=> implode("", $contents),
-											"class"		=> "card border-primary  mb-3 px-0 Module",
+											"class"		=> "card border-success  mb-3 px-0 Module",
 											"style" 	=> "max-width: 90rem",
 										]);
 		}
@@ -206,6 +214,30 @@ class modulesWidget extends Widget
 		return Html::tag("div", implode("", $modules), array("class" => "Modules"));
 	}
 	
+
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Construction d'un lien de suppression d'un module
+	 * 
+	 * @param array $params : 	['action'] 	= l'action à appeler lors de la validation du formulaire.
+	 *	 						['id'] 		= l'ID du module à supprimer
+	 * @return string
+	 */
+	private function _getModuleDeleteButton($params){
+		// Le picto
+		$l_STR_SubmitButton = Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
+
+		// Le lien
+		return Html::a($l_STR_SubmitButton, 
+						[$params['action'], "id" => $params['id']], 
+						['data-pjax' => "0", 
+						"aria-label" => "Supprimer", 
+						"title" => "Supprimer", 
+						"data-confirm" => "Êtes-vous sûr de vouloir supprimer cet élément ?",  
+						"data-method"=>"post"]);
+	}
 	
 	
 	// _____________________________________________________________________________________________
@@ -283,6 +315,7 @@ class modulesWidget extends Widget
 			$l_TAB_Avant[] = $i;
 		}
 		$l_TAB_Apres= [];
+		
 		for( $i=0; $i < $l_INT_Apres; $i++){
 			$l_TAB_Apres[] = $i;
 		}
