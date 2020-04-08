@@ -33,8 +33,10 @@ class modulesWidget extends Widget
 	 */
 	public function run() {
 		// Le bouton pour plier/déplier les boites.
-		$l_STR_BtnPliage = Html::tag("span","", ['class'	=> "triangle pull-right glyphicon glyphicon-triangle-bottom"]);
-		$l_STR_BtnDelete = Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
+		$l_STR_BtnPliage 		= Html::tag("span","", ['class'	=> "triangle pull-right glyphicon glyphicon-triangle-bottom"]);
+		$l_STR_BtnDelete 		= Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
+		$l_STR_BtnModuleActif 		= "";
+		$l_STR_BtnModuleDeactif 	= Html::tag("span", " Désactivé", ["class"=> "badge badge-warning glyphicon glyphicon-ban-circle"]);
 		
 		
 		$models = array_values($this->dataProvider->getModels());
@@ -66,8 +68,12 @@ class modulesWidget extends Widget
 			// BOUTONS D'ÉDITION DU MODULE ---------------------------------------------------------
 			$l_TAB_BtnEditionModule 	= [];
 			$l_TAB_BtnEditionModule[]	= $this->_btnEdition("module/update", "glyphicon glyphicon-pencil", $l_OBJ_Module->identifiantReseau);
-			$l_TAB_BtnEditionModule[]	= $this->_btnEdition("module/delete", "glyphicon glyphicon-trash", $l_OBJ_Module->identifiantReseau);
-			$l_TAB_BtnEditionModule[]	= $this->_getModuleDeleteButton([	'action' => "/module/delete",'id' => $l_OBJ_Module->identifiantReseau]);
+			$l_TAB_BtnEditionModule[]	= Html::a($l_STR_BtnDelete, ["/module/delete", "id" => $l_OBJ_Module->identifiantReseau],
+																	['data-pjax' => "0",
+																			"aria-label" => "Supprimer",
+																			"title" => "Supprimer",
+																			"data-confirm" => "Êtes-vous sûr de vouloir supprimer ce Module ?",
+																			"data-method"=>"post"]);
 			
 		
 			
@@ -128,13 +134,7 @@ class modulesWidget extends Widget
 					$l_STR_Format		= $this->_toolTip($format, "Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeurs['nature'].".\nExemple : ".$this->_exempleFormatGrandeur($format));
 					$l_STR_GrandeurID	= $l_OBJ_Grandeurs->idGrandeurs['id'];
 
-					
-					// Boutons d'édition du format
-					$l_TAB_BtnFormat	= [];
-					$l_TAB_BtnFormat[]	= $this->_btnEdition("grandeur/update", "glyphicon glyphicon-pencil", $l_STR_GrandeurID);
-					$l_TAB_BtnFormat[]	= $this->_btnEdition("grandeur/delete", "glyphicon glyphicon-trash", $l_STR_GrandeurID);
-					
-					
+
 					
 					// Ajout du format dans la trame
 					$formatTrame[] = Html::tag("button ",$l_STR_Format,["type" => "button", "class" => "btn btn-primary disabled"]);
@@ -146,9 +146,6 @@ class modulesWidget extends Widget
 											["class" => "col-md-8"]);
 					$contents[] = Html::tag("div",
 											$l_STR_Format,
-											["class" => "col-md-2"]);
-					$contents[] = Html::tag("div",
-							implode(" ", $l_TAB_BtnFormat),
 											["class" => "col-md-2"]);
 				}
 				$contents[] = "		</div>";
@@ -167,6 +164,10 @@ class modulesWidget extends Widget
 
 			
 			// CONSTRUCTION DU CONTENU DU MODULE ---------------------------------------------------
+			// Picto si le module est actif ou non
+			$l_STR_Actif = ($l_OBJ_Module->actif == 1) ? $l_STR_BtnModuleActif : $l_STR_BtnModuleDeactif;
+			
+			
 			// formattage des libellés
 			$l_STR_localisationModule	= $this->_toolTip($l_OBJ_Module->localisationModule->description, "Localisation du module");
 			$l_STR_Nom 					= $this->_toolTip($l_OBJ_Module->nom, "Nom du module");
@@ -185,6 +186,7 @@ class modulesWidget extends Widget
 			$contents[] = "<div class='row'>";
 			$contents[] = "<div class='col-md-3'>";
 			$contents[] = Html::tag("h4", $l_STR_Nom." ". implode(" ", $l_TAB_BtnEditionModule),["class" => "card-title"]);
+			$contents[] = ($l_OBJ_Module->actif == 0) ? Html::tag("div", "Module désactivé", ["class" => "alert alert-dismissible alert-warning text-center"]) : "";
 			$contents[] = Html::tag("p", $this->_legende($l_STR_Description, "Description"));
 			$contents[] = Html::tag("p", $this->_legende($l_STR_localisationModule, "Localisation"));
 			$contents[] = Html::tag("p", $this->_legende($l_STR_IdentifiantReseau, "Identifiant réseau"));
@@ -202,7 +204,7 @@ class modulesWidget extends Widget
 			
 			
 			// CONSTRUCTION DE LA BOITE DU MODULE --------------------------------------------------
-			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Nom." ".implode(" | ", $capteursNames) .$l_STR_BtnPliage,
+			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Actif." ".$l_STR_Nom." ".implode(" | ", $capteursNames) .$l_STR_BtnPliage,
 											"titre" 	=> $l_STR_Description,
 											"content"	=> implode("", $contents),
 											"class"		=> "card border-success  mb-3 px-0 Module",
