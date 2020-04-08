@@ -25,9 +25,9 @@ class tocioRegles extends Widget {
 		
 		switch (strtolower($this->regle)) {
 			case "capteurdefinition":
-				$this->message = "<p>Un <i>Capteur</i> est un élément éléctronique permettant de faire des mesures.</p>
-					<p>Il doit être défini avec un <b>nom</b> en toutes lettres et une liste d'ID de <i>Grandeurs</i>.<br/>
-						Chaque ID de <i>Grandeur</i> doit être séparée par un point virgule (;)
+				$this->message = "<p>Un <i>Capteur</i> est un élément éléctronique permettant de faire des <i>Mesures</i>.</p>
+					<p>Il doit être défini avec un <b>nom</b> en toutes lettres et une <b>liste</b> de <i>Grandeurs</i>.
+						Une <i>Grandeur</i> est la caractéristique d'une Mesure.
 					</p>";
 				break;
 			case "moduledefinition":

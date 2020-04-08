@@ -31,8 +31,9 @@ class Localisationmodule extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'coordX', 'coordY', 'coordZ'], 'required'],
+            [['description'], 'required'],
             [['description'], 'string'],
+        	[['coordX', 'coordY', 'coordZ'], 'default', 'value' => 0],	// Valeur par défault des coordoonées.
             [['coordX', 'coordY', 'coordZ'], 'integer'],
         ];
     }

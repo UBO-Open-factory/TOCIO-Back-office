@@ -18,9 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?= tocioRegles::widget(['regle' => "capteurDefinition"])?>
     
-    <p>
-        <?= Html::a('Nouveau Capteur', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -35,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'nom:ntext',
         	['attribute' => 'relmodulecapteur.idCapteur',
         	'format' => 'html',
-        	'label' => "Capteurs rattachés",
+        	'label' => "Grandeurs rattachées",
         	'value' => function($model){
         					return implode(',<br/> ', ArrayHelper::map($model->idGrandeurs, 'id', 'nature'));
         				}
@@ -46,6 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
         	],
         ],
     ]); ?>
-
+	<p>
+		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Capteur', ['create'], ['class' => 'btn btn-success pull-right'])?>
+	</p>
     <?php Pjax::end(); ?>
 </div>

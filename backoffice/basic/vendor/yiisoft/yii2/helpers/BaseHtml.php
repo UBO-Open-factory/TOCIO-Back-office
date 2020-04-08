@@ -1078,7 +1078,11 @@ class BaseHtml
             }
             $index++;
         }
+        /*
+         *	8 avril 2020  : APE : Ajout du br en fin  de ligne
         $visibleContent = implode($separator, $lines);
+         */
+        $visibleContent = implode($separator."<br/>", $lines);
 
         if ($tag === false) {
             return $hidden . $visibleContent;

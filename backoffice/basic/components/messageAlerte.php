@@ -44,7 +44,7 @@ class messageAlerte extends Widget{
 				$l_STR_TitreBoite = "";
 				break;
 			case "todo":
-				$this->type = "info";
+				$this->type = "danger";
 				$l_STR_TitreBoite = "A faire";
 				break;
 				

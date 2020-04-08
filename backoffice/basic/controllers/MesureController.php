@@ -153,7 +153,7 @@ class MesureController extends ActiveController {
 		// SI L'ID DU MODULE N'EST PAS RÉFÉRENCÉ DANS LA BASE --------------------------------------
 		if( !$this->_moduleIdIsValid($moduleID)){
 			// On fait une trace dans la base
-			Yii::error("Trame <".$moduleID."> inconnu dans la base.", "tocio");
+			Yii::error("Module <".$moduleID."> inconnu dans la base.", "tocio");
 			
 			// Renvoie un message d'erreur
 			return json_encode( ['error'	=> "Module ".$moduleID." not declared."] );
@@ -164,7 +164,7 @@ class MesureController extends ActiveController {
 		$module = Module::findOne($moduleID);
 		if( $module->actif == 0){
 			// On fait une trace dans la base
-			Yii::error("Trame <".$moduleID."> désactivé.", "tocio");
+			Yii::error("Module <".$moduleID."> désactivé.", "tocio");
 			
 			// Renvoie un message d'erreur
 			return json_encode( ['error'	=> "Module ".$moduleID." disabled."] );
