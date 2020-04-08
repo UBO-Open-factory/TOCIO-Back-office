@@ -155,9 +155,21 @@ class MesureController extends ActiveController {
 			// On fait une trace dans la base
 			Yii::error("Trame <".$moduleID."> inconnu dans la base.", "tocio");
 			
-			$l_TAB_Retour['error']	= "Module ".$moduleID." not declared.";
-			return json_encode( $l_TAB_Retour );
+			// Renvoie un message d'erreur
+			return json_encode( ['error'	=> "Module ".$moduleID." not declared."] );
 		}
+		
+		
+		// SI LE MODULE EST DESACTIVE --------------------------------------------------------------
+		$module = Module::findOne($moduleID);
+		if( $module->actif == 0){
+			// On fait une trace dans la base
+			Yii::error("Trame <".$moduleID."> désactivé.", "tocio");
+			
+			// Renvoie un message d'erreur
+			return json_encode( ['error'	=> "Module ".$moduleID." disabled."] );
+		}
+		
 		
 		$timestamp	= $params['timestamp'];
 		$payloadBrute	= $params['value']['payload'];

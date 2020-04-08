@@ -51,7 +51,7 @@ class Module extends \yii\db\ActiveRecord
             'identifiantReseau' => 'Identifiant Reseau',
             'nom' => 'Nom',
             'description' => 'Description',
-            'idLocalisationModule' => 'Id Localisation Module',
+            'idLocalisationModule' => 'Localisation du Module',
             'actif' => 'Actif',
         ];
     }
