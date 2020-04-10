@@ -81,8 +81,18 @@ class Module extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCapteurs()
-    {
-        return $this->hasMany(Capteur::className(), ['id' => 'idCapteur'])->viaTable('rel_modulecapteur', ['idModule' => 'identifiantReseau']);
+    public function getIdCapteurs() {
+    	
+        return $this->hasMany(Capteur::className(), ['id' => 'idCapteur'])
+        			->viaTable('rel_modulecapteur', ['idModule' => 'identifiantReseau']);
+        
+        
+        
+//         return $this->hasMany(Capteur::className(), ['id' => 'idCapteur'])
+//         ->viaTable('rel_modulecapteur', 
+//         		['idModule' => 'identifiantReseau'], 
+//         		function($query){
+// 		        	$query->orderBy(['rel_modulecapteur.ordre' => SORT_ASC]);
+// 		        });
     }
 }

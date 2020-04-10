@@ -7,6 +7,8 @@ use yii\helpers\VarDumper;
 use app\models\RelCapteurgrandeur;
 use app\models\RelPositionCapteur;
 use app\models\Position;
+use app\models\Relmodulecapteur;
+use app\models\Capteur;
 
 class modulesWidget extends Widget
 {
@@ -44,7 +46,6 @@ class modulesWidget extends Widget
 		
 
 		// PARCOURS DE CHACUN DES MODELS
-		
 		foreach ($models as $index => $l_OBJ_Module) {
 			// FORMATAGE DE LA TRAME (PAYLOAD" ATTENDU POUR CE MODULE ------------------------------
 			$formatTrame = [];
@@ -56,10 +57,6 @@ class modulesWidget extends Widget
 			// Le séparateur
 			$formatTrame[] = Html::tag("button", "#",[	"type" => "button", 
 														"class" => "btn btn-primary disabled",
-														"data-toggle"	=> "tooltip" ,
-														"data-placement" => "bottom",
-														"title" => "",
-														"data-original-title"	=> "Popover Title",
 														]);
 
 			
@@ -70,47 +67,59 @@ class modulesWidget extends Widget
 			$l_TAB_BtnEditionModule[]	= $this->_btnEdition("module/update", "glyphicon glyphicon-pencil", $l_OBJ_Module->identifiantReseau);
 			$l_TAB_BtnEditionModule[]	= Html::a($l_STR_BtnDelete, ["/module/delete", "id" => $l_OBJ_Module->identifiantReseau],
 																	['data-pjax' => "0",
-																			"aria-label" => "Supprimer",
-																			"title" => "Supprimer",
-																			"data-confirm" => "Êtes-vous sûr de vouloir supprimer ce Module ?",
-																			"data-method"=>"post"]);
+																	"aria-label" => "Supprimer",
+																	"title" => "Supprimer",
+																	"data-confirm" => "Êtes-vous sûr de vouloir supprimer ce Module ?",
+																	"data-method"=>"post"]);
 			
 		
 			
 			// RECUPERATION DES CAPTEURS RATTACHÉS À CE MODULE -------------------------------------
 			$capteurs = [];
-			$capteursNames = [];
-			foreach( $l_OBJ_Module->idCapteurs as $l_OBJ_Capteur){
+			// Recuperation de tout les capteurs de ce module
+			$l_TAB_Capteurs = $l_OBJ_Module->relmodulecapteur;
+			// Trie de la liste des capteurs selon l'ordre (champ 'ordre' de la table rel_moduleCapteur)
+			usort( $l_TAB_Capteurs, function ($a,$b){
+				if( $a == $b)	return 0;
+				return ($a->ordre < $b->ordre) ? -1 : 1;
+			});
+
+			// PARCOURS DE TOUT LES CAPTEURS DU MODULE----------------------------------------------
+			foreach( $l_TAB_Capteurs as $l_OBJ_ModuleCapteur){
 				// Boutons d'édition du capteur custom
 				$l_TAB_BtnCustomCapteur	= [];
 
 				
 				// La customisation de ce capteur pour ce module
-				$l_STR_Position				= "";
-				$l_STR_CustomCapteurName 	="";
-				foreach( $l_OBJ_Capteur->relModulecapteurs as $l_OBJ_ModuleCapteur){
-					// On trouve le Capteur de notre module dans la table des relation module/capteurs					
-					if( $l_OBJ_ModuleCapteur->idModule == $l_OBJ_Module->identifiantReseau) {
-						$l_STR_Position 				= $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
-						$l_STR_CustomCapteurName		= $l_OBJ_ModuleCapteur['nomcapteur'];
-						
-						// Bouton d'édition du capteur
-						$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("relmodulecapteur/update", "glyphicon glyphicon-pencil", $l_OBJ_ModuleCapteur['idModule'], $l_OBJ_ModuleCapteur['idCapteur']);
-						$l_TAB_BtnCustomCapteur[]	= Html::a($l_STR_BtnDelete,
-															["relmodulecapteur/delete", "idModule" => $l_OBJ_ModuleCapteur['idModule'], "idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']],
-															['data-pjax' => "0",
-																	"aria-label" => "Supprimer",
-																	"title" => "Supprimer",
-																	"data-confirm" => "Êtes-vous sûr de vouloir détacher ce Capteur de ce Module ?",
-																	"data-method"=>"post"]);
-					}
-				}
-				$l_STR_Position	= $this->_legende($l_STR_Position, "Coordonnées");
+				$l_STR_CustomCapteurName	= "#".$l_OBJ_ModuleCapteur->ordre." ".$l_OBJ_ModuleCapteur->nomcapteur;
 
+				// Position du capteur
+				$l_STR_PositionIcon 	= Html::tag("span", "", ['class'=>"glyphicon glyphicon-fast-forward"]);
+				$l_STR_Position = $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
+				$l_STR_Position = $l_STR_PositionIcon." ".Html::tag("span", $l_STR_Position, ['class'=>"dblClick",
+						'data' => ["idModule" 	=> $l_OBJ_ModuleCapteur['idModule'], 
+									"url"		=> "/relmodulecapteur/updateajax",
+									"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']]
+				]);
+				// Ajout de la légende de la position du capteur
+				$l_STR_Position	= $this->_legende($l_STR_Position, "Coordonnées");
 				
+				
+				
+				// Bouton d'édition du capteur
+				$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("relmodulecapteur/update", "glyphicon glyphicon-pencil", $l_OBJ_ModuleCapteur['idModule'], $l_OBJ_ModuleCapteur['idCapteur']);
+				$l_TAB_BtnCustomCapteur[]	= Html::a($l_STR_BtnDelete,
+													["relmodulecapteur/delete", "idModule" => $l_OBJ_ModuleCapteur['idModule'], "idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']],
+													['data-pjax' => "0",
+													"aria-label" => "Supprimer",
+													"title" => "Supprimer",
+													"data-confirm" => "Êtes-vous sûr de vouloir détacher ce Capteur de ce Module ?",
+													"data-method"=>"post"]);
+
+			
 				// Le nom officiel du capteur
-				$l_STR_NomCapteur	= $l_OBJ_Capteur->nom;
-				$capteursNames[]	= $l_OBJ_Capteur->nom;
+				$l_OBJ_Capteur	= Capteur::findOne($l_OBJ_ModuleCapteur->idCapteur0);
+				$l_STR_NomCapteur 	= $l_OBJ_Capteur->nom;
 				
 				
 				// Contenu de la boite du capteur sur 2 colonnes
@@ -124,15 +133,15 @@ class modulesWidget extends Widget
 				$contents[] = "</div>";
 				$contents[] = "<div class='col-md-7'>";
 				$contents[] = "		<div class='row'>";
-
-				
+		
+						
 				// Recuperation de chacune des grandeurs rattachées à ce capteur
-				foreach( RelCapteurgrandeur::find()->where(["idCapteur" => $l_OBJ_Capteur->id])->all() as $l_OBJ_Grandeurs){
+				foreach( RelCapteurgrandeur::find()->where(["idCapteur" => $l_OBJ_ModuleCapteur->idCapteur])->all() as $l_OBJ_Grandeurs){
 					// Formattage des libellés de la grandeur
 					$format = $l_OBJ_Grandeurs->idGrandeurs['formatCapteur'];
 					$l_STR_Nature		= $this->_toolTip($l_OBJ_Grandeurs->idGrandeurs['nature'], "Nature de la mesure");
 					$l_STR_Format		= $this->_toolTip($format, "Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeurs['nature'].".\nExemple : ".$this->_exempleFormatGrandeur($format));
-					$l_STR_GrandeurID	= $l_OBJ_Grandeurs->idGrandeurs['id'];
+					//$l_STR_GrandeurID	= $l_OBJ_Grandeurs->idGrandeurs['id'];
 
 
 					
@@ -151,9 +160,9 @@ class modulesWidget extends Widget
 				$contents[] = "		</div>";
 				$contents[] = "</div>";
 				$contents[] = "</div>";
-				
-				
-				
+			
+			
+			
 				// Boite autour du capteur
 				$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_CustomCapteurName. " ".implode(" ", $l_TAB_BtnCustomCapteur)." ".$l_STR_BtnPliage,
 												"content"	=> implode("", $contents),
@@ -196,7 +205,7 @@ class modulesWidget extends Widget
 			$contents[] = $l_STR_BtnAjoutCapteur;
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
-			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrame), "Format de la trame"));
+			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrame), "Format attendu de la trame (payload)"));
 			$contents[] = "</div>";
 			$contents[] = "</div>";
 			
@@ -204,7 +213,7 @@ class modulesWidget extends Widget
 			
 			
 			// CONSTRUCTION DE LA BOITE DU MODULE --------------------------------------------------
-			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Actif." ".$l_STR_Nom." ".implode(" | ", $capteursNames) .$l_STR_BtnPliage,
+			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Actif." ".$l_STR_Nom." ".$l_STR_BtnPliage,
 											"titre" 	=> $l_STR_Description,
 											"content"	=> implode("", $contents),
 											"class"		=> "card border-success  mb-3 px-0 Module",

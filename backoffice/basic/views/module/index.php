@@ -74,3 +74,10 @@ ModuleAsset::register($this);
 	</p>
     <?php Pjax::end(); ?>
 </div>
+
+<?php /*@todo  Faire le distingo pour les module LORA (dans l'affichage de la trame attendu)*/
+echo messageAlerte::widget(['type' => "todo", "message" => "Faire le distingo pour les module LORA (dans l'affichage de la trame attendu)"]); ?>
+<?php /*@todo  Pouvori faire du drag'n drop dans l'ordre des capteurs d'un module*/
+echo messageAlerte::widget(['type' => "todo", "message" => "Pouvoir faire du drag'n drop dans l'ordre des capteurs d'un module"]); ?>
+<?php /*@todo  Rajouter le nom du capteur dans la légende de la payload*/
+echo messageAlerte::widget(['type' => "todo", "message" => "Rajouter le nom du capteur dans la légende de la payload"]); ?>

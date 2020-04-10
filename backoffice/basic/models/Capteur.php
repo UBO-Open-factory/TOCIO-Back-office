@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\data\Sort;
 
 /**
  * This is the model class for table "capteur".
@@ -12,7 +13,7 @@ use Yii;
  *
  * @property RelCapteurgrandeur[] $relCapteurgrandeurs
  * @property Grandeur[] $idGrandeurs
- * @property Relmodulecapteur[] $relmodulecapteurs
+ * @property RelModulecapteur[] $relModulecapteurs
  * @property Module[] $idModules
  */
 class Capteur extends \yii\db\ActiveRecord
@@ -72,9 +73,8 @@ class Capteur extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRelModulecapteurs()
-    {
-        return $this->hasMany(Relmodulecapteur::className(), ['idCapteur' => 'id']);
+    public function getRelModulecapteurs() {
+     	return $this->hasMany(RelModulecapteur::className(), ['idCapteur' => 'id']);
     }
 
     /**

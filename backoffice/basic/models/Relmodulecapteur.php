@@ -10,6 +10,7 @@ use Yii;
  * @property string $idModule
  * @property int $idCapteur
  * @property string $nomcapteur
+ * @property int $ordre 
  * @property int $x Coordonnées X
  * @property int $y Coordonnées Y
  * @property int $z Coordonnées Z
@@ -34,8 +35,8 @@ class Relmodulecapteur extends \yii\db\ActiveRecord
     {
         return [
             [['idModule', 'idCapteur', 'nomcapteur'], 'required'],
-            [['idCapteur', 'x', 'y', 'z'], 'integer'],
-            [['x', 'y', 'z'], 'default', 'value' => 0],	// Valeur par défault des coordoonées.
+            [['idCapteur', 'ordre', 'x', 'y', 'z'], 'integer'],
+            [['ordre', 'x', 'y', 'z'], 'default', 'value' => 0],	// Valeur par défault de l'ordre et des coordoonées.
             [['nomcapteur'], 'string'],
             [['idModule'], 'string', 'max' => 50],
             [['idModule', 'idCapteur'], 'unique', 'targetAttribute' => ['idModule', 'idCapteur']],
@@ -53,6 +54,7 @@ class Relmodulecapteur extends \yii\db\ActiveRecord
         		'idModule' => 'Id Module',
         		'idCapteur' => 'Capteur',
         		'nomcapteur' => 'Nom du capteur',
+        		'ordre' => 'Ordre de cablage',
         		'x' => 'X',
         		'y' => 'Y',
         		'z' => 'Z',

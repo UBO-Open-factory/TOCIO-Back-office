@@ -21,6 +21,3 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
-<?php  
-/*@todo  Faire un système de saisie pour avoir plusieurs Capteurs*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Faire un système de saisie pour avoir plusieurs Capteurs"]); ?>
