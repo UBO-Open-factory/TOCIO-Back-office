@@ -30,9 +30,11 @@ class tocioRegles extends Widget {
 						Une <i>Grandeur</i> est la caractéristique d'une Mesure.
 					</p>";
 				break;
+			case "encodageformatdefinition":
+			$this->message = "Le formattage des valeurs mesurées est fait selon la règle <b>chiffre_avant_la_virgule,chiffre_apres_la_virgule</b>.</br> Par exemple pour une température de 12.5°C encodée selon le schéma -3.2, il faut écrire +01250, pour -1.02°C il faut écrire -00102";
+				break;
 			case "moduledefinition":
-				$this->message = "<p>Un <i>Module</i> est un ensemble de capteurs.</p>
-					</p>";
+				$this->message = "<p>Un <i>Module</i> est un ensemble de capteurs.</p>";
 				break;
 			case "grandeurdefinition":
 				$this->message = "<p>Une grandeur est composée de :</p>
@@ -49,7 +51,6 @@ class tocioRegles extends Widget {
 			default:
 				$this->message = "<P class='alert alert-danger'>Aucune regles défini pour <b>".$this->regle."</b> dans le fichier ".__FILE__."</P>";
 		}
-		
 	}
 	
 	public function run(){

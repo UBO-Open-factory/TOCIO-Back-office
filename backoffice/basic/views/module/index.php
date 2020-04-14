@@ -63,21 +63,17 @@ ModuleAsset::register($this);
 // 	?>
 
 
-	<?php 
+	<?php
+		echo yii\jui\Draggable::widget();
 		echo modulesWidget::widget([
 				'dataProvider' => $dataProvider,
 		]);
 	?>
-	
+
 	<p>
 	<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un module', ['create'], ['class' => 'btn btn-success pull-right'])?>
 	</p>
     <?php Pjax::end(); ?>
 </div>
-
-<?php /*@todo  Faire le distingo pour les module LORA (dans l'affichage de la trame attendu)*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Faire le distingo pour les module LORA (dans l'affichage de la trame attendu)"]); ?>
-<?php /*@todo  Pouvori faire du drag'n drop dans l'ordre des capteurs d'un module*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Pouvoir faire du drag'n drop dans l'ordre des capteurs d'un module"]); ?>
-<?php /*@todo  Rajouter le nom du capteur dans la légende de la payload*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Rajouter le nom du capteur dans la légende de la payload"]); ?>
+<?php /*@todo  Faire un filtre sur le nom d'un module*/
+echo messageAlerte::widget(['type' => "todo", "message" => "Faire un filtre sur le nom d'un module"]); ?>

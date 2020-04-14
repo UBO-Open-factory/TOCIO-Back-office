@@ -1,7 +1,4 @@
 <?php
-/**
- * @todo : Pouvoir créer dynamiquement une table pour stocker les valeur des capteurs.
- */
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;

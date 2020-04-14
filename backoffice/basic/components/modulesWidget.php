@@ -9,6 +9,7 @@ use app\models\RelPositionCapteur;
 use app\models\Position;
 use app\models\Relmodulecapteur;
 use app\models\Capteur;
+use function Opis\Closure\serialize;
 
 class modulesWidget extends Widget
 {
@@ -49,13 +50,14 @@ class modulesWidget extends Widget
 		foreach ($models as $index => $l_OBJ_Module) {
 			// FORMATAGE DE LA TRAME (PAYLOAD" ATTENDU POUR CE MODULE ------------------------------
 			$formatTrame = [];
+			$formatTrameWifi = [];
 			
 			// L'identification du capteur
 			// @see https://www.yiiframework.com/doc/guide/2.0/fr/helper-html
-			$formatTrame[] = Html::tag("button ",$l_OBJ_Module->identifiantReseau,["type" => "button", "class" => "btn btn-primary disabled"]);
+			$formatTrameWifi[] = Html::tag("button ",$l_OBJ_Module->identifiantReseau,["type" => "button", "class" => "btn btn-primary disabled"]);
 			
 			// Le séparateur
-			$formatTrame[] = Html::tag("button", "#",[	"type" => "button", 
+			$formatTrameWifi[] = Html::tag("button", "#",[	"type" => "button", 
 														"class" => "btn btn-primary disabled",
 														]);
 
@@ -85,13 +87,14 @@ class modulesWidget extends Widget
 			});
 
 			// PARCOURS DE TOUT LES CAPTEURS DU MODULE----------------------------------------------
+			$l_TAB_CapteursDuModule =  [];
 			foreach( $l_TAB_Capteurs as $l_OBJ_ModuleCapteur){
 				// Boutons d'édition du capteur custom
 				$l_TAB_BtnCustomCapteur	= [];
 
 				
 				// La customisation de ce capteur pour ce module
-				$l_STR_CustomCapteurName	= "#".$l_OBJ_ModuleCapteur->ordre." ".$l_OBJ_ModuleCapteur->nomcapteur;
+				$l_STR_CustomCapteurName	= '<i class="glyphicon glyphicon-th"></i>'." ".$l_OBJ_ModuleCapteur->nomcapteur;
 
 				// Position du capteur
 				$l_STR_PositionIcon 	= Html::tag("span", "", ['class'=>"glyphicon glyphicon-fast-forward"]);
@@ -118,8 +121,9 @@ class modulesWidget extends Widget
 
 			
 				// Le nom officiel du capteur
-				$l_OBJ_Capteur	= Capteur::findOne($l_OBJ_ModuleCapteur->idCapteur0);
-				$l_STR_NomCapteur 	= $l_OBJ_Capteur->nom;
+				$l_OBJ_Capteur				= Capteur::findOne($l_OBJ_ModuleCapteur->idCapteur0);
+				$l_STR_NomCapteur 			= $l_OBJ_Capteur->nom;
+				$l_TAB_CapteursDuModule[] 	= $l_OBJ_Capteur->nom;
 				
 				
 				// Contenu de la boite du capteur sur 2 colonnes
@@ -140,7 +144,9 @@ class modulesWidget extends Widget
 					// Formattage des libellés de la grandeur
 					$format = $l_OBJ_Grandeurs->idGrandeurs['formatCapteur'];
 					$l_STR_Nature		= $this->_toolTip($l_OBJ_Grandeurs->idGrandeurs['nature'], "Nature de la mesure");
-					$l_STR_Format		= $this->_toolTip($format, "Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeurs['nature'].".\nExemple : ".$this->_exempleFormatGrandeur($format));
+					$l_STR_Format		= $this->_toolTip($format, "Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeurs['nature'].
+															" du capteur ".$l_STR_NomCapteur.
+															"\nExemple : ".$this->_exempleFormatGrandeur($format));
 					//$l_STR_GrandeurID	= $l_OBJ_Grandeurs->idGrandeurs['id'];
 
 
@@ -167,6 +173,7 @@ class modulesWidget extends Widget
 				$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_CustomCapteurName. " ".implode(" ", $l_TAB_BtnCustomCapteur)." ".$l_STR_BtnPliage,
 												"content"	=> implode("", $contents),
 												"class"		=> "border-info mb-3 px-0 Capteur",
+												"data" 		=> $l_OBJ_ModuleCapteur['idModule']."|".$l_OBJ_ModuleCapteur['idCapteur'],
 												"style" 	=> null,
 										]);
 			}
@@ -190,6 +197,10 @@ class modulesWidget extends Widget
 			$l_STR_BtnAjoutCapteur = Html::a($l_STR_Temp, ['relmodulecapteur/create', 'idModule' => $l_OBJ_Module['identifiantReseau']], ['class' => 'profile-link']);
 			
 			
+			// Explication de la rêgle du formattage des valeurs
+			$l_STR_ReglesFormat	= $this->_legende(tocioRegles::widget(["regle" => "encodageFormatDefinition"]), "Formattage des valeurs");
+			
+			
 			// Construction du contenu de la boite sur 3 colonnes.
 			$contents = [];
 			$contents[] = "<div class='row'>";
@@ -200,12 +211,18 @@ class modulesWidget extends Widget
 			$contents[] = Html::tag("p", $this->_legende($l_STR_localisationModule, "Localisation"));
 			$contents[] = Html::tag("p", $this->_legende($l_STR_IdentifiantReseau, "Identifiant réseau"));
 			$contents[] = "</div>";
-			$contents[] = "<div class='col-md-9'>";
+			$contents[] = "<div class='col-md-9 Capteurs'>";
 			$contents[] = implode("", $capteurs);
 			$contents[] = $l_STR_BtnAjoutCapteur;
 			$contents[] = "</div>";
+			$contents[] = "<div class='col-md-6'>";
+			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI"));
+			$contents[] = "</div>";
+			$contents[] = "<div class='col-md-6'>";
+			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrame), "Format attendu de la payload LORA"));
+			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
-			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrame), "Format attendu de la trame (payload)"));
+			$contents[] = $l_STR_ReglesFormat;
 			$contents[] = "</div>";
 			$contents[] = "</div>";
 			
@@ -213,7 +230,7 @@ class modulesWidget extends Widget
 			
 			
 			// CONSTRUCTION DE LA BOITE DU MODULE --------------------------------------------------
-			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Actif." ".$l_STR_Nom." ".$l_STR_BtnPliage,
+			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Actif." ".$l_STR_Nom." (".implode(" + ", $l_TAB_CapteursDuModule).") ".$l_STR_BtnPliage,
 											"titre" 	=> $l_STR_Description,
 											"content"	=> implode("", $contents),
 											"class"		=> "card border-success  mb-3 px-0 Module",
@@ -269,7 +286,7 @@ class modulesWidget extends Widget
 	 * 		titre : le titre du contenu (lapartit "title")
 	 * 		text : Le contenu de la boite ( dans la partie "text")
 	 * 		content : si présent, écrase titre et text. 
-	 * 
+	 * 		data : si présent, la valeur du data-id mis dans le card
 	 * 
 	 * 
 	 * @see https://bootswatch.com/slate/
@@ -294,9 +311,18 @@ class modulesWidget extends Widget
 		// BOITE
 		$class 	= ($params['class'] !== null ) ? $params['class'] : "";
 		$style 	= ($params['style'] !== null ) ? $params['style'] : "";
-		$cardBox = Html::tag("div",$header . $body , array("class" => "card  ".$class,
-															"style" => $style
+		//si on a un data
+		if( isset( $params['data'])){
+			$cardBox = Html::tag("div",$header . $body , array("class" => "card  ".$class,
+																"style" => $style,
+																"data-value"=> $params['data'],
+																));
+			
+		} else {
+			$cardBox = Html::tag("div",$header . $body , array("class" => "card  ".$class,
+															"style" => $style,
 															));
+		}
 		// AFFICHAGE DE LA BOITE
 		return $cardBox;
 	}

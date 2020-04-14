@@ -78,6 +78,44 @@ class RelmodulecapteurController extends Controller
         ]);
     }
 
+    
+    // _____________________________________________________________________________________________
+    /**
+     * Met a jour l'ordre des capteurs dans un module.
+     * On va recevoir une chaine en POST de la forme : 123456789|2,123456789|3,123456789|1
+     * Elle donne l'ordre des tuples (idModule|idCapteur) dans la table rel_modulecapteur.
+     * 
+     * @return string[]
+     */
+    public function actionUpdateorderajax(){
+    	$request = Yii::$app->request;
+    	
+    	
+    	// UPDATE FAIT À L'AIDE D'UNE REQUÈTE AJAX -------------------------------------------------
+    	if (Yii::$app->request->isAjax && $request->post()) {
+    		$post = $request->post();
+    		
+    		$l_TAB_ordres = $post['ordre'];	// un truc du genre 123456789|2,123456789|3,123456789|1,
+    		
+    		// Supression du derniere element du table ( element vide)
+    		array_pop( $l_TAB_ordres);
+    		
+    		// Mise à jour de l'ordre
+    		foreach( $l_TAB_ordres as $ordre => $tuple){
+    			// Extraction des id de module et capteur
+    			list( $idModule, $idCapteur ) 	= explode("|", $tuple, 2);
+
+    			// recherche du modele
+    			$model = $this->findModel($idModule, $idCapteur);
+    			
+    			// Sauvegarde du module
+    			// Mise à jour de l'ordre
+    			$model->updateAttributes(['ordre' => $ordre]);
+    		}
+    	}
+    }
+    
+    
     // _____________________________________________________________________________________________
     /**
      * Updates an existing Relmodulecapteur model with ajax request.
