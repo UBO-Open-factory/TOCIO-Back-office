@@ -94,6 +94,43 @@ class ModuleController extends Controller
             'model' => $model,
         ]);
     }
+    
+    
+    /**
+     * Updates an existing Module model with an AJAX requet.
+     * @param string $id
+     * @return json array
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdateajax() {
+    	$request = Yii::$app->request;
+    	
+    	// UPDATE FAIT À L'AIDE D'UNE REQUÈTE AJAX -------------------------------------------------
+    	if (Yii::$app->request->isAjax && $request->post()) {
+    		$post 	= $request->post();
+	    	$model 	= $this->findModel($post['id']);
+	    	
+	    	// Récupération de l'attribut à mettre à jour
+	    	$attributeName = $post['attribute'];
+	    	
+	    	// Récupération de la valeur de l'attribut
+	    	$value 	= $post['value']; 
+	    	
+	    	// Mise à jour de l'attribut
+	    	$model->setAttribute($attributeName, $value);
+	    	
+	    	// Le retour sera au format JSON
+	    	Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+	    	
+	    	// Sauve le model
+	    	if( $model->save() ){
+	    		return ["success" => "ok"];
+	    	} else {
+	    		return ["error" => "ok"];
+	    	}
+    	}
+
+    }
 
     /**
      * Deletes an existing Module model.

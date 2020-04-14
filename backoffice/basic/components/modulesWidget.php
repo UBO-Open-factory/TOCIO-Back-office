@@ -40,6 +40,7 @@ class modulesWidget extends Widget
 		$l_STR_BtnDelete 		= Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
 		$l_STR_BtnModuleActif 		= "";
 		$l_STR_BtnModuleDeactif 	= Html::tag("span", " Désactivé", ["class"=> "badge badge-warning glyphicon glyphicon-ban-circle"]);
+		$l_STR_iconDoubleClick		= Html::tag("span", "", ['class'=>"glyphicon glyphicon-edit"]);
 		
 		
 		$models = array_values($this->dataProvider->getModels());
@@ -97,13 +98,14 @@ class modulesWidget extends Widget
 				$l_STR_CustomCapteurName	= '<i class="glyphicon glyphicon-th"></i>'." ".$l_OBJ_ModuleCapteur->nomcapteur;
 
 				// Position du capteur
-				$l_STR_PositionIcon 	= Html::tag("span", "", ['class'=>"glyphicon glyphicon-fast-forward"]);
 				$l_STR_Position = $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
-				$l_STR_Position = $l_STR_PositionIcon." ".Html::tag("span", $l_STR_Position, ['class'=>"dblClick",
-						'data' => ["idModule" 	=> $l_OBJ_ModuleCapteur['idModule'], 
-									"url"		=> "/relmodulecapteur/updateajax",
-									"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']]
-				]);
+				$l_STR_Position = Html::tag("span", $l_STR_Position, ['class'=>"dblClick alert-secondary",
+																	'data' => ["idModule" 	=> $l_OBJ_ModuleCapteur['idModule'], 
+																	"url"		=> "/relmodulecapteur/updateajax",
+																	"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']]
+																	]);
+				$l_STR_Position .= " ".$l_STR_iconDoubleClick;
+				
 				// Ajout de la légende de la position du capteur
 				$l_STR_Position	= $this->_legende($l_STR_Position, "Coordonnées");
 				
@@ -187,8 +189,17 @@ class modulesWidget extends Widget
 			// formattage des libellés
 			$l_STR_localisationModule	= $this->_toolTip($l_OBJ_Module->localisationModule->description, "Localisation du module");
 			$l_STR_Nom 					= $this->_toolTip($l_OBJ_Module->nom, "Nom du module");
-			$l_STR_IdentifiantReseau 	= $this->_toolTip($l_OBJ_Module->identifiantReseau, "Identifiant réseau du module");
-			$l_STR_Description			= $this->_toolTip($l_OBJ_Module->description, "Description du module");
+// 			$l_STR_IdentifiantReseau 	= $this->_toolTip($l_OBJ_Module->identifiantReseau, "Identifiant réseau du module");
+			$l_STR_IdentifiantReseau 	= Html::tag("span", $l_OBJ_Module->identifiantReseau, ["data-id" => $l_OBJ_Module->identifiantReseau,
+																						"class" 	=> "dblClick alert-secondary",
+																						"data-url" 	=> "/module/updateajax",
+																						"data-attribute" 	=> "identifiantReseau",
+																				]).$l_STR_iconDoubleClick;
+			$l_STR_Description			= Html::tag("span", $l_OBJ_Module->description, ["data-id" => $l_OBJ_Module->identifiantReseau,
+																						"class" 	=> "dblClick alert-secondary",
+																						"data-url" 	=> "/module/updateajax",
+																						"data-attribute" 	=> "description",
+											]).$l_STR_iconDoubleClick;
 
 			
 			// Bouton d'ajout d'un capteur
@@ -208,8 +219,8 @@ class modulesWidget extends Widget
 			$contents[] = Html::tag("h4", $l_STR_Nom." ". implode(" ", $l_TAB_BtnEditionModule),["class" => "card-title"]);
 			$contents[] = ($l_OBJ_Module->actif == 0) ? Html::tag("div", "Module désactivé", ["class" => "alert alert-dismissible alert-warning text-center"]) : "";
 			$contents[] = Html::tag("p", $this->_legende($l_STR_Description, "Description"));
-			$contents[] = Html::tag("p", $this->_legende($l_STR_localisationModule, "Localisation"));
 			$contents[] = Html::tag("p", $this->_legende($l_STR_IdentifiantReseau, "Identifiant réseau"));
+			$contents[] = Html::tag("p", $this->_legende($l_STR_localisationModule, "Localisation"));
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-9 Capteurs'>";
 			$contents[] = implode("", $capteurs);

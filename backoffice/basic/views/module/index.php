@@ -76,4 +76,4 @@ ModuleAsset::register($this);
     <?php Pjax::end(); ?>
 </div>
 <?php /*@todo  Faire un filtre sur le nom d'un module*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Faire un filtre sur le nom d'un module"]); ?>
+echo messageAlerte::widget(['type' => "todo", "message" => "Faire un filtre d'affichage sur le nom d'un module"]); ?>
