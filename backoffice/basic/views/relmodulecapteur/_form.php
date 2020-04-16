@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Module;
 use app\models\Capteur;
+use yii\bootstrap\BaseHtml;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Relmodulecapteur */
@@ -45,6 +46,7 @@ $Module = Module::findOne(['identifiantReseau' => $idModule]);
 		<div class="col-sm-4">
 			<?= $form->field($model, 'z')->textInput()->hint("Coordonnées Z du capteur")  ?>
 		</div>
+		<?= BaseHtml::activeHiddenInput($model, 'ordre', ['value' => 99]) ?>
 
 		
     </div>
@@ -55,5 +57,4 @@ $Module = Module::findOne(['identifiantReseau' => $idModule]);
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>

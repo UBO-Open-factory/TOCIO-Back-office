@@ -1,4 +1,11 @@
 <?php
+/**
+ * Widget pour l'affichage de la page des Modules.
+ * 
+ * 	@file modulesWidget.php
+ * @author : Alexandre PERETJATKO (APE)
+ * @version 09 avr. 2020	: APE	- Création
+ */
 namespace app\components;
 
 use yii\base\Widget;
@@ -24,6 +31,9 @@ class modulesWidget extends Widget
 	 */
 	public function init()	{
 		parent::init();
+		
+		// Supprime la pagination
+		$this->dataProvider->setPagination(false);
 	}
 	
 
@@ -38,11 +48,15 @@ class modulesWidget extends Widget
 		// Le bouton pour plier/déplier les boites.
 		$l_STR_BtnPliage 		= Html::tag("span","", ['class'	=> "triangle pull-right glyphicon glyphicon-triangle-bottom"]);
 		$l_STR_BtnDelete 		= Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
-		$l_STR_BtnModuleActif 		= "";
-		$l_STR_BtnModuleDeactif 	= Html::tag("span", " Désactivé", ["class"=> "badge badge-warning glyphicon glyphicon-ban-circle"]);
-		$l_STR_iconDoubleClick		= Html::tag("span", "", ['class'=>"glyphicon glyphicon-edit"]);
+		$l_STR_BtnModuleActif 	= "";
+		$l_STR_BtnModuleDeactif = Html::tag("span", " Désactivé", ["class"=> "badge badge-warning glyphicon glyphicon-ban-circle"]);
+		$l_STR_iconDoubleClick	= Html::tag("span", "", ['class'=>"glyphicon glyphicon-edit"]);
+		$l_STR_iconDeplacer 	= Html::tag("i", "", ["class" => "glyphicon glyphicon-move"]). " ";
+		$l_STR_ZoneDrop 		= Html::tag("div", "Laches moi là", ["class" => "DropZone"]);
 		
 		
+		// RÉCUPÉRATION DU JEUX DE DONNÉES ---------------------------------------------------------
+		// @see https://www.yiiframework.com/doc/guide/2.0/fr/output-data-providers
 		$models = array_values($this->dataProvider->getModels());
 		$modules = [];
 		
@@ -95,7 +109,7 @@ class modulesWidget extends Widget
 
 				
 				// La customisation de ce capteur pour ce module
-				$l_STR_CustomCapteurName	= '<i class="glyphicon glyphicon-th"></i>'." ".$l_OBJ_ModuleCapteur->nomcapteur;
+				$l_STR_CustomCapteurName	= $l_STR_iconDeplacer.$l_OBJ_ModuleCapteur->nomcapteur;
 
 				// Position du capteur
 				$l_STR_Position = $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
@@ -112,9 +126,13 @@ class modulesWidget extends Widget
 				
 				
 				// Bouton d'édition du capteur
-				$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("relmodulecapteur/update", "glyphicon glyphicon-pencil", $l_OBJ_ModuleCapteur['idModule'], $l_OBJ_ModuleCapteur['idCapteur']);
+				$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("relmodulecapteur/update", 
+													"glyphicon glyphicon-pencil", 
+													$l_OBJ_ModuleCapteur);
 				$l_TAB_BtnCustomCapteur[]	= Html::a($l_STR_BtnDelete,
-													["relmodulecapteur/delete", "idModule" => $l_OBJ_ModuleCapteur['idModule'], "idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']],
+													["relmodulecapteur/delete", "idModule" => $l_OBJ_ModuleCapteur['idModule'], 
+																				"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur'],
+																				"nomcapteur" => $l_OBJ_ModuleCapteur['nomcapteur']],
 													['data-pjax' => "0",
 													"aria-label" => "Supprimer",
 													"title" => "Supprimer",
@@ -175,7 +193,7 @@ class modulesWidget extends Widget
 				$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_CustomCapteurName. " ".implode(" ", $l_TAB_BtnCustomCapteur)." ".$l_STR_BtnPliage,
 												"content"	=> implode("", $contents),
 												"class"		=> "border-info mb-3 px-0 Capteur",
-												"data" 		=> $l_OBJ_ModuleCapteur['idModule']."|".$l_OBJ_ModuleCapteur['idCapteur'],
+												"data" 		=> $l_OBJ_ModuleCapteur['idModule']."|".$l_OBJ_ModuleCapteur['idCapteur']."|".$l_OBJ_ModuleCapteur['nomcapteur']."|".$l_OBJ_ModuleCapteur['ordre'],
 												"style" 	=> null,
 										]);
 			}
@@ -204,7 +222,7 @@ class modulesWidget extends Widget
 			
 			// Bouton d'ajout d'un capteur
 			$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
-			$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter un capteur", ["class" => "btn btn-info pull-right"]);
+			$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter un capteur", ["class" => "btn btn-info pull-right btnAjoutCapteur"]);
 			$l_STR_BtnAjoutCapteur = Html::a($l_STR_Temp, ['relmodulecapteur/create', 'idModule' => $l_OBJ_Module['identifiantReseau']], ['class' => 'profile-link']);
 			
 			
@@ -216,15 +234,26 @@ class modulesWidget extends Widget
 			$contents = [];
 			$contents[] = "<div class='row'>";
 			$contents[] = "<div class='col-md-3'>";
-			$contents[] = Html::tag("h4", $l_STR_Nom." ". implode(" ", $l_TAB_BtnEditionModule),["class" => "card-title"]);
-			$contents[] = ($l_OBJ_Module->actif == 0) ? Html::tag("div", "Module désactivé", ["class" => "alert alert-dismissible alert-warning text-center"]) : "";
-			$contents[] = Html::tag("p", $this->_legende($l_STR_Description, "Description"));
-			$contents[] = Html::tag("p", $this->_legende($l_STR_IdentifiantReseau, "Identifiant réseau"));
-			$contents[] = Html::tag("p", $this->_legende($l_STR_localisationModule, "Localisation"));
+			$contents[] =	 Html::tag("h4", $l_STR_Nom." ". implode(" ", $l_TAB_BtnEditionModule),["class" => "card-title"]);
+			$contents[] = 	($l_OBJ_Module->actif == 0) ? Html::tag("div", "Module désactivé", ["class" => "alert alert-dismissible alert-warning text-center"]) : "";
+			$contents[] = 	Html::tag("p", $this->_legende($l_STR_Description, "Description"));
+			$contents[] =	Html::tag("p", $this->_legende($l_STR_IdentifiantReseau, "Identifiant réseau"));
+			$contents[] = 	Html::tag("p", $this->_legende($l_STR_localisationModule, "Localisation"));
 			$contents[] = "</div>";
-			$contents[] = "<div class='col-md-9 Capteurs'>";
-			$contents[] = implode("", $capteurs);
-			$contents[] = $l_STR_BtnAjoutCapteur;
+			$contents[] = "<div class='col-md-9'>";
+			$contents[] = "	<div class='row'>";
+			$contents[] = "		<div class='col-md-12 Capteurs'>";
+			$contents[] = 			implode("", $capteurs);
+			$contents[] = "		</div>";
+			$contents[] = "	</div>";
+			$contents[] = "	<div class='row'>";
+			$contents[] = "		<div class='col-md-8 DropZoneContent' data-moduleid='".$l_OBJ_Module->identifiantReseau."'>";
+			$contents[] = 		$l_STR_ZoneDrop;
+			$contents[] = "		</div>";
+			$contents[] = "		<div class='col-md-4'>";
+			$contents[] = 		$l_STR_BtnAjoutCapteur;
+			$contents[] = "		</div>";
+			$contents[] = "	</div>";
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-6'>";
 			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI"));
@@ -244,7 +273,9 @@ class modulesWidget extends Widget
 			$modules[] = $this->_cardBox(["header" 	=> $l_STR_Actif." ".$l_STR_Nom." (".implode(" + ", $l_TAB_CapteursDuModule).") ".$l_STR_BtnPliage,
 											"titre" 	=> $l_STR_Description,
 											"content"	=> implode("", $contents),
+											"id"		=> $l_OBJ_Module->identifiantReseau,
 											"class"		=> "card border-success  mb-3 px-0 Module",
+											"data"		=> $l_OBJ_Module->identifiantReseau ,
 											"style" 	=> "max-width: 90rem",
 										]);
 		}
@@ -296,13 +327,16 @@ class modulesWidget extends Widget
 	 * 		style : style à appliquer à la boite.
 	 * 		titre : le titre du contenu (lapartit "title")
 	 * 		text : Le contenu de la boite ( dans la partie "text")
-	 * 		content : si présent, écrase titre et text. 
+	 * 		content : si présent, écrase titre et text.
+	 * 		id : l'ID de la div contennant le body 
 	 * 		data : si présent, la valeur du data-id mis dans le card
 	 * 
 	 * 
 	 * @see https://bootswatch.com/slate/
-	 * @param array $params tableaui de la forme cle, valeur.
+	 * @param array $params tableau de la forme cle, valeur.
 	 * @return string HTML.
+	 * 
+	 * 	@version 16 avr. 2020	: APE	- Encodage des paramètres affichées dans le data.
 	 */
 	private function _cardBox($params) {
 		// ENTETE		
@@ -316,7 +350,14 @@ class modulesWidget extends Widget
 			$titre = "";
 			$text = $params['content'];
 		}
-		$body	= Html::tag("div", $titre . $text, array("class" => "card-body"));
+		
+		// le BODY du card
+		if( isset($params['id'])) {
+			$body	= Html::tag("div", $titre . $text, array("class" => "card-body", 'id' => $params['id']));
+		} else {
+			$body	= Html::tag("div", $titre . $text, array("class" => "card-body"));
+			
+		}
 		
 		
 		// BOITE
@@ -326,7 +367,7 @@ class modulesWidget extends Widget
 		if( isset( $params['data'])){
 			$cardBox = Html::tag("div",$header . $body , array("class" => "card  ".$class,
 																"style" => $style,
-																"data-value"=> $params['data'],
+																"data-value"=> Html::encode($params['data']),
 																));
 			
 		} else {
@@ -422,12 +463,16 @@ class modulesWidget extends Widget
 	 * Génère le code HTML pour un bouton d'édition.
 	 * @param string $link 	à déclancher lorsque l'on clique sur le bouton
 	 * @param string $icon	du bouton.
-	 * @param string $id	de l'objhet à passer en paramètre.
+	 * @param objet  $p_OBJ_Module l'objet contennat le modèle du Module.
 	 * @return string
 	 */
-	private function _btnEditionCustomCapteur($link,$icon, $idModule, $idCapteur){
+	private function _btnEditionCustomCapteur($link,$icon, $p_OBJ_Module){
 		$btn = Html::tag("span ", "",["class" => $icon]);
-		return Html::a($btn, [$link, 'idModule' => $idModule, 'idCapteur' => $idCapteur]);
+		return Html::a($btn, [$link, 'idModule' => $p_OBJ_Module->idModule,
+				'idCapteur' => $p_OBJ_Module->idCapteur, 
+				'nomcapteur' => $p_OBJ_Module->nomcapteur,
+				'ordre' => $p_OBJ_Module->ordre, 
+		]);
 	}
 }
 ?>

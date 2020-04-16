@@ -8,6 +8,9 @@ use app\components\modulesWidget;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use app\assets\ModuleAsset;
+use app\components\capteursWidget;
+use app\models\Capteur;
+use yii\data\SqlDataProvider;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ModuleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -63,17 +66,29 @@ ModuleAsset::register($this);
 // 	?>
 
 
-	<?php
-		echo yii\jui\Draggable::widget();
-		echo modulesWidget::widget([
-				'dataProvider' => $dataProvider,
-		]);
-	?>
+    <div class="row">
+    	<div class="col-sm-9">
+			<?php
+				echo yii\jui\Draggable::widget();
+				echo modulesWidget::widget(['dataProvider' => $dataProvider,]);
+				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'btn btn-success pull-right']);
+			?>
+    	</div>
+    	<div class="col-sm-3">
+    		<h3>Capteurs disponibles</h3>
+	    	<?php 
+	    		$capteurProvider = new SqlDataProvider([
+	    				'sql' 	=> "SELECT * FROM capteur"
+	    		]);
 
-	<p>
-	<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un module', ['create'], ['class' => 'btn btn-success pull-right'])?>
-	</p>
+				echo capteursWidget::widget(['dataProvider' => $capteurProvider,]);
+				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Capteur', ['capteur/create'], ['class' => 'btn btn-info pull-right']);
+	    	?>
+    	</div>
+    </div>
+	
+
     <?php Pjax::end(); ?>
 </div>
-<?php /*@todo  Faire un filtre sur le nom d'un module*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Faire un filtre d'affichage sur le nom d'un module"]); ?>
+<?php /*@todo  Pouvoir filtrer l'affichage sur le nom du module*/
+echo messageAlerte::widget(['type' => "todo", "message" => "Pouvoir filtrer l'affichage sur le nom du module"]); ?>

@@ -1,0 +1,36 @@
+.toggleAffichage{
+	cursor : pointer;
+}
+.dblClick {
+	padding:0 0.5em;
+	line-height:1em;
+}
+.thVal {
+	color:black;
+}
+
+/* Lorsqu'on déplace un Capteur à la souris, la classe ui-draggable-dragging est ajoutée par Jquery */ 
+.Capteur.ui-draggable-dragging {
+	border:2px;
+	
+	-moz-box-shadow: 0 0 1em rgba(0, 0, 0, .9);
+	-webkit-box-shadow: 0 0 1em rgba(0, 0, 0, .9);
+	box-shadow: 0 0 1em rgba(0, 0, 0, .9);
+	opacity: 0.8;
+}
+.CapteurHovered {
+	background: green;
+}
+
+.DropZone {
+	border:3px dashed;
+	display:none;
+	padding:0.5em 1em;
+}
+.DropZoneContent {
+	width:100%;
+}
+.DropZoneDone {
+	border:1px solid;
+	padding:0.5em 1em;
+}

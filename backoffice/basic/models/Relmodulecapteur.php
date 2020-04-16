@@ -34,14 +34,15 @@ class Relmodulecapteur extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idModule', 'idCapteur', 'nomcapteur'], 'required'],
+        	[['idModule', 'idCapteur', 'nomcapteur', 'ordre'], 'required'],
             [['idCapteur', 'ordre', 'x', 'y', 'z'], 'integer'],
-            [['ordre', 'x', 'y', 'z'], 'default', 'value' => 0],	// Valeur par défault de l'ordre et des coordoonées.
             [['nomcapteur'], 'string'],
             [['idModule'], 'string', 'max' => 50],
-            [['idModule', 'idCapteur'], 'unique', 'targetAttribute' => ['idModule', 'idCapteur']],
+        	[['idModule', 'idCapteur', 'nomcapteur', 'ordre'], 'unique', 'targetAttribute' => ['idModule', 'idCapteur', 'nomcapteur', 'ordre']],
             [['idCapteur'], 'exist', 'skipOnError' => true, 'targetClass' => Capteur::className(), 'targetAttribute' => ['idCapteur' => 'id']],
             [['idModule'], 'exist', 'skipOnError' => true, 'targetClass' => Module::className(), 'targetAttribute' => ['idModule' => 'identifiantReseau']],
+            [['x', 'y', 'z'], 'default', 'value' => 0],	// Valeur par défault des coordoonées.
+            [['ordre'], 'default', 'value' => 99],	// Valeur par défault de l'ordre .
         ];
     }
 
