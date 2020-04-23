@@ -125,7 +125,7 @@ $(document).ready(function() {
 
 // _________________________________________________________________________________________________
 /**
- * Ajout du Drag and drop sur les capteurs dans les modules.
+ * Ajout du classement par drag'n drop sur la liste des capteurs dans les modules.
  * nb : Lorsqu'un éléments est déplacé, Jquery lui assigne la classe ui-draggable-dragging.
  * @see https://www.elated.com/drag-and-drop-with-jquery-your-essential-guide/
  */
@@ -150,6 +150,10 @@ $(document).ready(function() {
             	data : {"ordre": order},
             }).done(function() {
             	$(this).addClass("done");
+            	
+            	// On Affiche un message comme quoi il faut recharger la page
+            	var picto = '<i class="glyphicon glyphicon-warning-sign"></i>';
+            	$('.TramePayload').html('<span class="badge badge-danger">'+picto+' Pas à jour</span>');
             });
         }
 	});

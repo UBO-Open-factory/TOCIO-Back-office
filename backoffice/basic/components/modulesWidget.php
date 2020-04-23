@@ -11,7 +11,7 @@ namespace app\components;
 use yii\base\Widget;
 use yii\bootstrap\Html;
 use yii\helpers\VarDumper;
-use app\models\RelCapteurgrandeur;
+use app\models\Relcapteurgrandeur;
 use app\models\RelPositionCapteur;
 use app\models\Position;
 use app\models\Relmodulecapteur;
@@ -160,11 +160,11 @@ class modulesWidget extends Widget
 		
 						
 				// Recuperation de chacune des grandeurs rattachées à ce capteur
-				foreach( RelCapteurgrandeur::find()->where(["idCapteur" => $l_OBJ_ModuleCapteur->idCapteur])->all() as $l_OBJ_Grandeurs){
+				foreach( Relcapteurgrandeur::find()->where(["idCapteur" => $l_OBJ_ModuleCapteur->idCapteur])->all() as $l_OBJ_Grandeurs){
 					// Formattage des libellés de la grandeur
-					$format = $l_OBJ_Grandeurs->idGrandeurs['formatCapteur'];
-					$l_STR_Nature		= $this->_toolTip($l_OBJ_Grandeurs->idGrandeurs['nature'], "Nature de la mesure");
-					$l_STR_Format		= $this->_toolTip($format, "Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeurs['nature'].
+					$format = $l_OBJ_Grandeurs->idGrandeur0['formatCapteur'];
+					$l_STR_Nature		= $this->_toolTip($l_OBJ_Grandeurs->idGrandeur0['nature'], "Nature de la mesure");
+					$l_STR_Format		= $this->_toolTip($format, "Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeur0['nature'].
 															" du capteur ".$l_STR_NomCapteur.
 															"\nExemple : ".$this->_exempleFormatGrandeur($format));
 					//$l_STR_GrandeurID	= $l_OBJ_Grandeurs->idGrandeurs['id'];
@@ -222,7 +222,7 @@ class modulesWidget extends Widget
 			
 			// Bouton d'ajout d'un capteur
 			$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
-			$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter un capteur", ["class" => "btn btn-info pull-right btnAjoutCapteur"]);
+			$l_STR_Temp 	= Html::button($l_STR_Icon. " Associer un capteur", ["class" => "btn btn-info pull-right btnAjoutCapteur"]);
 			$l_STR_BtnAjoutCapteur = Html::a($l_STR_Temp, ['relmodulecapteur/create', 'idModule' => $l_OBJ_Module['identifiantReseau']], ['class' => 'profile-link']);
 			
 			
@@ -256,10 +256,10 @@ class modulesWidget extends Widget
 			$contents[] = "	</div>";
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-6'>";
-			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI"));
+			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-6'>";
-			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrame), "Format attendu de la payload LORA"));
+			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrame), "Format attendu de la payload LORA <span class='TramePayload'></span>"));
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
 			$contents[] = $l_STR_ReglesFormat;
