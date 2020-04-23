@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use app\components\tocioRegles;
 use app\components\messageAlerte;
+use app\assets\CapteurAsset;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Capteur */
@@ -10,6 +11,9 @@ use app\components\messageAlerte;
 $this->title = "Création d'un Capteur";
 $this->params['breadcrumbs'][] = ['label' => 'Capteurs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+// Utilisation des ressources pour les capteur (JS + CSS)
+CapteurAsset::register($this);
 ?>
 <div class="capteur-create">
 
@@ -20,4 +24,3 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
     ]) ?>
 </div>
-<?php echo /*@todo  Faire un système de saisie des Grandeurs. Pour l'instant il faut saisir les ID à la main*/messageAlerte::widget(['type' => "todo", "message" => "Faire un système de saisie des Grandeurs. Pour l'instant il faut saisir les ID à la main"]); ?>

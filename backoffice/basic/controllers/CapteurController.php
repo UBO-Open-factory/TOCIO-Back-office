@@ -8,6 +8,7 @@ use app\models\CapteurSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Relcapteurgrandeur;
 
 /**
  * CapteurController implements the CRUD actions for Capteur model.
@@ -57,17 +58,89 @@ class CapteurController extends Controller
         ]);
     }
 
+    // _____________________________________________________________________________________________
+    /**
+     * Updates an existing Capteur model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     * 	@version 23 avr. 2020	: APE	- Création.
+     */
+    public function actionAjaxupdate() {
+    	$request 	= Yii::$app->request;
+		$post		= $request->post();
+    		
+		
+		// AJOUT FAIT À L'AIDE D'UNE REQUÈTE AJAX --------------------------------------------------
+    	if (Yii::$app->request->isAjax && $request->post()) {
+    		$model = $this->findModel($post['id']);
+    		$model->nom = $post['nom'];
+    		
+    		// Le retour sera au format JSON
+    		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    		// Sauve le model
+    		if( $model->save() ){
+    			// Renvoie le dernier ID créé
+    			return ["success" 	=> "ok",
+    					"lastID" 	=> $model->id,
+    			];
+    		} else {
+    			var_dump($model->errors);
+    			return ["success" => "** Oupsss, il y a eu un problème à la mise à jour du model ".$model::className()."\n", "errors" => json_encode($model->errors)];
+    		}
+    	}
+    }
+    // _____________________________________________________________________________________________
+    /**
+     * Creates a new Capteur model with Ajax request
+     * @return mixed
+     * @version 23 avr. 2020	: APE	- Création.
+     */
+    public function actionAjaxcreate() {
+    	$request = Yii::$app->request;
+    	
+    	
+    	// AJOUT FAIT À L'AIDE D'UNE REQUÈTE AJAX --------------------------------------------------
+    	if (Yii::$app->request->isAjax && $request->post()) {
+    		
+    		// CONSTRUCTION DU MODEL
+    		$post	= $request->post();
+    		$model 	= new Capteur();
+    		
+    		// Initialiastion des attributs avec les valeurs passées en paramètre
+    		foreach( $post as $name => $value) {
+    			$model->setAttribute($name, $value);
+    		}
+    		
+    		// Le retour sera au format JSON
+    		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    		// Sauve le model
+    		if( $model->save() ){
+    			// Renvoie le dernier ID créé
+    			return ["success" 	=> "ok",
+    					"lastID" 	=> $model->id,
+    					];
+    		} else {
+    			var_dump($model->errors);
+    			return ["success" => "** Oupsss, il y a eu un problème à la création du model ".$model::className()."\n", "errors" => json_encode($model->errors)];
+    		}
+    	}
+    }
+
     /**
      * Creates a new Capteur model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @version 16 avr. 2020	: APE	- Redirection sur la liste des Capteurs
      */
-    public function actionCreate()
-    {
-        $model = new Capteur();
+    public function actionCreate() {
+        $model 		= new Capteur();
 
+       	// Si le modèle se sauve correctement, on reviens sur la page d'index des Capteurs
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+
+            return $this->redirect(['index', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -81,13 +154,14 @@ class CapteurController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @version 16 avr. 2020	: APE	- Redirection sur la liste des Capteurs
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        	
+            return $this->redirect(['index', 'id' => $model->id]);
         }
 
         return $this->render('update', [

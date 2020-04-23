@@ -8,25 +8,29 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="capteur-search">
-
-    <?php $form = ActiveForm::begin([
+<?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
         'options' => [
             'data-pjax' => 1
         ],
-    ]); ?>
-
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'nom') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-
+]); ?>
+<div class="capteur-search">
+<div class="row">
+	<div class="col-md-8">
+		
+	    <?php // echo $form->field($model, 'id') ?>
+		<!-- Search box -->	
+	    <?= $form->field($model, 'nom') ?>
+	</div>
+	
+	<div class="col-md-4">
+	    <div class="form-group">
+	    	<label class="control-label">&nbsp;</label><br/>
+	        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+	        <?php // echo Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+	    </div>
+	</div>	
 </div>
+</div>
+<?php ActiveForm::end(); ?>

@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     
 
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php
 //     GridView::widget([
@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //         	'label' => "Grandeurs rattachées",
 //         	'value' => function($model){
 //         					return implode(',<br/> ', ArrayHelper::map($model->idGrandeurs, 'id', 'nature'));
-//         				}
 //         	],
 
 //         	['class' => 'yii\grid\ActionColumn',

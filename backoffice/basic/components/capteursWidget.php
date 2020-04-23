@@ -4,7 +4,7 @@ namespace app\components;
 use yii\base\Widget;
 use yii\bootstrap\Html;
 use yii\helpers\VarDumper;
-use app\models\RelCapteurgrandeur;
+use app\models\Relcapteurgrandeur;
 use app\models\Relmodulecapteur;
 use app\models\Capteur;
 
@@ -92,11 +92,11 @@ class capteursWidget extends Widget
 			
 			
 			// RECUPERATION DE CHACUNE DES GRANDEURS RATTACHÉES À CE CAPTEUR -----------------------
-			foreach( RelCapteurgrandeur::find()->where(["idCapteur" => $l_STR_IDCapteur])->all() as $l_OBJ_Grandeurs){
+			foreach( Relcapteurgrandeur::find()->where(["idCapteur" => $l_STR_IDCapteur])->all() as $l_OBJ_Grandeurs){
 				// Formattage des libellés de la grandeur
-				$format = $l_OBJ_Grandeurs->idGrandeurs['formatCapteur'];
-				$l_STR_Nature		= $this->_toolTip($l_OBJ_Grandeurs->idGrandeurs['nature'], "Nature de la mesure");
-				$l_STR_Format		= $this->_toolTip($format, "Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeurs['nature'].
+				$format = $l_OBJ_Grandeurs->idGrandeur0['formatCapteur'];
+				$l_STR_Nature		= $this->_toolTip($l_OBJ_Grandeurs->idGrandeur0['nature'], "Nature de la mesure");
+				$l_STR_Format		= $this->_toolTip($format, "Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeur0['nature'].
 														" du capteur ".$l_STR_NomCapteur.
 														"\nExemple : ".$this->_exempleFormatGrandeur($format));
 
