@@ -23,13 +23,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\SerialColumn'],
 
             //'id',
+            'log_time:datetime',
             'level',
             'category',
-            'log_time:datetime',
             'message:ntext',
 
         		['class' => 'yii\grid\ActionColumn',
-        				'visibleButtons' => ['view' => false,'update' => true, 'delete' => true]
+        				'visibleButtons' => ['view' => false,'update' => false, 'delete' => true]
         		],
         ],
     ]); ?>
