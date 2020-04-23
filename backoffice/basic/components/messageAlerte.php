@@ -55,7 +55,7 @@ class messageAlerte extends Widget{
 		
 		return "<div class='alert alert-dismissible alert-".$this->type."'>
 		  <button type='button' class='close' data-dismiss='alert'>&times;</button>
-		  <h4 class='alert-heading'>".$l_STR_TitreBoite."</h4>
+		  <h4 class='alert-heading'><i class='glyphicon glyphicon-comment'></i> ".$l_STR_TitreBoite."</h4>
 		  <p class='mb-0'>".$this->message."</p>
 		</div>";
 	}
