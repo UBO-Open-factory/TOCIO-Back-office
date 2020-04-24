@@ -34,3 +34,7 @@
 	border:1px solid;
 	padding:0.5em 1em;
 }
+.sticky {
+  position: fixed;
+  top: 0;
+}

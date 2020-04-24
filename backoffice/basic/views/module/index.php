@@ -74,21 +74,24 @@ ModuleAsset::register($this);
 				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'btn btn-success pull-right']);
 			?>
     	</div>
-    	<div class="col-sm-3">
-    		<h3>Capteurs disponibles</h3>
-	    	<?php 
-	    		$capteurProvider = new SqlDataProvider([
-	    				'sql' 	=> "SELECT * FROM capteur"
-	    		]);
-
-				echo capteursWidget::widget(['dataProvider' => $capteurProvider,]);
-				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Capteur', ['capteur/create'], ['class' => 'btn btn-info pull-right']);
-	    	?>
+    	<div class="col-sm-3" id="listeCapteursFix">
+    		<div id="listeCapteursFix-Content">
+	    		<h3>Capteurs disponibles</h3>
+		    	<?php 
+		    		$capteurProvider = new SqlDataProvider([
+		    				'sql' 	=> "SELECT * FROM capteur"
+		    		]);
+	
+					echo capteursWidget::widget(['dataProvider' => $capteurProvider,]);
+					echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Capteur', ['capteur/create'], ['class' => 'btn btn-info pull-right']);
+		    	?>
+    		</div>
     	</div>
     </div>
 	
 
     <?php Pjax::end(); ?>
 </div>
+
 <?php /*@todo  Pouvoir filtrer l'affichage sur le nom du module*/
 echo messageAlerte::widget(['type' => "todo", "message" => "Pouvoir filtrer l'affichage sur le nom du module"]); ?>

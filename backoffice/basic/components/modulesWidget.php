@@ -255,10 +255,10 @@ class modulesWidget extends Widget
 			$contents[] = "		</div>";
 			$contents[] = "	</div>";
 			$contents[] = "</div>";
-			$contents[] = "<div class='col-md-6'>";
+			$contents[] = "<div class='col-md-12'>";
 			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
 			$contents[] = "</div>";
-			$contents[] = "<div class='col-md-6'>";
+			$contents[] = "<div class='col-md-12'>";
 			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrame), "Format attendu de la payload LORA <span class='TramePayload'></span>"));
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";

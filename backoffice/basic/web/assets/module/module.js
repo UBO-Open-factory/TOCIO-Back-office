@@ -1,5 +1,36 @@
 // _________________________________________________________________________________________________
 /**
+ * Fixe la div de la liste des capteurs sur le haut de l'écran lorsqeu l'on scroll.
+ * @see https://www.w3schools.com/howto/howto_js_sticky_header.asp
+ */
+$(document).ready(function() {
+	// Get the header
+	var header = document.getElementById("listeCapteursFix");
+	
+	// Get the offset position of the navbar
+	var stickyPos = header.offsetTop;
+	
+	// When the user scrolls the page, execute stickyFixDiv
+	window.onscroll = function() {stickyFixDiv(stickyPos, header)};
+	
+	function stickyFixDiv(stickyPos, header) {
+		console.debug(stickyPos + " - " +window.pageYOffset);
+		
+		if (window.pageYOffset > stickyPos) {
+			// Add the sticky class to the header when you reach its scroll position.
+			$('#listeCapteursFix-Content').addClass("sticky");
+	
+		} else {
+			// Remove "sticky" when you leave the scroll position
+			$('#listeCapteursFix-Content').removeClass("sticky");
+		}
+	}
+});
+	
+	
+	
+// _________________________________________________________________________________________________
+/**
  * Ajout du clique sur les classes toggleAffichage 
  */
 $(document).on('click', '.toggleAffichage', function() {
