@@ -61,13 +61,15 @@ class ModuleController extends Controller
      * Creates a new Module model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * 
+     * 	@version 16 avr. 2020	: APE	- Redirection sur la page des modules en ouvrant le nouveau module.
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new Module();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->identifiantReseau]);
+//             return $this->redirect(['view', 'id' => $model->identifiantReseau]);
+        	return $this->redirect(['index', 'idModule' => $model->identifiantReseau]);
         }
 
         return $this->render('create', [
@@ -81,13 +83,16 @@ class ModuleController extends Controller
      * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * 
+     * @version 16 avr. 2020	: APE	- Redirection sur la page des modules en ouvrant le nouveau module.
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->identifiantReseau]);
+//             return $this->redirect(['view', 'id' => $model->identifiantReseau]);
+        	return $this->redirect(['index', 'idModule' => $model->identifiantReseau]);
         }
 
         return $this->render('update', [

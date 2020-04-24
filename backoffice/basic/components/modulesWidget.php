@@ -135,8 +135,8 @@ class modulesWidget extends Widget
 																				"nomcapteur" => $l_OBJ_ModuleCapteur['nomcapteur']],
 													['data-pjax' => "0",
 													"aria-label" => "Supprimer",
-													"title" => "Supprimer",
-													"data-confirm" => "Êtes-vous sûr de vouloir détacher ce Capteur de ce Module ?",
+													"title" => "Dissocier",
+													"data-confirm" => "Êtes-vous sûr de vouloir dissocier ce Capteur de ce Module ?",
 													"data-method"=>"post"]);
 
 			
