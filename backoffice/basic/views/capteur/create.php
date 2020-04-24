@@ -20,7 +20,7 @@ CapteurAsset::register($this);
     <h1><?= Html::encode($this->title) ?></h1>
     <?= tocioRegles::widget(['regle' => "capteurDefinition"])?>
 
-    <?= $this->render('_form', [
+    <?= $this->render('_formCreate', [
         'model' => $model,
     ]) ?>
 </div>

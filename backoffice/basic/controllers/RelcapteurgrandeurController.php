@@ -145,12 +145,14 @@ class RelcapteurgrandeurController extends Controller
      * @param integer $idGrandeur
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * 	@version 24 avr. 2020	: APE	- Redirection sur la page d'update d'un capteur
      */
-    public function actionDelete($idCapteur, $idGrandeur)
-    {
+    public function actionDelete($idCapteur, $idGrandeur) {
         $this->findModel($idCapteur, $idGrandeur)->delete();
 
-        return $this->redirect(['index']);
+//         return $this->redirect(['index']);
+
+        return $this->redirect(['/capteur/update?id='. $idCapteur]);
     }
 
     /**

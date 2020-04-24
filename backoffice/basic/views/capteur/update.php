@@ -20,12 +20,8 @@ CapteurAsset::register($this);
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?= $this->render('_formUpdate', [
         'model' => $model,
     ]) ?>
 
 </div>
-
-<?php /*@todo  Lorsque l'on supprime une Grandeurs, il faut revenir sur cette page là.*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Lorsque l'on supprime une Grandeurs, il faut revenir sur cette page là."]); ?>
-
