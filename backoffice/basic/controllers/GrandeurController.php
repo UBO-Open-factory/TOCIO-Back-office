@@ -8,6 +8,8 @@ use app\models\GrandeurSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Codeception\Lib\Connector\Yii2;
+use PHPUnit\Framework\Constraint\Count;
 
 /**
  * GrandeurController implements the CRUD actions for Grandeur model.
@@ -103,26 +105,17 @@ class GrandeurController extends Controller{
      * Creates a new Grandeur model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
-     * @todo Afficher un message si le coupple (Nature,Type) existent déjà.
      */
     public function actionCreate() {
         $model = new Grandeur();
-        /*
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-        */
         // SI LA SAISIE EST VALIDE
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
         	// NETTOYAGE DU FORMATTAGE SAISIE
         	$this->_FormattageFormatCapteur($model);
         	
         	
-        	// FORMATTAGE DE LA NATURE (premiere caractère en majuscule )
+        	// FORMATTAGE DE LA NATURE (premiere caractère en majuscule)
         	$model->nature = ucfirst( $model->nature );
         	
         	
@@ -130,31 +123,37 @@ class GrandeurController extends Controller{
         	$this->_ConstruitNomTable($model);
         	
         	
-        	// SI LE NOM DE TABLE N'EST PAS UTILISÉ DANS LA BASE ...................................
-        	if (! $this->_tableMesureExiste($model->tablename)) {
+//         	// SI LE NOM DE TABLE N'EST PAS UTILISÉ DANS LA BASE ...................................
+//         	if (! $this->_tableMesureExiste($model->tablename)) {
         		// REQUETE DE CREATION DE LA TABLE
         		$this->_createTableMesure($model);
-        		
 	        		
 	        	// SAUVEGARDE LA SAISIE
 	        	$model->save();
-
 	        	
 	        	// ON RETOURNE SUR LA LISTE
-	        	return $this->redirect(['view', 'id' => $model->id]);
+	        	return $this->redirect(['index', 'id' => $model->id]);
 	        		
 	        	
 	        	
-      		// LE NOM DE CETTE TABLE EXISTE DÉJÀ ...................................................
-        	} else {
-        		// Affiche un message sur la page de la saisie.
-        		$model->addError('nature', "La table <".$model->tablename."> existe déjà");
+//       		// LE NOM DE CETTE TABLE EXISTE DÉJÀ ...................................................
+//         	} else {
         		
-        		// @todo traiter le cas de l'existance de la table pour cette grandeur
-        		
-        	}
-        	
-        	
+//         		// LA TABLE EST VIDE, ON LA SUPPRIME & ON CREER LA MESURE
+//         		if( $this->_getNbMesureFromTableMesure($model->tablename) == 0){
+        			
+//         			// Suppression de la table des mesures
+//         			$this->_deleteTableMesure($model->tablename);
+        			
+//         			// Création de la Grandeur
+//         			$model->save();
+        			
+//         		} else {
+// 	        		// LA TABLE N'EST PAS VIDE, ON AFFICHE UNE ERREUR
+// 	        		// Affiche un message sur la page de la saisie.
+// 	        		$model->addError('nature', "Impossible de créer cette Grandeur car La table des mesures prévus <".$model->tablename."> existe déjà (et n'est pas vide).");
+//         		}
+//         	}
         }
         return $this->render('create', [
         		'model' => $model,
@@ -174,51 +173,63 @@ class GrandeurController extends Controller{
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
+    public function actionUpdate($id){
+//         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-        	// NETTOYAGE DU FORMATTAGE SAISIE
-        	$model->formatCapteur = str_replace(".", ",", $model->formatCapteur);
+//         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+//         	// NETTOYAGE DU FORMATTAGE SAISIE
+//         	$model->formatCapteur = str_replace(".", ",", $model->formatCapteur);
         	
         	
-        	// FORMATTAGE DE LA NATURE (premier caractère en majuscule )
-        	$model->nature = ucfirst( $model->nature );
+//         	// FORMATTAGE DE LA NATURE (premier caractère en majuscule )
+//         	$model->nature = ucfirst( $model->nature );
         	
         	
-        	// ADAPTATION DU TYPE DE LA TABLE
-        	$l_STR_Requete = "ALTER TABLE `".$model->tablename."` CHANGE `valeur` `valeur` ".$model->type." NOT NULL;";
-        	Yii::$app->db->createCommand($l_STR_Requete)
-	        	->execute();
+//         	// ADAPTATION DU TYPE DE LA TABLE
+//         	$l_STR_Requete = "ALTER TABLE `".$model->tablename."` CHANGE `valeur` `valeur` ".$model->type." NOT NULL;";
+//         	Yii::$app->db->createCommand($l_STR_Requete)
+// 	        	->execute();
         	
         	
-        	// SAUVEGARDE LA SAISIE
-        	$model->save();
+//         	// SAUVEGARDE LA SAISIE
+//         	$model->save();
         	
-        	// REDIRECTION 
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+//         	// REDIRECTION 
+//             return $this->redirect(['index', 'id' => $model->id]);
+//         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+//         return $this->render('update', [
+//             'model' => $model,
+//         ]);
     }
 
+    
+    
     /**
      * Deletes an existing Grandeur model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @version 24 avr. 2020	: APE	- Si la table des mesures associée est vide, on la supprime.
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    public function actionDelete($id) {
+    	
+    	// SUPPRESSION DE LA TABLES DES MESURES ASSOCIÉE (SI ELLE EST VIDE ) -----------------------
+    	$model = $this->findModel($id);
+    	if( $this->_getNbMesureFromTableMesure($model->tablename) == 0){
+     		$this->_deleteTableMesure($model->tablename);
+    	}
+    	
+    	// SUPPRESSION DE LA GRANDEUR DANS LA TABLE ------------------------------------------------
+     	$model->delete();
 
-        return $this->redirect(['index']);
+ 		return $this->redirect(['index']);
     }
 
+    
+    
+    
     /**
      * Finds the Grandeur model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -269,21 +280,33 @@ class GrandeurController extends Controller{
     }
     
     
+    
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Supprime la table des mesures dont le nom est passé en paramètre.
+     * @param string $p_STR_NomTable : Le nom de la table des mesures.
+     * @return number
+     */
+    private function _deleteTableMesure($p_STR_NomTable){
+    	return \Yii::$app->db->createCommand("DROP TABLE {{".$p_STR_NomTable."}}")
+							->execute();
+    }
+    
+    
+    
     // ---------------------------------------------------------------------------------------------
     /**
      * Vérifie qu'un nom de table de mesure existe dans la base.
      * Les nom de ces tables commencent pas tm_
      * @param $p_STR_NomTable
      * @return BOOLEAN
+     * @todo il y a certainnement matière à optimiser cette function.
      */
     private function _tableMesureExiste($p_STR_NomTable){
     	// Récupération des noms de tables commencant par tm_
     	$l_TAB_Noms	= array();
     	$l_STR_requete = "SHOW TABLES LIKE 'tm_%'";
     	$l_TAB_NomTables	= Yii::$app->db->createCommand($l_STR_requete)->queryAll();
-    	
-    	
-    	
     	
     	// Construction d'un tableau avec les noms de table.
     	foreach( $l_TAB_NomTables as $l_TAB_NomTable){
@@ -294,6 +317,19 @@ class GrandeurController extends Controller{
 
 
     	return in_array($p_STR_NomTable, $l_TAB_Noms);
+    }
+    
+    
+    
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Renvoie le nombre de données dans une table de mesure passée en paramètre.
+     * @param string $p_STR_NomTable	Le nom de la table des mesures.
+     * 	@version 24 avr. 2020	: APE	- Création.
+     */
+    private function _getNbMesureFromTableMesure($p_STR_NomTable){
+    	return \Yii::$app->db->createCommand("SELECT COUNT(*) FROM {{".$p_STR_NomTable."}}")
+    							->queryScalar();
     }
     
     

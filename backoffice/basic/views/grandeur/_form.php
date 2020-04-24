@@ -27,11 +27,12 @@ use yii\widgets\ActiveForm;
 		    		"varchar" => "Varchar",
 		    ]) ?>
 		</div>
+		<div class="col-sm-12 ">
+	    	<p class="pull-right">
+	        	<?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
+	        </p>
+	    </div>
 	</div>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
 
     <?php ActiveForm::end(); ?>
 

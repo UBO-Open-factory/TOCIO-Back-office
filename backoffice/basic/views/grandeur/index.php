@@ -16,31 +16,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 	<?= tocioRegles::widget(["regle" => "grandeurDefinition"])?>
 
-    <p>
-        <?= Html::a('Nouvelle Grandeur', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
+//             ['class' => 'yii\grid\SerialColumn'],
+//             'id',
             'nature',
             'formatCapteur',
-            'tablename',
             'type',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            'tablename',
+			['class' => 'yii\grid\ActionColumn',
+				'visibleButtons' => ['view' => false,'update' => false, 'delete' => true]
+			],
+    		
         ],
     ]); ?>
-
+<p>
+		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une Grandeur', ['create'], ['class' => 'btn btn-success pull-right'])?>
+	</p>
     <?php Pjax::end(); ?>
 
 </div>
-
-<?php echo messageAlerte::widget(['type' => "todo", "message" => "Si on supprime une Grandeur, il faut supprimer la table MySQL (ou au moins demander si on le fait)"]);?>

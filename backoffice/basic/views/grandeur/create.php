@@ -20,11 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php echo tocioRegles::widget(['regle' => 'grandeurDefinition']); ?>
+    <?php echo tocioRegles::widget(['regle' => 'encodageformatdefinition']); ?>
 
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
 
 </div>
-<?php echo messageAlerte::widget(['type' => "todo", "message" => "Faire une auto-completion sur le libellé de la grandeur."]);?>
 <?php echo messageAlerte::widget(['type' => "todo", "message" => "Afficher un message si la Grandeur sasie existe ET qu'elle a un type différent."]);?>

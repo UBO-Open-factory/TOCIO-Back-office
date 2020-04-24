@@ -18,7 +18,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
 
 .wrap > .container {
     /*padding: 70px 15px 20px;*/
-    padding: 70px 15px 20px;
+    padding: 0  15px 20px;
 background: #45484d;
 background: -moz-linear-gradient(-45deg,  #45484d 0%, #000000 100%);
 background: -webkit-linear-gradient(-45deg,  #45484d 0%,#000000 100%);
@@ -130,4 +130,14 @@ a.desc:after {
 .table-bordered > thead > tr > td,
 .table-bordered > tbody> tr > td {
 	border: 1px solid #000000;
+}
+/* Arc en ciel -------------------------------------------------------------------------------------*/
+.arcEnCiel {
+	background: #000000;
+	background: -moz-linear-gradient(left,  #000000 0%, #0011ff 14%, #00c7ff 27%, #00ff6a 40%, #c3ff00 53%, #ff0000 68%, #ff0000 68%, #b600ff 85%, #000000 100%);
+	background: -webkit-linear-gradient(left,  #000000 0%,#0011ff 14%,#00c7ff 27%,#00ff6a 40%,#c3ff00 53%,#ff0000 68%,#ff0000 68%,#b600ff 85%,#000000 100%);
+	background: linear-gradient(to right,  #000000 0%,#0011ff 14%,#00c7ff 27%,#00ff6a 40%,#c3ff00 53%,#ff0000 68%,#ff0000 68%,#b600ff 85%,#000000 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000',GradientType=1 );
+	width:100%;
+	height:1px;
 }

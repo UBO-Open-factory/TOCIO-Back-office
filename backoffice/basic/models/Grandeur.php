@@ -36,6 +36,7 @@ class Grandeur extends \yii\db\ActiveRecord
             [['nature', 'tablename'], 'string', 'max' => 50],
             [['formatCapteur', 'type'], 'string', 'max' => 10],
         	[['nature'], 'trim'],	// Supprimer les espaces avant et après la saisie.
+        	[['nature'], 'unique'],
         ];
     }
 
@@ -47,7 +48,7 @@ class Grandeur extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nature' => 'Nature',
-            'formatCapteur' => 'Format Capteur',
+            'formatCapteur' => 'Format de la Grandeur',
             'tablename' => 'Nom de la table de stockage des valeurs',
             'type' => 'Type des valeurs',
         ];

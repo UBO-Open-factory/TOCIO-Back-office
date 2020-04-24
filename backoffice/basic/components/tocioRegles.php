@@ -40,7 +40,7 @@ class tocioRegles extends Widget {
 			case "grandeurdefinition":
 				$this->message = "<p>Une grandeur est composée de :</p>
 			    <ul>
-			    	<li>un <b>Libelé</b> (la nature de la Grandeur en toutes lettres suivies de l'uinité entre paraenthèse, comme <i>Température (°C)</i>),</li>
+			    	<li>un <b>Libelé</b> (la nature de la Grandeur en toutes lettres suivies de l'unité entre parenthèses, comme <i>Température (°C)</i>),</li>
 			    	<li>un <b>Formattage</b> de la chaine (qui servira à extraire la valeur du capteur de la trame envoyée par le module),</li>
 			    	<li>un <b>Type</b> qui sera utilisé pour le type des valeurs (des capteurs) stockée dans la table MySQL.</li>
 			    </ul>";
