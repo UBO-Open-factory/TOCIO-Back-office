@@ -36,7 +36,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
 .jumbotron {
     text-align: center;
 }
-
+.jumbotron H1 {
+	font-family: 'Raleway', sans-serif;
+	-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-image: -webkit-linear-gradient(left, blue, lightblue, green, yellow, red, indigo, violet);
+}
 .jumbotron .btn {
     font-size: 21px;
     padding: 14px 24px;

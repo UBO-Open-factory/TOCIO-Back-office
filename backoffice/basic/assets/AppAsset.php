@@ -21,7 +21,11 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/bootstrap-slate.min.css',
+    	'https://fonts.googleapis.com/css2?family=Raleway:wght@900&display=swap',
         'css/site.css',
+    ];
+    public $cssOptions = [
+    	'type' => 'text/css',
     ];
     public $js = [
     ];
