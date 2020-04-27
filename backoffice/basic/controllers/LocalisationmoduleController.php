@@ -8,6 +8,7 @@ use app\models\LocalisationmoduleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 
 /**
  * LocalisationmoduleController implements the CRUD actions for Localisationmodule model.
@@ -61,13 +62,15 @@ class LocalisationmoduleController extends Controller
      * Creates a new Localisationmodule model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @version 27 avr. 2020	: APE	- Redirection sur l'Url précédente ( doit être initialisée avec Url::remember() )
      */
     public function actionCreate()
     {
         $model = new Localisationmodule();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+//             return $this->redirect(['view', 'id' => $model->id]);
+        	return $this->redirect([Url::previous()]);
         }
 
         return $this->render('create', [
@@ -81,13 +84,15 @@ class LocalisationmoduleController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @version 27 avr. 2020	: APE	- Redirection sur l'Url précédente ( doit être initialisée avec Url::remember() )
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+//             return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect([Url::previous()]);
         }
 
         return $this->render('update', [
@@ -101,12 +106,14 @@ class LocalisationmoduleController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @version 27 avr. 2020	: APE	- Redirection sur l'Url précédente ( doit être initialisée avec Url::remember() )
      */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect([Url::previous()]);
+//         return $this->redirect(['index']);
     }
 
     /**

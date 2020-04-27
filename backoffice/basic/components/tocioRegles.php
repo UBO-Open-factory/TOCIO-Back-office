@@ -35,7 +35,11 @@ class tocioRegles extends Widget {
 			$this->message = "Le formattage des valeurs mesurées est fait selon la règle <b>chiffre_avant_la_virgule,chiffre_apres_la_virgule</b>.</br> Par exemple pour une température de 12.5°C encodée selon le schéma -3.2, il faut écrire +01250, pour -1.02°C il faut écrire -00102";
 				break;
 			case "moduledefinition":
-				$this->message = "<p>Un <i>Module</i> est un ensemble de capteurs.</p>";
+				$this->message = "Un <i>Module</i> est un ensemble de capteurs.";
+				break;
+			case "localisationmodule":
+				$this->message = "<p>La <i>Localisation</i> d'un <i>Module</i> permet de définir un emplacement géolocalisé d'un <i>Module</i>.</p>
+					Une <i>Localisation</i> ne peut pas être supprimée si un <i>Module</i> l'utilise.";
 				break;
 			case "grandeurdefinition":
 				$this->message = "<p>Une grandeur est composée de :</p>
