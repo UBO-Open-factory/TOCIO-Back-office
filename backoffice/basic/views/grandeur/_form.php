@@ -28,9 +28,7 @@ use yii\widgets\ActiveForm;
 		    ]) ?>
 		</div>
 		<div class="col-sm-12 ">
-	    	<p class="pull-right">
-	        	<?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
-	        </p>
+		        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-primary pull-right']) ?>
 	    </div>
 	</div>
 

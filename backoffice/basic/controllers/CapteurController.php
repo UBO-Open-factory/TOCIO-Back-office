@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Relcapteurgrandeur;
+use yii\helpers\Url;
 
 /**
  * CapteurController implements the CRUD actions for Capteur model.
@@ -133,6 +134,7 @@ class CapteurController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      * @version 16 avr. 2020	: APE	- Redirection sur la liste des Capteurs
+     * 	@version 25 avr. 2020	: APE	- Redirection sur l'Url précédente ( doit être initialisée avec Url::remember() )
      */
     public function actionCreate() {
         $model 		= new Capteur();
@@ -140,7 +142,7 @@ class CapteurController extends Controller
        	// Si le modèle se sauve correctement, on reviens sur la page d'index des Capteurs
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            return $this->redirect(['index', 'id' => $model->id]);
+            return $this->redirect([Url::previous(), 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -155,13 +157,15 @@ class CapteurController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      * @version 16 avr. 2020	: APE	- Redirection sur la liste des Capteurs
+     * 	@version 25 avr. 2020	: APE	- Redirection sur l'Url précédente ( doit être initialisée avec Url::remember() )
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
         	
-            return $this->redirect(['index', 'id' => $model->id]);
+//             return $this->redirect(['index', 'id' => $model->id]);
+        	return $this->redirect([Url::previous(), 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -175,12 +179,14 @@ class CapteurController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @version 25 avr. 2020	: APE	- Redirection sur l'Url précédente ( doit être initialisée avec Url::remember() )
      */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+//         return $this->redirect(['index']);
+        return $this->redirect([Url::previous()]);
     }
 
     /**

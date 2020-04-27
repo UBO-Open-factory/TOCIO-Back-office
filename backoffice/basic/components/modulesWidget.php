@@ -17,6 +17,7 @@ use app\models\Position;
 use app\models\Relmodulecapteur;
 use app\models\Capteur;
 use function Opis\Closure\serialize;
+use yii\helpers\Url;
 
 class modulesWidget extends Widget
 {
@@ -45,6 +46,10 @@ class modulesWidget extends Widget
 	 * @see \yii\base\Widget::run()
 	 */
 	public function run() {
+		// L'URL COURANTE --------------------------------------------------------------------------
+		Url::remember(Url::current());
+		
+		
 		// Le bouton pour plier/déplier les boites.
 		$l_STR_BtnPliage 		= Html::tag("span","", ['class'	=> "triangle pull-right glyphicon glyphicon-triangle-bottom"]);
 		$l_STR_BtnDelete 		= Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
@@ -121,7 +126,7 @@ class modulesWidget extends Widget
 				$l_STR_Position .= " ".$l_STR_iconDoubleClick;
 				
 				// Ajout de la légende de la position du capteur
-				$l_STR_Position	= $this->_legende($l_STR_Position, "Coordonnées");
+				$l_STR_Position	= $this->_legende($l_STR_Position, "Coord.");
 				
 				
 				
@@ -135,7 +140,7 @@ class modulesWidget extends Widget
 																				"nomcapteur" => $l_OBJ_ModuleCapteur['nomcapteur']],
 													['data-pjax' => "0",
 													"aria-label" => "Supprimer",
-													"title" => "Dissocier",
+													"title" => "Dissocier ce capteur",
 													"data-confirm" => "Êtes-vous sûr de vouloir dissocier ce Capteur de ce Module ?",
 													"data-method"=>"post"]);
 
@@ -151,11 +156,9 @@ class modulesWidget extends Widget
 				$contents[] = "<div class='row'>";
 				$contents[] = "<div class='col-md-3'>";
 				$contents[] = Html::tag("h4", $l_STR_NomCapteur,["class" => "card-title"]);
-				$contents[] = "</div>";
-				$contents[] = "<div class='col-md-2'>";
 				$contents[] = $l_STR_Position;
 				$contents[] = "</div>";
-				$contents[] = "<div class='col-md-7'>";
+				$contents[] = "<div class='col-md-9'>";
 				$contents[] = "		<div class='row'>";
 		
 						
@@ -169,19 +172,20 @@ class modulesWidget extends Widget
 															"\nExemple : ".$this->_exempleFormatGrandeur($format));
 					//$l_STR_GrandeurID	= $l_OBJ_Grandeurs->idGrandeurs['id'];
 
-
+					
+					// Récupération de la date de la dernière données entrée dans la table des mesures
+					$l_STR_LastDate = $this->_LastDateDataEntry($l_OBJ_Grandeurs->idGrandeur0['tablename']);
+					$l_STR_DateLastEntryGrandeur	= $this->_toolTip($l_STR_LastDate, "Date de la dernière données stockée");
+					
 					
 					// Ajout du format dans la trame
 					$formatTrame[] = Html::tag("button ",$l_STR_Format,["type" => "button", "class" => "btn btn-primary disabled"]);
 
 					
 					// Formattage de l'affichage de la grandeur
-					$contents[] = Html::tag("div",
-											$l_STR_Nature,
-											["class" => "col-md-8"]);
-					$contents[] = Html::tag("div",
-											$l_STR_Format,
-											["class" => "col-md-2"]);
+					$contents[] = Html::tag("div",$l_STR_Nature,["class" => "col-md-5"]);
+					$contents[] = Html::tag("div",$l_STR_Format,["class" => "col-md-2"]);
+					$contents[] = Html::tag("div",$l_STR_DateLastEntryGrandeur,["class" => "col-md-5"]);
 				}
 				$contents[] = "		</div>";
 				$contents[] = "</div>";
@@ -456,6 +460,28 @@ class modulesWidget extends Widget
 		$btn = Html::tag("span ", "",["class" => $icon]);
 		return Html::a($btn, [$link, 'id' => $id]);
 	}
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Renvoie la date de la dernière entrée dans la table des mesures pour cette grandeur.
+	 * @param string $p_STR_TableName Le nomde la tables des mesures.
+	 * @return array date
+	 */
+	private function _LastDateDataEntry($p_STR_TableName){
+		
+		$row = (new \yii\db\Query())
+				->select(['max(timestamp) as lastDate'])
+				->from($p_STR_TableName)
+				->one();
+		if( $row['lastDate'] != null ) {
+			return date("d/m/Y H:i:s", strtotime($row['lastDate']));
+			
+		} else {
+			return "No data";
+		}
+	}
+	
 	
 	
 	// _____________________________________________________________________________________________

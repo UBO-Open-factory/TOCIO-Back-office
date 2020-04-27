@@ -41,7 +41,6 @@ use app\models\Localisationmodule;
 		    		?>
 				</div>
 			</div>
-	</p>
 		</div>		
 
 		<div class="col-sm-6">
@@ -53,9 +52,8 @@ use app\models\Localisationmodule;
 	</div>
 
     <div class="form-group push-right">
-        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success pull-right']) ?>
     </div>
-
     <?php ActiveForm::end(); ?>
 
 </div>

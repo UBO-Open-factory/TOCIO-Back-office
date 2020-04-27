@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 <p>
-		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une Grandeur', ['create'], ['class' => 'btn btn-success pull-right'])?>
+		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une Grandeur', ['create'], ['class' => 'btn btn-primary pull-right'])?>
 	</p>
     <?php Pjax::end(); ?>
 

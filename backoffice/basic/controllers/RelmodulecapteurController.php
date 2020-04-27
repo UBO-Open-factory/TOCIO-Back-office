@@ -12,6 +12,7 @@ use yii\bootstrap\ActiveForm;
 use yii\base\Response;
 use yii\helpers\Html;
 use Codeception\Module;
+use yii\helpers\Url;
 
 /**
  * RelmodulecapteurController implements the CRUD actions for Relmodulecapteur model.
@@ -210,13 +211,15 @@ class RelmodulecapteurController extends Controller
      * @param string $nomcapteur
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @version 25 avr. 2020	: APE	- Rerdirection sur l'Url précédente ( doit être initialisée avec Url::remember() )
      */
     public function actionUpdate($idModule, $idCapteur, $nomcapteur) {
     	$model = $this->findModel($idModule, $idCapteur, $nomcapteur);
                 
         // UPDATE À PARTIR DE LA PAGE WEB (EN POST) ------------------------------------------------
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	return $this->redirect(['view', 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur, 'nomcapteur' => $model->nomcapteur]);
+//         	return $this->redirect(['view', 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur, 'nomcapteur' => $model->nomcapteur]);
+        	return $this->redirect([Url::previous(), 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur, 'nomcapteur' => $model->nomcapteur]);
         }
 
         return $this->render('update', [
