@@ -35,30 +35,56 @@ AppAsset::register($this);
             'class' => 'navbar navbar-expand-lg ',
         ],
     ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-        	['label' => 'Modules', 'url' => ['/module/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-        	['label' => 'Capteurs', 'url' => ['/capteur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-        	['label' => 'Grandeurs', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-        	['label' => 'Localisation de modules', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-        	['label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-//         	['label' => 'Contact', 'url' => ['/site/contact'], 'linkOptions' => ['class' => 'nav-link'] ],
-            Yii::$app->user->isGuest ? (
-            		['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
-        ],
-    ]);
+    // Si l'user est authentifié
+    $identity = Yii::$app->user->identity;	// null si non authentifié
+    // SI ON EST AUTHENTIFIE -----------------------------------------------------------------------
+    if( $identity != null){
+	    echo Nav::widget([
+	        'options' => ['class' => 'navbar-nav navbar-right'],
+	        'items' => [
+	            ['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+	        	['label' => 'Modules', 'url' => ['/module/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+	        	['label' => 'Capteurs', 'url' => ['/capteur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+	        	['label' => 'Grandeurs', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+	        	['label' => 'Localisation de modules', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+	        	['label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+	//         	['label' => 'Users', 'url' => ['/utilisateurs/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+	//         	['label' => 'Contact', 'url' => ['/site/contact'], 'linkOptions' => ['class' => 'nav-link'] ],
+	            Yii::$app->user->isGuest ? (
+	            		['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
+	            ) : (
+	                '<li>'
+	                . Html::beginForm(['/site/logout'], 'post')
+	                . Html::submitButton(
+	                    'Logout (' . Yii::$app->user->identity->username . ')',
+	                    ['class' => 'btn btn-link logout']
+	                )
+	                . Html::endForm()
+	                . '</li>'
+	            )
+	        ],
+	    ]);
+	// ANONYMOUS -----------------------------------------------------------------------------------
+    } else  {
+    	echo Nav::widget([
+    			'options' => ['class' => 'navbar-nav navbar-right'],
+    			'items' => [
+    					['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+    					Yii::$app->user->isGuest ? (
+    							['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
+    							) : (
+    									'<li>'
+    									. Html::beginForm(['/site/logout'], 'post')
+    									. Html::submitButton(
+    											'Logout (' . Yii::$app->user->identity->username . ')',
+    											['class' => 'btn btn-link logout']
+    											)
+    									. Html::endForm()
+    									. '</li>'
+    									)
+    			],
+    			]);
+    }
     NavBar::end();
     ?>
    	<div class="arcEnCiel"></div>
