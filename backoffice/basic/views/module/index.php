@@ -11,6 +11,7 @@ use app\assets\ModuleAsset;
 use app\components\capteursWidget;
 use app\models\Capteur;
 use yii\data\SqlDataProvider;
+use yii\jui\Draggable;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ModuleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -18,7 +19,7 @@ use yii\data\SqlDataProvider;
 $this->title = 'Modules';
 $this->params['breadcrumbs'][] = $this->title;
 
-// Utilisaiton des ressources pour les modules (JS + CSS)
+// Utilisation des ressources pour les modules (JS + CSS)
 ModuleAsset::register($this);
 
 ?>
@@ -69,7 +70,7 @@ ModuleAsset::register($this);
     <div class="row">
     	<div class="col-sm-9">
 			<?php
-				echo yii\jui\Draggable::widget();
+				echo Draggable::widget();
 				echo modulesWidget::widget(['dataProvider' => $dataProvider,]);
 				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'btn btn-success pull-right']);
 			?>
