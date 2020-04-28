@@ -16,8 +16,6 @@ $grandeurs 	= Grandeur::findBySql("SELECT * FROM grandeur")->all();
 $capteurs 	= Capteur::findBySql("SELECT * FROM capteur")->all();
 $modules	= Module::findBySql("SELECT * FROM module")->all();
 $l_INT_LocalisationModule	= Module::find()->indexBy('id')->count();
-// $l_INT_MesuresLuminosite	= TmLuminositlux::find()->indexBy('id')->count();
-// $l_INT_MesuresTemperaturC	= TmTemperaturec::find()->indexBy('id')->count();
 $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'])->count();
 
 ?>
@@ -103,22 +101,6 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
 						</div>
 					</div>
 	            </div>
-<!-- 	            <div class="col-lg-3"> -->
-<!-- 	            	<div class="card text-white bg-secondary " > -->
-<!-- 	            	<div class="card-header">Nombre de mesures dans la table luminosité</div> -->
-<!-- 						<div class="card-body"> -->
-							<h1 class="card-text text-center"><?php echo $l_INT_MesuresLuminosite; ?></h1>
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 	            </div> -->
-<!-- 	            <div class="col-lg-3"> -->
-<!-- 	            	<div class="card text-white bg-secondary " > -->
-<!-- 	            	<div class="card-header">Nombre de mesures dans la table température °C</div> -->
-<!-- 						<div class="card-body"> -->
-							<h1 class="card-text text-center"><?php echo $l_INT_MesuresTemperaturC; ?></h1>
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 	            </div> -->
 	        </div>
         </div>
     </div>
