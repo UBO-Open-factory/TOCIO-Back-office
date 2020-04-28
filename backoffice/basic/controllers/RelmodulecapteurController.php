@@ -8,23 +8,34 @@ use app\models\RelmodulecapteurSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\bootstrap\ActiveForm;
 use yii\base\Response;
 use yii\helpers\Html;
-use Codeception\Module;
 use yii\helpers\Url;
+use yii\filters\AccessControl;
 
 /**
  * RelmodulecapteurController implements the CRUD actions for Relmodulecapteur model.
  */
 class RelmodulecapteurController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
+	// _____________________________________________________________________________________________
+	/**
+	 * {@inheritdoc}
+	 * @version 28 avr. 2020	: APE	- Ajout des droits d'accès.
+	 */
+	public function behaviors(){
+		return [
+			'access' => [
+					'class' => AccessControl::className(),
+					'only' => ['create', 'update', 'delete', 'updateorderajax', 'attacheajax', 'updateajax'],
+					'rules' => [
+							[
+									'allow' => true,
+									'actions' => ['create', 'update', 'delete', 'updateorderajax', 'attacheajax', 'updateajax'],
+									'roles' => ['@'],	// Authenticated users | (?) for anonymous user
+							],
+					],
+			],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

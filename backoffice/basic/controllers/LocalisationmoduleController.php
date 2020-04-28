@@ -9,18 +9,31 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
+use yii\filters\AccessControl;
 
 /**
  * LocalisationmoduleController implements the CRUD actions for Localisationmodule model.
  */
 class LocalisationmoduleController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
+	// _____________________________________________________________________________________________
+	/**
+	 * {@inheritdoc}
+	 * @version 28 avr. 2020	: APE	- Ajout des droits d'accès.
+	 */
+	public function behaviors(){
+		return [
+			'access' => [
+					'class' =>AccessControl::className(),
+					'only' => ['create', 'update', 'delete'],
+					'rules' => [
+							[
+									'allow' => true,
+									'actions' => ['create', 'update', 'delete'],
+									'roles' => ['@'],	// Authenticated users | (?) for anonymous user
+							],
+					],
+			],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

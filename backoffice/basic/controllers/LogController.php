@@ -8,18 +8,31 @@ use app\models\LogSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * LogController implements the CRUD actions for Log model.
  */
 class LogController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
+	// _____________________________________________________________________________________________
+	/**
+	 * {@inheritdoc}
+	 * @version 28 avr. 2020	: APE	- Ajout des droits d'accès.
+	 */
+	public function behaviors(){
+		return [
+			'access' => [
+					'class' =>AccessControl::className(),
+					'only' => ['create', 'update', 'delete', 'index'],
+					'rules' => [
+							[
+									'allow' => true,
+									'actions' => ['create', 'update', 'delete', 'index'],
+									'roles' => ['@'],	// Authenticated users | (?) for anonymous user
+							],
+					],
+			],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

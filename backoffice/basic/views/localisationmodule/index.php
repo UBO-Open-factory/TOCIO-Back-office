@@ -36,7 +36,7 @@ Url::remember();
             'coordX',
             'coordY',
             'coordZ',
-			['attribute' => 'relmodulecapteur.idCapteur',
+			['attribute' => 'module.identifiantReseau',
 				'format' => 'html',
                 'label' => "Module rattachées",
                 'value' => function($model){

@@ -8,18 +8,31 @@ use app\models\ModuleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * ModuleController implements the CRUD actions for Module model.
  */
 class ModuleController extends Controller
 {
+	// _____________________________________________________________________________________________
     /**
      * {@inheritdoc}
+     * @version 28 avr. 2020	: APE	- Ajout des droits d'accès.
      */
-    public function behaviors()
-    {
+    public function behaviors(){
         return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'only' => ['create', 'update', 'delete', 'updateajax'],
+				'rules' => [
+					[
+						'allow' => true,
+						'actions' => ['create', 'update', 'delete', 'updateajax'],
+						'roles' => ['@'],	// Authenticated users | (?) for anonymous user
+					],
+				],
+			],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
