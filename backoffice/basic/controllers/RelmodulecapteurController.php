@@ -172,7 +172,7 @@ class RelmodulecapteurController extends Controller
     		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     		// Sauve le model
     		if( $model->save() ){
-    			return ["success" => "ok", "url" => "/module/index?idModule=".$post['idModule']];
+    			return ["success" => "ok", "url" => "module/index?idModule=".$post['idModule']];
     		} else {
     			
     			return ["success" => "** Oupsss, il y a eu un problème à la création du model ".$model::className()."\n", "errors" => json_encode($model->errors)];

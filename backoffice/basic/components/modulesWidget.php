@@ -87,7 +87,7 @@ class modulesWidget extends Widget
 			// BOUTONS D'ÉDITION DU MODULE ---------------------------------------------------------
 			$l_TAB_BtnEditionModule 	= [];
 			$l_TAB_BtnEditionModule[]	= $this->_btnEdition("module/update", "glyphicon glyphicon-pencil", $l_OBJ_Module->identifiantReseau);
-			$l_TAB_BtnEditionModule[]	= Html::a($l_STR_BtnDelete, ["/module/delete", "id" => $l_OBJ_Module->identifiantReseau],
+			$l_TAB_BtnEditionModule[]	= Html::a($l_STR_BtnDelete, ["module/delete", "id" => $l_OBJ_Module->identifiantReseau],
 																	['data-pjax' => "0",
 																	"aria-label" => "Supprimer",
 																	"title" => "Supprimer",
@@ -120,7 +120,7 @@ class modulesWidget extends Widget
 				$l_STR_Position = $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
 				$l_STR_Position = Html::tag("span", $l_STR_Position, ['class'=>"dblClick alert-secondary",
 																	'data' => ["idModule" 	=> $l_OBJ_ModuleCapteur['idModule'], 
-																	"url"		=> "/relmodulecapteur/updateajax",
+																	"url"		=> "relmodulecapteur/updateajax",
 																	"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']]
 																	]);
 				$l_STR_Position .= " ".$l_STR_iconDoubleClick;
@@ -214,12 +214,12 @@ class modulesWidget extends Widget
 // 			$l_STR_IdentifiantReseau 	= $this->_toolTip($l_OBJ_Module->identifiantReseau, "Identifiant réseau du module");
 			$l_STR_IdentifiantReseau 	= Html::tag("span", $l_OBJ_Module->identifiantReseau, ["data-id" => $l_OBJ_Module->identifiantReseau,
 																						"class" 	=> "dblClick alert-secondary",
-																						"data-url" 	=> "/module/updateajax",
+																						"data-url" 	=> "module/updateajax",
 																						"data-attribute" 	=> "identifiantReseau",
 																				]).$l_STR_iconDoubleClick;
 			$l_STR_Description			= Html::tag("span", $l_OBJ_Module->description, ["data-id" => $l_OBJ_Module->identifiantReseau,
 																						"class" 	=> "dblClick alert-secondary",
-																						"data-url" 	=> "/module/updateajax",
+																						"data-url" 	=> "module/updateajax",
 																						"data-attribute" 	=> "description",
 											]).$l_STR_iconDoubleClick;
 
