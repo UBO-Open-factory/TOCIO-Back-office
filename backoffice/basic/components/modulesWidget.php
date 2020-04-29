@@ -263,14 +263,14 @@ class modulesWidget extends Widget
 			$contents[] = "<div class='col-md-12'>";
 			$contents[] = 	"<fieldset>";
 			$contents[] = 		Html::tag("legend", "Format pour transmission Wifi");
-			$contents[] = 		"Url pour ajouter les données de ce Module:<br/><code>".Url::toRoute('/mesure/add/'.$l_OBJ_Module->identifiantReseau."/payload", "https")."</code>";
+			$contents[] = 		"Url pour ajouter les données de ce Module:<br/><code>".Url::toRoute('/mesure/add/[payload]', "https")."</code>";
 			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
 			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
 			$contents[] = 	"<fieldset>";
 			$contents[] = 		Html::tag("legend", "Format pour transmission Lora");
-			$contents[] = 		"Url pour ajouter les données de ce Module:<br/><code>".Url::toRoute('/mesure/addlora', "https")."</code>";
+			$contents[] = 		"Url pour ajouter les données de ce Module (à mettre dans le Back Office de Orange):<br/><code>".Url::toRoute('/mesure/addlora', "https")."</code>";
 			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrame), "Format attendu de la payload LORA <span class='TramePayload'></span>"));
 			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
