@@ -130,6 +130,16 @@ a.desc:after {
     outline: none;
 }
 
+/* Code --------------------------------------------------------------------------------------------*/
+code {
+	background: #37383d;
+background: -moz-linear-gradient(left,  #37383d 1%, #000000 100%);
+background: -webkit-linear-gradient(left,  #37383d 1%,#000000 100%);
+background: linear-gradient(to right,  #37383d 1%,#000000 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#37383d', endColorstr='#000000',GradientType=1 );
+
+	color: #FFFFFF;
+}
 /* licence -----------------------------------------------------------------------------------------*/
 .Licence {
 	font-size:0.85em;

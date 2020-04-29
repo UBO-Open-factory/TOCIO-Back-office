@@ -104,5 +104,3 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
         </div>
     </div>
 </div>
-<?php /*@todo  Ajouter un lien sur l'API */
-echo messageAlerte::widget(['type' => "todo", "message" => "Ajouter un lien sur l'API "]); ?>

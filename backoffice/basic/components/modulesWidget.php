@@ -22,6 +22,7 @@ use yii\helpers\Url;
 class modulesWidget extends Widget
 {
 	public $dataProvider;
+	public $urlAPISwagger = "https://192.168.0.40:8888/";
 	
 	
 	
@@ -75,12 +76,12 @@ class modulesWidget extends Widget
 			// L'identification du capteur
 			// @see https://www.yiiframework.com/doc/guide/2.0/fr/helper-html
 			$formatTrameWifi[] = Html::tag("button ",$l_OBJ_Module->identifiantReseau,["type" => "button", "class" => "btn btn-primary disabled"]);
+			$formatTrameWifiBrute[] = $l_OBJ_Module->identifiantReseau;
 			
 			// Le séparateur
-			$formatTrameWifi[] = Html::tag("button", "#",[	"type" => "button", 
+			$formatTrameWifi[] = Html::tag("button", "/",[	"type" => "button", 
 														"class" => "btn btn-primary disabled",
 														]);
-
 			
 			
 			
@@ -260,12 +261,21 @@ class modulesWidget extends Widget
 			$contents[] = "	</div>";
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
-			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
+			$contents[] = 	"<fieldset>";
+			$contents[] = 		Html::tag("legend", "Format pour transmission Wifi");
+			$contents[] = 		"Url pour ajouter les données de ce Module:<br/><code>".Url::toRoute('/mesure/add/'.$l_OBJ_Module->identifiantReseau."/payload", "https")."</code>";
+			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
+			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
-			$contents[] = Html::tag("p", $this->_legende(implode("", $formatTrame), "Format attendu de la payload LORA <span class='TramePayload'></span>"));
+			$contents[] = 	"<fieldset>";
+			$contents[] = 		Html::tag("legend", "Format pour transmission Lora");
+			$contents[] = 		"Url pour ajouter les données de ce Module:<br/><code>".Url::toRoute('/mesure/addlora', "https")."</code>";
+			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrame), "Format attendu de la payload LORA <span class='TramePayload'></span>"));
+			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
+			$contents[] = "<p>Voir documentation complète de l'API sur ".$this->urlAPISwagger."</p>";
 			$contents[] = $l_STR_ReglesFormat;
 			$contents[] = "</div>";
 			$contents[] = "</div>";
