@@ -130,6 +130,15 @@ a.desc:after {
     outline: none;
 }
 
+/* licence -----------------------------------------------------------------------------------------*/
+.Licence {
+	font-size:0.85em;
+}
+.Licence a {
+	color: #aaa;
+	text-decoration: underline;
+}
+
 /* tables ------------------------------------------------------------------------------------------*/
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td,

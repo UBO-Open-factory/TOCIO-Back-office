@@ -98,10 +98,15 @@ AppAsset::register($this);
 </div>
 
 <footer class="footer">
-    <div class="container">
-        <p class="pull-left">UBO Open Factory <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+    <div class="container row Licence">
+        <div class="col">
+        	<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a>
+        </div>
+        <div class="col-8 text-center">
+	        Ce site est mise à disposition selon les termes de la <br/><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Licence Creative Commons Attribution - Pas d’Utilisation Commerciale 4.0 International</a>.
+        </div >
+        <div class="col"><a href="https://github.com/">Dépot GitHub</a></div>
+        <div class="col pull-right"><?= Yii::powered() ?></div>
     </div>
 </footer>
 
