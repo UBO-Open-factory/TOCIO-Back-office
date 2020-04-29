@@ -59,7 +59,7 @@ foreach( Grandeur::find()->select(['nature','id'])->indexBy('id')->column() as $
 				foreach(Relcapteurgrandeur::find()->where(["idCapteur" => $model->id])->all()  as $l_OBJ_CapteurGrandeurs){
 					$l_STR_BtnDelete = Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
 					$l_STR_BtnDelete = Html::a($l_STR_BtnDelete,
-	 		  				         							["/relcapteurgrandeur/delete",
+	 		  				         							["relcapteurgrandeur/delete",
 	 		  				         									"idCapteur" => $model->id,
 	 		  				         									"idGrandeur" => $l_OBJ_CapteurGrandeurs->idGrandeur],
 	 				  				         					['data-pjax' => "0",
