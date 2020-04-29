@@ -10,11 +10,7 @@ namespace app\components;
 
 use yii\base\Widget;
 use yii\bootstrap\Html;
-use yii\helpers\VarDumper;
 use app\models\Relcapteurgrandeur;
-use app\models\RelPositionCapteur;
-use app\models\Position;
-use app\models\Relmodulecapteur;
 use app\models\Capteur;
 use function Opis\Closure\serialize;
 use yii\helpers\Url;
@@ -22,7 +18,6 @@ use yii\helpers\Url;
 class modulesWidget extends Widget
 {
 	public $dataProvider;
-	public $urlAPISwagger = "https://192.168.0.40:8888/";
 	
 	
 	
@@ -275,7 +270,6 @@ class modulesWidget extends Widget
 			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
-			$contents[] = "<p>Voir documentation complète de l'API sur ".$this->urlAPISwagger."</p>";
 			$contents[] = $l_STR_ReglesFormat;
 			$contents[] = "</div>";
 			$contents[] = "</div>";
