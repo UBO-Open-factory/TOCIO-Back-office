@@ -49,7 +49,6 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
     
     
 <div class="site-index">
-
     <div class="jumbotron">
         <h1>TOCIO : Data</h1>
         <p class="lead">Ce site web permet de configurer les capteurs et modules pour qu'ils puissent stocker des données dans la base.</p>
@@ -70,7 +69,7 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
 		            	<div class="card-header">Nombre de modules</div>
 						<div class="card-body">
 							<h1 class="card-text text-center"><?= $l_INT_LocalisationModule;?></h1>
-			                <a class="card-link" href="module/index">Voir les Modules &raquo;</a>
+			                <a class="card-link" href="/module/index">Voir les Modules &raquo;</a>
 						</div>
 					</div>
 	            </div>
@@ -79,7 +78,7 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
 		            	<div class="card-header">Nombre de capteur</div>
 						<div class="card-body">
 							<h1 class="card-text text-center"><?= count($capteurs);?></h1>
-			                <a class="card-link" href="capteur/index">Voir les Capteurs &raquo;</a>
+			                <a class="card-link" href="/capteur/index">Voir les Capteurs &raquo;</a>
 						</div>
 					</div>
 	            </div>
@@ -88,7 +87,7 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
 		            	<div class="card-header">Nombre de grandeurs</div>
 						<div class="card-body">
 							<h1 class="card-text text-center"><?= count($grandeurs);?></h1>
-			                <a class="card-link" href="grandeur/index">Voir les grandeurs &raquo;</a>
+			                <a class="card-link" href="/grandeur/index">Voir les grandeurs &raquo;</a>
 						</div>
 					</div>
 				</div>
@@ -97,7 +96,7 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
 	            	<div class="card-header">Nombre de table de mesure</div>
 						<div class="card-body">
 							<h1 class="card-text text-center"><?php echo $l_INT_NombreTableMesure; ?></h1>
-			                <a class="card-link" href="grandeur/index">Voir les table de mesures &raquo;</a>
+			                <a class="card-link" href="/grandeur/index">Voir les table de mesures &raquo;</a>
 						</div>
 					</div>
 	            </div>
