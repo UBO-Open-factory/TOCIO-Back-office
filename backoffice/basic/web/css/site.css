@@ -163,5 +163,5 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#37383d', end
 	background: linear-gradient(to right,  #000000 0%,#0011ff 14%,#00c7ff 27%,#00ff6a 40%,#c3ff00 53%,#ff0000 68%,#ff0000 68%,#b600ff 85%,#000000 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000',GradientType=1 );
 	width:100%;
-	height:1px;
+	height:2px;
 }
