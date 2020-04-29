@@ -14,8 +14,6 @@ $(document).ready(function() {
 	window.onscroll = function() {stickyFixDiv(stickyPos, header)};
 	
 	function stickyFixDiv(stickyPos, header) {
-		console.debug(stickyPos + " - " +window.pageYOffset);
-		
 		if (window.pageYOffset > stickyPos) {
 			// Add the sticky class to the header when you reach its scroll position.
 			$('#listeCapteursFix-Content').addClass("sticky");
