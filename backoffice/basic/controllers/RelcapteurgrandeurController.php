@@ -89,7 +89,7 @@ class RelcapteurgrandeurController extends Controller
     		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     		// Sauve le model
     		if( $model->save() ){
-    			return ["success" => "ok", "url" => "capteur/update?id=".$post['idCapteur']];
+    			return ["success" => "ok", "url" => "/capteur/update?id=".$post['idCapteur']];
     		} else {
     			
     			return ["success" => "** Oupsss, il y a eu un problème à la création du model ".$model::className()."\n", 

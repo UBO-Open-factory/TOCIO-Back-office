@@ -86,8 +86,8 @@ class modulesWidget extends Widget
 			
 			// BOUTONS D'ÉDITION DU MODULE ---------------------------------------------------------
 			$l_TAB_BtnEditionModule 	= [];
-			$l_TAB_BtnEditionModule[]	= $this->_btnEdition("module/update", "glyphicon glyphicon-pencil", $l_OBJ_Module->identifiantReseau);
-			$l_TAB_BtnEditionModule[]	= Html::a($l_STR_BtnDelete, ["module/delete", "id" => $l_OBJ_Module->identifiantReseau],
+			$l_TAB_BtnEditionModule[]	= $this->_btnEdition("/module/update", "glyphicon glyphicon-pencil", $l_OBJ_Module->identifiantReseau);
+			$l_TAB_BtnEditionModule[]	= Html::a($l_STR_BtnDelete, ["/module/delete", "id" => $l_OBJ_Module->identifiantReseau],
 																	['data-pjax' => "0",
 																	"aria-label" => "Supprimer",
 																	"title" => "Supprimer",
@@ -120,7 +120,7 @@ class modulesWidget extends Widget
 				$l_STR_Position = $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
 				$l_STR_Position = Html::tag("span", $l_STR_Position, ['class'=>"dblClick alert-secondary",
 																	'data' => ["idModule" 	=> $l_OBJ_ModuleCapteur['idModule'], 
-																	"url"		=> "relmodulecapteur/updateajax",
+																	"url"		=> "/relmodulecapteur/updateajax",
 																	"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']]
 																	]);
 				$l_STR_Position .= " ".$l_STR_iconDoubleClick;
@@ -131,11 +131,11 @@ class modulesWidget extends Widget
 				
 				
 				// Bouton d'édition du capteur
-				$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("relmodulecapteur/update", 
+				$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("/relmodulecapteur/update", 
 													"glyphicon glyphicon-pencil", 
 													$l_OBJ_ModuleCapteur);
 				$l_TAB_BtnCustomCapteur[]	= Html::a($l_STR_BtnDelete,
-													["relmodulecapteur/delete", "idModule" => $l_OBJ_ModuleCapteur['idModule'], 
+													["/relmodulecapteur/delete", "idModule" => $l_OBJ_ModuleCapteur['idModule'], 
 																				"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur'],
 																				"nomcapteur" => $l_OBJ_ModuleCapteur['nomcapteur']],
 													['data-pjax' => "0",
@@ -214,12 +214,12 @@ class modulesWidget extends Widget
 // 			$l_STR_IdentifiantReseau 	= $this->_toolTip($l_OBJ_Module->identifiantReseau, "Identifiant réseau du module");
 			$l_STR_IdentifiantReseau 	= Html::tag("span", $l_OBJ_Module->identifiantReseau, ["data-id" => $l_OBJ_Module->identifiantReseau,
 																						"class" 	=> "dblClick alert-secondary",
-																						"data-url" 	=> "module/updateajax",
+																						"data-url" 	=> "/module/updateajax",
 																						"data-attribute" 	=> "identifiantReseau",
 																				]).$l_STR_iconDoubleClick;
 			$l_STR_Description			= Html::tag("span", $l_OBJ_Module->description, ["data-id" => $l_OBJ_Module->identifiantReseau,
 																						"class" 	=> "dblClick alert-secondary",
-																						"data-url" 	=> "module/updateajax",
+																						"data-url" 	=> "/module/updateajax",
 																						"data-attribute" 	=> "description",
 											]).$l_STR_iconDoubleClick;
 
@@ -227,7 +227,7 @@ class modulesWidget extends Widget
 			// Bouton d'ajout d'un capteur
 			$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
 			$l_STR_Temp 	= Html::button($l_STR_Icon. " Associer un capteur", ["class" => "btn btn-info pull-right btnAjoutCapteur"]);
-			$l_STR_BtnAjoutCapteur = Html::a($l_STR_Temp, ['relmodulecapteur/create', 'idModule' => $l_OBJ_Module['identifiantReseau']], ['class' => 'profile-link']);
+			$l_STR_BtnAjoutCapteur = Html::a($l_STR_Temp, ['/relmodulecapteur/create', 'idModule' => $l_OBJ_Module['identifiantReseau']], ['class' => 'profile-link']);
 			
 			
 			// Explication de la rêgle du formattage des valeurs
