@@ -111,7 +111,7 @@ AppAsset::register($this);
         		Dépot GitHub
         	</a>
         </div>
-        <div class="col pull-right"><?= Yii::powered() ?></div>
+        <div class="col pull-right"><?php echo Yii::powered()." ".Yii::getVersion() ?> </div>
     </div>
 </footer>
 
