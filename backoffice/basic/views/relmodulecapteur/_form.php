@@ -4,6 +4,7 @@ use yii\widgets\ActiveForm;
 use app\models\Module;
 use app\models\Capteur;
 use yii\bootstrap\BaseHtml;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Relmodulecapteur */
@@ -18,7 +19,7 @@ $Module = Module::findOne(['identifiantReseau' => $idModule]);
 
 <div class="relmodulecapteur-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' => Url::base().Url::to(), ]); ?>
 
 	<?= $form->field($model, "idModule")->hiddenInput(['value'=> $idModule])?>
 	<div class="row">

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Log */
@@ -10,7 +11,7 @@ use yii\widgets\ActiveForm;
 
 <div class="log-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' => Url::base().Url::to(), ]); ?>
 
     <?= $form->field($model, 'level')->textInput(['maxlength' => true]) ?>
 

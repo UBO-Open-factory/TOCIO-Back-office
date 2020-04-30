@@ -5,29 +5,32 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\LocalisationmoduleSearch */
+/* @var $model app\models\UtilisateursSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="localisationmodule-search">
+<div class="utilisateurs-search">
 
     <?php $form = ActiveForm::begin([
     	'action' => Url::base().Url::to(['index']),
         'method' => 'get',
-        'options' => [
-            'data-pjax' => 1
-        ],
     ]); ?>
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'description') ?>
+    <?= $form->field($model, 'username') ?>
 
-    <?= $form->field($model, 'coordX') ?>
+    <?= $form->field($model, 'email') ?>
 
-    <?= $form->field($model, 'coordY') ?>
+    <?= $form->field($model, 'password') ?>
 
-    <?= $form->field($model, 'coordZ') ?>
+    <?= $form->field($model, 'authKey') ?>
+
+    <?php // echo $form->field($model, 'accessToken') ?>
+
+    <?php // echo $form->field($model, 'lastAccess') ?>
+
+    <?php // echo $form->field($model, 'idGroupe') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\CapteurSearch */
@@ -9,7 +10,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+		'action' => Url::base().Url::to(['index']),
         'method' => 'get',
         'options' => [
             'data-pjax' => 1

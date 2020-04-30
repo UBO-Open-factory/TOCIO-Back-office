@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Localisationmodule */
@@ -10,7 +11,7 @@ use yii\widgets\ActiveForm;
 
 <div class="localisationmodule-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' => Url::base().Url::to(), ]); ?>
 	<div class="row">
 		<div class="col-sm-12">
 		    <?= $form->field($model, 'description')->textarea(['rows' => 2]) ?>

@@ -8,6 +8,7 @@ use app\models\Relcapteurgrandeur;
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Capteur */
@@ -16,7 +17,7 @@ use yii\helpers\ArrayHelper;
 
 <div class="capteur-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' => Url::base().Url::to(), ]); ?>
 	<div class="row">
 		<div class="col-sm-4 bottom-align">
 		    <?= $form->field($model, 'nom')->textarea(['rows' => 1]) ?>

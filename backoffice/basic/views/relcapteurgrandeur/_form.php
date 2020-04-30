@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Relcapteurgrandeur */
@@ -10,7 +11,7 @@ use yii\widgets\ActiveForm;
 
 <div class="relcapteurgrandeur-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' => Url::base().Url::to(), ]); ?>
 
     <?= $form->field($model, 'idCapteur')->textInput() ?>
 

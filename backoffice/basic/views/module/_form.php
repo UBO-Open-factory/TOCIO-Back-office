@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Localisationmodule;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Module */
@@ -11,7 +12,7 @@ use app\models\Localisationmodule;
 
 <div class="module-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' => Url::base().Url::to(), ]); ?>
 
 	<div class="row">
 		<div class="col-sm-6">
