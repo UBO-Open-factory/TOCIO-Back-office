@@ -96,7 +96,7 @@ abstract class Application extends Module
     /**
      * @var string the application name.
      */
-    public $name = 'TOCIO : Data';
+    public $name = 'My Application';
     /**
      * @var string the charset currently used for the application.
      */
@@ -107,13 +107,13 @@ abstract class Application extends Module
      * for English, while `en-US` stands for English (United States).
      * @see sourceLanguage
      */
-    public $language = 'fr-FR';
+    public $language = 'en-US';
     /**
      * @var string the language that the application is written in. This mainly refers to
      * the language that the messages and view files are written in.
      * @see language
      */
-    public $sourceLanguage = 'fr-FR';
+    public $sourceLanguage = 'en-US';
     /**
      * @var Controller the currently active controller instance
      */
