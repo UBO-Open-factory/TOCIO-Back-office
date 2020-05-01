@@ -135,11 +135,11 @@ class modulesWidget extends Widget
 				
 				
 				// Bouton d'édition du capteur
-				$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur(Url::to(["/relmodulecapteur/update"]), 
+				$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("/relmodulecapteur/update", 
 													"glyphicon glyphicon-pencil", 
 													$l_OBJ_ModuleCapteur);
 				$l_TAB_BtnCustomCapteur[]	= Html::a($l_STR_BtnDelete,
-												[Url::to(["/relmodulecapteur/delete"]), "idModule" => $l_OBJ_ModuleCapteur['idModule'], 
+												["/relmodulecapteur/delete", "idModule" => $l_OBJ_ModuleCapteur['idModule'], 
 																				"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur'],
 																				"nomcapteur" => $l_OBJ_ModuleCapteur['nomcapteur']],
 													['data-pjax' => "0",

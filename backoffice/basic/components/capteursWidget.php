@@ -76,8 +76,8 @@ class capteursWidget extends Widget
 			
 			// BOUTONS D'ÉDITION DU CAPTEUR --------------------------------------------------------
 			$l_TAB_BtnEditionCapteur 	= [];
-			$l_TAB_BtnEditionCapteur[]	= $this->_btnEdition(Url::to(["capteur/update"]), "glyphicon glyphicon-pencil", $l_STR_IDCapteur);
-			$l_TAB_BtnEditionCapteur[]	= Html::a($l_STR_BtnDelete, [Url::to(["capteur/delete"]), "id" => $l_STR_IDCapteur],
+			$l_TAB_BtnEditionCapteur[]	= $this->_btnEdition("capteur/update", "glyphicon glyphicon-pencil", $l_STR_IDCapteur);
+			$l_TAB_BtnEditionCapteur[]	= Html::a($l_STR_BtnDelete, ["capteur/delete", "id" => $l_STR_IDCapteur],
 																	['data-pjax' => "0",
 																	"aria-label" => "Supprimer",
 																	"title" => "Supprimer",
