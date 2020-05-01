@@ -173,7 +173,7 @@ $(document).ready(function() {
             // Requète Ajax pour la mise à jour de l'ordre des Capteurs.
             $.ajax({
             	type : "POST",
-            	url : g_host"/relmodulecapteur/updateorderajax",
+            	url : g_host + "/relmodulecapteur/updateorderajax",
             	cache : false,
             	dataType : "text",
             	data : {"ordre": order},

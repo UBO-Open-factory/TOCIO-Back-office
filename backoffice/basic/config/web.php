@@ -6,16 +6,19 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
+	'homeUrl' => '/',
     'bootstrap' => ['log'],
 	'timeZone' => 'Europe/Paris',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+    	'@urlbehindproxy' => "/",
     ],
     'components' => [
 		// Gestion des ressources ( les assets )
 		// On rajoute un timestamp pour que cette ressources ne soient pas mise en cache
     	'assetManager' => [
+    		'baseUrl' => "@urlbehindproxy/assets/",
     		'appendTimestamp' => true,
     	],
         'request' => [
@@ -35,7 +38,7 @@ $config = [
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => '@urlbehindproxy/site/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -62,9 +65,10 @@ $config = [
         ],
         'db' => $db,
         'urlManager' => [
-            'enablePrettyUrl' => true,
-        	'enableStrictParsing' => false,
-            'showScriptName' => false,
+        	'baseUrl' => "@urlbehindproxy",
+			'enablePrettyUrl' => true,
+			'enableStrictParsing' => false,
+			'showScriptName' => false,
             'rules' => [
             		['class' => 'yii\rest\UrlRule', 'controller' => 'tramebrute'],
             		[
