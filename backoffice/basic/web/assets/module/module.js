@@ -120,7 +120,7 @@ $(document).ready(function() {
 		// Envoie la requete AJAX
 		$.ajax({
 			type : "POST",
-			url : "/relmodulecapteur/attacheajax",
+			url : g_urlbaseajax + "/relmodulecapteur/attacheajax",
 			cache : false,
 			dataType : "text",
 			data : {"idModule": ModuleID, 
@@ -173,7 +173,7 @@ $(document).ready(function() {
             // Requète Ajax pour la mise à jour de l'ordre des Capteurs.
             $.ajax({
             	type : "POST",
-            	url : "/relmodulecapteur/updateorderajax",
+            	url : g_urlbaseajax + "/relmodulecapteur/updateorderajax",
             	cache : false,
             	dataType : "text",
             	data : {"ordre": order},

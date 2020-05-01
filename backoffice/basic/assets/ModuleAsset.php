@@ -20,6 +20,7 @@ class ModuleAsset extends AssetBundle {
         'assets/module/module.css',
     ];
     public $js = [
+        'assets/module/config.js',
         'assets/module/module.js',
     ];
     public $depends = [

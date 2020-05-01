@@ -21,17 +21,24 @@ class modulesWidget extends Widget
 	
 	
 	
+	// _____________________________________________________________________________________________
 	/**
 	 * 
 	 * {@inheritDoc}
 	 * @see \yii\base\Widget::init()
+	 * 	@version 1 mai 2020	: APE	- Ajout de l'écriture des variables de chemins pour le Javascript.
 	 */
 	public function init()	{
 		parent::init();
 		
 		// Supprime la pagination
 		$this->dataProvider->setPagination(false);
+		
+		// Ecriture des chemins + Urls dans un fichier
+		$this->_dumpPaths();
 	}
+	
+	
 	
 
 	// _____________________________________________________________________________________________
@@ -40,6 +47,7 @@ class modulesWidget extends Widget
 	 * 
 	 * {@inheritDoc}
 	 * @see \yii\base\Widget::run()
+	 * @version 30 avr. 2020	: APE	- Modification des Urls.
 	 */
 	public function run() {
 		// L'URL COURANTE --------------------------------------------------------------------------
@@ -116,7 +124,7 @@ class modulesWidget extends Widget
 				$l_STR_Position = $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
 				$l_STR_Position = Html::tag("span", $l_STR_Position, ['class'=>"dblClick alert-secondary",
 																	'data' => ["idModule" 	=> $l_OBJ_ModuleCapteur['idModule'], 
-																	"url"		=> "/relmodulecapteur/updateajax",
+																	"url"		=> Url::to(["/relmodulecapteur/updateajax"]),
 																	"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']]
 																	]);
 				$l_STR_Position .= " ".$l_STR_iconDoubleClick;
@@ -131,7 +139,7 @@ class modulesWidget extends Widget
 													"glyphicon glyphicon-pencil", 
 													$l_OBJ_ModuleCapteur);
 				$l_TAB_BtnCustomCapteur[]	= Html::a($l_STR_BtnDelete,
-													["/relmodulecapteur/delete", "idModule" => $l_OBJ_ModuleCapteur['idModule'], 
+												[Url::to(["/relmodulecapteur/delete"]), "idModule" => $l_OBJ_ModuleCapteur['idModule'], 
 																				"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur'],
 																				"nomcapteur" => $l_OBJ_ModuleCapteur['nomcapteur']],
 													['data-pjax' => "0",
@@ -210,12 +218,12 @@ class modulesWidget extends Widget
 // 			$l_STR_IdentifiantReseau 	= $this->_toolTip($l_OBJ_Module->identifiantReseau, "Identifiant réseau du module");
 			$l_STR_IdentifiantReseau 	= Html::tag("span", $l_OBJ_Module->identifiantReseau, ["data-id" => $l_OBJ_Module->identifiantReseau,
 																						"class" 	=> "dblClick alert-secondary",
-																						"data-url" 	=> "/module/updateajax",
+																						"data-url" 	=> Url::to(["/module/updateajax"]),
 																						"data-attribute" 	=> "identifiantReseau",
 																				]).$l_STR_iconDoubleClick;
 			$l_STR_Description			= Html::tag("span", $l_OBJ_Module->description, ["data-id" => $l_OBJ_Module->identifiantReseau,
 																						"class" 	=> "dblClick alert-secondary",
-																						"data-url" 	=> "/module/updateajax",
+																						"data-url" 	=> Url::to(["/module/updateajax"]),
 																						"data-attribute" 	=> "description",
 											]).$l_STR_iconDoubleClick;
 
@@ -503,6 +511,37 @@ class modulesWidget extends Widget
 				'nomcapteur' => $p_OBJ_Module->nomcapteur,
 				'ordre' => $p_OBJ_Module->ordre, 
 		]);
+	}
+	
+	
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Ecriture des chemins pour les URls dans un fichier lisible par le JavaScript. 
+	 */
+	private function _dumpPaths(){
+		// Génération du contenu
+		$l_TAB_Content = [];
+		$l_TAB_Content[] = "// Ceci est un fichier généré dynamiquement par le script ".__FILE__;
+		$l_TAB_Content[] = "// Ne pas le modifier à la main";
+		$l_TAB_Content[] = "var g_web = '".\Yii::getAlias("@web")."';";
+		$l_TAB_Content[] = "var g_webroot = '".\Yii::getAlias("@webroot")."';";
+		$l_TAB_Content[] = "var g_app = '".\Yii::getAlias("@app")."';";
+		$l_TAB_Content[] = "var g_urlbehindproxy = '".\Yii::getAlias("@urlbehindproxy")."/';	// Set in /config/web.php";
+		$l_TAB_Content[] = "var g_host = '".Url::base('https')."';";
+		$l_TAB_Content[] = "var g_urlbaseajax = g_host + g_urlbehindproxy ;";
+				
+		
+				
+				
+		
+		// Ecriture du fichier
+		$l_STR_FileName = \Yii::getAlias('@webroot/assets/module/config.js');
+		$l_HDL_File 	= fopen( $l_STR_FileName,"w");
+		fwrite($l_HDL_File, implode("\n", $l_TAB_Content));
+		
+		fclose( $l_HDL_File );
 	}
 }
 ?>
