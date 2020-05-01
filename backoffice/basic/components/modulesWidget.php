@@ -525,7 +525,6 @@ class modulesWidget extends Widget
 		$l_TAB_Content = [];
 		$l_TAB_Content[] = "// Ceci est un fichier généré dynamiquement par le script ".__FILE__;
 		$l_TAB_Content[] = "// Ne pas le modifier à la main";
-		$l_TAB_Content[] = "var g_app = '".\Yii::getAlias("@app")."';";
 		$l_TAB_Content[] = "var g_urlbehindproxy = '".\Yii::getAlias("@urlbehindproxy")."/';	// Set in /config/web.php";
 		$l_TAB_Content[] = "var g_host = '".Url::base('https')."';";
 				
