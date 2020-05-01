@@ -3,7 +3,7 @@
 * @var $this yii\web\View 
 */
 
-$this->title = 'TOCIO : Data';
+$this->title = Yii::$app->name;
 
 use app\models\Grandeur;
 use app\models\Capteur;
@@ -53,7 +53,7 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
     
 <div class="site-index">
     <div class="jumbotron">
-        <h1>TOCIO : Data</h1>
+        <h1><?php echo Yii::$app->name;?></h1>
         <p class="lead">Ce site web permet de configurer les capteurs et modules pour qu'ils puissent stocker des données dans la base.</p>
     </div>
 
