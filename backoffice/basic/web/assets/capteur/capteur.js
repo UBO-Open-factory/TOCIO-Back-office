@@ -65,7 +65,7 @@ function CapteurCreate(p_nom, p_id, p_idGrandeur, p_url){
 				 // Création de la relation entre le capteur et la grandeur
 				$.ajax({
 					type : "POST",
-					url : "/relcapteurgrandeur/ajaxcreate",
+					url : g_urlbaseajax + "/relcapteurgrandeur/ajaxcreate",
 					cache : false,
 					dataType : "text",
 					data : {"idCapteur": lastID,

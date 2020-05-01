@@ -7,6 +7,7 @@ use yii\helpers\VarDumper;
 use app\models\Relcapteurgrandeur;
 use app\models\Relmodulecapteur;
 use app\models\Capteur;
+use yii\helpers\Url;
 
 /**
  * Widget pour la page des Capteurs.
@@ -29,6 +30,7 @@ class capteursWidget extends Widget
 	 */
 	public function init()	{
 		parent::init();
+		$this->_dumpPaths();
 	}
 	
 
@@ -261,5 +263,36 @@ class capteursWidget extends Widget
 		$btn = Html::tag("span ", "",["class" => $icon]);
 		return Html::a($btn, [$link, 'id' => $id]);
 	}
+	
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Ecriture des chemins pour les URls dans un fichier lisible par le JavaScript.
+	 */
+	private function _dumpPaths(){
+		// Génération du contenu
+		$l_TAB_Content = [];
+		$l_TAB_Content[] = "// Ceci est un fichier généré dynamiquement par le script ".__FILE__;
+		$l_TAB_Content[] = "// Ne pas le modifier à la main";
+		$l_TAB_Content[] = "var g_web = '". \Yii::getAlias("@web")."';";
+		$l_TAB_Content[] = "var g_webroot = '".\Yii::getAlias("@webroot")."';";
+		$l_TAB_Content[] = "var g_app = '".\Yii::getAlias("@app")."';";
+		$l_TAB_Content[] = "var g_urlbehindproxy = '".\Yii::getAlias("@urlbehindproxy")."/';	// Set in /config/web.php";
+		$l_TAB_Content[] = "var g_host = '".Url::base('https')."';";
+		$l_TAB_Content[] = "var g_urlbaseajax = g_host + g_urlbehindproxy ;";
+		
+		
+		
+		
+		
+		// Ecriture du fichier
+		$l_STR_FileName = \Yii::getAlias('@webroot/assets/capteur/config.js');
+		$l_HDL_File 	= fopen( $l_STR_FileName,"w");
+		fwrite($l_HDL_File, implode("\n", $l_TAB_Content));
+		
+		fclose( $l_HDL_File );
+	}
 }
 ?>
+	

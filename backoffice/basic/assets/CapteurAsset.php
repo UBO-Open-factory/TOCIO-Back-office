@@ -20,6 +20,7 @@ class CapteurAsset extends AssetBundle {
 //         'assets/capteur/capteur.css',
 //     ];
     public $js = [
+        'assets/capteur/config.js',
         'assets/capteur/capteur.js',
     ];
     public $depends = [
