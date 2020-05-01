@@ -90,8 +90,8 @@ class modulesWidget extends Widget
 			
 			// BOUTONS D'ÉDITION DU MODULE ---------------------------------------------------------
 			$l_TAB_BtnEditionModule 	= [];
-			$l_TAB_BtnEditionModule[]	= $this->_btnEdition("/module/update", "glyphicon glyphicon-pencil", $l_OBJ_Module->identifiantReseau);
-			$l_TAB_BtnEditionModule[]	= Html::a($l_STR_BtnDelete, ["/module/delete", "id" => $l_OBJ_Module->identifiantReseau],
+			$l_TAB_BtnEditionModule[]	= $this->_btnEdition(Url::to(["/module/update"]), "glyphicon glyphicon-pencil", $l_OBJ_Module->identifiantReseau);
+			$l_TAB_BtnEditionModule[]	= Html::a($l_STR_BtnDelete, [Url::to(["/module/delete"]), "id" => $l_OBJ_Module->identifiantReseau],
 																	['data-pjax' => "0",
 																	"aria-label" => "Supprimer",
 																	"title" => "Supprimer",
@@ -135,7 +135,7 @@ class modulesWidget extends Widget
 				
 				
 				// Bouton d'édition du capteur
-				$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("/relmodulecapteur/update", 
+				$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur(Url::to(["/relmodulecapteur/update"]), 
 													"glyphicon glyphicon-pencil", 
 													$l_OBJ_ModuleCapteur);
 				$l_TAB_BtnCustomCapteur[]	= Html::a($l_STR_BtnDelete,
