@@ -3,11 +3,12 @@
 use yii\helpers\Html;
 use app\components\messageAlerte;
 use app\assets\CapteurAsset;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Capteur */
 
-$this->title = 'Update Capteur: ' . $model->id;
+$this->title = 'Mise à jour du Capteur: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Capteurs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
@@ -15,6 +16,7 @@ $this->params['breadcrumbs'][] = 'Update';
 // Utilisation des ressources pour les capteur (JS + CSS)
 CapteurAsset::register($this);
 
+Url::remember();
 ?>
 <div class="capteur-update">
 

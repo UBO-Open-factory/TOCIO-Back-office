@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use app\components\tocioRegles;
 use app\components\messageAlerte;
 use app\assets\CapteurAsset;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Capteur */
@@ -14,6 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 // Utilisation des ressources pour les capteur (JS + CSS)
 CapteurAsset::register($this);
+
+Url::remember();
 ?>
 <div class="capteur-create">
 

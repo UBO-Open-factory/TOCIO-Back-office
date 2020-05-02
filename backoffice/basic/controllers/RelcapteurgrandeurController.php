@@ -8,6 +8,7 @@ use app\models\RelcapteurgrandeurSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 
 /**
  * RelcapteurgrandeurController implements the CRUD actions for Relcapteurgrandeur model.
@@ -63,7 +64,8 @@ class RelcapteurgrandeurController extends Controller
      * Creates a new Relcapteurgrandeur model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
-     * 	@version 23 avr. 2020	: APE	- Création.
+     * @version 23 avr. 2020	: APE	- Création.
+     * @version 2 mai 2020	: APE	- Utilisation du générateur d'Url.
      */
     public function actionAjaxcreate() {
     	$request = Yii::$app->request;
@@ -73,7 +75,7 @@ class RelcapteurgrandeurController extends Controller
     	if (Yii::$app->request->isAjax && $request->post()) {
     		
     		
-    		// CONSTRUCTION DU MODEL
+    		// Construction du model
     		$post	= $request->post();
     		$model 	= new Relcapteurgrandeur();
 
@@ -89,7 +91,8 @@ class RelcapteurgrandeurController extends Controller
     		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     		// Sauve le model
     		if( $model->save() ){
-    			return ["success" => "ok", "url" => "/capteur/update?id=".$post['idCapteur']];
+    			return ["success" => "ok", 
+    					"url" => Url::to(["/capteur/update", "id" => $post['idCapteur'] ])];
     		} else {
     			
     			return ["success" => "** Oupsss, il y a eu un problème à la création du model ".$model::className()."\n", 
