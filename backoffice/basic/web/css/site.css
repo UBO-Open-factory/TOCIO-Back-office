@@ -143,6 +143,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#37383d', end
 /* licence -----------------------------------------------------------------------------------------*/
 .Licence {
 	font-size:0.85em;
+	line-height:0.9em;
 }
 .Licence a {
 	color: #aaa;
