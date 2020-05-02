@@ -533,7 +533,7 @@ class modulesWidget extends Widget
 				
 		
 		// Ecriture du fichier
-		$l_STR_FileName = \Yii::getAlias('@webroot/assets/module/config.js');
+		$l_STR_FileName = \Yii::getAlias('@webroot/assets/config.js');
 		$l_HDL_File 	= fopen( $l_STR_FileName,"w");
 		fwrite($l_HDL_File, implode("\n", $l_TAB_Content));
 		
