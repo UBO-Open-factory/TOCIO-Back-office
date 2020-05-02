@@ -21,6 +21,7 @@ $modules	= Module::findBySql("SELECT * FROM module")->all();
 $l_INT_LocalisationModule	= Module::find()->indexBy('id')->count();
 $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'])->count();
 
+$identity = Yii::$app->user->identity;	// null si non authentifié
 ?>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -72,7 +73,9 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
 		            	<div class="card-header">Nombre de modules</div>
 						<div class="card-body">
 							<h1 class="card-text text-center"><?= $l_INT_LocalisationModule;?></h1>
+							<?php if( $identity != null){?>
 			                <a class="card-link" href="<?= Url::toRoute('/module/index')?>">Voir les Modules &raquo;</a>
+			                <?php }?>
 						</div>
 					</div>
 	            </div>
@@ -81,7 +84,9 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
 		            	<div class="card-header">Nombre de capteur</div>
 						<div class="card-body">
 							<h1 class="card-text text-center"><?= count($capteurs);?></h1>
+							<?php if( $identity != null){?>
 			                <a class="card-link" href="<?= Url::toRoute('/capteur/index')?>">Voir les Capteurs &raquo;</a>
+			                <?php }?>
 						</div>
 					</div>
 	            </div>
@@ -90,7 +95,9 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
 		            	<div class="card-header">Nombre de grandeurs</div>
 						<div class="card-body">
 							<h1 class="card-text text-center"><?= count($grandeurs);?></h1>
+							<?php if( $identity != null){?>
 			                <a class="card-link" href=<?= Url::toRoute('/grandeur/index')?>">Voir les grandeurs &raquo;</a>
+			                <?php }?>
 						</div>
 					</div>
 				</div>
@@ -99,7 +106,9 @@ $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'
 	            	<div class="card-header">Nombre de table de mesure</div>
 						<div class="card-body">
 							<h1 class="card-text text-center"><?php echo $l_INT_NombreTableMesure; ?></h1>
+							<?php if( $identity != null){?>
 			                <a class="card-link" href=<?= Url::toRoute('/grandeur/index')?>">Voir les table de mesures &raquo;</a>
+			                <?php }?>
 						</div>
 					</div>
 	            </div>
