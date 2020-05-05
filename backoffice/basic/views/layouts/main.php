@@ -36,10 +36,9 @@ AppAsset::register($this);
             'class' => 'navbar navbar-expand-lg ',
         ],
     ]);
-    // Si l'user est authentifié
-    $identity = Yii::$app->user->identity;	// null si non authentifié
     // SI ON EST AUTHENTIFIE -----------------------------------------------------------------------
-    if( $identity != null){
+    // ( on est pas un "invité" )
+    if( !Yii::$app->user->isGuest ){
 	    echo Nav::widget([
 	        'options' => ['class' => 'navbar-nav navbar-right'],
 	        'items' => [
@@ -49,7 +48,7 @@ AppAsset::register($this);
 	        	['label' => 'Grandeurs', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Localisation de modules', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-	        	['label' => 'Users', 'url' => ['/utilisateurs/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+	        	['label' => 'Users', 'url' => ['/utilisateur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	//         	['label' => 'Contact', 'url' => ['/site/contact'], 'linkOptions' => ['class' => 'nav-link'] ],
 	            Yii::$app->user->isGuest ? (
 	            		['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
@@ -112,7 +111,7 @@ AppAsset::register($this);
         		Dépot GitHub
         	</a>
         </div>
-        <?php if( $identity != null){ ?>
+        <?php if( !Yii::$app->user->isGuest ){ ?>
         <div class="col-2"><a href="https://bugs.alex-design.fr/" target="bug"><img src="<?php echo Url::to(['/assets/ico_BugTrackerAlexDesign.png']); ?>" height="30"></a></div>
         <?php }?>
         <div class="col pull-right"><?php echo Yii::powered()." ".Yii::getVersion() ?> </div>
