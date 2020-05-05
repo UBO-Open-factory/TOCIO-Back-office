@@ -37,6 +37,17 @@ class User extends ActiveRecord implements IdentityInterface
 //         ],
 //     ];
 
+	// _____________________________________________________________________________________________
+	/**
+	 * Renvoie true/false si l'utilisateur dont l'ID est passé en paramètre est un admin.
+	 * @param integer $id an user id. 
+	 * @return boolean
+	 */
+	public static function isAdmin($id){
+		$l_OBJ_User = User::findOne($id);
+		
+		return ($l_OBJ_User->idGroupe == 1);
+	}
     
     
     public static function tableName(){

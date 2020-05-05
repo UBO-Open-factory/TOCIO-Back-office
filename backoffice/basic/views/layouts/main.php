@@ -10,8 +10,14 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
+use app\models\User;
 
 AppAsset::register($this);
+if( !Yii::$app->user->isGuest ){
+	$isAdmin = User::isAdmin(\Yii::$app->user->id);
+} else {
+	$isAdmin = false;
+}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -56,7 +62,7 @@ AppAsset::register($this);
     // SI ON EST AUTHENTIFIE -----------------------------------------------------------------------
     // ( on est pas un "invité" )
     if( !Yii::$app->user->isGuest ){
-	    echo Nav::widget([
+    	$menuItems = [
 	        'options' => ['class' => 'navbar-nav navbar-right'],
 	        'items' => [
 	            ['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
@@ -65,7 +71,6 @@ AppAsset::register($this);
 	        	['label' => 'Grandeurs', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Localisation de modules', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-	        	['label' => 'Users', 'url' => ['/utilisateur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	//         	['label' => 'Contact', 'url' => ['/site/contact'], 'linkOptions' => ['class' => 'nav-link'] ],
 	            Yii::$app->user->isGuest ? (
 	            		['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
@@ -80,10 +85,13 @@ AppAsset::register($this);
 	                . '</li>'
 	            )
 	        ],
-	    ]);
+	    ];
+    	if( $isAdmin ) {
+    		$menuItems[] = ['label' => 'Users', 'url' => ['/utilisateur/index'], 'linkOptions' => ['class' => 'nav-link']]; 
+    	}
 	// ANONYMOUS -----------------------------------------------------------------------------------
     } else  {
-    	echo Nav::widget([
+    	$menuItems = [
     			'options' => ['class' => 'navbar-nav navbar-right'],
     			'items' => [
     					['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
@@ -100,8 +108,9 @@ AppAsset::register($this);
     									. '</li>'
     									)
     			],
-    			]);
+    		];
     }
+    echo Nav::widget($menuItems);
     NavBar::end();
     ?>
    	<div class="arcEnCiel"></div>
