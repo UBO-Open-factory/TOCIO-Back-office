@@ -52,25 +52,17 @@ if( !Yii::$app->user->isGuest ){
 
 <div class="wrap">
     <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar navbar-expand-lg ',
-        ],
-    ]);
     // SI ON EST AUTHENTIFIE -----------------------------------------------------------------------
     // ( on est pas un "invité" )
     if( !Yii::$app->user->isGuest ){
     	$menuItems = [
-	        'options' => ['class' => 'navbar-nav navbar-right'],
-	        'items' => [
 	            ['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Modules', 'url' => ['/module/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Capteurs', 'url' => ['/capteur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Grandeurs', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Localisation de modules', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+// 	        	['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ],
 	//         	['label' => 'Contact', 'url' => ['/site/contact'], 'linkOptions' => ['class' => 'nav-link'] ],
 	            Yii::$app->user->isGuest ? (
 	            		['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
@@ -84,33 +76,46 @@ if( !Yii::$app->user->isGuest ){
 	                . Html::endForm()
 	                . '</li>'
 	            )
-	        ],
 	    ];
+    	// SI ON EST ADMIN
     	if( $isAdmin ) {
     		$menuItems[] = ['label' => 'Users', 'url' => ['/utilisateur/index'], 'linkOptions' => ['class' => 'nav-link']]; 
     	}
+    	
+    	
+    	
 	// ANONYMOUS -----------------------------------------------------------------------------------
     } else  {
-    	$menuItems = [
-    			'options' => ['class' => 'navbar-nav navbar-right'],
-    			'items' => [
-    					['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-    					Yii::$app->user->isGuest ? (
-    							['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
-    							) : (
-    									'<li>'
-    									. Html::beginForm(['/site/logout'], 'post')
-    									. Html::submitButton(
-    											'Logout (' . Yii::$app->user->identity->username . ')',
-    											['class' => 'btn btn-link logout']
-    											)
-    									. Html::endForm()
-    									. '</li>'
+    	$menuItems = [	
+    			['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+//     			['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ],
+    			Yii::$app->user->isGuest ? (
+    					['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
+    					) : (
+    							'<li>'
+    							. Html::beginForm(['/site/logout'], 'post')
+    							. Html::submitButton(
+    									'Logout (' . Yii::$app->user->identity->username . ')',
+    									['class' => 'btn btn-link logout']
     									)
-    			],
-    		];
+    							. Html::endForm()
+    							. '</li>'
+    					)
+		    	];
     }
-    echo Nav::widget($menuItems);
+    
+    
+    
+    // CONSTRUCTION DU MENU ------------------------------------------------------------------------
+    NavBar::begin(['brandLabel' => Yii::$app->name,
+				    'brandUrl' => Yii::$app->homeUrl,
+				    'options' => [
+				    'class' => 'navbar navbar-expand-lg ',
+    				],
+    			]);
+    echo Nav::widget(['options' => ['class' => 'navbar-nav navbar-right'],
+    				'items' => $menuItems
+    				]);
     NavBar::end();
     ?>
    	<div class="arcEnCiel"></div>
@@ -126,10 +131,10 @@ if( !Yii::$app->user->isGuest ){
 <footer class="footer">
     <div class="container row Licence">
         <div class="col">
-        	<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />Ce(tte) œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Licence Creative Commons Attribution -  Partage dans les Mêmes Conditions 4.0 International</a>.
+        	<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />
         </div>
         <div class="col-6 text-center">
-	        Ce site est mise à disposition selon les termes de la <br/><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Licence Creative Commons Attribution - Pas d’Utilisation Commerciale 4.0 International</a>.
+	        Ce site est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Licence Creative Commons Attribution -  Partage dans les Mêmes Conditions 4.0 International</a>.
         </div >
         <div class="col-2">
         	<a href="https://github.com/">
