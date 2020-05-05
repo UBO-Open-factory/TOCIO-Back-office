@@ -47,7 +47,15 @@ $config = [
 						// send all mails to a file by default. You have to set
 						// 'useFileTransport' to false and configure a transport
 						// for the mailer to send real emails.
-						'useFileTransport' => true
+						'useFileTransport' => true,
+						'transport' => [
+								'class' => 'Swift_SmtpTransport',
+								'encryption' => 'tls',
+								'host' => 'your_mail_server_host',
+								'port' => 'your_smtp_port',
+								'username' => 'your_username',
+								'password' => 'your_password',
+						], 
 				],
 
 				// le composant "log" traite les messages avec un horodatage (timestamp).

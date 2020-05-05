@@ -37,6 +37,13 @@ class tocioRegles extends Widget {
 			case "moduledefinition":
 				$this->message = "Un <i>Module</i> est un ensemble de capteurs.";
 				break;
+			case "utilisateursgroupe":
+				$this->message = "<p>un <i>Utilisateur</i> est une personne pouvant accéder au BackOffice de TOCIO (ce site).<br/>
+					Chaque <i>Utilisateur</i> doit être rattaché à un <i>Groupe</i> afin de lui définir des droits d'accés.</p>
+					<p>Le <i>Groupe</i> <b>Utilisateur</b> à simplement des droits en lecture sur le contenu du site.<br/>
+					Le <i>Groupe</i> <b>Administrateur</b> à tout les droits sur l'ensemble du contenu du site. Il peut créer, modifier et supprimer. Ne donnez pas ce droit à n'importe qui...</p>
+				";
+				break;
 			case "localisationmodule":
 				$this->message = "<p>La <i>Localisation</i> d'un <i>Module</i> permet de définir un emplacement géolocalisé d'un <i>Module</i>.</p>
 					Une <i>Localisation</i> ne peut pas être supprimée si un <i>Module</i> l'utilise.";

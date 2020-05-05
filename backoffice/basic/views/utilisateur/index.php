@@ -47,5 +47,5 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Utilisateur', ['create'], ['class' => 'btn btn-primary pull-right'])?>
 	</p>
 </div>
-<?php /*@todo  Mettre en place la mise à jour du Last access*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Mettre en place la mise à jour du Last access"]); ?>
+<?php /*@todo  N'afficher cette liste que pour les administrateurs*/
+echo messageAlerte::widget(['type' => "todo", "message" => "N'afficher cette liste que pour les administrateurs"]); ?>
