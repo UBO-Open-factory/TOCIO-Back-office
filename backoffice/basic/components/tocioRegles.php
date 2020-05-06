@@ -24,6 +24,10 @@ class tocioRegles extends Widget {
 		
 		
 		switch (strtolower($this->regle)) {
+			case "tociodefinition" :
+				$this->message = "Le projet TOCIO permet de déployer un ensemble de Modules comportant des Capteurs afin de faire des remontées de Mesures de Grandeurs.<br/>
+						Ce Back Office (BO) permet d'administrer cette flotte de Modules et fourni une API vers la base de stockage des données.";
+				break;
 			case "capteurdefinition":
 				$this->message = "<p>Un <i>Capteur</i> est un élément éléctronique permettant de faire des <i>Mesures</i>.</p>
 					<p>Il doit être défini avec un <b>nom</b> en toutes lettres et une <b>liste</b> de <i>Grandeurs</i>.<br/>

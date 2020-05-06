@@ -62,7 +62,7 @@ if( !Yii::$app->user->isGuest ){
 	        	['label' => 'Grandeurs', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Localisation de modules', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 	        	['label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-// 	        	['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ],
+	        	['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ],
 	//         	['label' => 'Contact', 'url' => ['/site/contact'], 'linkOptions' => ['class' => 'nav-link'] ],
 	            Yii::$app->user->isGuest ? (
 	            		['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
@@ -88,7 +88,7 @@ if( !Yii::$app->user->isGuest ){
     } else  {
     	$menuItems = [	
     			['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-//     			['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ],
+    			['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ],
     			Yii::$app->user->isGuest ? (
     					['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
     					) : (

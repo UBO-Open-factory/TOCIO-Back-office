@@ -55,7 +55,7 @@ $identity = Yii::$app->user->identity;	// null si non authentifié
 <div class="site-index">
     <div class="jumbotron">
         <h1><?php echo Yii::$app->name;?></h1>
-        <p class="lead">Ce site web permet de configurer les capteurs et modules pour qu'ils puissent stocker des données dans la base.</p>
+        <p class="lead"><?= Yii::$app->version?><br/></p>
     </div>
 
     <div class="body-content">

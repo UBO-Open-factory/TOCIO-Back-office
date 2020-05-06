@@ -3,14 +3,16 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [ 
-		'id' => 'basic',
-		'basePath' => dirname ( __DIR__ ),
-		'homeUrl' => '/',
-		'name' => "TOCIO : Data",
+		'id' 		=> 'basic',
+		'basePath' 	=> dirname ( __DIR__ ),
+		'homeUrl' 	=> '/',
+		'language' 	=> 'fr-FR',
+		'name' 		=> "TOCIO : BO Data",
 		'bootstrap' => [ 
 				'log'
 		],
 		'timeZone' => 'Europe/Paris',
+		'version' => '1.0.0',
 		'aliases' => [ 
 				'@bower' => '@vendor/bower-asset',
 				'@npm' => '@vendor/npm-asset',
@@ -18,7 +20,7 @@ $config = [
 		],
 		'components' => [ 
 				// Gestion des ressources ( les assets )
-				// On rajoute un timestamp pour que cette ressources ne soient pas mise en cache
+				// On rajoute un timestamp pour que cette ressource ne soit pas mise en cache
 				'assetManager' => [ 
 						'baseUrl' => "@urlbehindproxy/assets/",
 						'appendTimestamp' => true
