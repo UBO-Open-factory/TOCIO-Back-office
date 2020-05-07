@@ -30,9 +30,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'formatCapteur',
             'type',
             'tablename',
-			['class' => 'yii\grid\ActionColumn',
-				'visibleButtons' => ['view' => false,'update' => false, 'delete' => true]
-			],
+        	['attribute' => 'NbDataTable',
+        				'format' => 'html',
+        				'label' => "Nb Data stockées",
+        				'value' => function($model){
+        				return $model->NbDataTable;
+        				}
+        	],
+        	['class' => 'yii\grid\ActionColumn',
+        				'visibleButtons' => [
+        						'view' => false,
+        						'update' => false,
+        						'delete' => function ($model, $key, $index) {
+        						return $model->NbDataTable == 0;
+        						}]
+        						],
     		
         ],
     ]); ?>

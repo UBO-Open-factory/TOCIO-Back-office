@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "grandeur".
@@ -72,5 +73,18 @@ class Grandeur extends \yii\db\ActiveRecord
     public function getIdCapteurs()
     {
     	return $this->hasMany(Capteur::className(), ['id' => 'idCapteur'])->viaTable('rel_capteurgrandeur', ['idGrandeur' => 'id']);
+    }
+    
+    
+    //______________________________________________________________________________________________
+    /**
+     * return table's data count for this Grandeur.
+     * @version 7 mai 2020	: APE	- Création.
+     */
+    public function getNbDataTable(){
+    	return (new \yii\db\Query())
+			    	->select(['id'])
+			    	->from($this->tablename)
+			    	->count();
     }
 }

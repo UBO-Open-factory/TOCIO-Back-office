@@ -112,7 +112,7 @@ class GrandeurController extends Controller{
 
     /**
      * Creates a new Grandeur model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * If creation is successful, the browser will be redirected to the 'index' page.
      * @return mixed
      */
     public function actionCreate() {
@@ -132,8 +132,8 @@ class GrandeurController extends Controller{
         	$this->_ConstruitNomTable($model);
         	
         	
-//         	// SI LE NOM DE TABLE N'EST PAS UTILISÉ DANS LA BASE ...................................
-//         	if (! $this->_tableMesureExiste($model->tablename)) {
+        	// SI LE NOM DE TABLE N'EST PAS UTILISÉ DANS LA BASE ...................................
+        	if (! $this->_tableMesureExiste($model->tablename)) {
         		// REQUETE DE CREATION DE LA TABLE
         		$this->_createTableMesure($model);
 	        		
@@ -145,9 +145,9 @@ class GrandeurController extends Controller{
 	        		
 	        	
 	        	
-//       		// LE NOM DE CETTE TABLE EXISTE DÉJÀ ...................................................
-//         	} else {
-        		
+      		// LE NOM DE CETTE TABLE EXISTE DÉJÀ ...................................................
+        	} else {
+        		$model->addError("nature", "Une Grandeur avec ce nom existe déjà. Impossible de la re-créer.");
 //         		// LA TABLE EST VIDE, ON LA SUPPRIME & ON CREER LA MESURE
 //         		if( $this->_getNbMesureFromTableMesure($model->tablename) == 0){
         			
@@ -162,7 +162,7 @@ class GrandeurController extends Controller{
 // 	        		// Affiche un message sur la page de la saisie.
 // 	        		$model->addError('nature', "Impossible de créer cette Grandeur car La table des mesures prévus <".$model->tablename."> existe déjà (et n'est pas vide).");
 //         		}
-//         	}
+        	}
         }
         return $this->render('create', [
         		'model' => $model,
