@@ -121,6 +121,7 @@ if( !Yii::$app->user->isGuest ){
    	<div class="arcEnCiel"></div>
     <div class="container">
 		<?= Breadcrumbs::widget([
+			'homeLink' => ['label' => "Home", 'url' =>  "@urlbehindproxy/"],
 			'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
 		]) ?>
         <?= Alert::widget() ?>
