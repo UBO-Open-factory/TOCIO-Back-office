@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Changement de la licence d'exploitation.
+- Modification de l'URL pour le retour sur le 'Home' des breadcrums lorsqu'on est derrière un proxy.
 - Habillage diverses.
 - Paramétrage du nom de l'application
 
