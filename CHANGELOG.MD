@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2020-05-05
 
 ### Added
+- Utilisation d'une tables pour la gestion des utilisateurs, chaque tuilisateur à désormé son login et mot de passe.
 - Gestion du menu en fonction du groupe auquel l'Utilisateur appartien.
 - Ajout du tracking Matomoto.
 - Icon sur BugTracker afin de pouvoir plus facilement saisir un bug.
