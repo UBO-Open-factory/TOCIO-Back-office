@@ -64,19 +64,23 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+    
+    // _____________________________________________________________________________________________
     /**
      * Login action.
      *
      * @return Response|string
      */
-    public function actionLogin()
-    {
+    public function actionLogin() {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
+        // IF LOGIN IS OK
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        	
+        	// Redirect after login
             return $this->goBack();
         }
 
@@ -86,13 +90,15 @@ class SiteController extends Controller
         ]);
     }
 
+    
+    
+    // _____________________________________________________________________________________________
     /**
      * Logout action.
      *
      * @return Response
      */
-    public function actionLogout()
-    {
+    public function actionLogout() {
         Yii::$app->user->logout();
 
         return $this->goHome();
@@ -124,5 +130,16 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+    
+    
+    // _____________________________________________________________________________________________
+    /**
+     * Redirect to the Home page.
+     * {@inheritDoc}
+     * @see \yii\web\Controller::goHome()
+     */
+    public function goHome(){
+    	return Yii::$app->getResponse()->redirect(['/']);
     }
 }
