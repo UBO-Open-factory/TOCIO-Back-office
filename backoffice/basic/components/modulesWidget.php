@@ -519,14 +519,17 @@ class modulesWidget extends Widget
 	// _____________________________________________________________________________________________
 	/**
 	 * Ecriture des chemins pour les URls dans un fichier lisible par le JavaScript. 
+	 * @version 11 mai 2020	: APE	- Changement de protocol utilisé pour l'url de base.
 	 */
 	private function _dumpPaths(){
 		// Génération du contenu
 		$l_TAB_Content = [];
-		$l_TAB_Content[] = "// Ceci est un fichier généré dynamiquement par le script ".__FILE__;
-		$l_TAB_Content[] = "// Ne pas le modifier à la main";
+		$l_TAB_Content[] = "// Ceci est un fichier généré dynamiquement par le script :\n// ".__FILE__;
+		$l_TAB_Content[] = "// ---------------------------------------------------------------------";
+		$l_TAB_Content[] = "// NE PAS MODIFIER CE FICHIER À LA MAIN";
+		$l_TAB_Content[] = "// ---------------------------------------------------------------------";
 		$l_TAB_Content[] = "var g_urlbehindproxy = '".\Yii::getAlias("@urlbehindproxy")."/';	// Set in /config/web.php";
-		$l_TAB_Content[] = "var g_host = '".Url::base('https')."';";
+		$l_TAB_Content[] = "var g_host = '".Url::base(true)."';";
 				
 		
 				

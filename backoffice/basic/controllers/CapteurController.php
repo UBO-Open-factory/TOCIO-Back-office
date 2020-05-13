@@ -80,30 +80,38 @@ class CapteurController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      * 	@version 23 avr. 2020	: APE	- Création.
+     * 	@version 11 mai 2020	: APE	- Add catch block around findModel function
      */
     public function actionAjaxupdate() {
     	$request 	= Yii::$app->request;
-		$post		= $request->post();
-    		
+    	// Le retour sera au format JSON
+    	Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    	
 		
 		// AJOUT FAIT À L'AIDE D'UNE REQUÈTE AJAX --------------------------------------------------
     	if (Yii::$app->request->isAjax && $request->post()) {
-    		$model = $this->findModel($post['id']);
+    		
+    		
+			$post	= $request->post();
+			try {
+	    		$model 	= $this->findModel($post['id']);
+				
+			} catch(Exception $e) {
+				return ["success" => "** Oupsss, impossible de trouver le model ".$model::className()."\n", "errors" => json_encode($e->getMessage())];
+			}
     		$model->nom = $post['nom'];
     		
-    		// Le retour sera au format JSON
-    		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     		// Sauve le model
     		if( $model->save() ){
     			// Renvoie le dernier ID créé
     			return ["success" 	=> "ok",
     					"lastID" 	=> $model->id,
     			];
-    		} else {
-    			var_dump($model->errors);
-    			return ["success" => "** Oupsss, il y a eu un problème à la mise à jour du model ".$model::className()."\n", "errors" => json_encode($model->errors)];
     		}
     	}
+    	
+    	// If we are here that mean something goes wrong, so we dump and return error.
+    	return ["success" => "** Oupsss, il y a eu un problème à la mise à jour du model ".$model::className()."\n", "errors" => json_encode($model->errors)];
     }
     // _____________________________________________________________________________________________
     /**

@@ -273,8 +273,10 @@ class capteursWidget extends Widget
 	private function _dumpPaths(){
 		// Génération du contenu
 		$l_TAB_Content = [];
-		$l_TAB_Content[] = "// Ceci est un fichier généré dynamiquement par le script ".__FILE__;
-		$l_TAB_Content[] = "// Ne pas le modifier à la main";
+		$l_TAB_Content[] = "// Ceci est un fichier généré dynamiquement par le script :\n// ".__FILE__;
+		$l_TAB_Content[] = "// ---------------------------------------------------------------------";
+		$l_TAB_Content[] = "// NE PAS MODIFIER CE FICHIER À LA MAIN";
+		$l_TAB_Content[] = "// ---------------------------------------------------------------------";
 		$l_TAB_Content[] = "var g_urlbehindproxy = '".\Yii::getAlias("@urlbehindproxy")."/';	// Set in /config/web.php";
 		$l_TAB_Content[] = "var g_host = '".Url::base('https')."';";
 		
