@@ -11,6 +11,11 @@ use yii\filters\VerbFilter;
 use Codeception\Lib\Connector\Yii2;
 use PHPUnit\Framework\Constraint\Count;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
+use app\models\TableSearch;
+use yii\data\Sort;
+use app\models\Tablemesure;
+use app\models\TablemesureSearch;
 
 /**
  * GrandeurController implements the CRUD actions for Grandeur model.
@@ -97,18 +102,35 @@ class GrandeurController extends Controller{
         ]);
     }
 
-    /**
-     * Displays a single Grandeur model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+	// _____________________________________________________________________________________________
+	/**
+	 * Display the data from the table which name is tablename in the current model.
+	 *
+	 * @param integer $id
+	 * @return mixed
+	 * @throws NotFoundHttpException if the model cannot be found
+	 */
+	public function actionView( $id ) {
+		
+		// Find current model
+		$model = $this->findModel( $id );
+		
+		
+		// Construct a dataprovider to display result
+		$searchModel = new TablemesureSearch();
+		$searchModel->setTableName($model->tablename);
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+		return $this->render( 'view', [ 
+			'model' 		=> $model,
+			'searchModel' 	=> $searchModel,
+            'dataProvider' 	=> $dataProvider,
+		] );
+	}
+	
+	
+	
+	
 
     /**
      * Creates a new Grandeur model.

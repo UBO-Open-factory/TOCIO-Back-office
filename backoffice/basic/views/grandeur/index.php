@@ -45,7 +45,13 @@ $this->params['breadcrumbs'][] = $this->title;
         						return $model->NbDataTable == 0;
         						}]
         						],
-    		
+			['class' => 'yii\grid\ActionColumn',
+        	'visibleButtons' => [
+					        	'view' => true,
+					        	'update' => false,
+					        	'delete' => false,
+        	],
+        	],
         ],
     ]); ?>
 <p>

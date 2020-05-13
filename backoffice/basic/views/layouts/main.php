@@ -67,6 +67,7 @@ AppAsset::register($this);
 			'label' => 'Outils',
 			'items' => [ 
 				[ 'label' => 'Traces de débug', 'url' => '/log/index', 'linkOptions' => ['class' => 'nav-link'] ],
+				[ 'label' => 'Tables des données', 'url' => '/grandeur/index', 'linkOptions' => ['class' => 'nav-link'] ],
 			],
 		];
 	}

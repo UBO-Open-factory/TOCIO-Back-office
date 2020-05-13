@@ -2,39 +2,30 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Grandeur */
 
-$this->title = $model->id;
+$this->title = $model->tablename;
 $this->params['breadcrumbs'][] = ['label' => 'Grandeurs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="grandeur-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= $model->nature?> de la table <?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Etes vous sûr de vouloir suppimer cette Grandeur ?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'nature',
-            'formatCapteur',
-            'tablename',
-            'type',
-        ],
-    ]) ?>
-
+     <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+     	'columns' => [ 	'id',
+     					'timestamp:datetime',
+	     				'valeur',
+	     				'identifiantModule',
+     					'posX', 
+     					'posY', 
+     					'posZ', 
+	     			],
+     	]);
+     ?>
 </div>
