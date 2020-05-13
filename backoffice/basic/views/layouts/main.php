@@ -48,7 +48,6 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     $menuItems = [];
-   	$menuItems[] = ['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ];
     if( Yii::$app->user->can('createModule') ) {
     	$menuItems[] = ['label' => 'Modules', 'url' => ['/module/index'], 'linkOptions' => ['class' => 'nav-link'] ];
     }
@@ -59,16 +58,27 @@ AppAsset::register($this);
     	$menuItems[] = ['label' => 'Grandeurs', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ];
     }
     if( Yii::$app->user->can('createLocalisation') ) {
-    	$menuItems[] = ['label' => 'Localisation de modules', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ];
+    	$menuItems[] = ['label' => 'Localisations', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ];
     }
+    
+	// OUTILS --------------------------------------------------------------------------------------
     if( ! Yii::$app->user->isGuest ) {
-    	$menuItems[] = ['label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ];
-    }
+		$menuItems[] = [ 
+			'label' => 'Outils',
+			'items' => [ 
+				[ 'label' => 'Traces de débug', 'url' => '/log/index', 'linkOptions' => ['class' => 'nav-link'] ],
+			],
+		];
+	}
+	
+   	// UTILISATEURS --------------------------------------------------------------------------------
    	if( Yii::$app->user->can('createUser') ) {
    		$menuItems[] = ['label' => 'Users', 'url' => ['/utilisateur/index'], 'linkOptions' => ['class' => 'nav-link']]; 
    	}
-	//         	['label' => 'Contact', 'url' => ['/site/contact'], 'linkOptions' => ['class' => 'nav-link'] ],
    	$menuItems[] = ['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ];
+   	
+   	
+   	// LOGIN ---------------------------------------------------------------------------------------
    	if( Yii::$app->user->isGuest ) {
    		$menuItems[] = ['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ];
    	} else {
@@ -80,37 +90,17 @@ AppAsset::register($this);
 	                	. '</li>';
    	}
     	
-    	
-	// ANONYMOUS -----------------------------------------------------------------------------------
-//     } else  {
-//     	$menuItems = [	
-//     			['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-//     			['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ],
-//     			Yii::$app->user->isGuest ? (
-//     					['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
-//     					) : (
-//     							'<li>'
-//     							. Html::beginForm(['/site/logout'], 'post')
-//     							. Html::submitButton(
-//     									'Logout (' . Yii::$app->user->identity->username . ')',
-//     									['class' => 'btn btn-link logout']
-//     									)
-//     							. Html::endForm()
-//     							. '</li>'
-//     					)
-// 		    	];
-//     }
-    
+
     
     
     // CONSTRUCTION DU MENU ------------------------------------------------------------------------
     NavBar::begin(['brandLabel' => Yii::$app->name,
 				    'brandUrl' => Yii::$app->homeUrl,
 				    'options' => [
-				    'class' => 'navbar navbar-expand-lg ',
+				    	'class' => 'navbar navbar-expand-lg ',
     				],
     			]);
-    echo Nav::widget(['options' => ['class' => 'navbar-nav'],
+    echo Nav::widget(['options' => ['class' => 'nav-pills'],
     				'items' => $menuItems
     				]);
     NavBar::end();
