@@ -58,8 +58,19 @@ function commentaire($elem){
 	if(strpos($data, "*") !== false) 	return true;
 	return false;
 }
-
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="jumbotron">
         <h1><?php echo Yii::$app->name;?> </h1>
         <p class="lead">
@@ -68,25 +79,38 @@ function commentaire($elem){
         </p>
     </div>
     
+    
+    <!-- ******************************************************************************************* -->
 	<h1>Nombre de ligne de code</h1>
-	Ce site est écrit en PHP à l'aide du Framework Yii v<?= Yii::getVersion()?>. Il nécessite :  
+	Ce site est écrit en PHP à l'aide du Framework Yii v<?= Yii::getVersion()?>. En plus des fichiers
+	propre au Framework, il nécessite :  
 	<ul>
 		<li><?= count($nbLigneCode)?> fichiers</li>
 		<li><?= array_sum($nbLigneCode)?> lignes de code. (lignes non vide, hein ;-)  )</li>
 		<li>dont <?= array_sum($nbLigneComment)?> lignes de commentaire (soit <?php echo round(array_sum($nbLigneComment) / array_sum($nbLigneCode) * 100, 0) ;?>%).</li>
 	</ul>
+
+
+
 	
+    <!-- ******************************************************************************************* -->
 	<h1>Version</h1>
 	<p>Version courante de <i><?php echo Yii::$app->name;?></i> : <?= Yii::$app->version?>
 	 
 
 
+
+    <!-- ******************************************************************************************* -->
 	<h1>Modifications</h1>
+	<h2>V 1.1.0</h2>
+	En cours.
+	
+	
 	<h2>V 1.0.0</h2>
 	<?php 
 	/**
-		Les lignes suivantes sont générée avec la commande :
-		git log v1.0 --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
+	 * Les lignes suivantes sont générées avec la commande :
+		git log v1.0...V1.1.0 --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
 	 * 
 	 */
 	?>
