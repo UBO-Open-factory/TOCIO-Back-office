@@ -13,11 +13,6 @@ use yii\helpers\Url;
 use app\models\User;
 
 AppAsset::register($this);
-if( !Yii::$app->user->isGuest ){
-	$isAdmin = User::isAdmin(\Yii::$app->user->id);
-} else {
-	$isAdmin = false;
-}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -52,57 +47,59 @@ if( !Yii::$app->user->isGuest ){
 
 <div class="wrap">
     <?php
-    // SI ON EST AUTHENTIFIE -----------------------------------------------------------------------
-    // ( on est pas un "invité" )
-    if( !Yii::$app->user->isGuest ){
-    	$menuItems = [
-	            ['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-	        	['label' => 'Modules', 'url' => ['/module/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-	        	['label' => 'Capteurs', 'url' => ['/capteur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-	        	['label' => 'Grandeurs', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-	        	['label' => 'Localisation de modules', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-	        	['label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-	        	['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ],
+    $menuItems = [];
+   	$menuItems[] = ['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ];
+    if( Yii::$app->user->can('createModule') ) {
+    	$menuItems[] = ['label' => 'Modules', 'url' => ['/module/index'], 'linkOptions' => ['class' => 'nav-link'] ];
+    }
+    if( Yii::$app->user->can('createCapteur') ) {
+    	$menuItems[] = ['label' => 'Capteurs', 'url' => ['/capteur/index'], 'linkOptions' => ['class' => 'nav-link'] ];
+    }
+    if( Yii::$app->user->can('createGrandeur') ) {
+    	$menuItems[] = ['label' => 'Grandeurs', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ];
+    }
+    if( Yii::$app->user->can('createLocalisation') ) {
+    	$menuItems[] = ['label' => 'Localisation de modules', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ];
+    }
+    if( ! Yii::$app->user->isGuest ) {
+    	$menuItems[] = ['label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ];
+    }
+   	if( Yii::$app->user->can('createUser') ) {
+   		$menuItems[] = ['label' => 'Users', 'url' => ['/utilisateur/index'], 'linkOptions' => ['class' => 'nav-link']]; 
+   	}
 	//         	['label' => 'Contact', 'url' => ['/site/contact'], 'linkOptions' => ['class' => 'nav-link'] ],
-	            Yii::$app->user->isGuest ? (
-	            		['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
-	            ) : (
-	                '<li>'
-	                . Html::beginForm(['/site/logout'], 'post')
-	                . Html::submitButton(
-	                    'Logout (' . Yii::$app->user->identity->username . ')',
-	                    ['class' => 'btn btn-link logout']
-	                )
-	                . Html::endForm()
-	                . '</li>'
-	            )
-	    ];
-    	// SI ON EST ADMIN
-    	if( $isAdmin ) {
-    		$menuItems[] = ['label' => 'Users', 'url' => ['/utilisateur/index'], 'linkOptions' => ['class' => 'nav-link']]; 
-    	}
-    	
+   	$menuItems[] = ['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ];
+   	if( Yii::$app->user->isGuest ) {
+   		$menuItems[] = ['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ];
+   	} else {
+   		$menuItems[] = '<li>'. Html::beginForm(['/site/logout'], 'post')
+	                		 . Html::submitButton( 	'Logout (' . Yii::$app->user->identity->username . ')',
+	                    							['class' => 'btn btn-link logout push-right']
+	                							)
+	                		. Html::endForm()
+	                	. '</li>';
+   	}
     	
     	
 	// ANONYMOUS -----------------------------------------------------------------------------------
-    } else  {
-    	$menuItems = [	
-    			['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
-    			['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ],
-    			Yii::$app->user->isGuest ? (
-    					['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
-    					) : (
-    							'<li>'
-    							. Html::beginForm(['/site/logout'], 'post')
-    							. Html::submitButton(
-    									'Logout (' . Yii::$app->user->identity->username . ')',
-    									['class' => 'btn btn-link logout']
-    									)
-    							. Html::endForm()
-    							. '</li>'
-    					)
-		    	];
-    }
+//     } else  {
+//     	$menuItems = [	
+//     			['label' => 'Home', 'url' => ['/site/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+//     			['label' => 'About', 'url' => ['/site/about'], 'linkOptions' => ['class' => 'nav-link'] ],
+//     			Yii::$app->user->isGuest ? (
+//     					['label' => 'Login', 'url' => ['/site/login'], 'linkOptions' => ['class' => 'nav-link pull-right'] ]
+//     					) : (
+//     							'<li>'
+//     							. Html::beginForm(['/site/logout'], 'post')
+//     							. Html::submitButton(
+//     									'Logout (' . Yii::$app->user->identity->username . ')',
+//     									['class' => 'btn btn-link logout']
+//     									)
+//     							. Html::endForm()
+//     							. '</li>'
+//     					)
+// 		    	];
+//     }
     
     
     
@@ -113,7 +110,7 @@ if( !Yii::$app->user->isGuest ){
 				    'class' => 'navbar navbar-expand-lg ',
     				],
     			]);
-    echo Nav::widget(['options' => ['class' => 'navbar-nav navbar-right'],
+    echo Nav::widget(['options' => ['class' => 'navbar-nav'],
     				'items' => $menuItems
     				]);
     NavBar::end();

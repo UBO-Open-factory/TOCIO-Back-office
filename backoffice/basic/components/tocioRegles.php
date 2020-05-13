@@ -44,8 +44,9 @@ class tocioRegles extends Widget {
 			case "utilisateursgroupe":
 				$this->message = "<p>un <i>Utilisateur</i> est une personne pouvant accéder au BackOffice de TOCIO (ce site).<br/>
 					Chaque <i>Utilisateur</i> doit être rattaché à un <i>Groupe</i> afin de lui définir des droits d'accés.</p>
-					<p>Le <i>Groupe</i> <b>Utilisateur</b> à simplement des droits en lecture sur le contenu du site.<br/>
-					Le <i>Groupe</i> <b>Administrateur</b> à tout les droits sur l'ensemble du contenu du site. Il peut créer, modifier et supprimer. Ne donnez pas ce droit à n'importe qui...</p>
+					<p>Le <i>Groupe</i> <b>Utilisateur</b> à tout les droits sur l'ensemble du contenu du site.<br/>
+					Le <i>Groupe</i> <b>Administrateur</b> à tout les droits sur l'ensemble du contenu du site. 
+					Il peut également créer, modifier et supprimer un Utilisateur. Ne donnez pas ce droit à n'importe qui...</p>
 				";
 				break;
 			case "localisationmodule":

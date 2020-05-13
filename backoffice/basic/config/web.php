@@ -12,7 +12,7 @@ $config = [
 				'log'
 		],
 		'timeZone' => 'Europe/Paris',
-		'version' => '1.0.0',
+		'version' => '1.1.0',
 		'aliases' => [ 
 				'@bower' => '@vendor/bower-asset',
 				'@npm' => '@vendor/npm-asset',
@@ -24,6 +24,10 @@ $config = [
 				'assetManager' => [ 
 						'baseUrl' => "@urlbehindproxy/assets/",
 						'appendTimestamp' => true
+				],
+				// Gestion des authentifications par groupe d'accès.
+				'authManager' => [
+						'class' => 'yii\rbac\DbManager',
 				],
 				'request' => [ 
 						// !!! insert a secret key in the following (if it is empty) - this is required by cookie validation

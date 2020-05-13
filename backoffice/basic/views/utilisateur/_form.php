@@ -3,8 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use app\models\UtilisateursGroup;
-use app\models\UtilisateurGroup;
+use app\models\AuthItem;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Utilisateurs */
@@ -22,14 +21,16 @@ use app\models\UtilisateurGroup;
 			<?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 		</div>
 		<div class="col-sm-4">
-			<?= $form->field($model, 'password')->textarea(['rows' => 1]) ?>
+			<?= $form->field($model, 'password')->passwordInput() ?>
 		</div>
 		<div class="col-sm-4">
-			<?= $form->field($model, 'idGroupe')->label('Groupe')
+			<?php echo $form->field($groupe, 'item_name')->label('Groupe')
 				->dropDownList(
-					UtilisateurGroup::find()->select(['groupName', 'id'])->indexBy('id')->column(),
-														['prompt'=>'Choisir un Groupe pour cet utilisateur'])
-					
+					AuthItem::find()->select(['name', 'name'])
+						->where(["type" => 1])
+						->indexBy('name')
+						->column(),
+					['prompt'=>'Choisir un Groupe pour cet utilisateur'])
 			?>
 		</div>
 	</div>

@@ -25,11 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
 //             ['class' => 'yii\grid\SerialColumn'],
 
-//             'id',
+            'id',
             'username',
             'email:email',
             'lastAccess:date',
-        	'idGroupe0.groupName',
+       		['attribute' => 'NbDataTable',
+       				'format' => 'html',
+       				'label' => "Groupe",
+       				'value' => function($model){
+       					return $model->authAssignment->item_name;
+       				}
+       		],
 //             'password:ntext',
 //             'authKey',
             //'accessToken:ntext',
@@ -47,5 +53,3 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Utilisateur', ['create'], ['class' => 'btn btn-primary pull-right'])?>
 	</p>
 </div>
-<?php /*@todo  N'afficher cette liste que pour les administrateurs*/
-echo messageAlerte::widget(['type' => "todo", "message" => "N'afficher cette liste que pour les administrateurs"]); ?>

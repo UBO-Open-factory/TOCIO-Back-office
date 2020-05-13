@@ -17,7 +17,11 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'log' => [
+   		// Gestion des authentifications par groupe d'accès.
+   		'authManager' => [
+   			'class' => 'yii\rbac\DbManager',
+   		],
+       'log' => [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',

@@ -17,8 +17,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+    	'groupe' => $groupe,
     ]) ?>
 
 </div>
-<?php /*@todo  Si le mot de passe est inchangé, il ne faut pas le sauver.*/
-echo messageAlerte::widget(['type' => "todo", "message" => "Si le mot de passe est inchangé, il ne faut pas le sauver."]); ?>

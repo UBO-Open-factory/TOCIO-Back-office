@@ -17,7 +17,7 @@ class UtilisateurSearch extends Utilisateur
     public function rules()
     {
         return [
-            [['id', 'idGroupe'], 'integer'],
+            [['id'], 'integer'],
             [['username', 'email', 'password', 'authKey', 'accessToken', 'lastAccess'], 'safe'],
         ];
     }
@@ -60,7 +60,6 @@ class UtilisateurSearch extends Utilisateur
         $query->andFilterWhere([
             'id' => $this->id,
             'lastAccess' => $this->lastAccess,
-            'idGroupe' => $this->idGroupe,
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
