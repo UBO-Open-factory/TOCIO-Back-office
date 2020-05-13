@@ -101,19 +101,42 @@ function commentaire($elem){
 
 
     <!-- ******************************************************************************************* -->
-	<h1>Modifications</h1>
-	<h2>V 1.1.0</h2>
-	En cours.
-	
-	
-	<h2>V 1.0.0</h2>
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.0...V1.1.0 --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
+		git log v1.1..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
 	 * 
 	 */
 	?>
+	<h1>Modifications</h1>
+	<h2>V 1.1.0</h2>
+<li>2020-05-13 <b>&bull;</b> Possibilité de visualiser les données stockées dans les tables des mesures.</li>
+<li>2020-05-13 <b>&bull;</b> Calcul du nombre de ligne développées dans le framework Yii</li>
+<li>2020-05-13 <b>&bull;</b> Liste déroulante pour regrouper les outils de debug de TOCIO dans le menu</li>
+<li>2020-05-13 <b>&bull;</b> Mise en place de la gestion des utilisateurs et des groupes</li>
+<li>2020-05-11 <b>&bull;</b> Redirection vers la page d'accueil</li>
+<li>2020-05-11 <b>&bull;</b> Modification de l'URL pour le retour sur le 'Home' lorsqu'on est derrière un proxy</li>
+<li>2020-05-07 <b>&bull;</b> Gestion des Grandeurs : affichage du nombre de données dans la table des Mesures relative (et possibilité de supprimer la Grandeur si la table des Mesures correspondante est vide.</li>
+<li>2020-05-06 <b>&bull;</b> Génération de la page 'About'</li>
+<li>2020-05-05 <b>&bull;</b> Gestion du menu en fonction du groupe d'Utilisateur</li>
+<li>2020-05-05 <b>&bull;</b> Ajout du tracking Matomoto</li>
+<li>2020-05-05 <b>&bull;</b> Changement de la licence d'exploitation</li>
+<li>2020-05-05 <b>&bull;</b> Authentification avec la tables des Utilisateurs</li>
+<li>2020-05-02 <b>&bull;</b> Icon sur mon BugTracker</li>
+<li>2020-05-02 <b>&bull;</b> Prise en compte de l'authentification pour l'affichage ou non des liens</li>
+<li>2020-05-02 <b>&bull;</b> Habillage diverses</li>
+<li>2020-05-02 <b>&bull;</b> Génération des varaibles pour le JavaScript</li>
+<li>2020-05-02 <b>&bull;</b> Modificaiton de la génération des URLs</li>
+<li>2020-05-02 <b>&bull;</b> Paramétrage du nom de l'application</li>
+<li>2020-04-30 <b>&bull;</b> Mise à jour de Yii</li>
+<li>2020-04-30 <b>&bull;</b> Mise à jour de la constuction des URLs dans le formulaires</li>
+<li>2020-04-30 <b>&bull;</b> Affichage de la version courante de Yii</li>
+<li>2020-04-30 <b>&bull;</b> Modification des action des forms pour prendre en compte le fait d'être derrière un proxy</li>
+<li>2020-04-30 <b>&bull;</b> Utilisation du gestionnaire d'URL</li>
+<li>2020-04-29 <b>&bull;</b> Mise en page est habillage CSS</li>
+<li>2020-04-29 <b>&bull;</b> Correction du formattage des URLs d'accès à l'API</li>
+	
+	<h2>V 1.0.0</h2>
 <li>2020-04-29 <b>&bull;</b> Mise à jour du footer avec une licence CC BY NC</li>
 <li>2020-04-29 <b>&bull;</b> Mise à jour du Readme</li>
 <li>2020-04-29 <b>&bull;</b> Problème avec les URLS</li>
@@ -179,4 +202,5 @@ function commentaire($elem){
 <li>2020-03-21 <b>&bull;</b> Suppression des tableGrandeurs</li>
 <li>2020-03-21 <b>&bull;</b> Ajout des grandeurs</li>
 <li>2020-03-21 <b>&bull;</b> Commit initial</li>
-<hr/>
+
+
