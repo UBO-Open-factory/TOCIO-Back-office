@@ -12,7 +12,7 @@ use yii\helpers\Url;
 <div class="log-search">
 
     <?php $form = ActiveForm::begin([
-    	'action' => Url::base().Url::to(['index']),
+    	'action' => Url::to(['index']),
         'method' => 'get',
     ]); ?>
 

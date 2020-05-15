@@ -110,6 +110,7 @@ function commentaire($elem){
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.1.0</h2>
+<li>2020-05-15 <b>&bull;</b> Correction des URLs pour les liens sur la page d'accueil et dans les formulaires de recherche.</li>
 <li>2020-05-13 <b>&bull;</b> Possibilité de visualiser les données stockées dans les tables des mesures.</li>
 <li>2020-05-13 <b>&bull;</b> Calcul du nombre de ligne développées dans le framework Yii</li>
 <li>2020-05-13 <b>&bull;</b> Liste déroulante pour regrouper les outils de debug de TOCIO dans le menu</li>

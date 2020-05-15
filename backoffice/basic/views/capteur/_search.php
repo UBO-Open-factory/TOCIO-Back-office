@@ -10,11 +10,8 @@ use yii\helpers\Url;
 ?>
 
 <?php $form = ActiveForm::begin([
-		'action' => Url::base().Url::to(['index']),
+		'action' => Url::to(['index']),
         'method' => 'get',
-        'options' => [
-            'data-pjax' => 1
-        ],
 ]); ?>
 <div class="capteur-search">
 <div class="row">

@@ -12,7 +12,7 @@ use yii\helpers\Url;
 <div class="localisationmodule-search">
 
     <?php $form = ActiveForm::begin([
-    	'action' => Url::base().Url::to(['index']),
+    	'action' => Url::to(['index']),
         'method' => 'get',
         'options' => [
             'data-pjax' => 1
