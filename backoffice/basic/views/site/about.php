@@ -110,6 +110,7 @@ function commentaire($elem){
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.1.0</h2>
+<li>2020-05-15 <b>&bull;</b> Suppresion de la table utilisateurs_group et utilisation du système d'authentification Yii2.</li>
 <li>2020-05-15 <b>&bull;</b> Correction des URLs pour les liens sur la page d'accueil et dans les formulaires de recherche.</li>
 <li>2020-05-13 <b>&bull;</b> Possibilité de visualiser les données stockées dans les tables des mesures.</li>
 <li>2020-05-13 <b>&bull;</b> Calcul du nombre de ligne développées dans le framework Yii</li>
@@ -123,7 +124,7 @@ function commentaire($elem){
 <li>2020-05-05 <b>&bull;</b> Ajout du tracking Matomoto</li>
 <li>2020-05-05 <b>&bull;</b> Changement de la licence d'exploitation</li>
 <li>2020-05-05 <b>&bull;</b> Authentification avec la tables des Utilisateurs</li>
-<li>2020-05-02 <b>&bull;</b> Icon sur mon BugTracker</li>
+<li>2020-05-02 <b>&bull;</b> Icon sur BugTracker</li>
 <li>2020-05-02 <b>&bull;</b> Prise en compte de l'authentification pour l'affichage ou non des liens</li>
 <li>2020-05-02 <b>&bull;</b> Habillage diverses</li>
 <li>2020-05-02 <b>&bull;</b> Génération des varaibles pour le JavaScript</li>
