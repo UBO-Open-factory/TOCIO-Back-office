@@ -25,7 +25,7 @@ use yii\helpers\Url;
 		    		"int(10)" => "Integer",
 		    		"real" => "Réel",
 		    		"text" => "Text",
-		    		"varchar" => "Varchar",
+		    		"varchar(50)" => "Varchar",
 		    ]) ?>
 		</div>
 		<div class="col-sm-12 ">
