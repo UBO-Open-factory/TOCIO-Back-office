@@ -68,8 +68,8 @@ AppAsset::register($this);
 			'linkOptions' => ['class' => 'nav-link'],
 			'items' => [ 
 					'<li class="dropdown-header">Outils de diagnostique divers</li>',
-				[ 'label' => 'Traces de débug', 'url' => '/log/index', 'linkOptions' => ['class' => 'nav-link'] ],
-				[ 'label' => 'Tables des données', 'url' => '/grandeur/index', 'linkOptions' => ['class' => 'nav-link'] ],
+				[ 'label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+				[ 'label' => 'Tables des données', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 			],
 		];
 	}
