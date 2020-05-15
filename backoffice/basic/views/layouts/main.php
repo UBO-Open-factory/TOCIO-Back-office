@@ -98,7 +98,7 @@ AppAsset::register($this);
     
     // CONSTRUCTION DU MENU ------------------------------------------------------------------------
     NavBar::begin(['brandLabel' => Yii::$app->name,
-				    'brandUrl' => Yii::$app->homeUrl,
+				    'brandUrl' => Url::to("/"),
 				    'options' => [
 				    	'class' => 'navbar navbar-expand-lg ',
     				],
