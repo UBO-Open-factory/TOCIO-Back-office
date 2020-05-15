@@ -9,7 +9,8 @@ use app\components\tocioRegles;
 $this->title = 'About';
 $this->params['breadcrumbs'][] = $this->title;
 
-$l_TAB_Directory 	= ['assets', 'components', 'controllers', 'mail', 'models', 'views' ];
+// LISTE DE RÉPERTOIRES CONTENANT LE CODE ÉCRIT À LA MAIN-------------------------------------------
+$l_TAB_Directory 	= ['assets', 'components', 'controllers', 'mail', 'models', 'views', 'migrations' ];
 $nbLigneCode 		= [];
 $nbLigneComment 	= [];
 foreach( $l_TAB_Directory as $directoryName){
@@ -59,7 +60,28 @@ function commentaire($elem){
 	return false;
 }
 ?>
+<!-- Generation du graphique -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+	google.charts.load("current", {packages:["corechart"]});
+	google.charts.setOnLoadCallback(drawChart);
+	function drawChart() {
+		var data = google.visualization.arrayToDataTable([
+			['Task', 'Nombre'],
+			['Code',	<?= array_sum($nbLigneCode);?>],
+			['Commentaire',	<?= array_sum($nbLigneComment);?>],
+        ]);
 
+        var options = {
+          backgroundColor: 'transparent',
+          pieSliceText: 'label',
+          textStyle:{color: '#FFFFFF'}
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+</script>
 
 
 
@@ -82,13 +104,20 @@ function commentaire($elem){
     
     <!-- ******************************************************************************************* -->
 	<h1>Nombre de ligne de code</h1>
-	Ce site est écrit en PHP à l'aide du Framework Yii v<?= Yii::getVersion()?>. En plus des fichiers
-	propre au Framework, il nécessite :  
-	<ul>
-		<li><?= count($nbLigneCode)?> fichiers</li>
-		<li><?= array_sum($nbLigneCode)?> lignes de code. (lignes non vide, hein ;-)  )</li>
-		<li>dont <?= array_sum($nbLigneComment)?> lignes de commentaire (soit <?php echo round(array_sum($nbLigneComment) / array_sum($nbLigneCode) * 100, 0) ;?>%).</li>
-	</ul>
+	<div class="row">
+		<div class="col-sm-6">
+			Ce site est écrit en PHP à l'aide du Framework Yii v<?= Yii::getVersion()?>. En plus des fichiers
+			propre au Framework, il nécessite : 
+			<ul>
+				<li><?= count($nbLigneCode)?> fichiers</li>
+				<li><?= array_sum($nbLigneCode)?> lignes de code. (lignes non vide, hein ;-)  )</li>
+				<li>dont <?= array_sum($nbLigneComment)?> lignes de commentaire (soit <?php echo round(array_sum($nbLigneComment) / array_sum($nbLigneCode) * 100, 0) ;?>%).</li>
+			</ul>
+		</div>
+		<div class="col-sm-6">
+			<div id="donutchart" style="width: 100%; height: 300px;"></div>
+		</div>
+	</div> 
 
 
 
@@ -110,7 +139,7 @@ function commentaire($elem){
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.1.0</h2>
-<li>2020-05-15 <b>&bull;</b> Suppresion de la table utilisateurs_group et utilisation du système d'authentification Yii2.</li>
+<li>2020-05-15 <b>&bull;</b> Suppression de la table utilisateurs_group et utilisation du système d'authentification Yii2.</li>
 <li>2020-05-15 <b>&bull;</b> Correction des URLs pour les liens sur la page d'accueil et dans les formulaires de recherche.</li>
 <li>2020-05-13 <b>&bull;</b> Possibilité de visualiser les données stockées dans les tables des mesures.</li>
 <li>2020-05-13 <b>&bull;</b> Calcul du nombre de ligne développées dans le framework Yii</li>

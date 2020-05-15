@@ -33,7 +33,7 @@ $identity = Yii::$app->user->identity;	// null si non authentifié
 			['Task', 'Nombre'],
 			['Capteurs',	<?= count($capteurs);?>],
 			['Grandeurs',	<?= count($grandeurs);?>],
-			['Localisation de module',	<?= $l_INT_LocalisationModule;?>],
+			['Localisation',	<?= $l_INT_LocalisationModule;?>],
 			['Modules',		<?= count($modules);?>]
         ]);
 
