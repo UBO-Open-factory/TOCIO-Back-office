@@ -70,6 +70,7 @@ class SiteController extends Controller
      * Login action.
      *
      * @return Response|string
+     * @version 18 mai 2020	: APE	- Redirection sur la page d'accueil.
      */
     public function actionLogin() {
         if (!Yii::$app->user->isGuest) {
@@ -81,7 +82,8 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
         	
         	// Redirect after login
-            return $this->goBack();
+//             return $this->goBack();
+        	return $this->goHome();
         }
 
         $model->password = '';

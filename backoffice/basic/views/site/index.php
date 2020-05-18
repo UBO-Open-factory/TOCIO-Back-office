@@ -107,7 +107,7 @@ $identity = Yii::$app->user->identity;	// null si non authentifié
 						<div class="card-body">
 							<h1 class="card-text text-center"><?php echo $l_INT_NombreTableMesure; ?></h1>
 							<?php if( $identity != null){?>
-			                <a class="card-link" href=<?= Url::toRoute('/grandeur/index')?>>Voir les table de mesures &raquo;</a>
+			                <a class="card-link" href=<?= Url::toRoute('/grandeur/index')?>>Voir les tables de mesures &raquo;</a>
 			                <?php }?>
 						</div>
 					</div>
