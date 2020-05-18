@@ -14,10 +14,9 @@ use yii\web\AssetBundle;
 
 class ModuleAsset extends AssetBundle {
     public $basePath = '@webroot';
-    //     public $baseUrl = '@web';
     public $baseUrl = '@urlbehindproxy';
     public $css = [
-        'assets/module/module.css',
+        'assets/module/module.scss',
     ];
     public $js = [
         'assets/config.js',
@@ -26,5 +25,4 @@ class ModuleAsset extends AssetBundle {
     public $depends = [
     		'\yii\web\JqueryAsset'
     ];
-
 }

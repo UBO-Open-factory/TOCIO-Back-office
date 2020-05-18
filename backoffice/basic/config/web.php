@@ -23,7 +23,13 @@ $config = [
 				// On rajoute un timestamp pour que cette ressource ne soit pas mise en cache
 				'assetManager' => [ 
 						'baseUrl' => "@urlbehindproxy/assets/",
-						'appendTimestamp' => true
+						'appendTimestamp' => true,
+						'converter' => [
+								'class' => 'yii\web\AssetConverter',
+								'commands' => [
+										'scss' => ['css', 'sass {from} {to} --sourcemap --style=compressed'],
+								],
+						],
 				],
 				// Gestion des authentifications par groupe d'accès.
 				'authManager' => [
