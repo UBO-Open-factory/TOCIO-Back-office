@@ -13,10 +13,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Capteurs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 
-// Utilisation des ressources pour les capteur (JS + CSS)
+// Utilisation des ressources pour les capteurs (JS + CSS)
 CapteurAsset::register($this);
-
-Url::remember();
 ?>
 <div class="capteur-update">
 

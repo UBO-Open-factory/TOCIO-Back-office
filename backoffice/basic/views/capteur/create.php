@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 // Utilisation des ressources pour les capteur (JS + CSS)
 CapteurAsset::register($this);
 
-Url::remember();
 ?>
 <div class="capteur-create">
 

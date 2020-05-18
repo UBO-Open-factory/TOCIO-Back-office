@@ -1,17 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\widgets\Pjax;
 use app\components\messageAlerte;
 use app\components\modulesWidget;
-use yii\data\ActiveDataProvider;
-use yii\helpers\ArrayHelper;
 use app\assets\ModuleAsset;
 use app\components\capteursWidget;
-use app\models\Capteur;
 use yii\data\SqlDataProvider;
 use yii\jui\Draggable;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ModuleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -22,6 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
 // Utilisation des ressources pour les modules (JS + CSS)
 ModuleAsset::register($this);
 
+// Enregistrement de l'URL courante pour les retours
+Url::remember();
+
 ?>
 
 <div class="module-index">
@@ -29,8 +28,6 @@ ModuleAsset::register($this);
     <h1><?= Html::encode($this->title) ?></h1>
 	<p>Un module est un ensemble de capteurs</p>
 
-
-    <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php
@@ -89,7 +86,4 @@ ModuleAsset::register($this);
     		</div>
     	</div>
     </div>
-	
-
-    <?php Pjax::end(); ?>
 </div>

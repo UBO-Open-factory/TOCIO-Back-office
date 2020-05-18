@@ -7,12 +7,16 @@ use app\components\messageAlerte;
 use yii\helpers\ArrayHelper;
 use app\models\Position;
 use app\components\capteursWidget;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\CapteurSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Capteurs';
 $this->params['breadcrumbs'][] = $this->title;
+
+// Enregistrement de l'URL courante pour les retours
+Url::remember();
 ?>
 <div class="capteur-index">
 

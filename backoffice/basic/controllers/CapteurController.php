@@ -79,8 +79,8 @@ class CapteurController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
-     * 	@version 23 avr. 2020	: APE	- Création.
-     * 	@version 11 mai 2020	: APE	- Add catch block around findModel function
+     * @version 23 avr. 2020: APE	- Création.
+     * @version 11 mai 2020	: APE	- Add catch block around findModel function
      */
     public function actionAjaxupdate() {
     	$request 	= Yii::$app->request;
@@ -111,13 +111,13 @@ class CapteurController extends Controller
     	}
     	
     	// If we are here that mean something goes wrong, so we dump and return error.
-    	return ["success" => "** Oupsss, il y a eu un problème à la mise à jour du model ".$model::className()."\n", "errors" => json_encode($model->errors)];
+    	return ["success" => "** Oupsss, il y a eu un problème à la mise à jour du Capteur ".$model::className()."\n", "errors" => json_encode($model->errors)];
     }
     // _____________________________________________________________________________________________
     /**
      * Creates a new Capteur model with Ajax request
      * @return mixed
-     * @version 23 avr. 2020	: APE	- Création.
+     * @version 23 avr. 2020: APE	- Création.
      */
     public function actionAjaxcreate() {
     	$request = Yii::$app->request;
@@ -143,6 +143,7 @@ class CapteurController extends Controller
     			return ["success" 	=> "ok",
     					"lastID" 	=> $model->id,
     					];
+    			
     		} else {
     			var_dump($model->errors);
     			return ["success" => "** Oupsss, il y a eu un problème à la création du model ".$model::className()."\n", "errors" => json_encode($model->errors)];
@@ -155,7 +156,7 @@ class CapteurController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      * @version 16 avr. 2020	: APE	- Redirection sur la liste des Capteurs
-     * 	@version 25 avr. 2020	: APE	- Redirection sur l'Url précédente ( doit être initialisée avec Url::remember() )
+     * @version 25 avr. 2020	: APE	- Redirection sur l'Url précédente ( doit être initialisée avec Url::remember() )
      */
     public function actionCreate() {
         $model 		= new Capteur();
