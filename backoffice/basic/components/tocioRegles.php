@@ -29,8 +29,8 @@ class tocioRegles extends Widget {
 										Ce Back Office (BO) permet d'administrer cette flotte de Modules et fourni une API vers la base de stockage des données.",
 				"capteurdefinition" => "<p>Un <i>Capteur</i> est un élément éléctronique permettant de faire des <i>Mesures</i>.</p>
 										<p>Il doit être défini avec un <b>nom</b> en toutes lettres et une <b>liste</b> de <i>Grandeurs</i>.<br/>
-											Une <i>Grandeur</i> est la caractéristique d'une Mesure.<br/>
-											La liste doit contenir au moins un élément.
+											Une <i>Grandeur</i> est la caractéristique d'une <i>Mesure</i>.<br/>
+											La liste doit contenir au moins un élément, sinon le <i>Capteur</i> ne pourra pas stocker de <i>Mesures</i>.
 										</p>",
 				"encodageformatdefinition" => "Le formattage des valeurs mesurées est fait selon la règle <b>chiffre_avant_la_virgule,chiffre_apres_la_virgule</b>.</br> Par exemple pour 
 										une température de 12.5°C encodée selon le schéma -3.2, il faut écrire +01250, pour -1.02°C il faut écrire -00102",
