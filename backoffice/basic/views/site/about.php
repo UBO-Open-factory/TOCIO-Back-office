@@ -9,6 +9,7 @@ use app\components\tocioRegles;
 $this->title = 'About';
 $this->params['breadcrumbs'][] = $this->title;
 
+
 // LISTE DE RÉPERTOIRES CONTENANT LE CODE ÉCRIT À LA MAIN-------------------------------------------
 $l_TAB_Directory 	= ['assets', 'components', 'controllers', 'mail', 'models', 'views', 'migrations' ];
 $nbLigneCode 		= [];
@@ -130,14 +131,29 @@ function commentaire($elem){
 
 
     <!-- ******************************************************************************************* -->
+    <h1>Rêgles diverses</h1>
+    <p>Afin d'assurer le bon fonctionnement du BackOffice de de <i><?php echo Yii::$app->name;?></i> certainnes rêgles ont été mise en place. Les voici :</p>
+    <div class="row">
+    	<div class="col-12">
+    	<?php echo tocioRegles::widget(['regle' => 'all']);?>
+    	</div>
+    </div>
+    
+    
+    <!-- ******************************************************************************************* -->
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.1..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
+		git log v1.1.1..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.1.1</h2>
+	En cours....
+<li>2020-05-18 <b>&bull;</b> Correction URL pour la redirection après login successful</li>
+
+
 	<h2>V 1.1.0</h2>
 <li>2020-05-15 <b>&bull;</b> Suppression de la table utilisateurs_group et utilisation du système d'authentification Yii2.</li>
 <li>2020-05-15 <b>&bull;</b> Correction des URLs pour les liens sur la page d'accueil et dans les formulaires de recherche.</li>
