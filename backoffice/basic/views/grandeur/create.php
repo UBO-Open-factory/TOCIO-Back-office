@@ -27,4 +27,3 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
-<?php echo messageAlerte::widget(['type' => "todo", "message" => "Afficher un message si la Grandeur sasie existe ET qu'elle a un type différent."]);?>

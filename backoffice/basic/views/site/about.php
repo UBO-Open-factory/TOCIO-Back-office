@@ -151,6 +151,11 @@ function commentaire($elem){
 	<h1>Modifications</h1>
 	<h2>V 1.1.1</h2>
 	En cours....
+<li>2020-06-17 <b>&bull;</b> Activation / désactivation d'un module sans passer par l'affichage de son détail</li>
+<li>2020-06-17 <b>&bull;</b> Modification du formattage des Grandeurs et renforcement du contrôle de saisie lors de la création d'une Granndeur</li>
+<li>2020-05-18 <b>&bull;</b> Utilisation de SASS pour la copilation des SCSS.</li>
+<li>2020-05-18 <b>&bull;</b> Eclaircissement de rêgles TOCIO.</li>
+<li>2020-05-18 <b>&bull;</b> Affichage de la liste des rêgles de TOCIO.</li>
 <li>2020-05-18 <b>&bull;</b> Correction URL pour la redirection après login successful</li>
 
 
@@ -233,7 +238,7 @@ function commentaire($elem){
 <li>2020-03-30 <b>&bull;</b> Ajout des Mesures</li>
 <li>2020-03-30 <b>&bull;</b> Nettoyage fichiers</li>
 <li>2020-03-30 <b>&bull;</b> Update APItocio.yaml</li>
-<li>2020-03-30 <b>&bull;</b> COnfiguraiton de l'API</li>
+<li>2020-03-30 <b>&bull;</b> Configuration de l'API</li>
 <li>2020-03-30 <b>&bull;</b> Nettoyage fichiers innutiles</li>
 <li>2020-03-30 <b>&bull;</b> Changement architecture</li>
 <li>2020-03-30 <b>&bull;</b> Back up</li>
