@@ -20,13 +20,16 @@ use yii\helpers\Url;
 	    	<?= $form->field($model, 'formatCapteur')->textInput(['maxlength' => true]) ?>
 	    </div>
 		<div class="col-sm-4">
-			<?= /* liste déroulante pour les types de valeurs*/
-				$form->field($model, 'type')->dropDownList(["float(5,3)" => "Float",
+			<?php /* liste déroulante pour les types de valeurs*/
+				echo $form->field($model, 'type')->dropDownList([
 		    		"int(10)" => "Integer",
+					"float(5,3)" => "Float",
 		    		"real" => "Réel",
 		    		"text" => "Text",
 		    		"varchar(50)" => "Varchar",
-		    ]) ?>
+		    ]); 
+// 		    echo $form->field($model, 'type')->hiddenInput(['value'=> "Integer"])->label(false);
+				?>
 		</div>
 		<div class="col-sm-12 ">
 		        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-primary pull-right']) ?>
