@@ -33,10 +33,11 @@ class Grandeur extends \yii\db\ActiveRecord
      */
     public function rules() {
         return [
-            [['nature', 'formatCapteur', 'type'], 'required'],
+            [['nature', 'formatCapteur'], 'required'],
             [['nature', 'tablename'], 'string', 'max' => 50],
-            [['formatCapteur'], 'string', 'max' => 10],
+            [['formatCapteur'], 'number', 'max' => 10],
             [['type'], 'string', 'max' => 15],
+//             [['type'], 'default', 'value' => 'Integer'],
         	[['nature'], 'trim'],	// Supprimer les espaces avant et après la saisie.
         	[['nature'], 'unique'],
         ];

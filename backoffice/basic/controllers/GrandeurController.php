@@ -136,14 +136,14 @@ class GrandeurController extends Controller{
      * Creates a new Grandeur model.
      * If creation is successful, the browser will be redirected to the 'index' page.
      * @return mixed
+     * 	@version 17 juin 2020	: APE	- Suppression du formattage de la saisie dans le format (plus
+     * 										de rempalcement des points par des virgules).
      */
     public function actionCreate() {
         $model = new Grandeur();
 
         // SI LA SAISIE EST VALIDE
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-        	// NETTOYAGE DU FORMATTAGE SAISIE
-        	$this->_FormattageFormatCapteur($model);
         	
         	
         	// FORMATTAGE DE LA NATURE (premiere caractère en majuscule)
@@ -363,16 +363,7 @@ class GrandeurController extends Controller{
     							->queryScalar();
     }
     
-    
-    // ---------------------------------------------------------------------------------------------
-    /**
-     * Vérifie le formattage du format de la mesure d'une Grandeur.
-     * @param unknown $model
-     */
-    private function _FormattageFormatCapteur($model){
-    	$model->formatCapteur = str_replace(".", ",", $model->formatCapteur);
-    }
-    
+
     
     
     // ---------------------------------------------------------------------------------------------

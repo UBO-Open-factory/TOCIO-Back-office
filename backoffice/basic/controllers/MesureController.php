@@ -235,9 +235,10 @@ class MesureController extends ActiveController {
 	//==============================================================================================
 	/**
 	 * Enregistre en base une mesure envoyée par un capteur.
-	 * @param unknown $moduleID
-	 * @param unknown $mesures
-	 * @return unknown
+	 * @param  $moduleID l'ID du module pour lequel enregistrer la mesure.
+	 * @param $mesures la mesure brute à enregistrer.
+	 * @return vide ou message au format JSON
+	 * @version 17 juin 2020	: APE	- Rempalcement des pointes dans la mesure par des virgules.
 	 */
 	private function _storeMesure($moduleID, $mesures){
 		// CONSTRUCTION DE LA REQUETE POUR RÉCUPERER LE NOM DES TABLES OU STOCKER LES DATA A PARTIR DE L'ID DU MODULE 
@@ -267,6 +268,10 @@ class MesureController extends ActiveController {
 		// CALCUL DU NOMBRE DE CARACTÈRES ATTENDU DANS LA TRAME ------------------------------------
 		$l_INT_LongeurAttendu = 0;
 		foreach( $l_TAB_Results as $l_INT_Key => $l_TAB_Format){
+			// Remplacement des points par des virgules
+			$l_TAB_Format['formatCapteur'] = str_replace(".", ",", $l_TAB_Format['formatCapteur']);
+			
+			// Récupération de ce qui est avant et apres le séparateur ( la virgule) 
 			list($l_STR_Avant, $l_INT_Apres) = explode(",", $l_TAB_Format['formatCapteur']);
 			
 			// On ajoute le nombre de caracteres apres la virgule
@@ -371,10 +376,11 @@ class MesureController extends ActiveController {
 	 *
 	 * @param string $moduleID = Identifiant unique d'un module
 	 * @return true si le résultat est valide, tableau json sinon.
+	 * 	@version 18 mai 2020	: APE	- L'ID réseau n'est pas senseible à la casse.
 	 */
 	private function _moduleIdIsValid($moduleID){
 		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
-		$module = Module::findOne($moduleID);
+		$module = Module::findOne(strtoupper($moduleID));
 		if( is_null($module)) {
 			
 			// TRACE DANS LA BASE QUE LE MODULE N'EXISTE PAS
