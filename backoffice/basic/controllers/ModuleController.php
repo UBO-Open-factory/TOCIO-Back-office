@@ -75,16 +75,25 @@ class ModuleController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      * 
-     * 	@version 16 avr. 2020	: APE	- Redirection sur la page des modules en ouvrant le nouveau module.
+     * @version 16 avr. 2020	: APE	- Redirection sur la page des modules en ouvrant le nouveau module.
+     * @version 18 mai 2020	: APE	- L'identifiant réseau est passé en majuscules.
      */
     public function actionCreate() {
         $model = new Module();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//             return $this->redirect(['view', 'id' => $model->identifiantReseau]);
-        	return $this->redirect(['index', 'idModule' => $model->identifiantReseau]);
+        if ($model->load(Yii::$app->request->post()) ) {
+        	
+	        // PASSAGE EN DE L'IDENTIFIATN RÉSEAU
+	        $model->identifiantReseau = strtoupper($model->identifiantReseau);
+	        
+	        // SAUVEGARDE DU MODULE
+	        if ($model->save() ) {
+	        	
+	        	// REDIRECTION SUR LA PAGE DE LA LISTE DES MODULES
+        		return $this->redirect(['index', 'idModule' => $model->identifiantReseau]);
+        	}
         }
 
+        // REDIRECTION SUR LA PAGE DE CRÉATION D'UN MODULE
         return $this->render('create', [
             'model' => $model,
         ]);

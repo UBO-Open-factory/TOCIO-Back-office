@@ -67,6 +67,7 @@ Url::remember();
     <div class="row">
     	<div class="col-sm-9">
 			<?php
+				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'btn btn-success ']);
 				echo Draggable::widget();
 				echo modulesWidget::widget(['dataProvider' => $dataProvider,]);
 				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'btn btn-success pull-right']);

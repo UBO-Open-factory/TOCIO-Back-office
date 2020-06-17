@@ -239,11 +239,13 @@ class modulesWidget extends Widget
 			
 			
 			// Construction du contenu de la boite sur 3 colonnes.
+			$l_STR_ModuleActivationStatus = $l_OBJ_Module->actif == "0" ? "checked": "";
 			$contents = [];
 			$contents[] = "<div class='row'>";
 			$contents[] = "<div class='col-md-3'>";
 			$contents[] =	 Html::tag("h4", $l_STR_Nom." ". implode(" ", $l_TAB_BtnEditionModule),["class" => "card-title"]);
 			$contents[] = 	($l_OBJ_Module->actif == 0) ? Html::tag("div", "Module désactivé", ["class" => "alert alert-dismissible alert-warning text-center"]) : "";
+			$contents[] = 	$this->_createSwitchButton(['state' => $l_STR_ModuleActivationStatus, 'label' => "Activé", 'id' => $l_OBJ_Module['identifiantReseau']]);
 			$contents[] = 	Html::tag("p", $this->_legende($l_STR_Description, "Description"));
 			$contents[] =	Html::tag("p", $this->_legende($l_STR_IdentifiantReseau, "Identifiant réseau"));
 			$contents[] = 	Html::tag("p", $this->_legende($l_STR_localisationModule, "Localisation"));
@@ -541,6 +543,35 @@ class modulesWidget extends Widget
 		fwrite($l_HDL_File, implode("\n", $l_TAB_Content));
 		
 		fclose( $l_HDL_File );
+	}
+
+	// _____________________________________________________________________________________________
+	/**
+	 * Give HTML code for a switch button on the label $params['label'] with id $param['id'] and 
+	 * state (checked) $param['state']
+	 * 
+	 * $param['id'] = the module id
+	 * $param['label'] = the string just behind the switch button
+	 * $param['state'] = "checkeed" or null
+	 *
+	 * @param array $params id, label, state
+	 * @return string with HTML code ready to display.
+	 */
+	private function _createSwitchButton( $params) {
+		$l_STR_Id = isset( $params['id'] ) ? $params['id'] : "name_" . date( "Ymd_His", time() );
+		$l_STR_Label = isset( $params['label'] ) ? $params['label'] : "";
+		$l_STR_State = isset( $params['state'] ) ? $params['state'] : "";
+
+		return '<div class="form-group">
+					<div class="custom-control custom-switch">
+						<input type="checkbox" 
+							class="warning custom-control-input switchToogle" 
+							data-url="/module/updateajax"
+							data-moduleid="'.$l_STR_Id.'" 
+							id="btt_' . $l_STR_Id.'" '.$l_STR_State.'>
+						<label class="custom-control-label" for="btt_'.$l_STR_Id.'">'.$l_STR_Label.'</label>
+					</div>
+				</div>';
 	}
 }
 ?>

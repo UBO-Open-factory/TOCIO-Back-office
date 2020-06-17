@@ -1,5 +1,50 @@
 // _________________________________________________________________________________________________
 /**
+ * Ajout de l'AJAX sur le radio bouton de l'activation des modules. 
+ */
+$(document).on('click', '.switchToogle', function() {
+	var state 		= $(this).is(':checked');
+	var ModuleID 	= $(this).data("moduleid");
+	
+	// Si l'état courant est coché quand on clique dessus c'est qu'on veut le passer à décoché
+	if (state == true) {
+		// ... la valeur a stocker en base est donc 0
+		state = 0;
+	} else {
+		state = 1;
+	}
+	
+	// Envoie la requete AJAX
+	$.ajax({
+		type : "POST",
+		url : $(this).data('url'),
+		cache : false,
+		dataType : "text",
+		data : {"id": ModuleID, 
+				"attribute": "actif",
+				"value": state},
+		success : function(results) {
+			 var data = JSON.parse( $.trim(results));
+			 var success = data['success'];
+			 
+			 // Aucune erreur lors de l'ajout
+			 if( success == "ok"){
+				 
+			 } else {
+				 alert( 'Modificaiton du status d\'activité du Module "' + ModuleID +"\n"+success+"\n"+error );
+			 }
+			 
+		}
+	}).done(function() {
+
+		 // Redirection sur la page renvoyée par la requète AJAX
+		 window.location.replace(g_host + g_urlbehindproxy + "/module/index?idModule="+ModuleID);
+	});
+});
+
+
+// _________________________________________________________________________________________________
+/**
  * Fixe la div de la liste des capteurs sur le haut de l'écran lorsqeu l'on scroll.
  * @see https://www.w3schools.com/howto/howto_js_sticky_header.asp
  */
