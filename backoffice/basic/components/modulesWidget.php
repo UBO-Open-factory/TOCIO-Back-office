@@ -566,7 +566,6 @@ class modulesWidget extends Widget
 					<div class="custom-control custom-switch">
 						<input type="checkbox" 
 							class="warning custom-control-input switchToogle" 
-							data-url="/module/updateajax"
 							data-moduleid="'.$l_STR_Id.'" 
 							id="btt_' . $l_STR_Id.'" '.$l_STR_State.'>
 						<label class="custom-control-label" for="btt_'.$l_STR_Id.'">'.$l_STR_Label.'</label>
