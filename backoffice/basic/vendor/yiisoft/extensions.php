@@ -66,13 +66,22 @@ return array (
       '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base/src',
     ),
   ),
-  'kartik-v/yii2-widget-alert' => 
+  'kartik-v/yii2-widget-growl' => 
   array (
-    'name' => 'kartik-v/yii2-widget-alert',
+    'name' => 'kartik-v/yii2-widget-growl',
     'version' => '1.1.1.0',
     'alias' => 
     array (
-      '@kartik/alert' => $vendorDir . '/kartik-v/yii2-widget-alert',
+      '@kartik/growl' => $vendorDir . '/kartik-v/yii2-widget-growl',
+    ),
+  ),
+  'yii2mod/yii2-sweet-alert' => 
+  array (
+    'name' => 'yii2mod/yii2-sweet-alert',
+    'version' => '1.3.0.0',
+    'alias' => 
+    array (
+      '@yii2mod/alert' => $vendorDir . '/yii2mod/yii2-sweet-alert',
     ),
   ),
 );
