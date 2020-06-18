@@ -1,6 +1,6 @@
-.project
-.settings/
-.buildpath/
+*.project
+*.settings/
+*.buildpath/
 vendor/
 */web/assets/181d1de5/
 */web/assets/310ba1d2/
@@ -8,3 +8,5 @@ vendor/
 */web/assets/5e83e817/
 */web/assets/6dbbc067/
 */web/assets/bedfe4d0/
+*.sass-cache/
+*package-lock.json
