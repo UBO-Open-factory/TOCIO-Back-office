@@ -17,7 +17,7 @@ $(document).on('click', '.switchToogle', function() {
 	// Envoie la requete AJAX
 	$.ajax({
 		type : "POST",
-		url : g_urlbehindproxy +"/module/updateajax",
+		url : "/module/updateajax",
 		cache : false,
 		dataType : "text",
 		data : {"id": ModuleID, 
@@ -31,14 +31,14 @@ $(document).on('click', '.switchToogle', function() {
 			 if( success == "ok"){
 				 
 			 } else {
-				 alert( 'Modificaiton du status d\'activité du Module "' + ModuleID +"\n"+success+"\n"+error );
+				 alert( 'Modification du status d\'activité du Module "' + ModuleID +"\n"+success+"\n"+error );
 			 }
 			 
 		}
 	}).done(function() {
 
 		 // Redirection sur la page renvoyée par la requète AJAX
-		 window.location.replace( g_urlbehindproxy + "/module/index?idModule="+ModuleID);
+		 window.location.replace( g_host + "/module/index?idModule="+ModuleID);
 	});
 });
 
