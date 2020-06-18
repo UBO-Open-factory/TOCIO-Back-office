@@ -9,6 +9,12 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\base\Security;
+use yii\web\Session;
+use function Opis\Closure\serialize;
+use yii\base\Response;
+use yii\widgets\ActiveForm;
+use function Opis\Closure\unserialize;
 
 /**
  * ModuleController implements the CRUD actions for Module model.
@@ -70,35 +76,71 @@ class ModuleController extends Controller
         ]);
     }
 
+    
+    //______________________________________________________________________________________________
     /**
      * Creates a new Module model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      * 
-     * @version 16 avr. 2020	: APE	- Redirection sur la page des modules en ouvrant le nouveau module.
+     * @version 16 avr. 2020: APE	- Redirection sur la page des modules en ouvrant le nouveau module.
      * @version 18 mai 2020	: APE	- L'identifiant réseau est passé en majuscules.
+     * @version 18 juin 2020	: APE	- Sauvegarde de la saisie en Session.
      */
     public function actionCreate() {
-        $model = new Module();
-        if ($model->load(Yii::$app->request->post()) ) {
+        $session = Yii::$app->session;
+        
+        // Creation d'un module vierge
+       	$model = new Module();
+        
+        
+       	// SI ON A FAIT UNE REQUÈTE AJAX  (ENVOYÉE PAR LA VALIDAITON DU FORMULAIRE)
+       	if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+       		// SAUVEGARDE DE LA SAISIE EN SESSION
+       		$session->set('module', serialize($model));
+       		
+
+       		// AFFICHAGE DES EVENTUIEL ERREUR DE SAISIE
+       		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+       		return ActiveForm::validate($model);
+       	} 
+       		
+       		
+        // SI ON A DES DONNÉES PROVENANT DU FORMULAIRE
+       	if ($model->load(Yii::$app->request->post()) ) {
+
         	
-	        // PASSAGE EN DE L'IDENTIFIATN RÉSEAU
+        	// PASSAGE DE L'IDENTIFIANT RÉSEAU EN MAJUSCULE
 	        $model->identifiantReseau = strtoupper($model->identifiantReseau);
+	        
 	        
 	        // SAUVEGARDE DU MODULE
 	        if ($model->save() ) {
+	        	// SUPPRESSION DE LA SESSION
+	        	$session->remove('module');
+	        	$session->close();
 	        	
 	        	// REDIRECTION SUR LA PAGE DE LA LISTE DES MODULES
         		return $this->redirect(['index', 'idModule' => $model->identifiantReseau]);
-        	}
+	        }
         }
 
+
+        // REMPLISSAGE DES CHAMPS DE SAISIE AVEC LE CONTENU DE LA SESSION
+        if( $session->has('module') ) {
+        	$model = unserialize( $session->get('module') );
+    	}
         // REDIRECTION SUR LA PAGE DE CRÉATION D'UN MODULE
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+    
 
+    
+    
+    
+    //______________________________________________________________________________________________
     /**
      * Updates an existing Module model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -123,6 +165,7 @@ class ModuleController extends Controller
     }
     
     
+    //______________________________________________________________________________________________
     /**
      * Updates an existing Module model with an AJAX requet.
      * @param string $id

@@ -33,7 +33,7 @@ class Module extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['identifiantReseau', 'nom', 'description', 'idLocalisationModule', 'actif'], 'required'],
+            [['identifiantReseau', 'nom', 'description', 'actif'], 'required'],
             [['description'], 'string'],
             [['idLocalisationModule', 'actif'], 'integer'],
             [['identifiantReseau'], 'string', 'max' => 50],
