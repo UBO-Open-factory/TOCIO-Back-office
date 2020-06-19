@@ -17,7 +17,7 @@ $(document).on('click', '.switchToogle', function() {
 	// Envoie la requete AJAX
 	$.ajax({
 		type : "POST",
-		url : "/module/updateajax",
+		url : g_host+ "/module/updateajax",
 		cache : false,
 		dataType : "text",
 		data : {"id": ModuleID, 
