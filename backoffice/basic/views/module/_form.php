@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use app\models\Localisationmodule;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Module */
@@ -30,9 +31,9 @@ use yii\widgets\Pjax;
 		<div class="col-sm-6">
 			<div class="row">
 				<div class="col-md-7">
-				    <?php	/* Liste déroulante des Localisations */ 
+				    <?php	/* Liste déroulante des Localisations */
 				    echo $form->field($model, 'idLocalisationModule')->dropDownList(
-				    	Localisationmodule::find()->select(['description','id'])->indexBy('id')->column()
+				    Localisationmodule::find()->select(['CONCAT(description," (coord. ", coordX, ",", coordY, ",", coordZ, ")")', 'id'])->indexBy('id')->column()
 				    	);
 				   ?>
 				</div>
