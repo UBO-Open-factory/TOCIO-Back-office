@@ -144,13 +144,25 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.1.1..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
+		git log v1.1.3..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
-	<h2>V 1.1.1</h2>
+	<h2>V 1.1.3</h2>
 	En cours....
+	
+	<h2>V 1.1.2</h2>
+<li>2020-06-19 <b>&bull;</b> Correction Bug 466 : Affichage des coordonnées de la Localisation dans la liste déroulante des Localisation lors de la saisie d'un Module</li>
+<li>2020-06-19 <b>&bull;</b> Changement des liens dans le pied de page (icone licence, dépot git)</li>
+<li>2020-06-18 <b>&bull;</b> Correction Bug 454 : Sauvegarde de la saisi lors de la création d'un Module pour pouvoir la restaurer si on change de page</li>
+<li>2020-06-18 <b>&bull;</b> Ajout d'un widget pour affichage des messages d'alerte envoyés par ->addFlash()</li>
+<li>2020-06-18 <b>&bull;</b> Mise à jour de Yii (version 2.0.35)</li>
+<li>2020-06-18 <b>&bull;</b> Correction Bug 463 : Modification de l'URL de redirection pour la requète AJAX de l'activation d'un Module</li>
+
+
+
+	<h2>V 1.1.1</h2>
 <li>2020-06-17 <b>&bull;</b> Activation / désactivation d'un module sans passer par l'affichage de son détail</li>
 <li>2020-06-17 <b>&bull;</b> Modification du formattage des Grandeurs et renforcement du contrôle de saisie lors de la création d'une Granndeur</li>
 <li>2020-05-18 <b>&bull;</b> Utilisation de SASS pour la copilation des SCSS.</li>
