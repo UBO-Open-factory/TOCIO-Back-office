@@ -12,7 +12,7 @@ $config = [
 				'log'
 		],
 		'timeZone' => 'Europe/Paris',
-		'version' => '1.1.1',
+		'version' => '1.1.3',
 		'aliases' => [ 
 				'@bower' => '@vendor/bower-asset',
 				'@npm' => '@vendor/npm-asset',
@@ -56,7 +56,7 @@ $config = [
 						]
 				],
 				'errorHandler' => [ 
-						'errorAction' => '@urlbehindproxy/site/error'
+						'errorAction' => '/site/error'
 				],
 				'mailer' => [ 
 						'class' => 'yii\swiftmailer\Mailer',
