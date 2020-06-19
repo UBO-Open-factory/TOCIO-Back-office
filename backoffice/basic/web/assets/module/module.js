@@ -227,7 +227,7 @@ $(document).ready(function() {
             	
             	// On Affiche un message comme quoi il faut recharger la page
             	var picto = '<i class="glyphicon glyphicon-warning-sign"></i>';
-            	$('.TramePayload').html('<span class="badge badge-danger">'+picto+' A mettre à jour</span>');
+            	$('.TramePayload').html('<span class="badge badge-danger">'+picto+' A mettre à jour (F5)</span>');
             });
         }
 	});

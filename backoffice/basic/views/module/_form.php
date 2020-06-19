@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Localisationmodule;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Module */
@@ -12,8 +13,10 @@ use yii\helpers\Url;
 
 <div class="module-form">
 
-    <?php $form = ActiveForm::begin(['action' => Url::base().Url::to(), ]); ?>
-
+    <?php $form = ActiveForm::begin(['action' => Url::base().Url::to(),
+    		'id' => "ModuleCreateForm",
+    		'enableAjaxValidation' => true, 
+    ]); ?>
 	<div class="row">
 		<div class="col-sm-6">
 		    <?= $form->field($model, 'nom')->textInput(['maxlength' => true]) ?>
@@ -56,5 +59,4 @@ use yii\helpers\Url;
         <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success pull-right']) ?>
     </div>
     <?php ActiveForm::end(); ?>
-
 </div>
