@@ -151,7 +151,7 @@ class modulesWidget extends Widget
 			
 				// Le nom officiel du capteur
 				$l_OBJ_Capteur				= Capteur::findOne($l_OBJ_ModuleCapteur->idCapteur0);
-				$l_STR_NomCapteur 			= $l_OBJ_Capteur->nom;
+				$l_STR_NomCapteur 			= $l_OBJ_ModuleCapteur->nomcapteur;
 				$l_TAB_CapteursDuModule[] 	= $l_OBJ_Capteur->nom;
 				
 				
