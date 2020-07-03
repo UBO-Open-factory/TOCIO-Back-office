@@ -12,7 +12,7 @@ $config = [
 				'log'
 		],
 		'timeZone' => 'Europe/Paris',
-		'version' => '1.1.3',
+		'version' => '1.1.4',
 		'aliases' => [ 
 				'@bower' => '@vendor/bower-asset',
 				'@npm' => '@vendor/npm-asset',
