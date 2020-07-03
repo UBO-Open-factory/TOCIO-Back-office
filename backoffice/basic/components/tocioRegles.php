@@ -32,8 +32,8 @@ class tocioRegles extends Widget {
 											Une <i>Grandeur</i> est la caractéristique d'une <i>Mesure</i>.<br/>
 											La liste doit contenir au moins un élément, sinon le <i>Capteur</i> ne pourra pas stocker de <i>Mesures</i>.
 										</p>",
-				"encodageformatdefinition" => "Le <b>formattage</b> des valeurs mesurées est fait selon la règle <b>[-]chiffreAvantLaVirgule.chiffreApresLaVirgule</b>. 
-										(Le signe - est facultatif et il n'est pas utile de mettre un signe +).</br> Par exemple : pour un Formattage de la forme -3.2, si on veut encoder 
+				"encodageformatdefinition" => "Le <b>Formattage</b> des valeurs mesurées est fait selon la règle <b>[-]chiffreAvantLaVirgule.chiffreApresLaVirgule</b>.<br/> 
+										Par exemple : pour un Formattage de la forme -3.2, si on veut encoder 
 										une température de 12.5°C, il faut écrire +01250, pour -1.02°C il faut écrire -00102",
 				"moduledefinition" =>	"Un <i>Module</i> est un ensemble de capteurs.",
 				"utilisateursgroupe" =>	"<p>un <i>Utilisateur</i> est une personne pouvant accéder au BackOffice de TOCIO (ce site).<br/>

@@ -238,9 +238,11 @@ class MesureController extends ActiveController {
 	 * @param  $moduleID l'ID du module pour lequel enregistrer la mesure.
 	 * @param $mesures la mesure brute à enregistrer.
 	 * @return vide ou message au format JSON
-	 * @version 17 juin 2020	: APE	- Rempalcement des pointes dans la mesure par des virgules.
+	 * @version 17 juin 2020	: APE	- Remplacement des points dans la mesure par des virgules.
+	 * 	@version 3 juil. 2020	: APE	- Remplacement des virgules dans le formattage de mesure par des points.
 	 */
 	private function _storeMesure($moduleID, $mesures){
+		$l_TAB_Retour = array();
 		// CONSTRUCTION DE LA REQUETE POUR RÉCUPERER LE NOM DES TABLES OU STOCKER LES DATA A PARTIR DE L'ID DU MODULE 
 		/*	Select m.nom, m.identifiantReseau, m.description, c.nom, g.nature, g.tablename, rmc.x, rmc.y, rmc.z
 			FROM module as m
@@ -268,11 +270,11 @@ class MesureController extends ActiveController {
 		// CALCUL DU NOMBRE DE CARACTÈRES ATTENDU DANS LA TRAME ------------------------------------
 		$l_INT_LongeurAttendu = 0;
 		foreach( $l_TAB_Results as $l_INT_Key => $l_TAB_Format){
-			// Remplacement des points par des virgules
-			$l_TAB_Format['formatCapteur'] = str_replace(".", ",", $l_TAB_Format['formatCapteur']);
+			// Remplacement des virgules par des points
+			$l_TAB_Format['formatCapteur'] = str_replace(",", ".", $l_TAB_Format['formatCapteur']);
 			
-			// Récupération de ce qui est avant et apres le séparateur ( la virgule) 
-			list($l_STR_Avant, $l_INT_Apres) = explode(",", $l_TAB_Format['formatCapteur']);
+			// Récupération de ce qui est avant et apres le séparateur (le point) 
+			list($l_STR_Avant, $l_INT_Apres) = explode(".", $l_TAB_Format['formatCapteur']);
 			
 			// On ajoute le nombre de caracteres apres la virgule
 			$l_INT_LongeurAttendu += $l_INT_Apres;

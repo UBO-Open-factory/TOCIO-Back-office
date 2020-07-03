@@ -154,16 +154,25 @@ class GrandeurController extends Controller{
         	$this->_ConstruitNomTable($model);
         	
         	
+        	// VERIFICAITON DU FORMAT SAISIE POUR LE CHAMP formatCapteur
+        	$model->formatCapteur = $this->_FormatageFormatCapteur($model->formatCapteur);
+        	
+        	
         	// SI LE NOM DE TABLE N'EST PAS UTILISÉ DANS LA BASE ...................................
         	if (! $this->_tableMesureExiste($model->tablename)) {
-        		// REQUETE DE CREATION DE LA TABLE
-        		$this->_createTableMesure($model);
 	        		
 	        	// SAUVEGARDE LA SAISIE
-	        	$model->save();
+        		if ($model->save()){
+	        		// CREATION DE LA TABLE
+	        		$this->_createTableMesure($model);
+	        		
+		        	// ON RETOURNE SUR LA LISTE
+		        	return $this->redirect(['index', 'id' => $model->id]);
+
+        		} else {
+// 	        		$model->addError("nature", "Problème.");
+        		}
 	        	
-	        	// ON RETOURNE SUR LA LISTE
-	        	return $this->redirect(['index', 'id' => $model->id]);
 	        		
 	        	
 	        	
@@ -390,5 +399,21 @@ class GrandeurController extends Controller{
      */
     private function _stripAccents($string){
     	return strtr($string,'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ', 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+    }
+    
+    
+    
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Permet de formatter la chaine saisie pour l'encodage du format. 
+     * @param string $string La chaine à formater.
+     * @return string : une chaine de caractères.
+     */
+    private function _FormatageFormatCapteur($string){
+    	// Si la chaine ne contient pas de point
+    	if( strpos($string, ".") === false ){
+    		$string .= ".0";
+    	}
+    	return $string;
     }
 }
