@@ -208,10 +208,12 @@ class capteursWidget extends Widget
 	 * Retourne un exemeple de formattage de grandeur en fonctoin du format fourni en paramètre.
 	 * @param string $format le format tel que défini dans le BDD pour la grandeur.
 	 * @return string
+	 * 	@version 3 juil. 2020	: APE	- Le formattage de la Grandeur est maintenant un point et 
+	 * 										non plus une virgule.
 	 */
 	private function _exempleFormatGrandeur($format){
-		// Extraction de la partie avant et apres la virgule
-		list($l_STR_Avant, $l_INT_Apres) = explode(",", $format);
+		// Extraction de la partie avant et apres le point
+		list($l_STR_Avant, $l_INT_Apres) = explode(".", $format);
 		$l_INT_Avant = abs($l_STR_Avant);	// On prend la valeur absolue de ce qui est avant la virgule.
 
 		
