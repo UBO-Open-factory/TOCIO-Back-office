@@ -144,11 +144,16 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.1.3..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
+		git log v1.1.4..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.1.4</h2>
+	... en cours
+	
+	
+	
 	<h2>V 1.1.3</h2>
 <li>2020-07-03 <b>&bull;</b> Le formattage d'une Grandeur n'accèpte plus que les points (au lieux des virgules). Si le formattage ne contient pas de point, on le rajoute.</li>
 <li>2020-07-03 <b>&bull;</b> Modification du fichier de description de l'API : Implémentation de la récupération d'un Capteur et de la liste des Capteurs</li>
@@ -163,8 +168,6 @@ function commentaire($elem){
 <li>2020-06-18 <b>&bull;</b> Mise à jour de Yii (version 2.0.35)</li>
 <li>2020-06-18 <b>&bull;</b> Correction Bug 463 : Modification de l'URL de redirection pour la requète AJAX de l'activation d'un Module</li>
 
-
-
 	<h2>V 1.1.1</h2>
 <li>2020-06-17 <b>&bull;</b> Activation / désactivation d'un module sans passer par l'affichage de son détail</li>
 <li>2020-06-17 <b>&bull;</b> Modification du formattage des Grandeurs et renforcement du contrôle de saisie lors de la création d'une Granndeur</li>
@@ -172,7 +175,6 @@ function commentaire($elem){
 <li>2020-05-18 <b>&bull;</b> Eclaircissement de rêgles TOCIO.</li>
 <li>2020-05-18 <b>&bull;</b> Affichage de la liste des rêgles de TOCIO.</li>
 <li>2020-05-18 <b>&bull;</b> Correction URL pour la redirection après login successful</li>
-
 
 	<h2>V 1.1.0</h2>
 <li>2020-05-15 <b>&bull;</b> Suppression de la table utilisateurs_group et utilisation du système d'authentification Yii2.</li>
