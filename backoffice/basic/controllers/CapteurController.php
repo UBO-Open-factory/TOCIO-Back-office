@@ -195,6 +195,8 @@ class CapteurController extends Controller
         ]);
     }
 
+    
+    // _____________________________________________________________________________________________
     /**
      * Deletes an existing Capteur model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -207,10 +209,60 @@ class CapteurController extends Controller
     {
         $this->findModel($id)->delete();
 
-//         return $this->redirect(['index']);
         return $this->redirect([Url::previous()]);
     }
+    
+    
+    
+    
+    // _____________________________________________________________________________________________
+    /**
+     * API RestFull
+     * Renvoie le model Capteur sous forme json 
+     * @param string $id : ID du capteur.
+     */
+    public function actionGetcapteur($id){
+    	$request 	= Yii::$app->request;
+    	// Le retour sera au format JSON
+    	Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    	
+    	
+    	// RECHERCHE DU MODEL DANS LA BASE ---------------------------------------------------------
+    	if ($request->get()) {
+    		$get	= $request->get();
+    		try {
+    			$model 	= $this->findModel($get['id']);
+    			
+    		} catch(Exception $e) {
+    			return ["success" => "** Oupsss, impossible de trouver le model ".$model::className()."\n", "errors" => json_encode($e->getMessage())];
+    		}
+    		return $model;
+    	}
+    }
+    
+    
+    
+    // _____________________________________________________________________________________________
+    /**
+     * API RestFull
+     * Renvoie la liste des Capteur sous forme json 
+     */
+    public function actionGetcapteurs(){
+    	// Le retour sera au format JSON
+    	Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
+    	
+    	// RECHERCHE DES MODELS DANS LA BASE -------------------------------------------------------
+    	$model 	= Capteur::find()
+				    	->orderBy(['id'=>SORT_DESC])
+			    		->all();
+		return $model;
+    }
+    
+    
+    
+    
+    // _____________________________________________________________________________________________
     /**
      * Finds the Capteur model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

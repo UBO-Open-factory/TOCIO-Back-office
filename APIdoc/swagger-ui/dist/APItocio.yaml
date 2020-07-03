@@ -24,39 +24,7 @@ paths:
         - Mesures
       summary: Renvoie les mesures faites par un module
 
-  /grandeur/getgrandeur:
-    get:
-      description: Renvoie une Grandeur dont l'ID est passé en paramètre.
-      parameters:
-        - name: id
-          in: query
-          schema:
-            type: string
-          example: '2'
-      responses:
-        '200':
-          description: Auto generated using Swagger Inspector
-          content:
-            application/json; charset=UTF-8:
-              schema:
-                type: string
-              examples: {}
-      tags:
-        - Grandeurs
-      summary: Renvoie une Grandeur
-  /grandeur/getgrandeurs:
-    get:
-      responses:
-        '200':
-          description: Auto generated using Swagger Inspector
-          content:
-            application/json; charset=UTF-8:
-              schema:
-                type: string
-              examples: {}
-      tags:
-        - Grandeurs
-      summary: Renvoie toutes les Grandeurs
+  
   /mesure/add:
     get:
       description: |-
@@ -84,6 +52,22 @@ paths:
       tags:
         - Mesures
       summary: "Enregistre les mesures d'un module. "
+    
+  /mesure/addlora:
+    get:
+      description: |-
+         La payload doit être au format JSON comme défini dans le BackOffice de LORA. Cette URL est celle qu'il faut configurer dans le back-end de Lora.
+      responses:
+        '200':
+          description: Insert OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: string
+              examples: {}
+      tags:
+        - Mesures
+      summary: "Enregistre les mesures d'un module provenant du réseau LORA."
   /capteur/getcapteur:
     get:
       description: |-

@@ -91,7 +91,7 @@ class MesureController extends ActiveController {
 	//==============================================================================================
 	/**
 	 * Permet d'ajouter une trame provenant de Lora dans la base.
-	 * Exemple de parametres recus:
+	 * Exemple de trame recus:
 	 * {
 		   "metadata": {
 		      "connector": "lora",
