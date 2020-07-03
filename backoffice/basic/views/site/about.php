@@ -150,7 +150,10 @@ function commentaire($elem){
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.1.3</h2>
-	En cours....
+<li>2020-07-03 <b>&bull;</b> Le formattage d'une Grandeur n'accèpte plus que les points (au lieux des virgules). Si le formattage ne contient pas de point, on le rajoute.</li>
+<li>2020-07-03 <b>&bull;</b> Modification du fichier de description de l'API : Implémentation de la récupération d'un Capteur et de la liste des Capteurs</li>
+<li>2020-06-22 <b>&bull;</b> Affichage du nom custom du Capteur dans les information de la Payload</li>
+<li>2020-06-19 <b>&bull;</b> Modificaiton de l'URL de la requète AJAX de mise à jour de l'activation d'un Module</li>
 	
 	<h2>V 1.1.2</h2>
 <li>2020-06-19 <b>&bull;</b> Correction Bug 466 : Affichage des coordonnées de la Localisation dans la liste déroulante des Localisation lors de la saisie d'un Module</li>
