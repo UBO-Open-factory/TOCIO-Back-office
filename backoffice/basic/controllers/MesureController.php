@@ -7,23 +7,25 @@ use app\models\Module;
 use yii\db\Query;
 use yii\filters\VerbFilter;
 use function GuzzleHttp\Psr7\str;
+use Elasticsearch\ClientBuilder;
+
 
 
 /**
  * Controlleur permettant d'ajouter une mesure dans la base.
- * 
- * @file MesureController.php 
+ *
+ * @file MesureController.php
  * @author Alex
  */
 class MesureController extends ActiveController {
 	public $modelClass = 'app\models\mesure';
 	
-
+	
 	
 	//==============================================================================================
 	/**
 	 * Renvoie les 100 dernières mesures d'un modules.
-	 * 
+	 *
 	 * @return array au format JSON.
 	 */
 	public function actionGet(){
@@ -42,26 +44,26 @@ class MesureController extends ActiveController {
 		
 		// RÉCUPÉRATION DE LA LISTE DES TABLES UTILISÉES PAR CE MODULE -----------------------------
 		/*
-			SELECT DISTINCT g.tablename
-			FROM module as m
-			INNER JOIN rel_modulecapteur as mc ON mc.idModule = m.identifiantReseau
-			INNER JOIN capteur as c ON c.id = mc.idCapteur
-			INNER JOIN rel_capteurgrandeur as cg ON cg.idCapteur = c.id
-			INNER JOIN grandeur as g ON g.id = cg.idGrandeur
-			WHERE m.identifiantReseau = "AA01"
+		 SELECT DISTINCT g.tablename
+		 FROM module as m
+		 INNER JOIN rel_modulecapteur as mc ON mc.idModule = m.identifiantReseau
+		 INNER JOIN capteur as c ON c.id = mc.idCapteur
+		 INNER JOIN rel_capteurgrandeur as cg ON cg.idCapteur = c.id
+		 INNER JOIN grandeur as g ON g.id = cg.idGrandeur
+		 WHERE m.identifiantReseau = "AA01"
 		 */
 		$l_OBJ_Query = new Query();
 		$l_TAB_TableNames = $l_OBJ_Query->select("g.tablename")
-							->distinct()
-							->from("module as m")
-							->innerJoin("rel_modulecapteur as mc", "mc.idModule = m.identifiantReseau")
-							->innerJoin("capteur as c", "c.id = mc.idCapteur")
-							->innerJoin("rel_capteurgrandeur as cg", "cg.idCapteur = c.id")
-							->innerJoin("grandeur as g", "g.id = cg.idGrandeur")
-							->where('m.identifiantReseau = :identifiantModule', ['identifiantModule' => $moduleID])
-							->all();
-
-
+		->distinct()
+		->from("module as m")
+		->innerJoin("rel_modulecapteur as mc", "mc.idModule = m.identifiantReseau")
+		->innerJoin("capteur as c", "c.id = mc.idCapteur")
+		->innerJoin("rel_capteurgrandeur as cg", "cg.idCapteur = c.id")
+		->innerJoin("grandeur as g", "g.id = cg.idGrandeur")
+		->where('m.identifiantReseau = :identifiantModule', ['identifiantModule' => $moduleID])
+		->all();
+		
+		
 		// RECUPERATION DES DONNÉES DU MODULES DANS LES TABLES DE MESURES --------------------------
 		$l_TAB_Retour	= array();
 		foreach( $l_TAB_TableNames as $l_TAB_Temp){
@@ -69,11 +71,11 @@ class MesureController extends ActiveController {
 				$l_OBJ_Query = new Query();
 				
 				$l_TAB_Retour[$l_STR_TableName] = $l_OBJ_Query->select(" timestamp, valeur, posX, posY, posY")
-							->from( $l_STR_TableName )
-							->where('identifiantModule = :identifiantModule', ['identifiantModule' => $moduleID])
-							->limit(100)
-							->all();
-			
+				->from( $l_STR_TableName )
+				->where('identifiantModule = :identifiantModule', ['identifiantModule' => $moduleID])
+				->limit(100)
+				->all();
+				
 		}
 		// RETOUR ----------------------------------------------------------------------------------
 		// Le format de l'affichage du message sera en JSON
@@ -93,53 +95,53 @@ class MesureController extends ActiveController {
 	 * Permet d'ajouter une trame provenant de Lora dans la base.
 	 * Exemple de trame recus:
 	 * {
-		   "metadata": {
-		      "connector": "lora",
-		      "source": "urn:lo:nsid:lora:70B3D54999F0552D",
-		      "group": {
-		         "path": "/",
-		         "id": "root"
-		      },
-		      "network": {
-		         "lora": {
-		            "signalLevel": 3,
-		            "rssi": -113,
-		            "gatewayCnt": 2,
-		            "esp": -116.01,
-		            "sf": 7,
-		            "messageType": "UNCONFIRMED_DATA_UP",
-		            "port": 2,
-		            "snr": 0,
-		            "ack": false,
-		            "location": {
-		               "alt": 0,
-		               "accuracy": 10000,
-		               "lon": -4.438382,
-		               "lat": 48.498604
-		            },
-		            "fcnt": 0,
-		            "devEUI": "70B3D54999F0552D"
-		         }
-		      }
-		   },
-		   "streamId": "urn:lo:nsid:lora:70B3D54999F0552D",
-		   "created": "2020-04-01T15:21:44.996Z",
-		   "extra": {},
-		   "location": {
-		      "provider": "lora",
-		      "alt": 0,
-		      "accuracy": 10000,
-		      "lon": -4.438382,
-		      "lat": 48.498604
-		   },
-		   "model": "lora_v0",
-		   "id": "5e84b188b112b25b2cb6d638",
-		   "value": {
-		      "payload": "53616c75742021"
-		   },
-		   "timestamp": "2020-04-01T15:21:29.683Z",
-		   "tags": []
-		}
+	 "metadata": {
+	 "connector": "lora",
+	 "source": "urn:lo:nsid:lora:70B3D54999F0552D",
+	 "group": {
+	 "path": "/",
+	 "id": "root"
+	 },
+	 "network": {
+	 "lora": {
+	 "signalLevel": 3,
+	 "rssi": -113,
+	 "gatewayCnt": 2,
+	 "esp": -116.01,
+	 "sf": 7,
+	 "messageType": "UNCONFIRMED_DATA_UP",
+	 "port": 2,
+	 "snr": 0,
+	 "ack": false,
+	 "location": {
+	 "alt": 0,
+	 "accuracy": 10000,
+	 "lon": -4.438382,
+	 "lat": 48.498604
+	 },
+	 "fcnt": 0,
+	 "devEUI": "70B3D54999F0552D"
+	 }
+	 }
+	 },
+	 "streamId": "urn:lo:nsid:lora:70B3D54999F0552D",
+	 "created": "2020-04-01T15:21:44.996Z",
+	 "extra": {},
+	 "location": {
+	 "provider": "lora",
+	 "alt": 0,
+	 "accuracy": 10000,
+	 "lon": -4.438382,
+	 "lat": 48.498604
+	 },
+	 "model": "lora_v0",
+	 "id": "5e84b188b112b25b2cb6d638",
+	 "value": {
+	 "payload": "53616c75742021"
+	 },
+	 "timestamp": "2020-04-01T15:21:29.683Z",
+	 "tags": []
+	 }
 	 */
 	public function actionAddlora(){
 		//on recupere les données du json envoyé
@@ -149,7 +151,7 @@ class MesureController extends ActiveController {
 		// Recuperation du streamId envoyé par LORA en quise d'ID unique de module.
 		$moduleID 	= $params['metadata']['network']['lora']['devEUI'];
 		
-
+		
 		// SI L'ID DU MODULE N'EST PAS RÉFÉRENCÉ DANS LA BASE --------------------------------------
 		if( !$this->_moduleIdIsValid($moduleID)){
 			// On fait une trace dans la base
@@ -174,25 +176,25 @@ class MesureController extends ActiveController {
 		$timestamp	= $params['timestamp'];
 		$payloadBrute	= $params['value']['payload'];
 		$mesures		= $this->_hex2str($payloadBrute);
-
+		
 		
 		// ENREGISTRE LA MESURE --------------------------------------------------------------------
 		return $this->_storeMesure($moduleID, $mesures);
-
+		
 	}
 	
 	
 	//==============================================================================================
 	/**
-	 * Empèche l'accès à l'action addlora en GET ( le fait que l'on soit en GET ou en POST est géré 
-	 * dans l'urlManager au niveau des rules dans le fichier config/web.php. 
-	 * 
+	 * Empèche l'accès à l'action addlora en GET ( le fait que l'on soit en GET ou en POST est géré
+	 * dans l'urlManager au niveau des rules dans le fichier config/web.php.
+	 *
 	 * @return unknown
 	 */
 	public function actionAddloraget(){
 		return json_encode(['erreur' => 'POST uniquement']);
 	}
-
+	
 	
 	
 	
@@ -202,7 +204,7 @@ class MesureController extends ActiveController {
 	/**
 	 * Permet d'ajouter une mesure dans la base.
 	 * La trame doit être sous la forme : AA01/*2018-203703100
-	 * 
+	 *
 	 */
 	public function actionAdd(){
 		// RECUPERATION DU PARAMETRE PASSÉ EN GET --------------------------------------------------
@@ -222,16 +224,16 @@ class MesureController extends ActiveController {
 			$l_TAB_Retour['error']	= "Module ".$moduleID." not declared.";
 			return json_encode( $l_TAB_Retour );
 		}
-
+		
 		
 		// ENREGISTRE LA MESURE
 		return $this->_storeMesure($moduleID, $mesures);
 	}
 	
 	
-
-		
-		
+	
+	
+	
 	//==============================================================================================
 	/**
 	 * Enregistre en base une mesure envoyée par un capteur.
@@ -240,31 +242,32 @@ class MesureController extends ActiveController {
 	 * @return vide ou message au format JSON
 	 * @version 17 juin 2020	: APE	- Remplacement des points dans la mesure par des virgules.
 	 * 	@version 3 juil. 2020	: APE	- Remplacement des virgules dans le formattage de mesure par des points.
+	 * 	@version 3 juil. 2020	: APE	- Implémentation de l'ajout dans Elasticsearch
 	 */
 	private function _storeMesure($moduleID, $mesures){
 		$l_TAB_Retour = array();
-		// CONSTRUCTION DE LA REQUETE POUR RÉCUPERER LE NOM DES TABLES OU STOCKER LES DATA A PARTIR DE L'ID DU MODULE 
+		// CONSTRUCTION DE LA REQUETE POUR RÉCUPERER LE NOM DES TABLES OU STOCKER LES DATA A PARTIR DE L'ID DU MODULE
 		/*	Select m.nom, m.identifiantReseau, m.description, c.nom, g.nature, g.tablename, rmc.x, rmc.y, rmc.z
-			FROM module as m
-			INNER JOIN rel_modulecapteur as rmc ON m.identifiantReseau = rmc.idModule
-			INNER JOIN capteur as c ON rmc.idCapteur = c.id
-			INNER JOIN rel_capteurgrandeur as rcg ON rcg.idCapteur = c.id
-			INNER JOIN grandeur as g ON g.id = rcg.idGrandeur
-			INNER JOIN position as p ON p.id = c.idPosition
-			WHERE m.identifiantReseau = "70B3D54999F0552D"
-			
-			@see https://www.yiiframework.com/doc/guide/2.0/fr/db-query-builder
+		 FROM module as m
+		 INNER JOIN rel_modulecapteur as rmc ON m.identifiantReseau = rmc.idModule
+		 INNER JOIN capteur as c ON rmc.idCapteur = c.id
+		 INNER JOIN rel_capteurgrandeur as rcg ON rcg.idCapteur = c.id
+		 INNER JOIN grandeur as g ON g.id = rcg.idGrandeur
+		 INNER JOIN position as p ON p.id = c.idPosition
+		 WHERE m.identifiantReseau = "70B3D54999F0552D"
+		 
+		 @see https://www.yiiframework.com/doc/guide/2.0/fr/db-query-builder
 		 */
 		$l_OBJ_Query= new Query();
-		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z')
-									->from('module as m')
-									->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
-									->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
-									->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
-									->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
-									->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
-									->all();
-					
+		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom as capteurnom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z, rmc.nomcapteur')
+		->from('module as m')
+		->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
+		->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
+		->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
+		->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
+		->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
+		->all();
+		
 		
 		
 		// CALCUL DU NOMBRE DE CARACTÈRES ATTENDU DANS LA TRAME ------------------------------------
@@ -273,7 +276,7 @@ class MesureController extends ActiveController {
 			// Remplacement des virgules par des points
 			$l_TAB_Format['formatCapteur'] = str_replace(",", ".", $l_TAB_Format['formatCapteur']);
 			
-			// Récupération de ce qui est avant et apres le séparateur (le point) 
+			// Récupération de ce qui est avant et apres le séparateur (le point)
 			list($l_STR_Avant, $l_INT_Apres) = explode(".", $l_TAB_Format['formatCapteur']);
 			
 			// On ajoute le nombre de caracteres apres la virgule
@@ -299,12 +302,12 @@ class MesureController extends ActiveController {
 		}
 		$l_TAB_Retour['Nb caractere attendu']	= $l_INT_LongeurAttendu;
 		
-
+		
 		
 		// TEST SI LA TRAME FAIT LE BON NOMBRE DE CARACTÈRES ---------------------------------------
 		if( strlen( $mesures ) <> $l_INT_LongeurAttendu) {
 			$l_TAB_Retour['error']	= "Longeur de trame (partie mesure) incorrecte. ".$l_INT_LongeurAttendu." caract. attendu.";
-
+			
 			// On fait une trace dans la base
 			Yii::error("Trame <".$mesures."> du module <".$moduleID."> incorrecte (mauvaise longeur)", "tocio");
 			
@@ -314,6 +317,10 @@ class MesureController extends ActiveController {
 			return json_encode($l_TAB_Retour);
 		}
 		
+		
+		// CREEATION DU CLIENT ELASTIC SEARCH ------------------------------------------------------
+		$l_OBJ_ClientElastic = ClientBuilder::create()->build();
+		$responsElastic		= array();
 		
 		
 		// ENREGISTREMENT DE LA TRAME DANS LES TABLES DE MESURES -----------------------------------
@@ -326,7 +333,7 @@ class MesureController extends ActiveController {
 				$l_STR_Signe = array_shift($l_TAB_ChaineMesure);
 			}
 			
-
+			
 			
 			// avant la virgule
 			$l_STR_Avant = "";
@@ -347,18 +354,34 @@ class MesureController extends ActiveController {
 			
 			
 			
-			// Construction de la requète d'insertion
-			Yii::$app->db->createCommand()->insert($l_TAB_Capteur['tablename'], [
-											'timestamp' => date("Y/m/d H:i:s", time()),
-											'valeur' => $l_INT_Mesure,
-											'posX' => $l_TAB_Capteur['x'],
-											'posY' => $l_TAB_Capteur['y'],
-											'posZ' => $l_TAB_Capteur['z'],
-											'identifiantModule' => $moduleID,
-											])
-											->execute();
+			// Construction de la requète d'insertion en BDD
+			$params = [
+					'timestamp' => date("Y/m/d H:i:s", time()),
+					'valeur' => $l_INT_Mesure,
+					'posX' => $l_TAB_Capteur['x'],
+					'posY' => $l_TAB_Capteur['y'],
+					'posZ' => $l_TAB_Capteur['z'],
+					'identifiantModule' => $moduleID,
+			];
+			Yii::$app->db->createCommand()
+							->insert($l_TAB_Capteur['tablename'], $params)
+							->execute();
+			
+			// Insertion dans Elastic Search
+			$params['timestamp']	= date(DATE_ATOM, time());
+			$params['Module identifiant reseau'] = $l_TAB_Capteur['identifiantReseau'];
+			$params['Module description'] 		= $l_TAB_Capteur['description'];
+			$params['Module nom'] 				= $l_TAB_Capteur['nom'];
+			$params['Capteur nom custom'] 		= $l_TAB_Capteur['nomcapteur'];
+			$params['Capteur nom'] 				= $l_TAB_Capteur['capteurnom'];
+			$params['Mesure nature'] 			= $l_TAB_Capteur['nature'];
+			$responsElastic[] = $l_OBJ_ClientElastic->index(
+					['index' => Yii::getAlias('@elasticsearchindex'),
+					'body'	=> $params
+					]);
 		}
-
+		
+		
 		
 		
 		// RETOUR ----------------------------------------------------------------------------------
@@ -366,6 +389,7 @@ class MesureController extends ActiveController {
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$l_TAB_Retour['error']	= "";
 		$l_TAB_Retour['success']	= "ok";
+		$l_TAB_Retour['ElasticSearchReturn'] = json_encode($responsElastic);
 		
 		return json_encode($l_TAB_Retour);
 	}
@@ -401,8 +425,8 @@ class MesureController extends ActiveController {
 	//==============================================================================================
 	/**
 	 * Convertie une chaine hexadécimale en caractères ASCII.
-	 * 
-	 * @param string $hex 
+	 *
+	 * @param string $hex
 	 * @return string
 	 */
 	private function _hex2str($hex) {
