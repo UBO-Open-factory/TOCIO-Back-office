@@ -247,7 +247,7 @@ class modulesWidget extends Widget
 			// Construction du contenu pour le code python
 			$l_STR_CodePython =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code python',
 					"content"	=> Html::tag("h3","Exemple") 
-									.Html::tag("p","Ceci est un exemple de code écrit en Python pour envoyer une Payload dans la base TOCIO.")
+									.Html::tag("p","Ceci est un exemple de code écrit en Python pour envoyer une Payload formatée dans la base TOCIO.")
 									.Html::tag("pre", $this->_codePython( Url::toRoute('/mesure/add/', "https"), $l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code Python
 					"class"		=> "mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
@@ -652,10 +652,10 @@ class modulesWidget extends Widget
 		$natures = [];
 		foreach ( $params as $grandeur ){
 			list($nature, $null) = explode(" ", $grandeur['nature']);
-			$natures[] = $this->_stripAccents($nature);
+			$natures[] = strtolower($this->_stripAccents($nature));
 			
 			$format[] = $this->_codePythonFormatChaine($grandeur['format']);
-			$ligne[] = "# ".$this->_stripAccents($nature)." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
+			$ligne[] = "# ".strtolower($this->_stripAccents($nature))." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
 		}
 
 		$ligne[] = 'payload = "'.implode("", $format).'".format('.implode(",", $natures).')';
@@ -666,7 +666,7 @@ class modulesWidget extends Widget
 		$ligne[] = 'response = requests.get(url)';
 		$ligne[] = '';
 		$ligne[] = '# Just for debug :-)';
-		$ligne[] = 'print( payload, response.json() )';
+		$ligne[] = 'print( url, response.json() )';
 		return implode("<br/>",$ligne);
 	}
 }
