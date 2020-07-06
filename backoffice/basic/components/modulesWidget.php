@@ -79,7 +79,7 @@ class modulesWidget extends Widget
 			// L'identification du capteur
 			// @see https://www.yiiframework.com/doc/guide/2.0/fr/helper-html
 			$formatTrameWifi[] = Html::tag("button ",$l_OBJ_Module->identifiantReseau,["type" => "button", "class" => "btn btn-primary disabled"]);
-			$formatTrameWifiBrute[] = $l_OBJ_Module->identifiantReseau;
+// 			$formatTrameWifiBrute[] = $l_OBJ_Module->identifiantReseau;
 			
 			// Le séparateur
 			$formatTrameWifi[] = Html::tag("button", "/",[	"type" => "button", 
@@ -112,6 +112,7 @@ class modulesWidget extends Widget
 
 			// PARCOURS DE TOUT LES CAPTEURS DU MODULE----------------------------------------------
 			$l_TAB_CapteursDuModule =  [];
+			$l_TAB_Grandeurs = [];
 			foreach( $l_TAB_Capteurs as $l_OBJ_ModuleCapteur){
 				// Boutons d'édition du capteur custom
 				$l_TAB_BtnCustomCapteur	= [];
@@ -190,6 +191,12 @@ class modulesWidget extends Widget
 					$contents[] = Html::tag("div",$l_STR_Nature,["class" => "col-md-5"]);
 					$contents[] = Html::tag("div",$l_STR_Format,["class" => "col-md-2"]);
 					$contents[] = Html::tag("div",$l_STR_DateLastEntryGrandeur,["class" => "col-md-5"]);
+
+					
+					// Enregistrement de la grandeur pour le formattage Python
+					$l_TAB_Grandeurs[] = array('format' => $format, 
+											'nomCapteur' => $l_STR_NomCapteur,
+											'nature' => $l_OBJ_Grandeurs->idGrandeur0['nature']);  
 				}
 				$contents[] = "		</div>";
 				$contents[] = "</div>";
@@ -236,6 +243,16 @@ class modulesWidget extends Widget
 			
 			// Explication de la rêgle du formattage des valeurs
 			$l_STR_ReglesFormat	= $this->_legende(tocioRegles::widget(["regle" => "encodageFormatDefinition"]), "Formattage des valeurs");
+
+			// Construction du contenu pour le code python
+			$l_STR_CodePython =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code python',
+					"content"	=> Html::tag("h3","Exemple") 
+									.Html::tag("p","Ceci est un exemple de code écrit en Python pour envoyer une Payload dans la base TOCIO.")
+									.Html::tag("pre", $this->_codePython( Url::toRoute('/mesure/add/', "https"), $l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code Python
+					"class"		=> "mb-3 px-0 PythonCode",
+					"style" 	=> "max-width: 90rem",
+			]);
+			
 			
 			
 			// Construction du contenu de la boite sur 3 colonnes.
@@ -270,6 +287,7 @@ class modulesWidget extends Widget
 			$contents[] = 		Html::tag("legend", "Format pour transmission Wifi");
 			$contents[] = 		"Url pour ajouter les données de ce Module:<br/><code>".Url::toRoute('/mesure/add/[payload]', "https")."</code>";
 			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
+			$contents[] = 		Html::tag("p", $l_STR_CodePython);
 			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
@@ -572,6 +590,84 @@ class modulesWidget extends Widget
 						<label class="custom-control-label" for="btt_'.$l_STR_Id.'">'.$l_STR_Label.'</label>
 					</div>
 				</div>';
+	}
+	
+	
+	// ---------------------------------------------------------------------------------------------
+	/**
+	 * Supprimer toutles accents dan sune chaine de caractère.
+	 * @param $string à nettoyer
+	 * @return string sans accents.
+	 */
+	private function _stripAccents($string){
+		return iconv('UTF-8','ASCII//TRANSLIT',$string);
+	}
+	
+	
+	
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Renvoie le formattage qu'il faut à la valeur Python en fonction de la chaine envoyée.
+	 * @param string $format
+	 * @return string
+	 */
+	private function _codePythonFormatChaine($format){
+		# test l'existance du signe
+		$existeSigne = strpos($format, "-");
+		
+		# Récupération de ce qui est avant et apres le point
+		list($avant,$apres) = explode(".", $format);
+		
+		# Suppression du signe
+		$avant	= str_replace("-", "", $avant);
+		
+		# Calcul du nombre de caractères
+		$longeur = $avant + $apres;
+		if( $existeSigne !== false )	$longeur ++;
+
+		# Si on doit avoir un signe
+		if( $existeSigne !== false){
+			return "{:+0".($longeur +1) .".".$apres."f}";
+		} else {
+			return "{:0".$longeur.".".$apres."f}";
+		}
+	}
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Formattage de code Python pour envoyer la trame WIFI.
+	 * 
+	 * @param string $url : URL sur laquelle envoyer la payload.
+	 * @param string $id : l'ID du module (son identifiant réseau)
+	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
+	 * @return string
+	 */
+	private function _codePython($url, $id, $params ){
+		$ligne = [];
+		
+		$format = [];
+		$natures = [];
+		foreach ( $params as $grandeur ){
+			list($nature, $null) = explode(" ", $grandeur['nature']);
+			$natures[] = $this->_stripAccents($nature);
+			
+			$format[] = $this->_codePythonFormatChaine($grandeur['format']);
+			$ligne[] = "# ".$this->_stripAccents($nature)." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
+		}
+
+		$ligne[] = 'payload = "'.implode("", $format).'".format('.implode(",", $natures).')';
+		$ligne[] = 'url = "'.$url.'/'.$id.'/"';
+		$ligne[] = 'url = url + payload.replace(".", "")';
+		$ligne[] = '';
+		$ligne[] = '# Send the request with GET method';
+		$ligne[] = 'response = requests.get(url)';
+		$ligne[] = '';
+		$ligne[] = '# Just for debug :-)';
+		$ligne[] = 'print( payload, response.json() )';
+		return implode("<br/>",$ligne);
 	}
 }
 ?>

@@ -256,7 +256,7 @@ class MesureController extends ActiveController {
 			@see https://www.yiiframework.com/doc/guide/2.0/fr/db-query-builder
 		 */
 		$l_OBJ_Query= new Query();
-		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z')
+		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom as capteurnom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z, rmc.nomcapteur')
 									->from('module as m')
 									->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
 									->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
@@ -264,7 +264,6 @@ class MesureController extends ActiveController {
 									->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
 									->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
 									->all();
-					
 		
 		
 		// CALCUL DU NOMBRE DE CARACTÈRES ATTENDU DANS LA TRAME ------------------------------------
@@ -303,8 +302,8 @@ class MesureController extends ActiveController {
 		
 		// TEST SI LA TRAME FAIT LE BON NOMBRE DE CARACTÈRES ---------------------------------------
 		if( strlen( $mesures ) <> $l_INT_LongeurAttendu) {
-			$l_TAB_Retour['error']	= "Longeur de trame (partie mesure) incorrecte. ".$l_INT_LongeurAttendu." caract. attendu.";
-
+			$l_TAB_Retour['error']	= "Longeur de trame (partie mesure) incorrecte. ".$l_INT_LongeurAttendu." caract. attendu (".strlen( $mesures )." recus)";
+			
 			// On fait une trace dans la base
 			Yii::error("Trame <".$mesures."> du module <".$moduleID."> incorrecte (mauvaise longeur)", "tocio");
 			
@@ -378,7 +377,7 @@ class MesureController extends ActiveController {
 	 *
 	 * @param string $moduleID = Identifiant unique d'un module
 	 * @return true si le résultat est valide, tableau json sinon.
-	 * 	@version 18 mai 2020	: APE	- L'ID réseau n'est pas senseible à la casse.
+	 * 	@version 18 mai 2020	: APE	- L'ID réseau n'est pas sensible à la casse.
 	 */
 	private function _moduleIdIsValid($moduleID){
 		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
@@ -388,8 +387,6 @@ class MesureController extends ActiveController {
 			// TRACE DANS LA BASE QUE LE MODULE N'EXISTE PAS
 			Yii::error("Le module <".$moduleID."> N'existe pas en base", "tocio");
 			
-			
-			// RENVOIE LE RÉSULTAT EN JSON
 			return false;
 		} else {
 			return true;
@@ -410,6 +407,5 @@ class MesureController extends ActiveController {
 		for($i=0;$i<strlen($hex);$i+=2) $str .= chr(hexdec(substr($hex,$i,2)));
 		return $str;
 	}
-	
 }
 ?>
