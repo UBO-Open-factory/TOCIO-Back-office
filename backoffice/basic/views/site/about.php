@@ -149,10 +149,11 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
-	<h2>V 1.1.4</h2>
-	... en cours
-	
-	
+	<h2>V 1.2.0</h2>
+<li>2020-07-08 <b>&bull;</b> Modification de l'URL générale pour l'accès à swagger</li>
+<li>2020-07-06 <b>&bull;</b> Générateur du code Python pour la Payload</li>
+<li>2020-07-03 <b>&bull;</b> Implémentation de l'ingestion dans ElasticSearch</li>
+<li>2020-07-03 <b>&bull;</b> Adaptation du code pour lire les formattages de Grandeur avec un point et non une virgule</li>
 	
 	<h2>V 1.1.3</h2>
 <li>2020-07-03 <b>&bull;</b> Le formattage d'une Grandeur n'accèpte plus que les points (au lieux des virgules). Si le formattage ne contient pas de point, on le rajoute.</li>
