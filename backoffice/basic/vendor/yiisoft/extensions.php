@@ -84,4 +84,13 @@ return array (
       '@yii2mod/alert' => $vendorDir . '/yii2mod/yii2-sweet-alert',
     ),
   ),
+  'scotthuangzl/yii2-google-chart' => 
+  array (
+    'name' => 'scotthuangzl/yii2-google-chart',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@scotthuangzl/googlechart' => $vendorDir . '/scotthuangzl/yii2-google-chart',
+    ),
+  ),
 );

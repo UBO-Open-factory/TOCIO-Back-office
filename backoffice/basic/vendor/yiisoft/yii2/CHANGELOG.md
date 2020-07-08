@@ -1,6 +1,39 @@
 Yii Framework 2 Change Log
 ==========================
 
+2.0.36 July 07, 2020
+--------------------
+
+- Bug #13828: Fix retrieving inserted data for a primary key of type uniqueidentifier for SQL Server 2005 or later (darkdef)
+- Bug #17474: Fix retrieving inserted data for a primary key of type trigger for SQL Server 2005 or later (darkdef)
+- Bug #17985: Convert migrationNamespaces to array if needed (darkdef)
+- Bug #18001: Fix getting table metadata for tables `(` in their name (floor12)
+- Bug #18026: Fix `ArrayHelper::getValue()` did not work with `ArrayAccess` objects (mikk150)
+- Bug #18028: Fix division by zero exception in console `Table::calculateRowHeight()` (fourhundredfour)
+- Bug #18031: `HttpBasicAuth` with auth callback now triggers login events same was as other authentication methods (samdark)
+- Bug #18041: Fix RBAC migration for MSSQL (darkdef)
+- Bug #18047: Fix colorization markers output in console `Table` (cheeseq)
+- Bug #18051: Fix missing support for custom validation method in EachValidator (bizley)
+- Bug #18051: Fix using `EachValidator` with custom validation function (bizley)
+- Bug #18081: Fix for PDO_DBLIB/MSSQL. Set flag `ANSI_NULL_DFLT_ON` to ON for current DB connection (darkdef)
+- Bug #18086: Fix accessing public properties of `ArrayAccess` via `ArrayHelper::getValue()` (samdark)
+- Bug #18094: Add support for composite file extension validation (darkdef)
+- Bug #18096: Fix `InlineValidator` with anonymous inline function not working well from `EachValidator` (trombipeti)
+- Bug #18101: Fix behavior of `OUTPUT INSERTED.*` for SQL Server query: "insert default values"; correct MSSQL unit tests; turn off profiling echo message in migration test (darkdef)
+- Bug #18105: Fix for old trigger in RBAC migration with/without `prefixTable` (darkdef)
+- Bug #18110: Add quotes to return value of viewName in MSSQL schema. It is `[someView]` now (darkdef)
+- Bug #18127: Resolve DI references inside of arrays in dependencies (hiqsol)
+- Bug #18134: `Expression` as `columnName` should not be quoted in `likeCondition` (darkdef)
+- Bug #18147: Fix parameters binding for MySQL when prepare emulation is off (rskrzypczak)
+- Enh #15202: Add optional param `--silent-exit-on-exception` in `yii\console\Controller` (egorrishe)
+- Enh #17722: Add action injection support (SamMousa, samdark, erickskrauch)
+- Enh #18019: Allow jQuery 3.5.0 to be installed (wouter90)
+- Enh #18048: Use `Instance::ensure()` to set `User::$accessChecker` (lav45)
+- Enh #18083: Add `Controller::$request` and `$response` (brandonkelly)
+- Enh #18120: Include the path to the log file into error message if `FileTarget::export` fails (uaoleg)
+- Enh #18151: Add `Mutex::isAcquired()` to check if lock is currently acquired (rhertogh)
+
+
 2.0.35 May 02, 2020
 -------------------
 
@@ -20,7 +53,6 @@ Yii Framework 2 Change Log
 - Enh #17758: `Query::withQuery()` can now be used for CTE (sartor)
 - Enh #17993: Add `yii\i18n\Formatter::$currencyDecimalSeparator` to allow setting custom symbols for currency decimal in `IntlNumberFormatter` (XPOHOC269)
 - Enh #18006: Allow `SameSite` cookie pre PHP 7.3 (scottix)
-- Enh #18019: Allow jQuery 3.5.0 to be installed (wouter90)
 
 
 2.0.34 March 26, 2020

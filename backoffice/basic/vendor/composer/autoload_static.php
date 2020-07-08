@@ -42,6 +42,10 @@ class ComposerStaticInit7adafd87f8bb733ed33687f73d7cbff8
             'yii\\' => 4,
             'yii2mod\\alert\\' => 14,
         ),
+        's' => 
+        array (
+            'scotthuangzl\\googlechart\\' => 25,
+        ),
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
@@ -162,6 +166,10 @@ class ComposerStaticInit7adafd87f8bb733ed33687f73d7cbff8
         'yii2mod\\alert\\' => 
         array (
             0 => __DIR__ . '/..' . '/yii2mod/yii2-sweet-alert',
+        ),
+        'scotthuangzl\\googlechart\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/scotthuangzl/yii2-google-chart',
         ),
         'phpDocumentor\\Reflection\\' => 
         array (

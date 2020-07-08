@@ -21,7 +21,8 @@
         "yiisoft/yii2-jui": "^2.0",
         "kartik-v/yii2-widget-growl": "*",
         "yii2mod/yii2-sweet-alert": "*",
-	"elasticsearch/elasticsearch": "~7.0"
+	"elasticsearch/elasticsearch": "~7.0",
+	"scotthuangzl/yii2-google-chart": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
