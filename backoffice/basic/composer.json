@@ -20,7 +20,8 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "yiisoft/yii2-jui": "^2.0",
         "kartik-v/yii2-widget-growl": "*",
-        "yii2mod/yii2-sweet-alert": "*"
+        "yii2mod/yii2-sweet-alert": "*",
+	"elasticsearch/elasticsearch": "~7.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

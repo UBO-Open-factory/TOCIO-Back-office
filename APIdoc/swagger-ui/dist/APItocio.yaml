@@ -4,7 +4,7 @@ info:
   description: Acces aux données du projet TOCIO
   version: '0.1'
 servers:
-  - url: 'http://192.168.0.40:8888'
+  - url: 'https://uboopenfactory.univ-brest.fr/data/passerelle/'
 paths:
   /mesure/get:
     get:
