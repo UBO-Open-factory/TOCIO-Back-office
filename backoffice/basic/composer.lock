@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c3c53e3179aaef3f417baa42dd8385f",
+    "content-hash": "29d0c9e0289ce92ffb6171aa3630c224",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -651,6 +651,866 @@
             "time": "2015-05-03T08:23:04+00:00"
         },
         {
+            "name": "npm-asset/axios",
+            "version": "0.19.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/axios/-/axios-0.19.2.tgz"
+            },
+            "require": {
+                "npm-asset/follow-redirects": "1.5.10"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/cacheable-request",
+            "version": "2.1.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/cacheable-request/-/cacheable-request-2.1.4.tgz"
+            },
+            "require": {
+                "npm-asset/clone-response": "1.0.2",
+                "npm-asset/get-stream": "3.0.0",
+                "npm-asset/http-cache-semantics": "3.8.1",
+                "npm-asset/keyv": "3.0.0",
+                "npm-asset/lowercase-keys": "1.0.0",
+                "npm-asset/normalize-url": "2.0.1",
+                "npm-asset/responselike": "1.0.2"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/clone-response",
+            "version": "1.0.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/clone-response/-/clone-response-1.0.2.tgz"
+            },
+            "require": {
+                "npm-asset/mimic-response": ">=1.0.0,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/core-util-is",
+            "version": "1.0.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/debug",
+            "version": "3.1.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/debug/-/debug-3.1.0.tgz"
+            },
+            "require": {
+                "npm-asset/ms": "2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/decode-uri-component",
+            "version": "0.2.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/decompress-response",
+            "version": "3.3.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/decompress-response/-/decompress-response-3.3.0.tgz"
+            },
+            "require": {
+                "npm-asset/mimic-response": ">=1.0.0,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/duplexer3",
+            "version": "0.1.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/duplexer3/-/duplexer3-0.1.4.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "BSD-3-Clause"
+            ]
+        },
+        {
+            "name": "npm-asset/follow-redirects",
+            "version": "1.5.10",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.5.10.tgz"
+            },
+            "require": {
+                "npm-asset/debug": "3.1.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/from2",
+            "version": "2.3.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/from2/-/from2-2.3.0.tgz"
+            },
+            "require": {
+                "npm-asset/inherits": ">=2.0.1,<3.0.0",
+                "npm-asset/readable-stream": ">=2.0.0,<3.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/get-stream",
+            "version": "3.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/get-stream/-/get-stream-3.0.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/got",
+            "version": "8.3.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/got/-/got-8.3.2.tgz"
+            },
+            "require": {
+                "npm-asset/cacheable-request": ">=2.1.1,<3.0.0",
+                "npm-asset/decompress-response": ">=3.3.0,<4.0.0",
+                "npm-asset/duplexer3": ">=0.1.4,<0.2.0",
+                "npm-asset/get-stream": ">=3.0.0,<4.0.0",
+                "npm-asset/into-stream": ">=3.1.0,<4.0.0",
+                "npm-asset/is-retry-allowed": ">=1.1.0,<2.0.0",
+                "npm-asset/isurl": ">=1.0.0-alpha5,<2.0.0",
+                "npm-asset/lowercase-keys": ">=1.0.0,<2.0.0",
+                "npm-asset/mimic-response": ">=1.0.0,<2.0.0",
+                "npm-asset/p-cancelable": ">=0.4.0,<0.5.0",
+                "npm-asset/p-timeout": ">=2.0.1,<3.0.0",
+                "npm-asset/pify": ">=3.0.0,<4.0.0",
+                "npm-asset/safe-buffer": ">=5.1.1,<6.0.0",
+                "npm-asset/sindresorhus--is": ">=0.7.0,<0.8.0",
+                "npm-asset/timed-out": ">=4.0.1,<5.0.0",
+                "npm-asset/url-parse-lax": ">=3.0.0,<4.0.0",
+                "npm-asset/url-to-options": ">=1.0.1,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/has-symbol-support-x",
+            "version": "1.4.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/has-symbol-support-x/-/has-symbol-support-x-1.4.2.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/has-to-string-tag-x",
+            "version": "1.4.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/has-to-string-tag-x/-/has-to-string-tag-x-1.4.1.tgz"
+            },
+            "require": {
+                "npm-asset/has-symbol-support-x": ">=1.4.1,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/http-cache-semantics",
+            "version": "3.8.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/http-cache-semantics/-/http-cache-semantics-3.8.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "BSD-2-Clause"
+            ]
+        },
+        {
+            "name": "npm-asset/inherits",
+            "version": "2.0.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "ISC"
+            ]
+        },
+        {
+            "name": "npm-asset/into-stream",
+            "version": "3.1.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/into-stream/-/into-stream-3.1.0.tgz"
+            },
+            "require": {
+                "npm-asset/from2": ">=2.1.1,<3.0.0",
+                "npm-asset/p-is-promise": ">=1.1.0,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/is-object",
+            "version": "1.0.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/is-object/-/is-object-1.0.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/is-plain-obj",
+            "version": "1.1.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/is-plain-obj/-/is-plain-obj-1.1.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/is-retry-allowed",
+            "version": "1.2.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/is-retry-allowed/-/is-retry-allowed-1.2.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/isarray",
+            "version": "1.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/isurl",
+            "version": "1.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/isurl/-/isurl-1.0.0.tgz"
+            },
+            "require": {
+                "npm-asset/has-to-string-tag-x": ">=1.2.0,<2.0.0",
+                "npm-asset/is-object": ">=1.0.1,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/json-buffer",
+            "version": "3.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/json-buffer/-/json-buffer-3.0.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/keyv",
+            "version": "3.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/keyv/-/keyv-3.0.0.tgz"
+            },
+            "require": {
+                "npm-asset/json-buffer": "3.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/lowercase-keys",
+            "version": "1.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/lowercase-keys/-/lowercase-keys-1.0.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/mimic-response",
+            "version": "1.0.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/mimic-response/-/mimic-response-1.0.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/ms",
+            "version": "2.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/normalize-url",
+            "version": "2.0.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/normalize-url/-/normalize-url-2.0.1.tgz"
+            },
+            "require": {
+                "npm-asset/prepend-http": ">=2.0.0,<3.0.0",
+                "npm-asset/query-string": ">=5.0.1,<6.0.0",
+                "npm-asset/sort-keys": ">=2.0.0,<3.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/object-assign",
+            "version": "4.1.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/p-cancelable",
+            "version": "0.4.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/p-cancelable/-/p-cancelable-0.4.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/p-finally",
+            "version": "1.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/p-finally/-/p-finally-1.0.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/p-is-promise",
+            "version": "1.1.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/p-is-promise/-/p-is-promise-1.1.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/p-timeout",
+            "version": "2.0.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/p-timeout/-/p-timeout-2.0.1.tgz"
+            },
+            "require": {
+                "npm-asset/p-finally": ">=1.0.0,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/pify",
+            "version": "3.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/pify/-/pify-3.0.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/prepend-http",
+            "version": "2.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/prepend-http/-/prepend-http-2.0.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/process-nextick-args",
+            "version": "v1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/calvinmetcalf/process-nextick-args.git",
+                "reference": "07f531b2e7b3587f1c6cbce3f83054f50aa5cc97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/calvinmetcalf/process-nextick-args/zipball/07f531b2e7b3587f1c6cbce3f83054f50aa5cc97",
+                "reference": "07f531b2e7b3587f1c6cbce3f83054f50aa5cc97"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/query-string",
+            "version": "5.1.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/query-string/-/query-string-5.1.1.tgz"
+            },
+            "require": {
+                "npm-asset/decode-uri-component": ">=0.2.0,<0.3.0",
+                "npm-asset/object-assign": ">=4.1.0,<5.0.0",
+                "npm-asset/strict-uri-encode": ">=1.0.0,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/readable-stream",
+            "version": "2.2.10",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.2.10.tgz"
+            },
+            "require": {
+                "npm-asset/core-util-is": "~1.0.0",
+                "npm-asset/inherits": "~2.0.1",
+                "npm-asset/isarray": "~1.0.0",
+                "npm-asset/process-nextick-args": "~1.0.6",
+                "npm-asset/safe-buffer": ">=5.0.1,<6.0.0",
+                "npm-asset/string_decoder": "~1.0.0",
+                "npm-asset/util-deprecate": "~1.0.1"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/resize-observer-polyfill",
+            "version": "1.5.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/responselike",
+            "version": "1.0.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/responselike/-/responselike-1.0.2.tgz"
+            },
+            "require": {
+                "npm-asset/lowercase-keys": ">=1.0.0,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/safe-buffer",
+            "version": "5.2.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/sindresorhus--is",
+            "version": "0.7.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/@sindresorhus/is/-/is-0.7.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/sort-keys",
+            "version": "2.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/sort-keys/-/sort-keys-2.0.0.tgz"
+            },
+            "require": {
+                "npm-asset/is-plain-obj": ">=1.0.0,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/strict-uri-encode",
+            "version": "1.1.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/string_decoder",
+            "version": "1.0.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.0.1.tgz"
+            },
+            "require": {
+                "npm-asset/safe-buffer": ">=5.0.1,<6.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/timed-out",
+            "version": "4.0.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/timed-out/-/timed-out-4.0.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/url-parse-lax",
+            "version": "3.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/url-parse-lax/-/url-parse-lax-3.0.0.tgz"
+            },
+            "require": {
+                "npm-asset/prepend-http": ">=2.0.0,<3.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/url-to-options",
+            "version": "1.0.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/url-to-options/-/url-to-options-1.0.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/util-deprecate",
+            "version": "1.0.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/vue",
+            "version": "2.6.11",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/vue/-/vue-2.6.11.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/vue-js-modal",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:euvl/vue-js-modal.git",
+                "reference": "518754a4141ad6805b0765815d22ba9df6d57709"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/euvl/vue-js-modal/zipball/518754a4141ad6805b0765815d22ba9df6d57709",
+                "reference": "518754a4141ad6805b0765815d22ba9df6d57709"
+            },
+            "require": {
+                "npm-asset/resize-observer-polyfill": ">=1.5.1,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/vue-notification",
+            "version": "1.3.20",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/vue-notification/-/vue-notification-1.3.20.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/vue-resource",
+            "version": "1.5.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/vue-resource/-/vue-resource-1.5.1.tgz"
+            },
+            "require": {
+                "npm-asset/got": ">=8.0.3,<9.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/vue-router",
+            "version": "3.3.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/vue-router/-/vue-router-3.3.4.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "onmotion/yii2-vuejs-assets",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/onmotion/yii2-vuejs-assets.git",
+                "reference": "a87499803b7063058a0f06f8c1f00b226052fb5b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/onmotion/yii2-vuejs-assets/zipball/a87499803b7063058a0f06f8c1f00b226052fb5b",
+                "reference": "a87499803b7063058a0f06f8c1f00b226052fb5b",
+                "shasum": ""
+            },
+            "require": {
+                "npm-asset/axios": "*",
+                "npm-asset/vue": "*",
+                "npm-asset/vue-js-modal": "*",
+                "npm-asset/vue-notification": "*",
+                "npm-asset/vue-resource": "*",
+                "npm-asset/vue-router": "*",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "onmotion\\vue\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandr Kozhevnikov",
+                    "email": "onmotion1@gmail.com",
+                    "homepage": "http://kozhevnikov.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Vue.js assets for Yii2 app",
+            "keywords": [
+                "assets",
+                "vue",
+                "vuejs",
+                "yii2"
+            ],
+            "time": "2018-10-02T07:24:33+00:00"
+        },
+        {
+            "name": "onmotion/yii2-widget-apexcharts",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/onmotion/yii2-widget-apexcharts.git",
+                "reference": "699f4540a975039868674ff21030494e467ebb08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/onmotion/yii2-widget-apexcharts/zipball/699f4540a975039868674ff21030494e467ebb08",
+                "reference": "699f4540a975039868674ff21030494e467ebb08",
+                "shasum": ""
+            },
+            "require": {
+                "onmotion/yii2-vuejs-assets": ">=1.0.1",
+                "php": ">=5.5.0",
+                "yiisoft/yii2": ">=2.0.1"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "onmotion\\apexcharts\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandr Kozhevnikov",
+                    "email": "onmotion1@gmail.com",
+                    "homepage": "http://kozhevnikov.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Yii2 charts widget - wrapper for the ApexCharts.js",
+            "keywords": [
+                "apexcharts",
+                "chart",
+                "charts",
+                "diagram",
+                "extension",
+                "widget",
+                "yii2"
+            ],
+            "time": "2019-07-12T06:43:40+00:00"
+        },
+        {
             "name": "psr/log",
             "version": "1.1.3",
             "source": {
@@ -742,50 +1602,6 @@
                 "promises"
             ],
             "time": "2020-05-12T15:16:56+00:00"
-        },
-        {
-            "name": "scotthuangzl/yii2-google-chart",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ScottHuangZL/yii2-google-chart.git",
-                "reference": "6bd68466030af8a931b34d2ceacf0a498da5b9a0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ScottHuangZL/yii2-google-chart/zipball/6bd68466030af8a931b34d2ceacf0a498da5b9a0",
-                "reference": "6bd68466030af8a931b34d2ceacf0a498da5b9a0",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "scotthuangzl\\googlechart\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Scott Huang",
-                    "email": "zhiliang.huang@gmail.com"
-                }
-            ],
-            "description": "A wraper for google chart",
-            "keywords": [
-                "extension",
-                "google chart",
-                "hzl",
-                "scott huang",
-                "widget",
-                "yii2"
-            ],
-            "time": "2015-06-11T12:13:00+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -5363,9 +6179,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "scotthuangzl/yii2-google-chart": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

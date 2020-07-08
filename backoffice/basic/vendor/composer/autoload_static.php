@@ -42,13 +42,14 @@ class ComposerStaticInit7adafd87f8bb733ed33687f73d7cbff8
             'yii\\' => 4,
             'yii2mod\\alert\\' => 14,
         ),
-        's' => 
-        array (
-            'scotthuangzl\\googlechart\\' => 25,
-        ),
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
+        ),
+        'o' => 
+        array (
+            'onmotion\\vue\\' => 13,
+            'onmotion\\apexcharts\\' => 20,
         ),
         'k' => 
         array (
@@ -167,15 +168,19 @@ class ComposerStaticInit7adafd87f8bb733ed33687f73d7cbff8
         array (
             0 => __DIR__ . '/..' . '/yii2mod/yii2-sweet-alert',
         ),
-        'scotthuangzl\\googlechart\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/scotthuangzl/yii2-google-chart',
-        ),
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'onmotion\\vue\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/onmotion/yii2-vuejs-assets',
+        ),
+        'onmotion\\apexcharts\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/onmotion/yii2-widget-apexcharts',
         ),
         'kartik\\growl\\' => 
         array (

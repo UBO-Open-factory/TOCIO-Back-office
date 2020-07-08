@@ -14,42 +14,20 @@ use app\models\TmTemperaturec;
 use yii\helpers\Url;
 use Codeception\Lib\Connector\Yii2;
 use yii\filters\HostControl;
+use onmotion\apexcharts\ApexchartsWidget;
 
-$grandeurs 	= Grandeur::findBySql("SELECT * FROM grandeur")->all();
-$capteurs 	= Capteur::findBySql("SELECT * FROM capteur")->all();
-$modules	= Module::findBySql("SELECT * FROM module")->all();
+
+
+$grandeurs 	= Grandeur::findBySql("SELECT * FROM grandeur")->count();
+$capteurs 	= Capteur::findBySql("SELECT * FROM capteur")->count();
+$modules	= Module::findBySql("SELECT * FROM module")->count();
 $l_INT_LocalisationModule	= Module::find()->indexBy('id')->count();
 $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'])->count();
 
 $identity = Yii::$app->user->identity;	// null si non authentifié
+$series = [$grandeurs +0, $capteurs +0, $modules +0, $l_INT_LocalisationModule +0, $l_INT_NombreTableMesure +0];
 ?>
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-	google.charts.load("current", {packages:["corechart"]});
-	google.charts.setOnLoadCallback(drawChart);
-	function drawChart() {
-		var data = google.visualization.arrayToDataTable([
-			['Task', 'Nombre'],
-			['Capteurs',	<?= count($capteurs);?>],
-			['Grandeurs',	<?= count($grandeurs);?>],
-			['Localisation',	<?= $l_INT_LocalisationModule;?>],
-			['Modules',		<?= count($modules);?>]
-        ]);
-
-        var options = {
-          title: '',
-          backgroundColor: 'transparent',
-          pieHole: 0.4,
-          legend: 'none',
-          pieSliceText: 'label',
-          textStyle:{color: '#FFFFFF'}
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-        chart.draw(data, options);
-      }
-</script>
     
     
 <div class="site-index">
@@ -64,7 +42,31 @@ $identity = Yii::$app->user->identity;	// null si non authentifié
 	        	<div class="col-sm-5">
 	        		<h1 class="text-center">Répartition des données de paramétrage</h1>
 	        		<p class="text-center">(Grandeurs, Capteurs, Modules & localisation de modules)</p>
-	        		<div id="donutchart" style="width: 100%; height: 400px;"></div>
+	        		<?php echo ApexchartsWidget::widget([
+	        						'type' => 'donut', // default area
+	        						'height' => '400', // default 350
+	        						'width' => '90%',
+	        						'chartOptions' => [
+	        								'chart' => [
+	        										'toolbar' => [
+	        												'show' => true,
+	        												'autoSelected' => 'zoom'
+	        										],
+	        								],
+	        								'fill' => 		[ 'type' => 'gradient'],
+	        								'labels' =>		['Grandeurs', 'Capteurs', 'Modules', 'Localisation', 'Tables de mesure'],
+	        								'dataLabels' => [ 'enabled' => true,
+	        													'style' => ['colors' => ['#FFFFFF']]],
+	        								'legend' =>		['onItemHover' => ['highlightDataSeries' => true],
+	        													'style' => ['colors' => ['#FFFFFF']]],
+	        								'stroke' => [
+	        										'show' => true,
+	        										'colors' => ['transparent']
+	        								],
+	        						],
+	        				'series' => $series
+	        				]
+	        				);?>
 	        	</div>
 	        	
 	        	
@@ -83,7 +85,7 @@ $identity = Yii::$app->user->identity;	// null si non authentifié
 	            	<div class="card text-white bg-secondary " >
 		            	<div class="card-header">Nombre de capteur</div>
 						<div class="card-body">
-							<h1 class="card-text text-center"><?= count($capteurs);?></h1>
+							<h1 class="card-text text-center"><?= $capteurs?></h1>
 							<?php if( $identity != null){?>
 			                <a class="card-link" href="<?= Url::toRoute('/capteur/index')?>">Voir les Capteurs &raquo;</a>
 			                <?php }?>
@@ -94,7 +96,7 @@ $identity = Yii::$app->user->identity;	// null si non authentifié
 					<div class="card text-white bg-secondary " ">
 		            	<div class="card-header">Nombre de grandeurs</div>
 						<div class="card-body">
-							<h1 class="card-text text-center"><?= count($grandeurs);?></h1>
+							<h1 class="card-text text-center"><?= $grandeurs?></h1>
 							<?php if( $identity != null){?>
 			                <a class="card-link" href=<?= Url::toRoute('/grandeur/index')?>>Voir les grandeurs &raquo;</a>
 			                <?php }?>
