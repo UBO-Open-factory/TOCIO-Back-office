@@ -4,6 +4,8 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\components\tocioRegles;
 use app\components\messageAlerte;
+use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\GrandeurSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -32,25 +34,24 @@ $this->params['breadcrumbs'][] = $this->title;
             'tablename',
         	['attribute' => 'NbDataTable',
         				'format' => 'html',
-        				'label' => "Nb Data stockées",
+        				'label' => "Nb données stockées",
         				'value' => function($model){
-        				return $model->NbDataTable;
-        				}
+				        				return $model->NbDataTable;
+				        			}
         	],
-        	['class' => 'yii\grid\ActionColumn',
-        				'visibleButtons' => [
-        						'view' => false,
-        						'update' => false,
-        						'delete' => function ($model, $key, $index) {
-        						return $model->NbDataTable == 0;
-        						}]
-        						],
+        	['attribute' => 'Graphique',
+        				'format' => 'html',
+        				'label' => "",
+        				'value' => function($model){
+        				return "<a href=".Url::toRoute("/grandeur/graphique?id=".$model->id)."><i class='glyphicon glyphicon-random'></i></a>";
+				        			}
+        	],
 			['class' => 'yii\grid\ActionColumn',
         	'visibleButtons' => [
 					        	'view' => true,
 					        	'update' => false,
 					        	'delete' => false,
-        	],
+        						],
         	],
         ],
     ]); ?>

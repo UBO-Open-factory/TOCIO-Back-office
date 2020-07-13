@@ -128,6 +128,33 @@ class GrandeurController extends Controller{
 		] );
 	}
 	
+
+	// _____________________________________________________________________________________________
+	/**
+	 * Display the data in a graphics from the table which name is tablename in the current model.
+	 *
+	 * @param integer $id
+	 * @return mixed
+	 * @throws NotFoundHttpException if the model cannot be found
+	 */
+	public function actionGraphique( $id ) {
+		
+		// Find current model
+		$model = $this->findModel( $id );
+		
+		
+		// Construct a dataprovider to display result
+		$searchModel = new TablemesureSearch();
+		$searchModel->setTableName($model->tablename);
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+		return $this->render( 'view', [ 
+			'model' 		=> $model,
+			'searchModel' 	=> $searchModel,
+            'dataProvider' 	=> $dataProvider,
+		] );
+	}
+	
 	
 	
 	
