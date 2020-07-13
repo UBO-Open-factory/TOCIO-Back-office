@@ -46,6 +46,11 @@ class graphiquesWidget extends Widget
 		
 		// ON VA CHERCHER LES NOMS DES TABLES CONTENANT LES MESURES --------------------------------
 		foreach( Grandeur::find()->all() as $l_OBJ_Grandeur){
+			// SI ON N'A PAS DE MESURES POUR CETTE GRANDEURS, ON NE FAIT RIEN
+			// (on ne pvas pas faire un graphique vide...)
+			if( $l_OBJ_Grandeur->NbDataTable == 0) continue;
+			
+			
 			// RECUPERATION DES IDENTIFIANTS DES MODULES DANS CETTE TABLE DE MESURES
 			$modulesID = (new \yii\db\Query())
 							->select(['identifiantModule'])
