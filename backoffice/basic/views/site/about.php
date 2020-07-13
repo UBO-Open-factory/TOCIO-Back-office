@@ -144,12 +144,16 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.1.4..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
+		git log v1.2.0..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.2.0</h2>
+<li>2020-07-13 <b>&bull;</b> Affichage des graphiques des mesures sur la page d'accueil</li>
+<li>2020-07-13 <b>&bull;</b> Affichage des valeurs de Grandeurs dans un graphique</li>
+<li>2020-07-08 <b>&bull;</b> Utilisation de Apexcharts pour l'affichage des graphiques</li>
+<li>2020-07-08 <b>&bull;</b> Mise à jour de YII2</li>
 <li>2020-07-08 <b>&bull;</b> Modification de l'URL générale pour l'accès à swagger</li>
 <li>2020-07-06 <b>&bull;</b> Générateur du code Python pour la Payload</li>
 <li>2020-07-03 <b>&bull;</b> Implémentation de l'ingestion dans ElasticSearch</li>
