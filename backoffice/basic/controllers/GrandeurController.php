@@ -142,16 +142,8 @@ class GrandeurController extends Controller{
 		// Find current model
 		$model = $this->findModel( $id );
 		
-		
-		// Construct a dataprovider to display result
-		$searchModel = new TablemesureSearch();
-		$searchModel->setTableName($model->tablename);
-		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-		return $this->render( 'view', [ 
+		return $this->render( 'graphique', [ 
 			'model' 		=> $model,
-			'searchModel' 	=> $searchModel,
-            'dataProvider' 	=> $dataProvider,
 		] );
 	}
 	
