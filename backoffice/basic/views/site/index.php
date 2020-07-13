@@ -15,6 +15,7 @@ use yii\helpers\Url;
 use Codeception\Lib\Connector\Yii2;
 use yii\filters\HostControl;
 use onmotion\apexcharts\ApexchartsWidget;
+use app\components\graphiquesWidget;
 
 
 
@@ -25,6 +26,8 @@ $l_INT_LocalisationModule	= Module::find()->indexBy('id')->count();
 $l_INT_NombreTableMesure 	= Grandeur::find()->where(['like', 'tablename' , 'tm_'])->count();
 
 $identity = Yii::$app->user->identity;	// null si non authentifié
+
+// Il faut convertir les valeurs en integer (et pas les laisser en string), on leur ajoute donc 0
 $series = [$grandeurs +0, $capteurs +0, $modules +0, $l_INT_LocalisationModule +0, $l_INT_NombreTableMesure +0];
 ?>
 
@@ -116,5 +119,12 @@ $series = [$grandeurs +0, $capteurs +0, $modules +0, $l_INT_LocalisationModule +
 	            </div>
 	        </div>
         </div>
+        
+        <div class="row">
+       		<?php echo graphiquesWidget::widget(); ?>
+        </div>
+        
+        
+        
     </div>
 </div>

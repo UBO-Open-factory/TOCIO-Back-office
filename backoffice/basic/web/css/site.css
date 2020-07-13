@@ -161,6 +161,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#37383d', end
 .table-bordered > tbody> tr > td {
 	border: 1px solid #000000;
 }
+/* libellé des graphiques --------------------------------------------------------------------------*/
+.apexcharts-legend,
+.apexcharts-legend-text {
+	color: #7A8288 !important;
+}
 /* Arc en ciel -------------------------------------------------------------------------------------*/
 .arcEnCiel {
 	background: #000000;
