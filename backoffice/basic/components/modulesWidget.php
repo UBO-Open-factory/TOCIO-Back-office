@@ -245,10 +245,19 @@ class modulesWidget extends Widget
 			$l_STR_ReglesFormat	= $this->_legende(tocioRegles::widget(["regle" => "encodageFormatDefinition"]), "Formattage des valeurs");
 
 			// Construction du contenu pour le code python
-			$l_STR_CodePython =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code python',
+			$l_STR_CodePython =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Python',
 					"content"	=> Html::tag("h3","Exemple") 
 									.Html::tag("p","Ceci est un exemple de code écrit en Python pour envoyer une Payload formatée dans la base TOCIO.")
 									.Html::tag("pre", $this->_codePython( Url::toRoute('/mesure/add/', "https"), $l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code Python
+					"class"		=> "mb-3 px-0 PythonCode",
+					"style" 	=> "max-width: 90rem",
+			]);
+
+			// Construction du contenu pour le code Arduino
+			$l_STR_CodeArduino =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Arduino',
+					"content"	=> Html::tag("h3","Exemple") 
+									.Html::tag("p","Ceci est un exemple de code écrit pour un Arduino pour envoyer une Payload formatée dans la base TOCIO.")
+					.Html::tag("pre", $this->_codeArduino( Url::base('https'), '/mesure/add/'.$l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code Arduino
 					"class"		=> "mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
 			]);
@@ -288,6 +297,7 @@ class modulesWidget extends Widget
 			$contents[] = 		"Url pour ajouter les données de ce Module:<br/><code>".Url::toRoute('/mesure/add/[payload]', "https")."</code>";
 			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
 			$contents[] = 		Html::tag("p", $l_STR_CodePython);
+			$contents[] = 		Html::tag("p", $l_STR_CodeArduino);
 			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
@@ -635,6 +645,7 @@ class modulesWidget extends Widget
 		}
 	}
 	
+
 	
 	// _____________________________________________________________________________________________
 	/**
@@ -650,12 +661,17 @@ class modulesWidget extends Widget
 		
 		$format = [];
 		$natures = [];
+		$compteur = 0;
 		foreach ( $params as $grandeur ){
 			list($nature, $null) = explode(" ", $grandeur['nature']);
-			$natures[] = strtolower($this->_stripAccents($nature));
+			$natureValue = $nature.$compteur++;
+			$variable = strtolower($this->_stripAccents($natureValue));
+			$natures[] = $variable;
 			
 			$format[] = $this->_codePythonFormatChaine($grandeur['format']);
-			$ligne[] = "# ".strtolower($this->_stripAccents($nature))." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
+			$ligne[] = "# ".strtolower($this->_stripAccents($natureValue))." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
+			$ligne[] = $variable." = 0000.00 # <- Your code to read value from sensor goes here ";
+			$ligne[] = "";
 		}
 
 		$ligne[] = 'payload = "'.implode("", $format).'".format('.implode(",", $natures).')';
@@ -667,6 +683,146 @@ class modulesWidget extends Widget
 		$ligne[] = '';
 		$ligne[] = '# Just for debug :-)';
 		$ligne[] = 'print( url, response.json() )';
+		return implode("<br/>",$ligne);
+	}
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Formattage de code Arduino (C++) pour envoyer la trame WIFI.
+	 *
+	 * @param string $url : URL sur laquelle envoyer la payload.
+	 * @param string $id : l'ID du module (son identifiant réseau)
+	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
+	 * @return string
+	 */
+	private function _codeArduino($url, $id, $params ){
+		$ligne = [];
+		
+		$format = [];
+		$natures = [];
+		$compteur = 0;
+		$ligne[] = 'const String host = "'.$url.'/";';
+		$ligne[] = 'const String url  = "'.$id.'";';
+		$ligne[] = "";
+		$ligne[] = '// Use the web site https://www.grc.com/fingerprints.htm to get the fingerprint from your web site';
+		$ligne[] = 'const char fingerprint[] PROGMEM = "BD:CD:08:B3:............:A4:A8:CB";';
+		$ligne[] = "";
+		$ligne[] = 'void loop() {';
+		$ligne[] = "";
+		$ligne[] = '	// Concatenation des mesures .............................';
+		$ligne[] = '	String Mesures = "";';
+		foreach ( $params as $grandeur ){
+			list($nature, $null) = explode(" ", $grandeur['nature']);
+			$natureValue = $nature.$compteur++;
+			$natures[] = strtolower($this->_stripAccents($natureValue));
+			
+			$ligne[] = "";
+			$ligne[] = "	// ".strtolower($this->_stripAccents($natureValue))." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
+			$ligne[] = "	float ".$this->_stripAccents($natureValue)." = \"\"; // <- Your code to read value from sensor goes here ";
+			$ligne[] = '	Mesures.concat(formatString('.$this->_stripAccents($natureValue).', "'.$grandeur['format'].'"));';
+		}
+		$ligne[] = "";
+		$ligne[] = '	// Envoie des données vers TOCIO .........................';
+		$ligne[] = '	sendDataInHTTPSRequest( url, Mesures );';
+		$ligne[] = "";
+		$ligne[] = '	// Pause .................................................';
+		$ligne[] = '	delay(60 * 1000);';
+		$ligne[] = '}';
+		$ligne[] = "";
+		$ligne[] = "";
+		$ligne[] = "";
+		
+		
+		// Partie pour le formattage de la mesure
+		$ligne[] = '// --------------------------------------------------------------------------------';
+		$ligne[] = '// Formattage d\'une chaine de caractères "chaine" selon le format "formattage".';
+		$ligne[] = '// @param chaine : Chainbe de caractère à formater.';
+		$ligne[] = '// @param formattage : Formattage d\'une valeur selon la règle [-]chiffreAvantLaVirgule.chiffreApresLaVirgule';
+		$ligne[] = 'String formatString(float p_valeur, String p_formattage) {';
+		$ligne[] = '	int delimiterPosition, lenghtAvant;';
+		$ligne[] = '	String data = "";  // The string we need to format';
+		$ligne[] = '	String chaine = String(p_valeur);';
+		$ligne[] = '';
+		$ligne[] = '	delimiterPosition = chaine.indexOf(".");  // Read the delimiter positon in "chaine".';
+		$ligne[] = '	String avant = chaine.substring(0, delimiterPosition);';
+		$ligne[] = '	String apres = chaine.substring(delimiterPosition + 1);';
+		$ligne[] = '';
+		$ligne[] = '	delimiterPosition = p_formattage.indexOf(".");           // Read the delimiter position in "formattage".';
+		$ligne[] = '	if ( p_formattage.substring(0, 1) == "-" ) {';
+		$ligne[] = '		lenghtAvant = p_formattage.substring(1, delimiterPosition).toInt();';
+		$ligne[] = '	} else {';
+		$ligne[] = '		lenghtAvant = p_formattage.substring(0, delimiterPosition).toInt();';
+		$ligne[] = '	}';
+		$ligne[] = '	int lenghtApres = p_formattage.substring(delimiterPosition + 1).toInt();';
+		$ligne[] = '';
+		$ligne[] = '	// Si on a besoin d\'un signe .................................';
+		$ligne[] = '	if ( p_formattage.substring(0, 1) == "-" ) {';
+		$ligne[] = '		if (p_valeur < 0) {';
+		$ligne[] = '			data.concat("-");';
+		$ligne[] = '		} else {';
+		$ligne[] = '			data.concat("+");';
+		$ligne[] = '		}';
+		$ligne[] = '	}';
+		$ligne[] = '';
+		$ligne[] = '	// Padding with 0 for the "avant" part ........................';
+		$ligne[] = '	String temp = "";';
+		$ligne[] = '	for (int i = 0; i <= lenghtAvant; i++) {';
+		$ligne[] = '		// Concatenation de tout les 0';
+		$ligne[] = '		temp.concat("0");';
+		$ligne[] = '	}';
+		$ligne[] = '	temp.concat(avant);';
+		$ligne[] = '	data.concat(temp.substring( temp.length() - lenghtAvant ));';
+		$ligne[] = '';
+		$ligne[] = '	// Formattage de la partie apres la virgule ....................';
+		$ligne[] = '	for (int i = 0; i <= apres.length(); i++) {';
+		$ligne[] = '		apres.concat("0");';
+		$ligne[] = '	}';
+		$ligne[] = '	apres = apres.substring(0, lenghtApres);';
+		$ligne[] = '	data.concat(apres);';
+		$ligne[] = '';
+		$ligne[] = '	return data;';
+		$ligne[] = '}';
+		$ligne[] = '';
+		$ligne[] = '';
+		$ligne[] = '';
+		$ligne[] = '// --------------------------------------------------------------------------------';
+		$ligne[] = '// Envoi au serveur TOCIO les mesures ("data") passées en paramètre.';
+		$ligne[] = '// @param data : String contenant les mesures formatée selon la payload défini dans le Back Office de Tocio';
+		$ligne[] = 'String sendDataInHTTPSRequest(String data) {';
+		$ligne[] = '';
+		$ligne[] = '	// If we are connecte to the WIFI';
+		$ligne[] = '	if (WiFi.status() == WL_CONNECTED) {';
+		$ligne[] = '';
+		$ligne[] = '		//  Create an https client';
+		$ligne[] = '		WiFiClientSecure client;';
+		$ligne[] = '		client.setFingerprint(fingerprint);';
+		$ligne[] = '		int port = 443;';
+		$ligne[] = '		if (!client.connect(host, port)) {';
+		$ligne[] = '			Serial.println("connection failed");';
+		$ligne[] = '			return "nok";';
+		$ligne[] = '		}';
+		$ligne[] = '';
+		$ligne[] = '		// Send data to the client with a GET method';
+		$ligne[] = '		String request = url + "/" + data;';
+		$ligne[] = '		client.print(String("GET ") + request + " HTTP/1.1\r\n" +';
+		$ligne[] = '				"Host: " + host + "\r\n" +';
+		$ligne[] = '				"Connection: close\r\n\r\n");';
+		$ligne[] = '';
+		$ligne[] = '		// Lecture de ce qui est renvoyée par le serveur';
+		$ligne[] = '		while (client.available()) {';
+		$ligne[] = '			String line = client.readStringUntil(\'\r\');';
+		$ligne[] = '			Serial.print(line);';
+		$ligne[] = '		}';
+		$ligne[] = '';
+		$ligne[] = '		client.stop();';
+		$ligne[] = '		return "ok";';
+		$ligne[] = '';
+		$ligne[] = '	} else {';
+		$ligne[] = '		return "nok";';
+		$ligne[] = '	}';
+		$ligne[] = '';
+		$ligne[] = '}';
+
 		return implode("<br/>",$ligne);
 	}
 }
