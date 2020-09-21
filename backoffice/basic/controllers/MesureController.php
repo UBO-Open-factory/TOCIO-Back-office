@@ -243,6 +243,8 @@ class MesureController extends ActiveController {
 	 * @version 17 juin 2020	: APE	- Remplacement des points dans la mesure par des virgules.
 	 * 	@version 3 juil. 2020	: APE	- Remplacement des virgules dans le formattage de mesure par des points.
 	 * 	@version 3 juil. 2020	: APE	- Implémentation de l'ajout dans Elasticsearch
+	 * 	@version 17 sept. 2020	: APE	- Suppression de l'utilisation de json_encode pour le retour de la fonction.
+	 * 									- Affichage des data inséréés dans ElasticSearch.
 	 */
 	private function _storeMesure($moduleID, $mesures){
 		$l_TAB_Retour = array();
@@ -319,8 +321,9 @@ class MesureController extends ActiveController {
 		
 		
 		// CREEATION DU CLIENT ELASTIC SEARCH ------------------------------------------------------
+		// Pour la configuration du client elastic @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/configuration.html
 		$l_OBJ_ClientElastic = ClientBuilder::create()->build();
-		$responsElastic		= array();
+		$elasticRespons		= array();
 		
 		
 		// ENREGISTREMENT DE LA TRAME DANS LES TABLES DE MESURES -----------------------------------
@@ -368,6 +371,7 @@ class MesureController extends ActiveController {
 							->execute();
 			
 			// Insertion dans Elastic Search
+			// @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/indexing_documents.html
 			$params['timestamp']	= date(DATE_ATOM, time());
 			$params['Module identifiant reseau'] = $l_TAB_Capteur['identifiantReseau'];
 			$params['Module description'] 		= $l_TAB_Capteur['description'];
@@ -375,10 +379,11 @@ class MesureController extends ActiveController {
 			$params['Capteur nom custom'] 		= $l_TAB_Capteur['nomcapteur'];
 			$params['Capteur nom'] 				= $l_TAB_Capteur['capteurnom'];
 			$params['Mesure nature'] 			= $l_TAB_Capteur['nature'];
-			$responsElastic[] = $l_OBJ_ClientElastic->index(
-					['index' => Yii::getAlias('@elasticsearchindex'),
-					'body'	=> $params
-					]);
+			$elasticData		= ['index' 	=> Yii::getAlias('@elasticsearchindex'),
+									'body'		=> $params
+									];
+			$respons 			= $l_OBJ_ClientElastic->index($elasticData);
+			$elasticRespons[] 	= $respons;
 		}
 		
 		
@@ -389,9 +394,12 @@ class MesureController extends ActiveController {
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$l_TAB_Retour['error']	= "";
 		$l_TAB_Retour['success']	= "ok";
-		$l_TAB_Retour['ElasticSearchReturn'] = json_encode($responsElastic);
+		$l_TAB_Retour['ElasticSearchDataInsertion'] = $elasticData;
+		$l_TAB_Retour['ElasticSearchReturn'] = $elasticRespons;
 		
-		return json_encode($l_TAB_Retour);
+		return $l_TAB_Retour;
+		
+		
 	}
 	
 	
