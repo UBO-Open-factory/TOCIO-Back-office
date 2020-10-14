@@ -12,12 +12,12 @@ $config = [
 				'log'
 		],
 		'timeZone' => 'Europe/Paris',
-		'version' => '1.2.0',
+		'version' => '1.2.1',
 		'aliases' => [ 
 				'@bower' => '@vendor/bower-asset',
 				'@npm' => '@vendor/npm-asset',
-				'@urlbehindproxy' => "/",
-				'@elasticsearchindex'	=> "model-tocio-event-large"
+				'@elasticsearchindex'	=> "model-tocio-event-large",
+				'@urlbehindproxy' => "/data/passerelle"
 		],
 		'components' => [ 
 				// Gestion des ressources ( les assets )

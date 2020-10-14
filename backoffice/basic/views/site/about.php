@@ -149,6 +149,9 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.2.1</h2>
+<li>2020-10-14 <b>&bull;</b> BUG 473 : L'ordre des capteurs dans la définition d'un Module est prise en compte lors de l'insertion d'une payload.</li>
+	
 	<h2>V 1.2.0</h2>
 <li>2020-07-13 <b>&bull;</b> Affichage des graphiques des mesures sur la page d'accueil</li>
 <li>2020-07-13 <b>&bull;</b> Affichage des valeurs de Grandeurs dans un graphique</li>
