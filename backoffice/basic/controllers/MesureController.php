@@ -203,7 +203,7 @@ class MesureController extends ActiveController {
 	//==============================================================================================
 	/**
 	 * Permet d'ajouter une mesure dans la base.
-	 * La trame doit être sous la forme : AA01/*2018-203703100
+	 * La trame doit être sous la forme : AA01/2018-203703100
 	 *
 	 */
 	public function actionAdd(){
@@ -245,6 +245,8 @@ class MesureController extends ActiveController {
 	 * 	@version 3 juil. 2020	: APE	- Implémentation de l'ajout dans Elasticsearch
 	 * 	@version 17 sept. 2020	: APE	- Suppression de l'utilisation de json_encode pour le retour de la fonction.
 	 * 									- Affichage des data inséréés dans ElasticSearch.
+	 * 	@version 14 oct. 2020	: APE	- Prise en compte de l'ordre des capteurs (ajout du "orderBy") 
+	 * 										lors de la récupéraiton de la liste des capteurs rattachés au module.
 	 */
 	private function _storeMesure($moduleID, $mesures){
 		$l_TAB_Retour = array();
@@ -261,17 +263,22 @@ class MesureController extends ActiveController {
 		 @see https://www.yiiframework.com/doc/guide/2.0/fr/db-query-builder
 		 */
 		$l_OBJ_Query= new Query();
-		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom as capteurnom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z, rmc.nomcapteur')
+		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom as capteurnom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z, rmc.nomcapteur, rmc.ordre')
 									->from('module as m')
 									->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
 									->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
 									->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
 									->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
 									->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
+									->orderBy(['rmc.ordre'=> SORT_ASC])
 									->all();
 
 		
-		
+									
+									
+									
+									
+									
 		// CALCUL DU NOMBRE DE CARACTÈRES ATTENDU DANS LA TRAME ------------------------------------
 		$l_INT_LongeurAttendu = 0;
 		foreach( $l_TAB_Results as $l_INT_Key => $l_TAB_Format){
@@ -304,6 +311,8 @@ class MesureController extends ActiveController {
 		}
 		$l_TAB_Retour['Nb caractere attendu']	= $l_INT_LongeurAttendu;
 		
+
+
 		
 		
 		// TEST SI LA TRAME FAIT LE BON NOMBRE DE CARACTÈRES ---------------------------------------
