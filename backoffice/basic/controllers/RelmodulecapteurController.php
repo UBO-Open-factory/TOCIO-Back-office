@@ -223,6 +223,7 @@ class RelmodulecapteurController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      * @version 25 avr. 2020	: APE	- Rerdirection sur l'Url précédente ( doit être initialisée avec Url::remember() )
+     * @version 6 nov. 2020	: APE	- Redirection sur la page des modules (car problème avec les uRL behind proxy sinon)
      */
     public function actionUpdate($idModule, $idCapteur, $nomcapteur) {
     	$model = $this->findModel($idModule, $idCapteur, $nomcapteur);
@@ -230,7 +231,8 @@ class RelmodulecapteurController extends Controller
         // UPDATE À PARTIR DE LA PAGE WEB (EN POST) ------------------------------------------------
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 //         	return $this->redirect(['view', 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur, 'nomcapteur' => $model->nomcapteur]);
-        	return $this->redirect([Url::previous(), 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur, 'nomcapteur' => $model->nomcapteur]);
+//         	return $this->redirect([Url::previous(), 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur, 'nomcapteur' => $model->nomcapteur]);
+        	return $this->redirect(['module/index', 'idModule' => $idModule]);
         }
 
         return $this->render('update', [

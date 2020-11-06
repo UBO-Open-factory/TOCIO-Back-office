@@ -6,9 +6,13 @@ use yii\helpers\Html;
 /* @var $model app\models\Relmodulecapteur */
 
 $this->title = 'Mise à jour du Capteur : ' . $model->idModule;
-$this->params['breadcrumbs'][] = ['label' => 'Relmodulecapteurs', 'url' => ['index']];
+/*
+ * Le breadcrumbs n'a pas lieux d'être.
+$this->params['breadcrumbs'][] = ['label' => 'Relation module-capteur', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->idModule, 'url' => ['view', 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur]];
 $this->params['breadcrumbs'][] = 'Update';
+*/
+
 ?>
 <div class="relmodulecapteur-update">
 
