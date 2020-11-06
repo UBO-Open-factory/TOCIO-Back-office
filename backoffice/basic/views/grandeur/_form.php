@@ -23,7 +23,7 @@ use yii\helpers\Url;
 			<?php /* liste déroulante pour les types de valeurs*/
 				echo $form->field($model, 'type')->dropDownList([
 		    		"int(10)" => "Integer",
-					"float(5,3)" => "Float",
+					"float(8,3)" => "Float",
 		    		"real" => "Réel",
 		    		"text" => "Text",
 		    		"varchar(50)" => "Varchar",

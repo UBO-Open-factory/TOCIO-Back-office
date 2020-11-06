@@ -149,6 +149,10 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.2.2</h2>
+<li>2020-11-06 <b>&bull;</b> Mise à jour de Yii</li>
+<li>2020-11-06 <b>&bull;</b> Récupération des mises a jour faite sur le serveur de prod.</li>
+
 	<h2>V 1.2.1</h2>
 <li>2020-10-14 <b>&bull;</b> BUG 473 : L'ordre des capteurs dans la définition d'un Module est prise en compte lors de l'insertion d'une payload.</li>
 	
