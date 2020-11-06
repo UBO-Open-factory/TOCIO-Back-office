@@ -136,6 +136,8 @@ class RelmodulecapteurController extends Controller
      * @param integer $idCapteur
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * 
+     * 	@version 6 nov. 2020	: APE	- Le numéro d'odre n'est plus 99 par défaut, mais le plus grand.
      */
     public function actionAttacheajax() {
     	$request = Yii::$app->request;
@@ -150,11 +152,13 @@ class RelmodulecapteurController extends Controller
     		$post	= $request->post();
     		$model 	= new Relmodulecapteur();
     		
-    		// On recherche si le capteur existe déjà avec ce nom
+    		// ON RECHERCHE SI LE CAPTEUR EXISTE DÉJÀ AVEC CE NOM ..................................
+    		// ( comme ça on modifie son nom )
     		$relModuleCapteurs 	= Relmodulecapteur::findAll(['idModule' => $post['idModule'], 'idCapteur' => $post['idCapteur']]);
     		$l_TAB_NomCapteurs	= [];
     		foreach( $relModuleCapteurs as $l_OBJ_RelModuleCapteur){
     			$l_TAB_NomCapteurs[]	= $l_OBJ_RelModuleCapteur->nomcapteur;
+    			
     		}
     		if ( in_array($post['nomcapteur'], $l_TAB_NomCapteurs) ){
     			$post['nomcapteur']	= $post['nomcapteur']. " Ajouté le ". date("Y/m/d H:i:s", time());
@@ -162,15 +166,36 @@ class RelmodulecapteurController extends Controller
     		
     		
     		
-    		// Initialiastion des attributs avec les valeurs passées en paramètre 
+    		// RECHERCHE LE PLUS GRAND NUMÉRO D'ORDRE ..............................................
+    		$l_INT_MaxOrdre 	= 0; 
+    		foreach( Relmodulecapteur::findAll(['idModule' => $post['idModule']]) as $l_OBJ_RelModuleCapteur){
+    			
+    			// Recherche le numéro d'Ordre le plus grand
+    			if( $l_OBJ_RelModuleCapteur->ordre > $l_INT_MaxOrdre ){
+    				$l_INT_MaxOrdre = $l_OBJ_RelModuleCapteur->ordre;
+    			}
+    		}
+    		
+    		
+    		
+    		// INITIALIASTION DES ATTRIBUTS AVEC LES VALEURS PASSÉES EN PARAMÈTRE ..................
     		foreach( $post as $name => $value) {
+    			if( $name == "ordre" and $value = 99) {
+    				// Si l'ordre est bien à 99 c'est que le capteur vient d'être attaché au module.
+    				// dans ce cas, on prend le numéro d'ordre le plus grand dans la base et on l'incrémente
+    				// Le but est qu'il ne doit pas y avoir plusieurs capteur avec le même numéro d'ordre, mais que  
+    				// l'ordre d'affichage des capteurs soit belle et bien le même que celui de leur création. 
+    				$value = $l_INT_MaxOrdre +1;
+    			}
     			$model->setAttribute($name, $value);
     		}
     		
     		
         	// Le retour sera au format JSON
     		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    		// Sauve le model
+    		
+    		
+    		// SAUVE LE MODEL ......................................................................
     		if( $model->save() ){
     			return ["success" => "ok", "url" => Url::to(["/module/index", "idModule" => $post['idModule']])];
     		} else {

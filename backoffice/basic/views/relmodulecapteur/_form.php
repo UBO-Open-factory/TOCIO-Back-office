@@ -10,7 +10,7 @@ use yii\helpers\Url;
 /* @var $model app\models\Relmodulecapteur */
 /* @var $form yii\widgets\ActiveForm */
 
-// Récupération du nom du capteur en foction de l'idModule
+// Récupération du nom du capteur en fonction de l'idModule
 $request = Yii::$app->request;
 $idModule	= $request->get('idModule');
 
@@ -47,7 +47,6 @@ $Module = Module::findOne(['identifiantReseau' => $idModule]);
 		<div class="col-sm-4">
 			<?= $form->field($model, 'z')->textInput()->hint("Coordonnées Z du capteur")  ?>
 		</div>
-		<?= BaseHtml::activeHiddenInput($model, 'ordre', ['value' => 99]) ?>
 
 		
     </div>

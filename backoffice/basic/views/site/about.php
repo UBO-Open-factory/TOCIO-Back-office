@@ -150,6 +150,8 @@ function commentaire($elem){
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.2.2</h2>
+<li>2020-11-06 <b>&bull;</b> Correction Bug 475 : L'ordre d'ajout d'un Capteur dans un Module est conservé lorsque l'on modifie le nom d'un capteur.</li>
+<li>2020-11-06 <b>&bull;</b> Correction Bug 476 : Redirection sur la page des modules après la modification d'un nom de Capteur.</li>
 <li>2020-11-06 <b>&bull;</b> Correction Bug 747 : Le format du type (float) de la Grandeur ne permet pas d'insérer des valeur > 99.999</li>
 <li>2020-11-06 <b>&bull;</b> Mise à jour de Yii</li>
 <li>2020-11-06 <b>&bull;</b> Récupération des mises a jour faite sur le serveur de prod.</li>
