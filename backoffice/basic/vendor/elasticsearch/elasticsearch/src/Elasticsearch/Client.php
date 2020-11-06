@@ -1,4 +1,17 @@
 <?php
+/**
+ * Elasticsearch PHP client
+ *
+ * @link      https://github.com/elastic/elasticsearch-php/
+ * @copyright Copyright (c) Elasticsearch B.V (https://www.elastic.co)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @license   https://www.gnu.org/licenses/lgpl-2.1.html GNU Lesser General Public License, Version 2.1 
+ * 
+ * Licensed to Elasticsearch B.V under one or more agreements.
+ * Elasticsearch B.V licenses this file to you under the Apache 2.0 License or
+ * the GNU Lesser General Public License, Version 2.1, at your option.
+ * See the LICENSE file in the project root for more information.
+ */
 declare(strict_types = 1);
 
 namespace Elasticsearch;
@@ -15,6 +28,7 @@ use Elasticsearch\Namespaces\NamespaceBuilderInterface;
 use Elasticsearch\Namespaces\BooleanRequestWrapper;
 use Elasticsearch\Namespaces\CatNamespace;
 use Elasticsearch\Namespaces\ClusterNamespace;
+use Elasticsearch\Namespaces\DanglingIndicesNamespace;
 use Elasticsearch\Namespaces\IndicesNamespace;
 use Elasticsearch\Namespaces\IngestNamespace;
 use Elasticsearch\Namespaces\NodesNamespace;
@@ -44,17 +58,11 @@ use Elasticsearch\Namespaces\XpackNamespace;
 
 /**
  * Class Client
- * Generated running $ php util/GenerateEndpoints.php 7.8
- *
- * @category Elasticsearch
- * @package  Elasticsearch
- * @author   Enrico Zimuel <enrico.zimuel@elastic.co>
- * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
- * @link     http://elastic.co
+ * Generated running $ php util/GenerateEndpoints.php 7.9
  */
 class Client
 {
-    const VERSION = '7.8';
+    const VERSION = '7.9';
 
     /**
      * @var Transport
@@ -85,6 +93,11 @@ class Client
      * @var ClusterNamespace
      */
     protected $cluster;
+    
+    /**
+     * @var DanglingIndicesNamespace
+     */
+    protected $danglingIndices;
     
     /**
      * @var IndicesNamespace
@@ -230,6 +243,7 @@ class Client
         $this->endpoints = $endpoint;
         $this->cat = new CatNamespace($transport, $endpoint);
         $this->cluster = new ClusterNamespace($transport, $endpoint);
+        $this->danglingIndices = new DanglingIndicesNamespace($transport, $endpoint);
         $this->indices = new IndicesNamespace($transport, $endpoint);
         $this->ingest = new IngestNamespace($transport, $endpoint);
         $this->nodes = new NodesNamespace($transport, $endpoint);
@@ -298,7 +312,7 @@ class Client
      *
      * @param array $params Associative array of parameters
      * @return array
-     * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/search-request-body.html#_clear_scroll_api
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/clear-scroll-api.html
      */
     public function clearScroll(array $params = [])
     {
@@ -632,6 +646,7 @@ class Client
      * $params['allow_no_indices']   = (boolean) Whether to ignore if a wildcard indices expression resolves into no concrete indices. (This includes `_all` string or when no indices have been specified)
      * $params['expand_wildcards']   = (enum) Whether to expand wildcard expression to concrete indices that are open, closed or both. (Options = open,closed,hidden,none,all) (Default = open)
      * $params['include_unmapped']   = (boolean) Indicates whether unmapped fields should be included in the response. (Default = false)
+     * $params['body']               = (array) An index filter specified with the Query DSL
      *
      * @param array $params Associative array of parameters
      * @return array
@@ -640,11 +655,13 @@ class Client
     public function fieldCaps(array $params = [])
     {
         $index = $this->extractArgument($params, 'index');
+        $body = $this->extractArgument($params, 'body');
 
         $endpointBuilder = $this->endpoints;
         $endpoint = $endpointBuilder('FieldCaps');
         $endpoint->setParams($params);
         $endpoint->setIndex($index);
+        $endpoint->setBody($body);
 
         return $this->performRequest($endpoint);
     }
@@ -1420,6 +1437,10 @@ class Client
     public function cluster(): ClusterNamespace
     {
         return $this->cluster;
+    }
+    public function danglingIndices(): DanglingIndicesNamespace
+    {
+        return $this->danglingIndices;
     }
     public function indices(): IndicesNamespace
     {

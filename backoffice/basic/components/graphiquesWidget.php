@@ -37,6 +37,8 @@ class graphiquesWidget extends Widget
 	 * Génération du code HTML pour l'affichage des graphiques de visualisation des données des 
 	 * Grandeurs.
 	 * 
+	 * 	@version 17 sept. 2020	: APE	- Filtrage des mesures (on prend les 1000 dernières mesures)
+	 * 
 	 * {@inheritDoc}
 	 * @see \yii\base\Widget::run()
 	 */
@@ -67,6 +69,8 @@ class graphiquesWidget extends Widget
 								->select(['timestamp', 'valeur'])
 								->from($l_OBJ_Grandeur->tablename)
 								->where(['identifiantModule' => $id])
+								->orderBy('timestamp DESC')
+								->limit(1000)
 								->all();
 			}
 			
