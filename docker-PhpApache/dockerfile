@@ -1,0 +1,6 @@
+# On va construire un container apache en lui rajoutant les extension qu'on a besoin pour TOCIO
+FROM php:7.2.1-apache
+LABEL author="Alexandre PERETJATKO"
+LABEL version="1.0"
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+

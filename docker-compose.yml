@@ -1,0 +1,85 @@
+version: '3'
+services:
+  # 
+  # ______________________________________________________________________________________
+  # Le serveur apache
+  # @see : https://www.osradar.com/how-to-deploy-a-lamp-server-using-docker-compose/
+  # TODO : Rajouter les config apache des virtual host pour les ports 80, 8080, 8888
+  php-apache:
+    container_name: tocio-Apache
+    build:
+      context: ./docker-PhpApache     # On utilise ce container (definit dans le fichier dockerfile de ce repertoire)
+    ports:
+      - 8080:80
+    volumes:
+      - ./backoffice/basic/web/:/var/www/html/
+    links:
+      - 'mariadb'
+
+
+  
+  # ______________________________________________________________________________________
+  # PHPmyAdmin
+  # Pour debug
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: tocio-PHP-MyAdmin
+    restart: always
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+    links:
+      - 'mariadb'
+
+
+
+  # ______________________________________________________________________________________
+  # Swagger
+  # Pour afficher l'API de l'application TOCIO
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: tocio-swagger
+    ports:
+      - "8888:8080"
+    volumes:
+      - ./APIdoc/swagger-ui/dist/APItocio.yaml:/swagger.yml
+    environment:
+      SWAGGER_JSON: /swagger.yml
+
+
+  # ______________________________________________________________________________________
+  # Kibana
+  # TODO : a faire
+  # kibana:
+
+
+
+
+  # ______________________________________________________________________________________
+  # La base de données MySQL
+  # TODO : Initialiser la bdd avec les data
+  mariadb:
+    image: mariadb:10.3
+    container_name: tocio-MySQL
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - mariadb:/var/lib/mysql
+    environment:
+      TZ: "Europe/Paris"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: aO3JdymuJuqGnHwzLCuA
+      MYSQL_USER: userdata
+      MYSQL_PASSWORD: 5EFEMzGZALn8nYBV
+      MYSQL_DATABASE: data
+    ports:
+      - 3306:3306
+
+volumes:
+  mariadb: {}

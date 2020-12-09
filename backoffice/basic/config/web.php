@@ -2,27 +2,27 @@
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
-$config = [ 
+$config = [
 		'id' 		=> 'basic',
 		'basePath' 	=> dirname ( __DIR__ ),
 		'homeUrl' 	=> '/',
 		'language' 	=> 'fr-FR',
 		'name' 		=> "TOCIO : BO Data",
-		'bootstrap' => [ 
+		'bootstrap' => [
 				'log'
 		],
 		'timeZone' => 'Europe/Paris',
-		'version' => '1.2.1',
-		'aliases' => [ 
+		'version' => '1.2.2',
+		'aliases' => [
 				'@bower' => '@vendor/bower-asset',
 				'@npm' => '@vendor/npm-asset',
-				'@elasticsearchindex'	=> "model-tocio-event-large",
-				'@urlbehindproxy' => "/data/passerelle"
+				'@urlbehindproxy' => "/",
+				'@elasticsearchindex'	=> "model-tocio-event-large"
 		],
-		'components' => [ 
+		'components' => [
 				// Gestion des ressources ( les assets )
 				// On rajoute un timestamp pour que cette ressource ne soit pas mise en cache
-				'assetManager' => [ 
+				'assetManager' => [
 						'baseUrl' => "@urlbehindproxy/assets/",
 						'appendTimestamp' => true,
 						'converter' => [
@@ -36,19 +36,19 @@ $config = [
 				'authManager' => [
 						'class' => 'yii\rbac\DbManager',
 				],
-				'request' => [ 
+				'request' => [
 						// !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
 						'cookieValidationKey' => 'keW0Qn2MixxqzkfRxEWni-Frzm3VJoFim',
-
+						
 						// Autorisation pour avoir du JSON en entrée (POST par exemple)
-						'parsers' => [ 
+						'parsers' => [
 								'application/json' => 'yii\web\JsonParser'
 						]
 				],
-				'cache' => [ 
+				'cache' => [
 						'class' => 'yii\caching\FileCache'
 				],
-				'user' => [ 
+				'user' => [
 						'identityClass' => 'app\models\User',
 						'enableAutoLogin' => true,
 						'authTimeout' => 60*30,
@@ -56,10 +56,10 @@ $config = [
 								'name' => '_User',
 						]
 				],
-				'errorHandler' => [ 
+				'errorHandler' => [
 						'errorAction' => '/site/error'
 				],
-				'mailer' => [ 
+				'mailer' => [
 						'class' => 'yii\swiftmailer\Mailer',
 						// send all mails to a file by default. You have to set
 						// 'useFileTransport' to false and configure a transport
@@ -72,25 +72,25 @@ $config = [
 								'port' => 'your_smtp_port',
 								'username' => 'your_username',
 								'password' => 'your_password',
-						], 
+						],
 				],
-
+				
 				// le composant "log" traite les messages avec un horodatage (timestamp).
-				'log' => [ 
+				'log' => [
 						'traceLevel' => YII_DEBUG ? 4 : 0,
-						'targets' => [ 
-								[ 
+						'targets' => [
+								[
 										'class' => 'yii\log\DbTarget',
-										'levels' => [ 
+										'levels' => [
 												'error'
 										],
-										'categories' => [ 
+										'categories' => [
 												'tocio'
 										]
 								],
-								[ 
+								[
 										'class' => 'yii\log\FileTarget',
-										'levels' => [ 
+										'levels' => [
 												'error',
 												'warning'
 										]
@@ -98,41 +98,41 @@ $config = [
 						]
 				],
 				'db' => $db,
-				'urlManager' => [ 
+				'urlManager' => [
 						'baseUrl' => "@urlbehindproxy",
 						'enablePrettyUrl' => true,
 						'enableStrictParsing' => false,
 						'showScriptName' => false,
-						'rules' => [ 
-								[ 
+						'rules' => [
+								[
 										'class' => 'yii\rest\UrlRule',
 										'controller' => 'tramebrute'
 								],
-								[ 
+								[
 										'class' => 'yii\rest\UrlRule',
 										'controller' => 'mesure',
 										'pluralize' => false,
-										'patterns' => [ 
+										'patterns' => [
 												'POST addlora' => 'addlora',
 												'GET addlora' => 'addloraget',
 												'GET add/<moduleid>/<mesures>' => 'add',
 												'GET get/<moduleid>' => 'get'
 										]
 								],
-								[ 
+								[
 										'class' => 'yii\rest\UrlRule',
 										'controller' => 'capteur',
 										'pluralize' => false,
-										'patterns' => [ 
+										'patterns' => [
 												'GET getcapteur/<id:\d+>' => 'getcapteur',
 												'GET,POST getcapteurs' => 'getcapteurs'
 										]
 								],
-								[ 
+								[
 										'class' => 'yii\rest\UrlRule',
 										'controller' => 'grandeur',
 										'pluralize' => false,
-										'patterns' => [ 
+										'patterns' => [
 												'GET getgrandeur/<id:\d+>' => 'getgrandeur',
 												'GET getgrandeurs' => 'getgrandeurs'
 										]
@@ -146,25 +146,25 @@ $config = [
 if (YII_ENV_DEV) {
 	// configuration adjustments for 'dev' environment
 	$config ['bootstrap'] [] = 'debug';
-	$config ['modules'] ['debug'] = [ 
+	$config ['modules'] ['debug'] = [
 			'class' => 'yii\debug\Module',
 			// uncomment the following to add your IP if you are not connecting from localhost.
 			// 'allowedIPs' => ['127.0.0.1', '::1', '192.168.0.*'],
-			'allowedIPs' => [ 
+			'allowedIPs' => [
 					'*'
 			]
 	];
-
+	
 	$config ['bootstrap'] [] = 'gii';
-	$config ['modules'] ['gii'] = [ 
+	$config ['modules'] ['gii'] = [
 			'class' => 'yii\gii\Module',
 			// uncomment the following to add your IP if you are not connecting from localhost.
-			'allowedIPs' => [ 
+			'allowedIPs' => [
 					'127.0.0.1',
 					'::1',
 					'192.168.0.*'
 			]
-		// 'allowedIPs' => ['*'],
+			// 'allowedIPs' => ['*'],
 	];
 }
 
