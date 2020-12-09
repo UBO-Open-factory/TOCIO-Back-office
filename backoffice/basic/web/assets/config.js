@@ -3,5 +3,5 @@
 // ---------------------------------------------------------------------
 // NE PAS MODIFIER CE FICHIER À LA MAIN
 // ---------------------------------------------------------------------
-var g_urlbehindproxy = '/data/passerelle/';	// Set in /config/web.php
-var g_host = 'https://uboopenfactory.univ-brest.fr/data/passerelle';
+var g_urlbehindproxy = '/';	// Set in /config/web.php
+var g_host = 'https://tocio.alex-design.fr';
