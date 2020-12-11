@@ -5,3 +5,4 @@ vendor/
 */web/assets/*
 *.sass-cache/
 *package-lock.json
+*.lock
