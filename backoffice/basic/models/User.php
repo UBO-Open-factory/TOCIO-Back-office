@@ -137,10 +137,16 @@ class User extends ActiveRecord implements IdentityInterface
     }
     
     
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
     public function beforeSave($insert) {
     	if (parent::beforeSave($insert)) {
     		if ($this->isNewRecord) {
     			$this->authKey = \Yii::$app->security->generateRandomString();
+    			
     		}
     		return true;
     	}

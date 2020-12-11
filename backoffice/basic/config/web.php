@@ -7,7 +7,7 @@ $config = [
 		'basePath' 	=> dirname ( __DIR__ ),
 		'homeUrl' 	=> '/',
 		'language' 	=> 'fr-FR',
-		'name' 		=> "TOCIO : BO Data",
+		'name' 		=> "TOCIO : BO Dev.",
 		'bootstrap' => [
 				'log'
 		],
