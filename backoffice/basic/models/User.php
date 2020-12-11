@@ -135,4 +135,15 @@ class User extends ActiveRecord implements IdentityInterface
 
     	return \Yii::$app->getSecurity()->validatePassword($password, $this->password); 
     }
+    
+    
+    public function beforeSave($insert) {
+    	if (parent::beforeSave($insert)) {
+    		if ($this->isNewRecord) {
+    			$this->authKey = \Yii::$app->security->generateRandomString();
+    		}
+    		return true;
+    	}
+    	return false;
+    }
 }

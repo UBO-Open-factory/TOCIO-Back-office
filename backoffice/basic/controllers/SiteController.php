@@ -79,12 +79,22 @@ class SiteController extends Controller
 
         // IF LOGIN IS OK
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if (isset($_POST['LoginForm'])) {
+//         	$model->attributes = $_POST['LoginForm'];
+			// Get model from login form
+        	$model->load(Yii::$app->request->post());
         	
-        	// Redirect after login
-//             return $this->goBack();
-        	return $this->goHome();
+        	// If the model (the user) is logged 
+        	if ($model->login())
+//         		$this->redirect(Yii::app()->user->returnUrl);
+        		return $this->goHome();
         }
+//         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        	
+//         	// Redirect after login
+// //             return $this->goBack();
+//         	return $this->goHome();
+//         }
 
         $model->password = '';
         return $this->render('login', [
