@@ -1,9 +1,92 @@
 version: '2'
 services:
+  # ______________________________________________________________________________________
+  # framwork Yii avec mon appli
   php:
-    image: yiisoftware/yii2-php:7.1-apache
+    image: yiisoftware/yii2-php:7.3-apache
+    container_name: tocio_yii
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./:/app:delegated
     ports:
-      - '8000:80'
+      - '80:80'
+    networks:
+     - my-network
+
+
+  # ______________________________________________________________________________________
+  # PHPmyAdmin
+  # Pour debug (a ne pas mettre pour le déployement en prod)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: tocio_PHPMyAdmin
+    restart: always
+    environment:
+      PMA_HOST: dataBase # le nom du service mysql
+      PMA_PORT: 3306
+      # PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - dataBase
+    networks:
+      - my-network
+
+
+  # ______________________________________________________________________________________
+  # La base de données MySQL
+  dataBase:
+    image: mysql:5.7
+    container_name: tocio_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: aO3JdymuJuqGnHwzLCuA
+      MYSQL_USER: userdata
+      MYSQL_PASSWORD: 5EFEMzGZALn8nYBV
+      MYSQL_DATABASE: data
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - mySQL:/var/lib/mysql
+    networks:
+     - my-network
+
+
+  # ______________________________________________________________________________________
+  # Swagger
+  # Pour afficher l'API de l'application TOCIO
+#   swagger-ui:
+#     image: swaggerapi/swagger-ui
+#     container_name: tocio_swagger
+#     ports:
+#       - "80:8080"
+#     volumes:
+#       - ../../APIdoc/swagger-ui/dist/APItocio.yaml:/swagger.yml
+#     environment:
+#       SWAGGER_JSON: /swagger.yml
+
+
+  # ______________________________________________________________________________________
+  # Kibana
+  # TODO : a faire
+  # kibana:
+
+
+
+
+
+  # ______________________________________________________________________________________
+  # Cache pour l'appli
+  memcached:
+    container_name: tocio_memcached
+    image: memcached:latest
+    ports:
+        - "0.0.0.0:11211:11211"
+volumes:
+  mySQL: {}
+networks:
+  my-network:
+    driver: bridge
