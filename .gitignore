@@ -2,11 +2,6 @@
 *.settings/
 *.buildpath/
 vendor/
-*/web/assets/181d1de5/
-*/web/assets/310ba1d2/
-*/web/assets/3cd15aa1/
-*/web/assets/5e83e817/
-*/web/assets/6dbbc067/
-*/web/assets/bedfe4d0/
+*/web/assets/*
 *.sass-cache/
 *package-lock.json
