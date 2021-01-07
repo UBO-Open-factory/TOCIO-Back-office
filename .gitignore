@@ -1,7 +1,6 @@
 *.project
 *.settings/
 *.buildpath/
-vendor/
 */web/assets/*
 *.sass-cache/
 *package-lock.json
