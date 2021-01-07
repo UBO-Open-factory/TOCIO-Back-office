@@ -149,6 +149,11 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.2.3</h2>
+<li>2021-01-07 <b>&bull;</b> Mise à jour de Yii en version 2.0.40</li>
+<li>2021-01-07 <b>&bull;</b> Corretion Bug 482 : Association d'un capteur impossible (en utilisant les boutons).</li>
+	
+	
 	<h2>V 1.2.2</h2>
 <li>2020-12-09 <b>&bull;</b> Mise à jour de Yii en version 2.0.39.3.</li>
 <li>2020-12-09 <b>&bull;</b> Passage en version 1.2.2</li>

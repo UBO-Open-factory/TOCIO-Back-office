@@ -1,5 +1,4 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
@@ -80,17 +79,53 @@ class RelmodulecapteurController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      * @version 16 avr. 2020	: APE	- Redirection sur la page des modules
+     * @version 7 janv. 2021    : APE    - Initialisation du numéro d'ordre du capteur dans le module.
      */
     public function actionCreate() {
         $model = new Relmodulecapteur();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	return $this->redirect(['module/index', 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur, 'nomcapteur' => $model->nomcapteur]);
-        	
+        // Si on arrive a créer un module à partir des données récupérées en POST
+        if ($model->load(Yii::$app->request->post())) {
+            $post = Yii::$app->request->post()['Relmodulecapteur'];
+            
+            
+            // ON RECHERCHE SI LE CAPTEUR EXISTE DÉJÀ AVEC CE NOM ..................................
+            // ( si c'est le cas on modifie son nom )
+            $l_TAB_NomCapteurs	= [];
+            $relModuleCapteurs 	= Relmodulecapteur::findAll(['idModule' => $post['idModule'], 'idCapteur' => $post['idCapteur']]);
+            foreach( $relModuleCapteurs as $l_OBJ_RelModuleCapteur){
+                $l_TAB_NomCapteurs[]	= $l_OBJ_RelModuleCapteur->nomcapteur;
+                
+            }
+            if ( in_array($post['nomcapteur'], $l_TAB_NomCapteurs) ){
+                $post['nomcapteur']	= $post['nomcapteur']. " Ajouté le ". date("Y/m/d H:i:s", time());
+            }
+            
+            
+            // RECHERCHE LE PLUS GRAND NUMÉRO D'ORDRE ..............................................
+            $l_INT_MaxOrdre 	= 0;
+            foreach( Relmodulecapteur::findAll(['idModule' => $post['idModule']]) as $l_OBJ_RelModuleCapteur){
+                
+                // Recherche le numéro d'Ordre le plus grand
+                if( $l_OBJ_RelModuleCapteur->ordre > $l_INT_MaxOrdre ){
+                    $l_INT_MaxOrdre = $l_OBJ_RelModuleCapteur->ordre;
+                }
+            }
+            // Initialisation du numéro d'ordre du capteur 
+            $model->setAttribute("ordre", $l_INT_MaxOrdre+1);
+            
+            
+            
+            // SAUVEGARDE DU MODEL ...................................................................
+            if ($model->save()) {
+        	   return $this->redirect(['module/index', 'idModule' => $model->idModule, 'idCapteur' => $model->idCapteur, 'nomcapteur' => $model->nomcapteur]);
+            } else {
+                return ["success" => "** Oupsss, il y a eu un problème à la création du model ".$model::className()."\n", "errors" => json_encode($model->errors)];
+            }
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model' => $model
         ]);
     }
 

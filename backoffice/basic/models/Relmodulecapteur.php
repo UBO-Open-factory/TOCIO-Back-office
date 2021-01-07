@@ -42,7 +42,7 @@ class Relmodulecapteur extends \yii\db\ActiveRecord
             [['idCapteur'], 'exist', 'skipOnError' => true, 'targetClass' => Capteur::className(), 'targetAttribute' => ['idCapteur' => 'id']],
             [['idModule'], 'exist', 'skipOnError' => true, 'targetClass' => Module::className(), 'targetAttribute' => ['idModule' => 'identifiantReseau']],
             [['x', 'y', 'z'], 'default', 'value' => 0],	// Valeur par défault des coordoonées.
-            [['ordre'], 'default', 'value' => 99],	// Valeur par défault de l'ordre .
+//             [['ordre'], 'default', 'value' => 99],	// Valeur par défault de l'ordre .
         ];
     }
 
