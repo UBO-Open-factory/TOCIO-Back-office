@@ -38,6 +38,7 @@ use GuzzleHttp\Ring\Client\CurlMultiHandler;
 use GuzzleHttp\Ring\Client\Middleware;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use ReflectionClass;
 
 class ClientBuilder
 {
@@ -188,8 +189,14 @@ class ClientBuilder
         $builder = new static;
         foreach ($config as $key => $value) {
             $method = "set$key";
-            if (method_exists($builder, $method)) {
-                $builder->$method($value);
+            $reflection = new ReflectionClass($builder);
+            if ($reflection->hasMethod($method)) {
+                $func = $reflection->getMethod($method);
+                if ($func->getNumberOfParameters() > 1) {
+                    $builder->$method(...$value);
+                } else {
+                    $builder->$method($value);
+                }
                 unset($config[$key]);
             }
         }
@@ -564,7 +571,11 @@ class ClientBuilder
 
             $this->endpoint = function ($class) use ($serializer) {
                 $fullPath = '\\Elasticsearch\\Endpoints\\' . $class;
-                if ($class === 'Bulk' || $class === 'Msearch' || $class === 'MsearchTemplate' || $class === 'MPercolate') {
+                
+                $reflection = new ReflectionClass($fullPath);
+                $constructor = $reflection->getConstructor();
+
+                if ($constructor && $constructor->getParameters()) {
                     return new $fullPath($serializer);
                 } else {
                     return new $fullPath();
