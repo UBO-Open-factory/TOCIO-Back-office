@@ -2,6 +2,7 @@
 *.settings/
 *.buildpath/
 */web/assets/*
+web/assets/
 *.sass-cache/
 *package-lock.json
 *.lock
