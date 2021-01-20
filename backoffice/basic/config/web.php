@@ -142,8 +142,11 @@ $config = [
     'params' => $params
 ];
 
+
 // Merge config from other web.php config file
-$config = array_merge($config, require __DIR__ . '/web_local.php');
+if( __DIR__ . '/web_local.php') {
+    $config = array_merge($config, require __DIR__ . '/web_local.php');
+}
 
 
 
