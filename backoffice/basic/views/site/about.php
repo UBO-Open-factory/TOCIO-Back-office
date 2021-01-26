@@ -144,11 +144,15 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.2.0..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
+		git log v1.2.4..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.2.4</h2>
+<li>2021-01-20 <b>&bull;</b> Creation d'un fichier de configuration locale pour éviter qu'il soit écrasé lors de mise a jour</li>
+<li>2021-01-20 <b>&bull;</b> Nettoyage de fichiers suite à mise à jour de Yii</li>
+
 	<h2>V 1.2.3</h2>
 <li>2021-01-07 <b>&bull;</b> Mise à jour de Yii en version 2.0.40</li>
 <li>2021-01-07 <b>&bull;</b> Corretion Bug 482 : Association d'un capteur impossible (en utilisant les boutons).</li>
