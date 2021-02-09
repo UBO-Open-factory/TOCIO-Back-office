@@ -32,8 +32,8 @@ class tocioRegles extends Widget {
 											Une <i>Grandeur</i> est la caractéristique d'une <i>Mesure</i>.<br/>
 											La liste doit contenir au moins un élément, sinon le <i>Capteur</i> ne pourra pas stocker de <i>Mesures</i>.
 										</p>",
-				"encodageformatdefinition" => "Le <b>Formattage</b> des valeurs mesurées est fait selon la règle <b>[-]chiffreAvantLaVirgule.chiffreApresLaVirgule</b>.<br/> 
-										Par exemple : pour un Formattage de la forme -3.2, si on veut encoder 
+				"encodageformatdefinition" => "Le <b>Formatage</b> des valeurs mesurées est fait selon la règle <b>[-]chiffreAvantLaVirgule.chiffreApresLaVirgule</b>.<br/> 
+										Par exemple : pour un Formatage de la forme -3.2, si on veut encoder 
 										une température de 12.5°C, il faut écrire +01250, pour -1.02°C il faut écrire -00102",
 				"moduledefinition" =>	"Un <i>Module</i> est un ensemble de capteurs.",
 				"utilisateursgroupe" =>	"<p>un <i>Utilisateur</i> est une personne pouvant accéder au BackOffice de TOCIO (ce site).<br/>
@@ -47,7 +47,7 @@ class tocioRegles extends Widget {
 				"grandeurdefinition" => "<p>Une grandeur est composée de :</p>
 									    <ul>
 									    	<li>un <b>Libelé</b> (la nature de la Grandeur en toutes lettres suivies de l'unité entre parenthèses, comme <i>Température (°C)</i>),</li>
-									    	<li>un <b>Formattage</b> de la chaine (qui servira à extraire la valeur numérique du capteur de la trame envoyée par le module).</li>
+									    	<li>un <b>Formatage</b> de la chaine (qui servira à extraire la valeur numérique du capteur de la trame envoyée par le module).</li>
 									    	<li>un <b>Type</b> qui sera utilisé pour le type des valeurs (des capteurs) stockée dans la table MySQL.</li>
 									    </ul>",
 				"tablemesuredefinition" => "<p>Une Table de mesure contient un type de données envoyées par un capteur.</p>",
