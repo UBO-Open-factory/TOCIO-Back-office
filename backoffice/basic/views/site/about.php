@@ -144,13 +144,14 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.2.0..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
+		git log v1.2.4..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.2.4</h2>
-	<li>2021-02-09 <b>&bull;</b> Correction de bug : lors de la création d'un Module il faut affecter une Localisation.</li>
+	<li>2021-02-09 <b>&bull;</b> Affichage des tableaux de données avec l'ordre décroissant des dates d'enregistrement par défaut afin d'avoir la dernière valeur en début de page.</li>
+<li>2021-02-09 <b>&bull;</b> Correction de bug : lors de la création d'un Module il faut affecter une Localisation.</li>
 <li>2021-01-20 <b>&bull;</b> Creation d'un fichier de configuration locale pour éviter qu'il soit écrasé lors de mise a jour</li>
 <li>2021-01-20 <b>&bull;</b> Nettoyage de fichiers suite à mise à jour de Yii</li>
 
