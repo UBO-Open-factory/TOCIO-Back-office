@@ -40,19 +40,26 @@ $this->params['breadcrumbs'][] = $this->title;
 				        			}
         	],
         	['attribute' => 'Graphique',
-        				'format' => 'html',
-        				'label' => "",
-        				'value' => function($model){
-        				return "<a href=".Url::toRoute("/grandeur/graphique?id=".$model->id)."><i class='glyphicon glyphicon-random'></i></a>";
+			'format' => 'html',
+        	'label' => "",
+        	'value' => function($model){
+        					return "<a href=".Url::toRoute("/grandeur/graphique?id=".$model->id)."><i class='glyphicon glyphicon-stats'></i></a>";
+				        		}
+        	],
+        	['attribute' => 'Detail',
+        	'format' => 'html',
+        	'label' => "",
+        	'value' => function($model){
+        	return "<a href=".Url::toRoute("/grandeur/view?id=".$model->id."&sort=-timestamp")."><i class='glyphicon glyphicon-list'></i></a>";
 				        			}
         	],
-			['class' => 'yii\grid\ActionColumn',
-        	'visibleButtons' => [
-					        	'view' => true,
-					        	'update' => false,
-					        	'delete' => false,
-        						],
-        	],
+// 			['class' => 'yii\grid\ActionColumn',
+//         	'visibleButtons' => [
+// 					      		'view' => true,
+// 					        	'update' => false,
+// 					        	'delete' => false,
+//         						],
+//         	],
         ],
     ]); ?>
 <p>
