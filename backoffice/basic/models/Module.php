@@ -35,7 +35,8 @@ class Module extends \yii\db\ActiveRecord
         return [
             [['identifiantReseau', 'nom', 'description', 'actif'], 'required'],
             [['description'], 'string'],
-        	[['idLocalisationModule', 'actif'], 'integer', 'required'],
+            [['idLocalisationModule', 'actif'], 'integer'],
+            [['idLocalisationModule'], 'required'],
             [['identifiantReseau'], 'string', 'max' => 50],
             [['identifiantReseau'], 'unique'],
             [['idLocalisationModule'], 'exist', 'skipOnError' => true, 'targetClass' => Localisationmodule::className(), 'targetAttribute' => ['idLocalisationModule' => 'id']],
