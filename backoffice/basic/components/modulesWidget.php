@@ -661,6 +661,8 @@ class modulesWidget extends Widget
 	 * @param string $id : l'ID du module (son identifiant réseau)
 	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
 	 * @return string
+	 * 
+	 * 	@version 12 févr. 2021	: APE	- protection contre les noms de Granndeur n'ayant pas d'espaces.
 	 */
 	private function _codePython($url, $id, $params ){
 		$ligne = [];
@@ -669,7 +671,12 @@ class modulesWidget extends Widget
 		$natures = [];
 		$compteur = 0;
 		foreach ( $params as $grandeur ){
-			list($nature, $null) = explode(" ", $grandeur['nature']);
+			// Si le nom de la Grandeur a pas un espace
+			if( str_contains(" ", $grandeur['nature'] )){
+				list($nature, $null) = explode(" ", $grandeur['nature']);
+			} else {
+				$nature = $grandeur['nature'];
+			}
 			$natureValue = $nature.$compteur++;
 			$variable = strtolower($this->_stripAccents($natureValue));
 			$natures[] = $variable;
@@ -700,6 +707,8 @@ class modulesWidget extends Widget
 	 * @param string $id : l'ID du module (son identifiant réseau)
 	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
 	 * @return string
+	 * 
+	 * @version 12 févr. 2021	: APE	- protection contre les noms de Granndeur n'ayant pas d'espaces.
 	 */
 	private function _codeArduino($url, $id, $params ){
 		$ligne = [];
@@ -718,7 +727,12 @@ class modulesWidget extends Widget
 		$ligne[] = '	// Concatenation des mesures .............................';
 		$ligne[] = '	String Mesures = "";';
 		foreach ( $params as $grandeur ){
-			list($nature, $null) = explode(" ", $grandeur['nature']);
+			// Si le nom de la Grandeur a pas un espace
+			if( str_contains(" ", $grandeur['nature'] )){
+				list($nature, $null) = explode(" ", $grandeur['nature']);
+			} else {
+				$nature = $grandeur['nature'];
+			}
 			$natureValue = $nature.$compteur++;
 			$natures[] = strtolower($this->_stripAccents($natureValue));
 			
