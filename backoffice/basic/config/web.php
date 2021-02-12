@@ -11,7 +11,7 @@ $config = [
         'log'
     ],
     'timeZone' => 'Europe/Paris',
-    'version' => '1.2.4',
+    'version' => '1.2.5',
     'aliases' => [
         // Do not define anything here, but in web_local.php
     ],
