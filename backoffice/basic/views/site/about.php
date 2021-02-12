@@ -150,9 +150,9 @@ function commentaire($elem){
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.2.5</h2>
-	<li>2021-02-12 <b>&bull;</b> Suppression du maximum dans la saisie d'un formattage d'une Grandeur.</li>
-<li>2021-02-12 <b>&bull;</b> Possibilité de supprimer une Grandeur si elle n'est utilisée par aucune donnée.</li>
-<li>2021-02-12 <b>&bull;</b> Lors de la génération du code Arduino et Python, il est maintenant possible d'utiliser un nom de Grandeur sans espace.</li>
+	<li>2021-02-12 <b>&bull;</b> Suppression du maximum dans la saisie d'un formattage d'une Grandeur (bug 491).</li>
+<li>2021-02-12 <b>&bull;</b> Possibilité de supprimer une Grandeur si elle n'est utilisée par aucune donnée (bug 489).</li>
+<li>2021-02-12 <b>&bull;</b> Lors de la génération du code Arduino et Python, il est maintenant possible d'utiliser un nom de Grandeur sans espace (bug 487).</li>
 	
 	<h2>V 1.2.4</h2>
 	<li>2021-02-09 <b>&bull;</b> Affichage des tableaux de données avec l'ordre décroissant des dates d'enregistrement par défaut afin d'avoir la dernière valeur en début de page.</li>
