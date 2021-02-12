@@ -51,7 +51,7 @@ class Grandeur extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nature' => 'Nature',
-            'formatCapteur' => 'Format de la Grandeur',
+            'formatCapteur' => 'Formatage de la Grandeur',
             'tablename' => 'Nom de la table de stockage des valeurs',
             'type' => 'Type des valeurs',
         ];
