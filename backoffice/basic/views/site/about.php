@@ -144,15 +144,15 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.2.5..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
+		git log v1.2.6..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>'
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.2.6</h2>
-	
-	
-	
+	<li>2021-03-04 <b>&bull;</b> Il est maintenant possible d'uploader un fichier journal de Mesures au format CSV.</li>
+<li>2021-03-04 <b>&bull;</b> Suppression de fichiers innutiles.</li>
+<li>2021-03-02 <b>&bull;</b> Bug 497 : L'affichage des timestamp dans les tables des Grandeurs affiche la bonne heure.</li>
 	
 	<h2>V 1.2.5</h2>
 	<li>2021-02-12 <b>&bull;</b> Suppression du maximum dans la saisie d'un formattage d'une Grandeur (bug 491).</li>

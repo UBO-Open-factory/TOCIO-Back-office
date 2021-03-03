@@ -7,3 +7,4 @@ web/assets/
 *package-lock.json
 *.lock
 config/web_local.php
+uploads/*.csv
