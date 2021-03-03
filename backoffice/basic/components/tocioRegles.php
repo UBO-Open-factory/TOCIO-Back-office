@@ -51,6 +51,13 @@ class tocioRegles extends Widget {
 									    	<li>un <b>Type</b> qui sera utilisé pour le type des valeurs (des capteurs) stockée dans la table MySQL.</li>
 									    </ul>",
 				"tablemesuredefinition" => "<p>Une Table de mesure contient un type de données envoyées par un capteur.</p>",
+				"fichiercsv" => "<p>Un fichier CSV (autrement dit, un journal de <i>Mesures</i>) peut contenir autant de ligne que souhaité.<br/>
+								Chaque ligne doit contenir les champs dans l'ordre défini par l'ordre des <i>Capteurs</i> du <i>Module</i>.<br/>
+								Chaque champ doit être séparé par une point virgule ( <b>;</b> ) et encadré par des doubles cote ( <b>\"</b> ).<br/>
+								Chaque ligne ne doit contenir que les <i>Mesures</i> d'un <i>Module</i>.<br/>
+								Une ligne peut contenir les <i>Mesures</i> d'un <i>Module</i> et la ligne suivante les <i>Mesures</i> d'un autre <i>Module</i>.<br/>
+								Toute ligne mal formatée sera ignorée lors de l'import (il peut donc y avoir une entête de colonne au fichier, elle sera ignorée lors de l'insertion).<br/>
+								</p>",
 				
 		];
 		

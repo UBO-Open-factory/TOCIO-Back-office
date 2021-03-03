@@ -254,10 +254,24 @@ class modulesWidget extends Widget
 			]);
 
 			// Construction du contenu pour le code Arduino
+			$host = substr(Url::base(''), 2);
 			$l_STR_CodeArduino =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Arduino',
 					"content"	=> Html::tag("h3","Exemple") 
 									.Html::tag("p","Ceci est un exemple de code écrit pour un Arduino pour envoyer une Payload formatée dans la base TOCIO.")
-					.Html::tag("pre", $this->_codeArduino( Url::base('https'), '/mesure/add/'.$l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code Arduino
+									.Html::tag("pre", $this->_codeArduino( $host, $l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code Arduino
+					"class"		=> "mb-3 px-0 PythonCode",
+					"style" 	=> "max-width: 90rem",
+			]);
+			
+			// Construction du contenu pour le code dans un fichier CSV
+			$l_STR_CodeCSV =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Formattage d\'un fichier CSV',
+					"content"	=> Html::tag("h3","Exemple") 
+									.Html::tag("p","Ceci est un exemple de fichier CSV pouvant être importé pour ce module.")
+									.Html::tag("p",tocioRegles::widget(["regle" => "fichiercsv"]))
+									.Html::tag("p","Ordre des champs :")
+									.Html::tag("ol", $this->_codeCSVEntetes($l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs))
+									.Html::tag("p","Exemple d'une ligne au format CSV attendu pour ce Module :")
+									.Html::tag("pre", $this->_codeCSVLignes($l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),
 					"class"		=> "mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
 			]);
@@ -298,6 +312,7 @@ class modulesWidget extends Widget
 			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
 			$contents[] = 		Html::tag("p", $l_STR_CodePython);
 			$contents[] = 		Html::tag("p", $l_STR_CodeArduino);
+			$contents[] = 		Html::tag("p", $l_STR_CodeCSV);
 			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
 			$contents[] = "<div class='col-md-12'>";
@@ -672,7 +687,7 @@ class modulesWidget extends Widget
 		$compteur = 0;
 		foreach ( $params as $grandeur ){
 			// Si le nom de la Grandeur a pas un espace
-			if( str_contains(" ", $grandeur['nature'] )){
+			if( stripos( $grandeur['nature']," ") !== false){
 				list($nature, $null) = explode(" ", $grandeur['nature']);
 			} else {
 				$nature = $grandeur['nature'];
@@ -716,11 +731,8 @@ class modulesWidget extends Widget
 		$format = [];
 		$natures = [];
 		$compteur = 0;
-		$ligne[] = 'const String host = "'.$url.'/";';
-		$ligne[] = 'const String url  = "'.$id.'";';
-		$ligne[] = "";
-		$ligne[] = '// Use the web site https://www.grc.com/fingerprints.htm to get the fingerprint from your web site';
-		$ligne[] = 'const char fingerprint[] PROGMEM = "BD:CD:08:B3:............:A4:A8:CB";';
+		$ligne[] = 'const String host = "'.$url.'";';
+		$ligne[] = 'const String url  = "'. \Yii::getAlias('@urlbehindproxy').'/mesure/add/'.$id.'";';
 		$ligne[] = "";
 		$ligne[] = 'void loop() {';
 		$ligne[] = "";
@@ -728,7 +740,7 @@ class modulesWidget extends Widget
 		$ligne[] = '	String Mesures = "";';
 		foreach ( $params as $grandeur ){
 			// Si le nom de la Grandeur a pas un espace
-			if( str_contains(" ", $grandeur['nature'] )){
+			if( stripos( $grandeur['nature']," ") !== false){
 				list($nature, $null) = explode(" ", $grandeur['nature']);
 			} else {
 				$nature = $grandeur['nature'];
@@ -815,7 +827,11 @@ class modulesWidget extends Widget
 		$ligne[] = '';
 		$ligne[] = '		//  Create an https client';
 		$ligne[] = '		WiFiClientSecure client;';
-		$ligne[] = '		client.setFingerprint(fingerprint);';
+		$ligne[] = '';
+		$ligne[] = '		// Don\'t validate the certificat (and avoid fingerprint).';
+		$ligne[] = '		client.setInsecure();';
+		$ligne[] = '';
+		$ligne[] = '		// We don\'t validate the certificat, buit we use https (port 443 of the server).';
 		$ligne[] = '		int port = 443;';
 		$ligne[] = '		if (!client.connect(host, port)) {';
 		$ligne[] = '			Serial.println("connection failed");';
@@ -843,6 +859,67 @@ class modulesWidget extends Widget
 		$ligne[] = '';
 		$ligne[] = '}';
 
+		return implode("<br/>",$ligne);
+	}
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Entete de fichier pour Formattage d'un fichier journal au format CSV.
+	 *
+	 * @param string $id : l'ID du module (son identifiant réseau)
+	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
+	 * @return string
+	 *
+	 *	@version 3 mars 2021	: APE	- Création.
+	 */
+	private function _codeCSVEntetes($id, $params ){
+		$ligne 		= [];
+		$natures 	= [];
+		$compteur 	= 0;
+		
+		$ligne[] = '"Identifiant du Module";';
+		$ligne[] = '"Timestamp de la mesure";';
+		
+		foreach ( $params as $grandeur ){
+			// Si le nom de la Grandeur n'a pas d'espace
+			if( stripos( $grandeur['nature']," ") !== false){
+				list($nature, $null) = explode(" ", $grandeur['nature']);
+			} else {
+				$nature = $grandeur['nature'];
+			}
+			
+			$ligne[] = "\"".$nature." (value from your sensor '".$grandeur['nomCapteur']."')\";";
+		}
+		
+		return "<li>".implode("</li><li>",$ligne)."</li>";
+	}
+	// _____________________________________________________________________________________________
+	/**
+	 * Exemple de formattage d'une ligne pour un fichier journal au format CSV.
+	 *
+	 * @param string $id : l'ID du module (son identifiant réseau)
+	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
+	 * @return string
+	 *
+	 *	@version 3 mars 2021	: APE	- Création.
+	 */
+	private function _codeCSVLignes($id, $params ){
+		$ligne 		= [];
+		$champs		= [];
+		
+		$champs[] 	= "\"".$id."\"";
+		$champs[]	= "\"". time()."\"";
+		
+		// Construction des champs des mesures dans l'ordre imposé.
+		foreach ( $params as $grandeur ){
+			
+			$champs[] = "\"".$this->_exempleFormatGrandeur($grandeur['format'])."\"";
+		}
+		
+		// Creation de lignes contenant les champs concaténés avec un ;
+		$ligne[]	= implode(";", $champs);
+		
+		
 		return implode("<br/>",$ligne);
 	}
 }
