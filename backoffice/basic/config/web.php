@@ -7,11 +7,12 @@ $config = [
     'basePath' => dirname(__DIR__),
     'homeUrl' => '/',
     'language' => 'fr-FR',
+	'sourceLanguage' => 'fr-FR',
     'bootstrap' => [
         'log'
     ],
-    'timeZone' => 'Europe/Paris',
-    'version' => '1.2.5',
+    'timeZone' => 'GMT',
+    'version' => '1.2.6',
     'aliases' => [
         // Do not define anything here, but in web_local.php
     ],

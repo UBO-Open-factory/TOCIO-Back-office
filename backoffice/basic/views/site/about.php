@@ -149,6 +149,11 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.2.6</h2>
+	
+	
+	
+	
 	<h2>V 1.2.5</h2>
 	<li>2021-02-12 <b>&bull;</b> Suppression du maximum dans la saisie d'un formattage d'une Grandeur (bug 491).</li>
 <li>2021-02-12 <b>&bull;</b> Possibilité de supprimer une Grandeur si elle n'est utilisée par aucune donnée (bug 489).</li>
