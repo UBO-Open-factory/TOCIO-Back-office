@@ -1,4 +1,4 @@
-# installation
+# Installation
 ```
 mkdir data
 cd data 
