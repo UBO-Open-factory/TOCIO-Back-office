@@ -169,6 +169,9 @@ class SiteController extends Controller {
 	// _____________________________________________________________________________________________
 	/**
 	 * Display page to export Grandeurs.
+	 * Si on a fait une saisie, on export un fichier CSV dans le flux HTML avec cette saisie.
+	 * 
+	 * @see https://awesomeopensource.com/project/yii2tech/csv-grid?categoryPage=29
 	 *
 	 * @return void|string
 	 */
@@ -184,14 +187,52 @@ class SiteController extends Controller {
 			// si les saisie sont correcte 
 			if( $model->validate()){
 
-				// Récupération des data pour l'export
+				// Récupération des data correspondant à la saisie
 				$data = $this->_getGrandeurGroupBy( $model );
 				
+				// Extraction des dates
+				$dates = [];
+				foreach( $data as $ligne){
+					$dates[$ligne['date']]	= $ligne['date'];
+				}
+				
+				// Transformation des dates en colonnes
+				$tableauCroiseDynamique = [];
+				foreach( $data as $ligne){
+					
+					// Pour chacune des dates trouvée, on cherche la valeur correspondante
+					foreach( $dates as $date){
+						
+						// Si on trouve la date ... on met la valeur
+						if($ligne['date'] == $date ) {
+							
+							// Il se peut qu'il n'y ai pas de cumul, mais simplement la valeur 
+							if( isset($ligne['cumul'])) {
+								$tableauCroiseDynamique[$ligne['identifiantModule']][]	= [$date, $ligne['cumul']];
+							} else {
+								$tableauCroiseDynamique[$ligne['identifiantModule']][]	= [$date, $ligne['valeur']];
+							}
+						
+						// Si on ne trouve pas la date, on remet la dernière valeur
+						// @todo mettre la derniere valeur et non 0
+						} else {
+							$tableauCroiseDynamique[$ligne['identifiantModule']][]	= [$date, 0];
+						}
+					}
+				}
+
+				
 				// Construction de l'export
+				// @see https://awesomeopensource.com/project/yii2tech/csv-grid?categoryPage=29
 				$exporter = new CsvGrid([
 						'dataProvider' => new ArrayDataProvider([
-							'allModels' => $data
-						])
+																	'allModels' => $data
+																]),
+						'csvFileConfig' => [
+								'cellDelimiter' => ",",
+								'enclosure' => '"'
+								],
+						'maxEntriesPerFile' => 10000,
 				]);
 				
 				// Traitement de l'export
@@ -250,7 +291,7 @@ class SiteController extends Controller {
 		
 		// Protection du contenu saisie pour le where
 		if( $where != ""){
-			// Renvoie le résultat de al requète.
+			// Renvoie le résultat de la requète.
 			return Yii::$app->db->createCommand($l_STR_requete)
 						->bindParam('modulename', $model->moduleName)
 						->queryAll();
