@@ -12,6 +12,10 @@ use app\models\ContactForm;
 use app\models\UploadImageForm;
 use yii\web\UploadedFile;
 use app\models\Grandeur;
+use app\models\GrandeurExportForm;
+use app\models\Module;
+use yii2tech\csvgrid\CsvGrid;
+use yii\data\ArrayDataProvider;
 
 class SiteController extends Controller {
 	/**
@@ -160,6 +164,108 @@ class SiteController extends Controller {
 		}
 		return $this->render('upload', ['model' => $model]);
 	}
+
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Display page to export Grandeurs.
+	 *
+	 * @return void|string
+	 */
+	public function actionExport() {
+		$model 	= new GrandeurExportForm();
+
+		// Si on a des parametres qui sont passés en POST dans un formulaire
+		if( Yii::$app->request->isPost ) {
+			
+			// enregistrement des saisie dans le modèle
+			$model->load( Yii::$app->request->post());
+			
+			// si les saisie sont correcte 
+			if( $model->validate()){
+
+				// Récupération des data pour l'export
+				$data = $this->_getGrandeurGroupBy( $model );
+				
+				// Construction de l'export
+				$exporter = new CsvGrid([
+						'dataProvider' => new ArrayDataProvider([
+							'allModels' => $data
+						])
+				]);
+				
+				// Traitement de l'export
+				return $exporter->export()->send('exportMesures.csv');
+			}
+		}
+		return $this->render( 'export', [
+			'model'			 => $model,
+			]);
+	}
+	
+	
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Fait une requète de cumul du style :
+	 * SELECT    identifiantModule, DATE(timestamp) as DATE, SUM(valeur) Cumul
+		FROM      tm_temperaturec
+		GROUP BY  DATE(timestamp), identifiantModule
+		
+	 * @param array contenant le résultat rows by rows de la requète.
+	 */
+	private function _getGrandeurGroupBy($model){
+
+		// Construction du cumul
+		switch ($model->cumulBy){
+			case "day":
+				$groupBy	= "DATE(timestamp)";
+				break;
+			case "month":
+				$groupBy	= "YEAR(timestamp), MONTH(timestamp)";
+				break;
+			case "year":
+				$groupBy	= "YEAR(timestamp)";
+				break;
+		}
+		
+		// Construction du filtre sur le Module
+		$where = ($model->moduleName != "all" ) ? "WHERE identifiantModule = :modulename " : "";
+		
+		// Construction de la requete de cumul
+		
+		// SI on a aucun cumul voulu
+		// ... on fait une requète sans cumul ni group by
+		if( $model->cumulBy == "none") {
+			$l_STR_requete	= "SELECT identifiantModule, timestamp as date, valeur
+							FROM ".$model->tableName." ".
+							$where." ;";
+		} else {
+			$l_STR_requete = "SELECT identifiantModule, ".$groupBy." as date, SUM(valeur) cumul
+							FROM ".$model->tableName." ".
+							$where." " .
+							"GROUP BY ".$groupBy." , identifiantModule;";
+		}
+		
+		// Protection du contenu saisie pour le where
+		if( $where != ""){
+			// Renvoie le résultat de al requète.
+			return Yii::$app->db->createCommand($l_STR_requete)
+						->bindParam('modulename', $model->moduleName)
+						->queryAll();
+			
+			
+		} else {
+			// Renvoie le résultat de al requète.
+			return Yii::$app->db->createCommand($l_STR_requete)
+						->queryAll();
+		}
+		
+		
+	}
+	
+	
 	
 	
 	// _____________________________________________________________________________________________
@@ -182,17 +288,11 @@ class SiteController extends Controller {
 			$numLigne 	= 1;
 			
 			// lecture ligne par ligne du fichier
-// 			while (($ligne = fgets($handle)) !== false) {
 			while (($l_TAB_champs = fgetcsv($handle, 0, ";", "\"")) !== false) {
 				
 // 				if( !is_null($ligne)){
 				if( is_array($l_TAB_champs)){
 					// Séparation des champs de la ligne
-// 					$l_TAB_champs	= str_getcsv( $ligne, ";");
-// 					$ligne = str_replace('"', "", $ligne);
-// 					$l_TAB_champs	= explode( ";", $ligne);
-
-					
 					$idModule 	= $l_TAB_champs[0];
 					$timeStamp 	= $l_TAB_champs[1];
 					$payload 	= "";

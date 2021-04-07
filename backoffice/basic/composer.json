@@ -22,7 +22,8 @@
         "kartik-v/yii2-widget-growl": "*",
         "yii2mod/yii2-sweet-alert": "*",
 	"elasticsearch/elasticsearch": "~7.0",
-	"onmotion/yii2-widget-apexcharts": "*"
+	"onmotion/yii2-widget-apexcharts": "*",
+	"yii2tech/csv-grid": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
