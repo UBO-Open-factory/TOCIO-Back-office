@@ -150,7 +150,8 @@ function commentaire($elem){
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.2.7</h2>
-	<li>2021-04-08 <b>&bull;</b> Filtrage de l'export sur un interval de temps en utilisant un date-picker</li>
+	<li>2021-04-08 <b>&bull;</b> Ajout de la prévisualisation des données avant l'export en CSV</li>
+<li>2021-04-08 <b>&bull;</b> Filtrage de l'export sur un interval de temps en utilisant un date-picker</li>
 <li>2021-04-08 <b>&bull;</b> Exportation d'un tableau croisé dynamique par identifiant réseau et par cumul de dates.</li>
 <li>2021-04-07 <b>&bull;</b> Mise à jour de Yii en version 2.0.41.1</li>
 <li>2021-04-07 <b>&bull;</b> Un utilisateur anonyme peut faire un export CSV des données.</li>
