@@ -7,8 +7,6 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
 use app\models\UploadImageForm;
 use yii\web\UploadedFile;
 use app\models\Grandeur;
@@ -17,7 +15,6 @@ use app\models\Module;
 use yii2tech\csvgrid\CsvGrid;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
-use SebastianBergmann\Comparator\DateTimeComparator;
 
 class SiteController extends Controller {
 	/**
@@ -168,6 +165,10 @@ class SiteController extends Controller {
 	}
 
 	
+	public function actionExportDownload(){
+		
+	}
+	
 	// _____________________________________________________________________________________________
 	/**
 	 * Display page to export Grandeurs.
@@ -179,6 +180,8 @@ class SiteController extends Controller {
 	 */
 	public function actionExport() {
 		$model 	= new GrandeurExportForm();
+		$tableauCroiseDynamique = [];
+		$descriptionDesColonnes	= [];
 
 		// Si on a des parametres qui sont passés en POST dans un formulaire
 		if( Yii::$app->request->isPost ) {
@@ -189,9 +192,13 @@ class SiteController extends Controller {
 			// si les saisie sont correcte 
 			if( $model->validate()){
 
-				// Récupération des data correspondant à la saisie
+				// Récupération des data correspondant à la saisie .......................
 				$data = $this->_getGrandeurGroupBy( $model );
 				
+				
+				
+				
+				// Construction du povot pour le tableau .................................
 				// Extraction des dates
 				$dates = [];
 				foreach( $data as $ligne){
@@ -205,8 +212,6 @@ class SiteController extends Controller {
 				}
 				
 				// Transformation des dates en colonnes
-				$tableauCroiseDynamique = [];
-				
 				// Pour chaque date, on va chercher les valeur de 
 				foreach( $identifiantModules as $identifiantModule){
 					$ligneCroisee = [];
@@ -219,44 +224,56 @@ class SiteController extends Controller {
 					
 					// On ajoute la ligne contrsuite
 					$tableauCroiseDynamique[] = $ligneCroisee;
+			
 				}
 				
-			
-				// On ajoute la colonne des identifiatn réseau aux dates
-				array_unshift($dates, "identifiantModule");
+				// Construction du formattage des colonnes
+				$descriptionDesColonnes = ['attribute' => "identifiantModule"];
+				foreach ( $dates as $date){
+					$descriptionDesColonnes[] = ['attribute' => $date];
+				}
 				
-
-			
-				// Construction de l'export
+				
+				// Construction de l'export ..............................................
 				// @see https://awesomeopensource.com/project/yii2tech/csv-grid?categoryPage=29
 				$exporter = new CsvGrid([
 						'dataProvider' => new ArrayDataProvider([
 								'allModels' => $tableauCroiseDynamique
 						]),
-						'columns' => $dates,
+						'columns' => $descriptionDesColonnes,
 						'csvFileConfig' => [
 								'cellDelimiter' => ",",
 								'enclosure' => '"'
 								],
 						'maxEntriesPerFile' => 10000,
 				]);
+					
 				
-				// Traitement de l'export
-				return $exporter->export()->send('exportMesures.csv');
+				// Si on a cliqué sur le bouton "Download CSV"
+				$boutonDownload = Yii::$app->request->post('downloadCSVExport');
+				echo "";
+				if( ! is_null($boutonDownload ) ) {
+					
+					// Renvoie du fichier CSV généré .....................................
+					$exporter->export()->send('exportMesures.csv');
+				}
 			}
 		}
 		
-		// Construction des listes déroulantes
+	
+		
+		
+		// Construction des listes déroulantes pour le formulaire de saisie
 		$TableGrandeurs = Grandeur::find()->all();
-		$listMesures	= ArrayHelper::map( $TableGrandeurs, 	'tablename', 'nature' );
-		$listModules	= ArrayHelper::map( Module::find()->all(), 		'identifiantReseau', 'nom' );
+		$listMesures	= ArrayHelper::map( $TableGrandeurs, 		'tablename', 'nature' );
+		$listModules	= ArrayHelper::map( Module::find()->all(), 	'identifiantReseau', 'nom' );
 		
 		
 		// Récupération des dates min et max des Grandeurs enregistrées
 		$tableMesure	= ArrayHelper::map( $TableGrandeurs, 'id', 'tablename' );
 		$minMax 		= [date("2021-04-01", time()),date("1970-01-01")];
 
-		// On va analyser chacune des tables de Grandeur
+		// On va analyser chacune des tables de Grandeur pour trouver les dates min et max
 		foreach( $tableMesure as $table){
 			$temp = $this->_getDateMinMaxFromTable($table);
 			
@@ -271,6 +288,8 @@ class SiteController extends Controller {
 				'listModules' 	=> $listModules,
 				'listMesures' 	=> $listMesures,
 				'model'			=> $model,
+				'dataProvider'	=> $tableauCroiseDynamique,
+				'columns'		=> $descriptionDesColonnes,
 				'dateMin'		=> $minMax[0],
 				'dateMax'		=> $minMax[1],
 			]);
@@ -389,25 +408,15 @@ class SiteController extends Controller {
 							" GROUP BY ".$groupBy." , identifiantModule;";
 		}
 		
-		$temp = Yii::$app->db->createCommand($l_STR_requete)->getSql();
+		// pour debug de la requete
+		$debug = Yii::$app->db->createCommand($l_STR_requete)
+			->bindParam(':modulename', $model->moduleName)
+			->getSql();
 		
-		
-		
-		// Protection du contenu saisie pour le where
-		if( $where != ""){
-			// Renvoie le résultat de la requète.
-			return Yii::$app->db->createCommand($l_STR_requete)
-						->bindParam('modulename', $model->moduleName)
-						->queryAll();
-			
-			
-		} else {
-			// Renvoie le résultat de al requète.
-			return Yii::$app->db->createCommand($l_STR_requete)
-						->queryAll();
-		}
-		
-		
+		// Renvoie le résultat de la requète.
+		return Yii::$app->db->createCommand($l_STR_requete)
+					->bindParam(':modulename', $model->moduleName)
+					->queryAll();
 	}
 	
 	

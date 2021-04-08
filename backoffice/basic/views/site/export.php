@@ -3,10 +3,13 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use app\components\tocioRegles;
 use nex\datepicker\DatePicker;
+use yii\grid\GridView;
+use yii\data\ArrayDataProvider;
+use Symfony\Component\DomCrawler\Form;
 
 
 
-$this->title = 'Exportation de Mesures au format CSV';
+$this->title = 'Exportation de mesures au format CSV';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -15,11 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 	<h1><?= Html::encode($this->title) ?></h1>
 
 
-	<p>
-		Cette page permet de faire une exportaiton des données collectées pour
-		une <i>Grandeur</i> donnée au format CSV.
-	</p>
-	<p>Il est également possible de cumuler les données selon certain critères pré-définis.</p> 
+	<p>Il est possible de cumuler les données collectées pour une <i>Grandeur</i> (selon certain critères pré-définis), de filtrer les données par <i>Module</i> et par date.</p>
+	<p>Les dates possibles sont celles pour lesquelles il existe des données pour ces Modules.</p> 
 
 	
 	<?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal']]);	?>
@@ -50,6 +50,8 @@ $this->params['breadcrumbs'][] = $this->title;
 				],
 		]);?>
 		</div>
+	</div>
+	<div class="row">
 		<div class="col-sm-3">
 		<?= /* Liste déroulante des tables des Mesures */
 		$form->field( $model, 'tableName' )->dropDownList( 
@@ -77,10 +79,36 @@ $this->params['breadcrumbs'][] = $this->title;
 		);
 		?>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-sm-12">
 			<br />
-		<?= Html::submitButton('Exporter en CSV', ['class' => 'btn btn-primary', 'name' => 'Upload']) ?>
+		<?php 
+		/* @todo pouvoir afficher les données avant de les télécharger
+		 * @bug si on décommente l'affichage de ce bouton, on peut afficher les données, mais
+		 * dès qu'on fait un download, il n'est plus possible de faire autre chose qu'un download.
+		 * -> Je penses qu'il faudrait rafraichir la page après un download, mais le prolbème c'est
+		 * que le navigateur semble garder en mémoire l'entete de type text/csv qui lui a été envoyé.
+		Html::submitButton('Afficher', ['class' => 'btn btn-primary', 'name' => 'generateCSV']);
+		*/ ?>
+		<?= Html::submitButton('Download en CSV', ['class' => 'btn btn-primary pull-right', 'name' => 'downloadCSVExport']) ?>
 	   </div>
+	</div>
+	
+	<div class="row">
+		<div class="col-xs-12">
+			<?php 
+				// Affichage des données (si on en a)
+				if( count($dataProvider) > 0 ){
+					
+					// T'ableau d'affichage des données
+		     		echo GridView::widget([
+		     				'dataProvider' => new ArrayDataProvider([
+		     						'allModels' => $dataProvider
+		     				]),
+		     				'columns' => $columns,
+		     			]);
+				}
+			?>
+		</div>	
 	</div>
 	<?php ActiveForm::end() ?>
 	
