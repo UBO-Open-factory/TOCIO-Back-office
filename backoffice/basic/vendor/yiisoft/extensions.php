@@ -102,4 +102,13 @@ return array (
       '@yii2tech/csvgrid' => $vendorDir . '/yii2tech/csv-grid/src',
     ),
   ),
+  'nex/yii2-datepicker' => 
+  array (
+    'name' => 'nex/yii2-datepicker',
+    'version' => 'dev-master',
+    'alias' => 
+    array (
+      '@nex/datepicker' => $vendorDir . '/nex/yii2-datepicker',
+    ),
+  ),
 );

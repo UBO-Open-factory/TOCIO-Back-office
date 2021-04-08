@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '17916c8224d21b67d6f1b87559a21fc1716e79ce',
+    'reference' => '44c94f91ebf628ad5607b8b1302765d72ede39ab',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -51,6 +51,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '68b0d231a13201eb14acd3dc84e51543d16e5f7e',
+    ),
+    'bower-asset/eonasdan-bootstrap-datetimepicker' => 
+    array (
+      'pretty_version' => '4.17.47',
+      'version' => '4.17.47.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '25c11d79e614bc6463a87c3dd9cbf8280422e006',
     ),
     'bower-asset/inputmask' => 
     array (
@@ -78,6 +87,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '44ecf3794cc56b65954cc19737234a3119d036cc',
+    ),
+    'bower-asset/moment' => 
+    array (
+      'pretty_version' => '2.29.1',
+      'version' => '2.29.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'b7ec8e2ec068e03de4f832f28362675bb9e02261',
     ),
     'bower-asset/punycode' => 
     array (
@@ -316,6 +334,16 @@ private static $installed = array (
       array (
         0 => '1.10.2',
       ),
+    ),
+    'nex/yii2-datepicker' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+        0 => '9999999-dev',
+      ),
+      'reference' => '14a5623e3ac8b487dd615db8c89fb7e53110a6f0',
     ),
     'onmotion/yii2-widget-apexcharts' => 
     array (
@@ -883,7 +911,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '17916c8224d21b67d6f1b87559a21fc1716e79ce',
+      'reference' => '44c94f91ebf628ad5607b8b1302765d72ede39ab',
     ),
     'yiisoft/yii2-bootstrap' => 
     array (

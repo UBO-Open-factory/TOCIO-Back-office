@@ -14,8 +14,14 @@ class GrandeurExportForm extends Model {
 	// Module name
 	public $moduleName;
 	
+	// date de début à l'aquelle faire l'export des données
+	public $dateStart;
+	
+	// date de fin à l'aquelle faire l'export des données
+	public $dateEnd;
+	
 	public function rules() {
-		return [[	['cumulBy', 'tableName', 'moduleName'], 'string',
+		return [[	['cumulBy', 'tableName', 'moduleName', 'dateStart', 'dateEnd'], 'string',
 		]];
 	}
 	
@@ -31,6 +37,8 @@ class GrandeurExportForm extends Model {
 				'tableName' 	=> 'Grandeur a exporter',
 				'cumulBy' 		=> 'Cumul par',
 				'moduleName' 	=> 'Filtre par Module',
+				'dateStart' 	=> 'Date de début',
+				'dateEnd' 		=> 'Date de fin',
 		];
 	}
 }

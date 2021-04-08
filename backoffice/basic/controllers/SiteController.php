@@ -16,6 +16,8 @@ use app\models\GrandeurExportForm;
 use app\models\Module;
 use yii2tech\csvgrid\CsvGrid;
 use yii\data\ArrayDataProvider;
+use yii\helpers\ArrayHelper;
+use SebastianBergmann\Comparator\DateTimeComparator;
 
 class SiteController extends Controller {
 	/**
@@ -243,11 +245,63 @@ class SiteController extends Controller {
 				return $exporter->export()->send('exportMesures.csv');
 			}
 		}
+		
+		// Construction des listes déroulantes
+		$TableGrandeurs = Grandeur::find()->all();
+		$listMesures	= ArrayHelper::map( $TableGrandeurs, 	'tablename', 'nature' );
+		$listModules	= ArrayHelper::map( Module::find()->all(), 		'identifiantReseau', 'nom' );
+		
+		
+		// Récupération des dates min et max des Grandeurs enregistrées
+		$tableMesure	= ArrayHelper::map( $TableGrandeurs, 'id', 'tablename' );
+		$minMax 		= [date("2021-04-01", time()),date("1970-01-01")];
+
+		// On va analyser chacune des tables de Grandeur
+		foreach( $tableMesure as $table){
+			$temp = $this->_getDateMinMaxFromTable($table);
+			
+			if( $temp[0] < $minMax[0] ) $minMax[0] = $temp[0];
+			if( $temp[1] > $minMax[1] ) $minMax[1] = $temp[1];
+		}
+		
+		
+		
+		// Envoie des données dans la vue		
 		return $this->render( 'export', [
-			'model'			 => $model,
+				'listModules' 	=> $listModules,
+				'listMesures' 	=> $listMesures,
+				'model'			=> $model,
+				'dateMin'		=> $minMax[0],
+				'dateMax'		=> $minMax[1],
 			]);
 	}
 	
+	
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Renvoie la date min et max des mesures faites dans une table.
+	 * 
+	 * @param string $p_STR_TableName le nom de la table des mesure à analyser.
+	 * @return array contenant [minDate, maxDate]
+	 */
+	private function _getDateMinMaxFromTable($p_STR_TableName){
+		$l_STR_Min = date("2021-03-01");
+		$l_STR_Max = date("Y-m-d", time());
+		
+		// Construction de la requète MySQL pour trouver la date la plus petite
+		$l_STR_Requete = "SELECT MIN(timestamp) FROM ".$p_STR_TableName;
+		$l_STR_Min = Yii::$app->db->createCommand($l_STR_Requete)
+								->queryScalar();
+								
+		// Construction de la requète MySQL pour trouver la date la plus grande
+		$l_STR_Requete = "SELECT MAX(timestamp) FROM ".$p_STR_TableName;
+		$l_STR_Max = Yii::$app->db->createCommand($l_STR_Requete)
+								->queryScalar();
+		
+		return [$l_STR_Min, $l_STR_Max];
+	}
 	
 	
 	// _____________________________________________________________________________________________
@@ -292,8 +346,8 @@ class SiteController extends Controller {
 	 * @param array contenant le résultat rows by rows de la requète.
 	 */
 	private function _getGrandeurGroupBy($model){
-
-		// Construction du cumul
+		
+		// Construction du cumul .........................................................
 		switch ($model->cumulBy){
 			case "day":
 				$groupBy	= "DATE(timestamp)";
@@ -306,23 +360,38 @@ class SiteController extends Controller {
 				break;
 		}
 		
-		// Construction du filtre sur le Module
-		$where = ($model->moduleName != "all" ) ? "WHERE identifiantModule = :modulename " : "";
+		// Construction du filtre sur le Module ..........................................
+		$where[] =  "true"; // To protect from empty filter
+		if($model->moduleName != "all" )$where[] =  " identifiantModule = :modulename ";
 		
-		// Construction de la requete de cumul
 		
+		
+		// Construction du filtrage sur les dates ........................................
+		// On a une date de départ
+		if( $model->dateStart != "")	$where[] = " timestamp >= DATE('".$model->dateStart."')"; 
+
+		// On a une date de fin
+		if( $model->dateEnd != "") 		$where[] =  " timestamp <= DATE_ADD(DATE('".$model->dateEnd."'), INTERVAL 1 DAY)"; 
+		
+		
+		
+		// Construction de la requete de cumul ...........................................
 		// SI on a aucun cumul voulu
 		// ... on fait une requète sans cumul ni group by
 		if( $model->cumulBy == "none") {
 			$l_STR_requete	= "SELECT identifiantModule, timestamp as date, valeur
-							FROM ".$model->tableName." ".
-							$where." ;";
+							FROM ".$model->tableName.
+							" WHERE ".implode($where, " AND ")." ;";
 		} else {
 			$l_STR_requete = "SELECT identifiantModule, ".$groupBy." as date, SUM(valeur) cumul
-							FROM ".$model->tableName." ".
-							$where." " .
-							"GROUP BY ".$groupBy." , identifiantModule;";
+							FROM ".$model->tableName.
+							" WHERE ".implode($where, " AND ").
+							" GROUP BY ".$groupBy." , identifiantModule;";
 		}
+		
+		$temp = Yii::$app->db->createCommand($l_STR_requete)->getSql();
+		
+		
 		
 		// Protection du contenu saisie pour le where
 		if( $where != ""){

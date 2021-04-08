@@ -92,6 +92,31 @@
             "install-path": "../bower-asset/bootstrap"
         },
         {
+            "name": "bower-asset/eonasdan-bootstrap-datetimepicker",
+            "version": "4.17.47",
+            "version_normalized": "4.17.47.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Eonasdan/tempus-dominus.git",
+                "reference": "25c11d79e614bc6463a87c3dd9cbf8280422e006"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Eonasdan/tempus-dominus/zipball/25c11d79e614bc6463a87c3dd9cbf8280422e006",
+                "reference": "25c11d79e614bc6463a87c3dd9cbf8280422e006"
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.8.3",
+                "bower-asset/moment": ">=2.10.5"
+            },
+            "type": "bower-asset",
+            "installation-source": "dist",
+            "license": [
+                "MIT"
+            ],
+            "install-path": "../bower-asset/eonasdan-bootstrap-datetimepicker"
+        },
+        {
             "name": "bower-asset/inputmask",
             "version": "3.3.11",
             "version_normalized": "3.3.11.0",
@@ -159,6 +184,27 @@
                 "MIT"
             ],
             "install-path": "../bower-asset/jquery-ui"
+        },
+        {
+            "name": "bower-asset/moment",
+            "version": "2.29.1",
+            "version_normalized": "2.29.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moment/moment.git",
+                "reference": "b7ec8e2ec068e03de4f832f28362675bb9e02261"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moment/moment/zipball/b7ec8e2ec068e03de4f832f28362675bb9e02261",
+                "reference": "b7ec8e2ec068e03de4f832f28362675bb9e02261"
+            },
+            "type": "bower-asset",
+            "installation-source": "dist",
+            "license": [
+                "MIT"
+            ],
+            "install-path": "../bower-asset/moment"
         },
         {
             "name": "bower-asset/punycode",
@@ -1600,6 +1646,63 @@
                 }
             ],
             "install-path": "../myclabs/deep-copy"
+        },
+        {
+            "name": "nex/yii2-datepicker",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RomeroMsk/yii2-datepicker.git",
+                "reference": "14a5623e3ac8b487dd615db8c89fb7e53110a6f0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RomeroMsk/yii2-datepicker/zipball/14a5623e3ac8b487dd615db8c89fb7e53110a6f0",
+                "reference": "14a5623e3ac8b487dd615db8c89fb7e53110a6f0",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/eonasdan-bootstrap-datetimepicker": "4.17.*",
+                "bower-asset/moment": "*",
+                "yiisoft/yii2": "*",
+                "yiisoft/yii2-bootstrap": "*"
+            },
+            "time": "2018-01-30T04:44:28+00:00",
+            "default-branch": true,
+            "type": "yii2-extension",
+            "installation-source": "source",
+            "autoload": {
+                "psr-4": {
+                    "nex\\datepicker\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Ovchinnikov",
+                    "email": "nex.software@gmail.com",
+                    "homepage": "https://github.com/RomeroMsk"
+                }
+            ],
+            "description": "Bootstrap 3 Date/time picker widget for Yii2",
+            "homepage": "https://github.com/RomeroMsk/yii2-datepicker",
+            "keywords": [
+                "DateTimePicker",
+                "bootstrap",
+                "datepicker",
+                "extension",
+                "widget",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/RomeroMsk/yii2-datepicker/issues",
+                "source": "https://github.com/RomeroMsk/yii2-datepicker/tree/master"
+            },
+            "install-path": "../nex/yii2-datepicker"
         },
         {
             "name": "onmotion/yii2-widget-apexcharts",

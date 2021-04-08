@@ -23,6 +23,7 @@
         "yii2mod/yii2-sweet-alert": "*",
 	"elasticsearch/elasticsearch": "~7.0",
 	"onmotion/yii2-widget-apexcharts": "*",
+	"nex/yii2-datepicker": "@dev",
 	"yii2tech/csv-grid": "*"
     },
     "require-dev": {
