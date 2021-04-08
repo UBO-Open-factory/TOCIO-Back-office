@@ -196,38 +196,42 @@ class SiteController extends Controller {
 					$dates[$ligne['date']]	= $ligne['date'];
 				}
 				
+				// Extraction des identifiant réseaux
+				$identifiantModules = [];
+				foreach( $data as $ligne){
+					$identifiantModules[$ligne['identifiantModule']]	= $ligne['identifiantModule'];
+				}
+				
 				// Transformation des dates en colonnes
 				$tableauCroiseDynamique = [];
-				foreach( $data as $ligne){
-					
-					// Pour chacune des dates trouvée, on cherche la valeur correspondante
-					foreach( $dates as $date){
-						
-						// Si on trouve la date ... on met la valeur
-						if($ligne['date'] == $date ) {
-							
-							// Il se peut qu'il n'y ai pas de cumul, mais simplement la valeur 
-							if( isset($ligne['cumul'])) {
-								$tableauCroiseDynamique[$ligne['identifiantModule']][]	= [$date, $ligne['cumul']];
-							} else {
-								$tableauCroiseDynamique[$ligne['identifiantModule']][]	= [$date, $ligne['valeur']];
-							}
-						
-						// Si on ne trouve pas la date, on remet la dernière valeur
-						// @todo mettre la derniere valeur et non 0
-						} else {
-							$tableauCroiseDynamique[$ligne['identifiantModule']][]	= [$date, 0];
-						}
-					}
-				}
-
 				
+				// Pour chaque date, on va chercher les valeur de 
+				foreach( $identifiantModules as $identifiantModule){
+					$ligneCroisee = [];
+					
+					// l'Identifiant réseau
+					$ligneCroisee['identifiantModule'] = $identifiantModule;
+					foreach( $dates as $date){
+						$ligneCroisee[$date] = $this->_getCumulForDate( $date, $identifiantModule, $data );
+					}
+					
+					// On ajoute la ligne contrsuite
+					$tableauCroiseDynamique[] = $ligneCroisee;
+				}
+				
+			
+				// On ajoute la colonne des identifiatn réseau aux dates
+				array_unshift($dates, "identifiantModule");
+				
+
+			
 				// Construction de l'export
 				// @see https://awesomeopensource.com/project/yii2tech/csv-grid?categoryPage=29
 				$exporter = new CsvGrid([
 						'dataProvider' => new ArrayDataProvider([
-																	'allModels' => $data
-																]),
+								'allModels' => $tableauCroiseDynamique
+						]),
+						'columns' => $dates,
 						'csvFileConfig' => [
 								'cellDelimiter' => ",",
 								'enclosure' => '"'
@@ -244,6 +248,37 @@ class SiteController extends Controller {
 			]);
 	}
 	
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Cherche la valeur de cumul pour un identifiant réseau et une date.
+	 * 
+	 * @param unknown $p_STR_date la date à chercher
+	 * @param unknown $p_STR_identifiantModule	l'identifiant réseau pour lequel on veut la valeur
+	 * @param unknown $p_TAB_data	La structure de données contenant les valeurs.
+	 * 
+	 * @return string La valeur ou vide si aucune valeur.
+	 */
+	private function _getCumulForDate($p_STR_date, $p_STR_identifiantModule, $p_TAB_data){
+		foreach( $p_TAB_data as $data){
+
+			// On trouve la date pour l'identifiant réseau
+			if( $data['identifiantModule'] == $p_STR_identifiantModule && $data['date'] == $p_STR_date){
+				
+				// Il se peut qu'il n'y ai pas de cumul, mais simplement la valeur
+				if( isset($data['cumul'])) {
+					return $data['cumul'];
+				} else {
+					return $data['valeur'];
+				}
+				
+			}
+		}
+		
+		// On a pas trouve de date pour cet identifiant
+		return "";
+	}
 	
 	
 	

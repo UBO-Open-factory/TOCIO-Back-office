@@ -3,18 +3,21 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use app\components\tocioRegles;
 use app\models\Grandeur;
+use app\models\Module;
 use yii\helpers\ArrayHelper;
-use Codeception\Module;
 
 
 
 $this->title = 'Exportation de Mesures au format CSV';
 $this->params['breadcrumbs'][] = $this->title;
 
-$tableMesures = Grandeur::find()->all();
-$listData = ArrayHelper::map( $tableMesures, 'tablename', 'nature' );
+// Liste des Grandeurs
+$tableMesures 	= Grandeur::find()->all();
+$listMesures	= ArrayHelper::map( $tableMesures, 'tablename', 'nature' );
 
-// @todo pouvoir faire un filtre par module
+
+$tableModules 	= Module::find()->all();
+$listModules	= ArrayHelper::map( $tableModules, 'identifiantReseau', 'nom' );
 ?>
 <div class="tablemesure-index">
 
@@ -32,24 +35,27 @@ $listData = ArrayHelper::map( $tableMesures, 'tablename', 'nature' );
 		<div class="col-sm-3">
 		<?= /* Liste déroulante des tables des Mesures */
 		$form->field( $model, 'tableName' )->dropDownList( 
-				$listData
+				$listMesures
 		);
 		?>
 		</div>
 		<div class="col-sm-3">
 		<?= /* Liste déroulante des Momdules */
 		$form->field( $model, 'moduleName' )->dropDownList( 
-				['all' => 'Tous les modules' ]
+				['all' => 'Tous les modules',
+				$listModules
+				]
 		);
 		?>
 		</div>
 		<div class="col-sm-3">
 		<?= /* Liste déroulante des tables des Mesures */
+		// @todo pouvoir cocher des items dans la liste
 		$form->field( $model, 'cumulBy' )->dropDownList( 
-					['none' => 'Aucun cumul',
-					'day' => 'Jour',
-					'month' => 'Mois',
-					'year' => 'Année' ]
+				['none' => 'Aucun cumul',
+				'day' => 'Jour',
+				'month' => 'Mois',
+				'year' => 'Année' ]
 		);
 		?>
 		</div>
