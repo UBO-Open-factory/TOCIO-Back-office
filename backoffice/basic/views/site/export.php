@@ -23,8 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	
 	<?php $form = ActiveForm::begin(
-			['action' => [Yii::getAlias('@urlbehindproxy').'site/export'],
-			'options' => ['class' => 'form-horizontal']]
+			['options' => ['class' => 'form-horizontal']]
 			);	?>
 	<div class="row">
 		<div class="col-sm-2">
@@ -94,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<?php
 	$form = ActiveForm::begin(
-			['action' => [Yii::getAlias('@urlbehindproxy').'site/downloadcsv'],
+			['action' => ["/".Yii::getAlias('@urlbehindproxy').'site/downloadcsv'],
 			'options' => ['class' => 'form-horizontal']]
 			);	?>
 	<div class="row">
