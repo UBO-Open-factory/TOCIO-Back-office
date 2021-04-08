@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	
 	<?php $form = ActiveForm::begin(
-			['action' => ['/site/export'],,
+			['action' => ['/site/export'],
 			 'options' => ['class' => 'form-horizontal']]
 			);	?>
 	<div class="row">
