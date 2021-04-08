@@ -247,16 +247,6 @@ class SiteController extends Controller {
 								],
 						'maxEntriesPerFile' => 10000,
 				]);
-					
-				
-				// Si on a cliqué sur le bouton "Download CSV"
-				$boutonDownload = Yii::$app->request->post('downloadCSVExport');
-				echo "";
-				if( ! is_null($boutonDownload ) ) {
-					
-					// Renvoie du fichier CSV généré .....................................
-					$exporter->export()->send('exportMesures.csv');
-				}
 			}
 		}
 		
@@ -293,6 +283,94 @@ class SiteController extends Controller {
 				'dateMin'		=> $minMax[0],
 				'dateMax'		=> $minMax[1],
 			]);
+	}
+	
+	
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Export Grandeurs.
+	 *
+	 * @see https://awesomeopensource.com/project/yii2tech/csv-grid?categoryPage=29
+	 *
+	 * @return void|string
+	 */
+	public function actionDownloadcsv() {
+		$model 	= new GrandeurExportForm();
+		$tableauCroiseDynamique = [];
+		$descriptionDesColonnes	= [];
+		
+		// Si on a des parametres qui sont passés en POST dans un formulaire
+		if( Yii::$app->request->isPost ) {
+			
+			// enregistrement des saisie dans le modèle
+			$model->load( Yii::$app->request->post());
+			
+			// si les saisie sont correcte
+			if( $model->validate()){
+				
+				// Récupération des data correspondant à la saisie .......................
+				$data = $this->_getGrandeurGroupBy( $model );
+				
+				
+				
+				
+				// Construction du povot pour le tableau .................................
+				// Extraction des dates
+				$dates = [];
+				foreach( $data as $ligne){
+					$dates[$ligne['date']]	= $ligne['date'];
+				}
+				
+				// Extraction des identifiant réseaux
+				$identifiantModules = [];
+				foreach( $data as $ligne){
+					$identifiantModules[$ligne['identifiantModule']]	= $ligne['identifiantModule'];
+				}
+				
+				// Transformation des dates en colonnes
+				// Pour chaque date, on va chercher les valeur de
+				foreach( $identifiantModules as $identifiantModule){
+					$ligneCroisee = [];
+					
+					// l'Identifiant réseau
+					$ligneCroisee['identifiantModule'] = $identifiantModule;
+					foreach( $dates as $date){
+						$ligneCroisee[$date] = $this->_getCumulForDate( $date, $identifiantModule, $data );
+					}
+					
+					// On ajoute la ligne contrsuite
+					$tableauCroiseDynamique[] = $ligneCroisee;
+					
+				}
+				
+				// Construction du formattage des colonnes
+				$descriptionDesColonnes = ['attribute' => "identifiantModule"];
+				foreach ( $dates as $date){
+					$descriptionDesColonnes[] = ['attribute' => $date];
+				}
+				
+				
+				// Construction de l'export ..............................................
+				// @see https://awesomeopensource.com/project/yii2tech/csv-grid?categoryPage=29
+				$exporter = new CsvGrid([
+						'dataProvider' => new ArrayDataProvider([
+								'allModels' => $tableauCroiseDynamique
+						]),
+						'columns' => $descriptionDesColonnes,
+						'csvFileConfig' => [
+								'cellDelimiter' => ",",
+								'enclosure' => '"'
+						],
+						'maxEntriesPerFile' => 10000,
+				]);
+				
+				
+				// Renvoie du fichier CSV généré .....................................
+				$exporter->export()->send('exportMesures.csv');
+			}
+		}
 	}
 	
 	

@@ -72,27 +72,28 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?= /* Liste déroulante avc les cumul possibles */
 		// @todo pouvoir cocher des items dans la liste
 		$form->field( $model, 'cumulBy' )->dropDownList( 
-				['none' => 'Aucun cumul',
-				'day' => 'Jour',
+				['day' => 'Jour',
 				'month' => 'Mois',
-				'year' => 'Année' ]
+				'year' => 'Année',
+				'none' => 'Aucun cumul',],
+				['options' => ['day' => ['Selected'=>'selected']]]
 		);
 		?>
 		</div>
 		<div class="col-sm-12">
 			<br />
 		<?php 
-		/* @todo pouvoir afficher les données avant de les télécharger
-		 * @bug si on décommente l'affichage de ce bouton, on peut afficher les données, mais
-		 * dès qu'on fait un download, il n'est plus possible de faire autre chose qu'un download.
-		 * -> Je penses qu'il faudrait rafraichir la page après un download, mais le prolbème c'est
-		 * que le navigateur semble garder en mémoire l'entete de type text/csv qui lui a été envoyé.
-		Html::submitButton('Afficher', ['class' => 'btn btn-primary', 'name' => 'generateCSV']);
-		*/ ?>
-		<?= Html::submitButton('Download en CSV', ['class' => 'btn btn-primary pull-right', 'name' => 'downloadCSVExport']) ?>
+			echo Html::submitButton('Afficher', ['class' => 'btn btn-primary', 'name' => 'generateCSV']);
+		 ?>
 	   </div>
 	</div>
+	<?php ActiveForm::end(); ?>
 	
+	<?php
+	$form = ActiveForm::begin(
+			['action' => [Yii::getAlias('@urlbehindproxy').'site/downloadcsv'],
+			'options' => ['class' => 'form-horizontal']]
+			);	?>
 	<div class="row">
 		<div class="col-xs-12">
 			<?php 
@@ -106,10 +107,18 @@ $this->params['breadcrumbs'][] = $this->title;
 		     				]),
 		     				'columns' => $columns,
 		     			]);
+					/* Les champs précédement saisie */
+		     		echo $form->field($model, 'dateStart')->hiddenInput()->label(false);
+					echo $form->field($model, 'dateEnd')->hiddenInput()->label(false); 
+					echo $form->field($model, 'tableName')->hiddenInput()->label(false); 
+					echo $form->field($model, 'moduleName')->hiddenInput()->label(false); 
+					echo $form->field($model, 'cumulBy')->hiddenInput()->label(false);
+					
+					echo Html::submitButton('Download en CSV', ['class' => 'btn btn-primary pull-right', 'name' => 'downloadCSVExport']);
 				}
 			?>
 		</div>	
 	</div>
-	<?php ActiveForm::end() ?>
+	<?php ActiveForm::end(); ?>
 	
 </div>
