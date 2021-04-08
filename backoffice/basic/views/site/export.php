@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		?>
 		</div>
 		<div class="col-sm-3">
-		<?= /* Liste déroulante des tables des Mesures */
+		<?= /* Liste déroulante avc les cumul possibles */
 		// @todo pouvoir cocher des items dans la liste
 		$form->field( $model, 'cumulBy' )->dropDownList( 
 				['none' => 'Aucun cumul',
