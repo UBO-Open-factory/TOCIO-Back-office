@@ -144,11 +144,17 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.2.6..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>'
+		git log v1.2.7..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>'
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.2.7</h2>
+	<li>2021-04-08 <b>&bull;</b> Filtrage de l'export sur un interval de temps en utilisant un date-picker</li>
+<li>2021-04-08 <b>&bull;</b> Exportation d'un tableau croisé dynamique par identifiant réseau et par cumul de dates.</li>
+<li>2021-04-07 <b>&bull;</b> Mise à jour de Yii en version 2.0.41.1</li>
+<li>2021-04-07 <b>&bull;</b> Un utilisateur anonyme peut faire un export CSV des données.</li>
+	
 	<h2>V 1.2.6</h2>
 	<li>2021-03-04 <b>&bull;</b> Il est maintenant possible d'uploader un fichier journal de Mesures au format CSV.</li>
 <li>2021-03-04 <b>&bull;</b> Suppression de fichiers innutiles.</li>

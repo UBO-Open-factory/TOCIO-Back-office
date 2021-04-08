@@ -12,7 +12,7 @@ $config = [
         'log'
     ],
     'timeZone' => 'GMT',
-    'version' => '1.2.6',
+    'version' => '1.2.7',
     'aliases' => [
         // Do not define anything here, but in web_local.php
     ],
