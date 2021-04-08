@@ -22,7 +22,10 @@ $this->params['breadcrumbs'][] = $this->title;
 	<p>Les dates possibles sont celles pour lesquelles il existe des données pour ces Modules.</p> 
 
 	
-	<?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal']]);	?>
+	<?php $form = ActiveForm::begin(
+			['action' => [Yii::getAlias('@urlbehindproxy').'site/export'],
+			'options' => ['class' => 'form-horizontal']]
+			);	?>
 	<div class="row">
 		<div class="col-sm-2">
 		<?=  /* Filtrage par date (Date de début) 
