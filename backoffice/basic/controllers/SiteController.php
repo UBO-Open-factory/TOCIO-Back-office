@@ -15,6 +15,7 @@ use app\models\Module;
 use yii2tech\csvgrid\CsvGrid;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
+use app\models\LoginForm;
 
 class SiteController extends Controller {
 	/**
