@@ -40,9 +40,12 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'keW0Qn2MixxqzkfRxEWni-Frzm3VJoFim',
 
-            // Autorisation pour avoir du JSON en entrée (POST par exemple)
             'parsers' => [
-                'application/json' => 'yii\web\JsonParser'
+	            // Parser pour avoir du JSON en entrée (POST par exemple)
+                'application/json' => 'yii\web\JsonParser',
+            		
+            	// Parser allowing file's upload vi REST API
+            	'multipart/form-data' => 'yii\web\MultipartFormDataParser'
             ]
         ],
         'cache' => [
@@ -113,6 +116,7 @@ $config = [
                     'controller' => 'mesure',
                     'pluralize' => false,
                     'patterns' => [
+                        'PUT uploadcsv' => 'uploadcsv',
                         'POST addlora' => 'addlora',
                         'GET addlora' => 'addloraget',
                         'GET add/<moduleid>/<mesures>' => 'add',
