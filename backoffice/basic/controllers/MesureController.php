@@ -26,7 +26,7 @@ class MesureController extends ActiveController {
 	
 	//==============================================================================================
 	/**
-	 * This allow to upload a csv file with Mesure data according tosomething like :
+	 * This allow to upload a csv file with Mesure data according to something like :
 	 * "TEST_1";"1618307702";"-01234";"012";"-01201"
 	 * where :
 	 *     field 1 is module ID
@@ -42,6 +42,11 @@ class MesureController extends ActiveController {
 		
 		// GET THE UPLOADED FILE
 		$uploadedFile	= UploadedFile::getInstancesByName('file');
+
+		// we didn't have the "file" param
+		if( sizeof($uploadedFile) ==0) {
+			return ["error" => "Invalid file transfert. Pleas use PUT method with file=<YourCSFFile.csv> parameter."];
+		}
 		$uploadedFile	= $uploadedFile[0];
 		
 		
