@@ -150,7 +150,13 @@ function commentaire($elem){
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.2.7</h2>
-	<li>2021-04-08 <b>&bull;</b> Ajout de la prévisualisation des données avant l'export en CSV</li>
+	<li>2021-04-14 <b>&bull;</b> Documentation de l'API pour pouvoir envoyer un ficheir CSV</li>
+<li>2021-04-14 <b>&bull;</b> Mise à jour du gitignore pour ne pas versionner le répertoire des uploads</li>
+<li>2021-04-14 <b>&bull;</b> Ajout du parser pour pouvoir uploader un fichier via l'API en PUT</li>
+<li>2021-04-14 <b>&bull;</b> On enregistre pas dans ElasticSearch s'il n'y a pas d'index de défini dans le fichier de configuration local config/(web_local.php)</li>
+<li>2021-04-13 <b>&bull;</b> Missing namespace (Issue #8 https://github.com/UBO-Open-factory/TOCIO-Back-office/issues/8)</li>
+<li>2021-04-08 <b>&bull;</b> Correction URL d'action dans le formulaire de la page site/export</li>
+<li>2021-04-08 <b>&bull;</b> Ajout de la prévisualisation des données avant l'export en CSV</li>
 <li>2021-04-08 <b>&bull;</b> Filtrage de l'export sur un interval de temps en utilisant un date-picker</li>
 <li>2021-04-08 <b>&bull;</b> Exportation d'un tableau croisé dynamique par identifiant réseau et par cumul de dates.</li>
 <li>2021-04-07 <b>&bull;</b> Mise à jour de Yii en version 2.0.41.1</li>
