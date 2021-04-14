@@ -40,18 +40,28 @@ $this->params['breadcrumbs'][] = $this->title;
 				        			}
         	],
         	['attribute' => 'Graphique',
-        				'format' => 'html',
-        				'label' => "",
-        				'value' => function($model){
-        				return "<a href=".Url::toRoute("/grandeur/graphique?id=".$model->id)."><i class='glyphicon glyphicon-random'></i></a>";
+			'format' => 'html',
+        	'label' => "",
+        	'value' => function($model){
+        					return '<a href="'.Url::toRoute("/grandeur/graphique?id=".$model->id).'" title="Voir les données sous forme de graphique)"><i class="glyphicon glyphicon-stats"></i></a>';
+				        		}
+        	],
+        	['attribute' => 'Detail',
+        	'format' => 'html',
+        	'label' => "",
+        	'value' => function($model){
+        	return '<a href="'.Url::toRoute("/grandeur/view?id=".$model->id."&sort=-timestamp").'" title="Voir les données sous forme de tableau)"><i class="glyphicon glyphicon-list"></i></a>';
 				        			}
         	],
 			['class' => 'yii\grid\ActionColumn',
         	'visibleButtons' => [
-					        	'view' => true,
-					        	'update' => false,
-					        	'delete' => false,
-        						],
+		      		'view' => false,
+		        	'update' => false,
+        			'delete' => function($model){
+        							# if we got no value stored in the related table of data, we 
+        							# display the delete button. 
+			        				return $model->NbDataTable == 0;
+			        			}],
         	],
         ],
     ]); ?>

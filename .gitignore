@@ -1,8 +1,9 @@
 *.project
 *.settings/
 *.buildpath/
-**/assets/*
+*/assets/*
 *.sass-cache/
 *package-lock.json
 *.lock
-**/web_local.php
+config/web_local.php
+uploads/*.csv

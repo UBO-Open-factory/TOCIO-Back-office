@@ -70,6 +70,7 @@ AppAsset::register($this);
 					'<li class="dropdown-header">Outils de diagnostique divers</li>',
 				[ 'label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Tables des données', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+				[ 'label' => 'Import de journaux CSV', 'url' => ['/site/upload'], 'linkOptions' => ['class' => 'nav-link'] ],
 			],
 		];
 	}

@@ -221,7 +221,7 @@ class MesureController extends ActiveController {
 			// On fait une trace dans la base
 			Yii::error("Trame <".$moduleID."> inconnu dans la base.", "tocio");
 			
-			$l_TAB_Retour['error']	= "Module ".$moduleID." not declared.";
+			$l_TAB_Retour['error']	= "Module <b>".$moduleID."</b> not declared.";
 			return json_encode( $l_TAB_Retour );
 		}
 		
@@ -231,7 +231,33 @@ class MesureController extends ActiveController {
 	}
 	
 	
-	
+	// ==============================================================================================
+	/**
+	* Enregistre en base une mesure envoyée par un capteur.
+	 * @param  $moduleID l'ID du module pour lequel enregistrer la mesure.
+	 * @param $mesures la mesure brute à enregistrer.
+	 * @param $timeStamp le timestamp des mesures. S'il existe on le prend pour la sauvegarde des mesures, sinon
+	 * 						on met l'heure actuelle.
+	 * @return vide ou message au format JSON
+	 
+	 */
+	public function enregistreMesure($moduleID, $mesures, $timeStamp){
+		
+		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
+		if( MesureController::_moduleIdIsValid($moduleID)){
+			
+			// ENREGISTRE LA MESURE
+			return MesureController::_storeMesure($moduleID, $mesures, $timeStamp);
+			
+		} else {
+			// On fait une trace dans la base
+			Yii::error("Trame <".$moduleID."> inconnu dans la base.", "tocio");
+			
+			// Cet identifiant de Module n'existe pas
+			$l_TAB_Retour['error']	= "Module <b>".$moduleID."</b> not declared.";
+			return $l_TAB_Retour;
+		}
+	}
 	
 	
 	//==============================================================================================
@@ -239,7 +265,10 @@ class MesureController extends ActiveController {
 	 * Enregistre en base une mesure envoyée par un capteur.
 	 * @param  $moduleID l'ID du module pour lequel enregistrer la mesure.
 	 * @param $mesures la mesure brute à enregistrer.
+	 * @param $timeStamp le timestamp des mesures. S'il existe on le prend pour la sauvegarde des mesures, sinon
+	 * 						on met l'heure actuelle.
 	 * @return vide ou message au format JSON
+	 * 
 	 * @version 17 juin 2020	: APE	- Remplacement des points dans la mesure par des virgules.
 	 * 	@version 3 juil. 2020	: APE	- Remplacement des virgules dans le formattage de mesure par des points.
 	 * 	@version 3 juil. 2020	: APE	- Implémentation de l'ajout dans Elasticsearch
@@ -247,8 +276,10 @@ class MesureController extends ActiveController {
 	 * 									- Affichage des data inséréés dans ElasticSearch.
 	 * 	@version 14 oct. 2020	: APE	- Prise en compte de l'ordre des capteurs (ajout du "orderBy") 
 	 * 										lors de la récupéraiton de la liste des capteurs rattachés au module.
+	 * 	@version 3 mars 2021	: APE	- Ajout du paramètre "timeStamp qui est null par défaut pour 
+	 * 										garder une rétrocomptabilité.
 	 */
-	private function _storeMesure($moduleID, $mesures){
+	private function _storeMesure($moduleID, $mesures, $timeStamp = null){
 		$l_TAB_Retour = array();
 		// CONSTRUCTION DE LA REQUETE POUR RÉCUPERER LE NOM DES TABLES OU STOCKER LES DATA A PARTIR DE L'ID DU MODULE
 		/*	Select m.nom, m.identifiantReseau, m.description, c.nom, g.nature, g.tablename, rmc.x, rmc.y, rmc.z
@@ -317,15 +348,13 @@ class MesureController extends ActiveController {
 		
 		// TEST SI LA TRAME FAIT LE BON NOMBRE DE CARACTÈRES ---------------------------------------
 		if( strlen( $mesures ) <> $l_INT_LongeurAttendu) {
-			$l_TAB_Retour['error']	= "Longeur de trame (partie mesure) incorrecte. ".$l_INT_LongeurAttendu." caract. attendu (".strlen( $mesures )." recus)";
+			$l_TAB_Retour['error']	= "Longeur de trame ($mesures) incorrecte. ".$l_INT_LongeurAttendu." caract. attendu (".strlen( $mesures )." recus)";
 			
 			// On fait une trace dans la base
 			Yii::error("Trame <".$mesures."> du module <".$moduleID."> incorrecte (mauvaise longeur)", "tocio");
 			
-			
-			
-			// RENVOIE LE RÉSULTAT EN JSON
-			return json_encode($l_TAB_Retour);
+			// RENVOIE LE RÉSULTAT
+			return $l_TAB_Retour;
 		}
 		
 		
@@ -365,10 +394,12 @@ class MesureController extends ActiveController {
 			$l_INT_Mesure = floatval($l_STR_Signe . $l_STR_Avant . "." . $l_STR_Apres);
 			
 			
+			// Initialisaiton du timestamp
+			$timeStampMesure = is_null($timeStamp) ?date("Y/m/d H:i:s", time()) : date("Y/m/d H:i:s", $timeStamp);
 			
 			// Construction de la requète d'insertion en BDD
 			$params = [
-					'timestamp' => date("Y/m/d H:i:s", time()),
+					'timestamp' => $timeStampMesure ,
 					'valeur' => $l_INT_Mesure,
 					'posX' => $l_TAB_Capteur['x'],
 					'posY' => $l_TAB_Capteur['y'],
@@ -381,7 +412,7 @@ class MesureController extends ActiveController {
 			
 			// Insertion dans Elastic Search
 			// @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/indexing_documents.html
-			$params['timestamp']	= date(DATE_ATOM, time());
+			$params['timestamp']	= is_null($timeStamp) ?date(DATE_ATOM, time()) : date(DATE_ATOM, $timeStamp);
 			$params['Module identifiant reseau'] = $l_TAB_Capteur['identifiantReseau'];
 			$params['Module description'] 		= $l_TAB_Capteur['description'];
 			$params['Module nom'] 				= $l_TAB_Capteur['nom'];
@@ -389,7 +420,7 @@ class MesureController extends ActiveController {
 			$params['Capteur nom'] 				= $l_TAB_Capteur['capteurnom'];
 			$params['Mesure nature'] 			= $l_TAB_Capteur['nature'];
 			$elasticData		= ['index' 	=> Yii::getAlias('@elasticsearchindex'),
-									'body'		=> $params
+									'body'	=> $params
 									];
 			$respons 			= $l_OBJ_ClientElastic->index($elasticData);
 			$elasticRespons[] 	= $respons;
@@ -400,15 +431,14 @@ class MesureController extends ActiveController {
 		
 		// RETOUR ----------------------------------------------------------------------------------
 		// Le format de l'affichage du message sera en JSON
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+// 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		
 		$l_TAB_Retour['error']	= "";
 		$l_TAB_Retour['success']	= "ok";
 		$l_TAB_Retour['ElasticSearchDataInsertion'] = $elasticData;
 		$l_TAB_Retour['ElasticSearchReturn'] = $elasticRespons;
 		
 		return $l_TAB_Retour;
-		
-		
 	}
 	
 	

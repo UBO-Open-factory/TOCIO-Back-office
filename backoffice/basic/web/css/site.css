@@ -105,6 +105,17 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+.error {
+	background: #cc0000;
+background: -moz-linear-gradient(left, #cc0000 0%, #aa0000 100%);
+background: -webkit-linear-gradient(left, #cc0000 0%,#aa0000 100%);
+background: linear-gradient(to right, #cc0000 0%,#aa0000 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0000', endColorstr='#aa0000',GradientType=1 );
+    color: #FFFFFF;
+    border-left: 3px solid #ad0028;
+    padding: 3px 10px;
+    margin: 3px 0 15px 3px;
+}
 
 /* align the logout "link" (button in form) of the navbar */
 .nav li > form > button.logout {

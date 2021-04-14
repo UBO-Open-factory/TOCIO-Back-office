@@ -144,12 +144,28 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.2.4..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>' >> views/site/about.php
+		git log v1.2.6..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>'
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
+<<<<<<< HEAD
 	<h2>V 1.2.4</h2>
+=======
+	<h2>V 1.2.6</h2>
+	<li>2021-03-04 <b>&bull;</b> Il est maintenant possible d'uploader un fichier journal de Mesures au format CSV.</li>
+<li>2021-03-04 <b>&bull;</b> Suppression de fichiers innutiles.</li>
+<li>2021-03-02 <b>&bull;</b> Bug 497 : L'affichage des timestamp dans les tables des Grandeurs affiche la bonne heure.</li>
+	
+	<h2>V 1.2.5</h2>
+	<li>2021-02-12 <b>&bull;</b> Suppression du maximum dans la saisie d'un formattage d'une Grandeur (bug 491).</li>
+<li>2021-02-12 <b>&bull;</b> Possibilité de supprimer une Grandeur si elle n'est utilisée par aucune donnée (bug 489).</li>
+<li>2021-02-12 <b>&bull;</b> Lors de la génération du code Arduino et Python, il est maintenant possible d'utiliser un nom de Grandeur sans espace (bug 487).</li>
+	
+	<h2>V 1.2.4</h2>
+	<li>2021-02-09 <b>&bull;</b> Affichage des tableaux de données avec l'ordre décroissant des dates d'enregistrement par défaut afin d'avoir la dernière valeur en début de page.</li>
+<li>2021-02-09 <b>&bull;</b> Correction de bug : lors de la création d'un Module il faut affecter une Localisation.</li>
+>>>>>>> master
 <li>2021-01-20 <b>&bull;</b> Creation d'un fichier de configuration locale pour éviter qu'il soit écrasé lors de mise a jour</li>
 <li>2021-01-20 <b>&bull;</b> Nettoyage de fichiers suite à mise à jour de Yii</li>
 
