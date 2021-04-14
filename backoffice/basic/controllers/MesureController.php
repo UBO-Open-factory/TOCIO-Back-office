@@ -32,6 +32,8 @@ class MesureController extends ActiveController {
 	 *     field 1 is module ID
 	 *     field 2 is timestamp when Data have been take.
 	 *     field 3 and next are data formatted as describ in Grandeur format.
+	 *     
+	 * @return array in JSON with success, error, parse error 
 	 */
 	public function actionUploadcsv(){
 		// DISABLE CSRF VALIDATION (?)
@@ -58,14 +60,18 @@ class MesureController extends ActiveController {
 				// Insert data from file in data base
 				if( ! SiteController::insertDataFromFile($model)) {
 					
-					// @todo traiter les erruers d'insertion
-					$l_TAB_Retour = ["sucess" => "ok"];
+					$l_TAB_Retour = ["success" => "ok"];
+				
+				// There is a parsing error in a line (or more)
 				} else {
-					$l_TAB_Retour = ["error" => "Unable to parse CSV file"];
+					$l_TAB_Retour = [
+								"success" => "Partial imports, there is some error.",
+								"error" => "Parse error in the CSV file", 
+								"parse error" => $model->ErrorMessages];
 				}
 				
 
-				// file can't be upload
+			// file can't be upload
 			} else {
 				
 				$l_TAB_Retour = ["error" => "Unable to upload this file"];

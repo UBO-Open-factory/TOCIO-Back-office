@@ -155,7 +155,7 @@ class SiteController extends Controller {
 			if ($model->upload()) {
 				
 				// Traitement du fichier
-				if( ! $this->_insertDataFromFile($model)) {
+				if( ! $this->insertDataFromFile($model)) {
 					
 					// Redirectiopn sur la page d'affichage des données
 					return $this->redirect(['/grandeur/index']);
@@ -374,7 +374,69 @@ class SiteController extends Controller {
 		}
 	}
 	
-	
+	// _____________________________________________________________________________________________
+	/**
+	 * Insertion des données ligne par ligne du fichier CSV envoyé.
+	 * Si tout se passe bien on renvoie true, False sinon.
+	 *
+	 * On lit chacune des lignes pour reconstruire la payload qui sera envoyée dans l'API.
+	 *
+	 * @return boolean containing error. False (default) if every line have been insert in data base
+	 */
+	public function insertDataFromFile($model) {
+		$error 		= false;
+		// Autodetection des fins de lignes
+		// Ceci est sencé améliorer la compatibilité de lecture avec les fichiers de sources Unix ou MAC.
+		ini_set('auto_detect_line_endings',TRUE);
+		
+		//  Ouverture du fichier CSV en lecture
+		if (($handle = fopen($model->fileName, "r")) !== false) {
+			$numLigne 	= 1;
+			
+			// lecture ligne par ligne du fichier
+			while (($l_TAB_champs = fgetcsv($handle, 0, ";", "\"")) !== false) {
+				
+				if( is_array($l_TAB_champs)){
+					// Séparation des champs de la ligne
+					$idModule 	= $l_TAB_champs[0];
+					$timeStamp 	= $l_TAB_champs[1];
+					$payload 	= "";
+					
+					// Concaténation de la Payload Champ par champ
+					// On fait une concaténation avec un caractère vide pour avoir une chaine de
+					// caractère et non pas des integer, car sinon on peut perdre le 0 devant le
+					// nombre, ce qui va provoquer une erreur sur la taille de la chaine attendu.
+					for ($c=2; $c < count($l_TAB_champs); $c++) {
+						$payload .= $l_TAB_champs[$c];
+					}
+					
+					// Insertion des mesures de la ligne dans la base (via le controleur des Mesures)
+					$l_TAB_Retour = MesureController::enregistreMesure($idModule, $payload, $timeStamp);
+					
+					// Si on a une erreur à l'insertion.
+					if( isset($l_TAB_Retour['error']) and $l_TAB_Retour['error'] != ""){
+						$error = true;
+						$model->ErrorMessages[] = "Problème à l'enregistrement de la ligne $numLigne : <b><br/>". implode(",", $l_TAB_champs)."</b><br/><span class='error'>". $l_TAB_Retour['error']."</span>";
+					}
+					
+					// La ligne lue est vide
+				} else {
+					$error = true;
+					$model->ErrorMessages[] = "Impossible de trouver les champs de la ligne $numLigne, est-ce vraiment un fichier CSV correctement formaté ?";
+				}
+				$numLigne++;
+			}
+			fclose($handle);
+		}
+		
+		// Suppression du fichier CSV
+		if( is_file($model->fileName)) {
+			unlink($model->fileName);
+		}
+		
+		
+		return $error;
+	}
 	
 	
 	// _____________________________________________________________________________________________
@@ -497,73 +559,4 @@ class SiteController extends Controller {
 					->bindParam(':modulename', $model->moduleName)
 					->queryAll();
 	}
-	
-	
-	
-	
-	// _____________________________________________________________________________________________
-	/**
-	 * Insertion des données ligne par ligne du fichier CSV envoyé.
-	 * Si tout se passe bien on renvoie true, False sinon.
-	 * 
-	 * On lit chacune des lignes pour reconstruire la payload qui sera envoyée dans l'API.
-	 * 
-	 * @return boolean 
-	 */
-	private function _insertDataFromFile($model) {
-		$error 		= false;
-		// Autodetection des fins de lignes
-		// Ceci est sencé améliorer la compatibilité de lecture avec les fichiers de sources Unix ou MAC. 
-		ini_set('auto_detect_line_endings',TRUE);
-		
-		//  Ouverture du fichier CSV en lecture
-		if (($handle = fopen($model->fileName, "r")) !== false) {
-			$numLigne 	= 1;
-			
-			// lecture ligne par ligne du fichier
-			while (($l_TAB_champs = fgetcsv($handle, 0, ";", "\"")) !== false) {
-				
-// 				if( !is_null($ligne)){
-				if( is_array($l_TAB_champs)){
-					// Séparation des champs de la ligne
-					$idModule 	= $l_TAB_champs[0];
-					$timeStamp 	= $l_TAB_champs[1];
-					$payload 	= "";
-					
-					// Concaténation de la Payload Champ par champ
-					// On fait une concaténation avec un caractère vide pour avoir une chaine de 
-					// caractère et non pas des integer, car sinon on peut perdre le 0 devant le 
-					// nombre, ce qui va provoquer une erreur sur la taille de la chaine attendu.
-					for ($c=2; $c < count($l_TAB_champs); $c++) {
-						$payload .= $l_TAB_champs[$c];
-					}
-					
-					// Insertion des mesures de la ligne dans la base (via le controleur des Mesures)
-					$l_TAB_Retour = MesureController::enregistreMesure($idModule, $payload, $timeStamp);
-					
-					// Si on a une erreur à l'insertion.
-					if( isset($l_TAB_Retour['error']) and $l_TAB_Retour['error'] != ""){
-						$error = true;
-						$model->ErrorMessages[] = "Problème à l'enregistrement de la ligne $numLigne : <b><br/>". implode(",", $l_TAB_champs)."</b><br/><span class='error'>". $l_TAB_Retour['error']."</span>";
-					}
-				
-				// La ligne lue est vide
-				} else {
-					$error = true;
-					$model->ErrorMessages[] = "Impossible de trouver les champs de la ligne $numLigne, est-ce vraiment un fichier CSV correctement formaté ?";
-				}
-				$numLigne++;
-			}
-			fclose($handle);
-		}
-		
-		// Suppression du fichier CSV
-		if( is_file($model->fileName)) {
-			unlink($model->fileName);
-		}
-		
-		
-		return $error;
-	}
-	
 }
