@@ -2,9 +2,10 @@
 *.settings/
 *.buildpath/
 */web/assets/*
-web/assets/
+web/assets/*
 *.sass-cache/
 *package-lock.json
 *.lock
 config/web_local.php
-uploads/*.csv
+uploads/*
+composer.lock
