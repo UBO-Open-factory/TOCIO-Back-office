@@ -731,100 +731,86 @@ class modulesWidget extends Widget
 		$format = [];
 		$natures = [];
 		$compteur = 0;
+
+		//generation of the Arduino code 
 		$ligne[] = 'const String host = "'.$url.'";';
 		$ligne[] = 'const String url  = "'. \Yii::getAlias('@urlbehindproxy').'/mesure/add/'.$id.'";';
 		$ligne[] = "";
-		$ligne[] = 'void loop() {';
+		$ligne[] = 'void setup()';
+		$ligne[] = '{';
+		$ligne[] = '	Serial.begin(9600);';
+		$ligne[] = '}';
 		$ligne[] = "";
-		$ligne[] = '	// Concatenation des mesures .............................';
-		$ligne[] = '	String Mesures = "";';
-		foreach ( $params as $grandeur ){
-			// Si le nom de la Grandeur a pas un espace
-			if( stripos( $grandeur['nature']," ") !== false){
-				list($nature, $null) = explode(" ", $grandeur['nature']);
-			} else {
-				$nature = $grandeur['nature'];
-			}
-			$natureValue = $nature.$compteur++;
-			$natures[] = strtolower($this->_stripAccents($natureValue));
-			
-			$ligne[] = "";
-			$ligne[] = "	// ".strtolower($this->_stripAccents($natureValue))." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
-			$ligne[] = "	float ".$this->_stripAccents($natureValue)." = \"\"; // <- Your code to read value from sensor goes here ";
-			$ligne[] = '	Mesures.concat(formatString('.$this->_stripAccents($natureValue).', "'.$grandeur['format'].'"));';
-		}
-		$ligne[] = "";
-		$ligne[] = '	// Envoie des données vers TOCIO .........................';
-		$ligne[] = '	sendDataInHTTPSRequest( url, Mesures );';
-		$ligne[] = "";
-		$ligne[] = '	// Pause .................................................';
+		$ligne[] = 'void loop()';
+		$ligne[] = '{';
+		$ligne[] = '	//Call readconcatsend_data function ......................';
+		$ligne[] = '	readconcatsend_data();';
+		$ligne[] = '	// Pause of 1 minute .....................................';
 		$ligne[] = '	delay(60 * 1000);';
 		$ligne[] = '}';
 		$ligne[] = "";
+		$ligne[] = 'void readconcatsend_data()';
+		$ligne[] = '{';
+		$ligne[] = '	//create data_string save and concat data';
+		$ligne[] = '	String Mesures = "";';
+		$ligne[] = '	//create temp variable saving and form data from sensor';
+		$ligne[] = '	char data[30];';
+		$ligne[] = '	int i = 0;';
+		foreach ( $params as $grandeur )
+		{
+		// If Grandeur as space in his name
+		if( stripos( $grandeur['nature']," ") !== false)
+		{
+			list($nature, $null) = explode(" ", $grandeur['nature']);
+		} 
+		else 
+		{
+			$nature = $grandeur['nature'];
+		}
+		$natureValue = $nature.$compteur++;
+		$natures[] = strtolower($this->_stripAccents($natureValue));
 		$ligne[] = "";
+		$ligne[] = "	// ".strtolower($this->_stripAccents($natureValue))." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
+		$ligne[] = "	float ".$this->_stripAccents($natureValue)." = 0.0 ; // <- Your code to read value from sensor goes here ";
+		$ligne[] = "	//form data from ".$this->_stripAccents($natureValue);
+		$arr1  = str_split($grandeur['format']);
+		if( $arr1[0] === '-')
+		{
+			$valmax = $arr1[1] + $arr1[3];
+			$val2 = $arr1[3];
+			$formatt = "%+0".$valmax."d";
+		}
+		else
+		{
+			$valmax = $arr1[0] + $arr1[2];
+			$val2 = $arr1[2];
+			$formatt = "%0".$valmax."d";
+		}
+		if($val2 != '0')
+		{
+		$ligne[] = "	for( i = 0 ; i < ".$val2." ; i++ )  ";
+		$ligne[] = '	{';
+		$ligne[] = "	".$this->_stripAccents($natureValue)." = ".$this->_stripAccents($natureValue)."*10;";
+		$ligne[] = '	}';
+		}
+		$ligne[] = "	//concat data in Mesures variable";
+		$ligne[] = "	sprintf(data,\"".$formatt."\",(int)".$this->_stripAccents($natureValue).");";
+		$ligne[] = "	Mesure.concat(data);";	
+		}
 		$ligne[] = "";
-		
-		
-		// Partie pour le formattage de la mesure
-		$ligne[] = '// --------------------------------------------------------------------------------';
-		$ligne[] = '// Formattage d\'une chaine de caractères "chaine" selon le format "formattage".';
-		$ligne[] = '// @param chaine : Chainbe de caractère à formater.';
-		$ligne[] = '// @param formattage : Formattage d\'une valeur selon la règle [-]chiffreAvantLaVirgule.chiffreApresLaVirgule';
-		$ligne[] = 'String formatString(float p_valeur, String p_formattage) {';
-		$ligne[] = '	int delimiterPosition, lenghtAvant;';
-		$ligne[] = '	String data = "";  // The string we need to format';
-		$ligne[] = '	String chaine = String(p_valeur);';
-		$ligne[] = '';
-		$ligne[] = '	delimiterPosition = chaine.indexOf(".");  // Read the delimiter positon in "chaine".';
-		$ligne[] = '	String avant = chaine.substring(0, delimiterPosition);';
-		$ligne[] = '	String apres = chaine.substring(delimiterPosition + 1);';
-		$ligne[] = '';
-		$ligne[] = '	delimiterPosition = p_formattage.indexOf(".");           // Read the delimiter position in "formattage".';
-		$ligne[] = '	if ( p_formattage.substring(0, 1) == "-" ) {';
-		$ligne[] = '		lenghtAvant = p_formattage.substring(1, delimiterPosition).toInt();';
-		$ligne[] = '	} else {';
-		$ligne[] = '		lenghtAvant = p_formattage.substring(0, delimiterPosition).toInt();';
-		$ligne[] = '	}';
-		$ligne[] = '	int lenghtApres = p_formattage.substring(delimiterPosition + 1).toInt();';
-		$ligne[] = '';
-		$ligne[] = '	// Si on a besoin d\'un signe .................................';
-		$ligne[] = '	if ( p_formattage.substring(0, 1) == "-" ) {';
-		$ligne[] = '		if (p_valeur < 0) {';
-		$ligne[] = '			data.concat("-");';
-		$ligne[] = '		} else {';
-		$ligne[] = '			data.concat("+");';
-		$ligne[] = '		}';
-		$ligne[] = '	}';
-		$ligne[] = '';
-		$ligne[] = '	// Padding with 0 for the "avant" part ........................';
-		$ligne[] = '	String temp = "";';
-		$ligne[] = '	for (int i = 0; i <= lenghtAvant; i++) {';
-		$ligne[] = '		// Concatenation de tout les 0';
-		$ligne[] = '		temp.concat("0");';
-		$ligne[] = '	}';
-		$ligne[] = '	temp.concat(avant);';
-		$ligne[] = '	data.concat(temp.substring( temp.length() - lenghtAvant ));';
-		$ligne[] = '';
-		$ligne[] = '	// Formattage de la partie apres la virgule ....................';
-		$ligne[] = '	for (int i = 0; i <= apres.length(); i++) {';
-		$ligne[] = '		apres.concat("0");';
-		$ligne[] = '	}';
-		$ligne[] = '	apres = apres.substring(0, lenghtApres);';
-		$ligne[] = '	data.concat(apres);';
-		$ligne[] = '';
-		$ligne[] = '	return data;';
+		$ligne[] = '	// Send data to TOCIO ....................................';
+		$ligne[] = '	sendDataInHTTPSRequest( Mesures );';
+		$ligne[] = "";
 		$ligne[] = '}';
-		$ligne[] = '';
-		$ligne[] = '';
-		$ligne[] = '';
-		$ligne[] = '// --------------------------------------------------------------------------------';
-		$ligne[] = '// Envoi au serveur TOCIO les mesures ("data") passées en paramètre.';
-		$ligne[] = '// @param data : String contenant les mesures formatée selon la payload défini dans le Back Office de Tocio';
-		$ligne[] = 'String sendDataInHTTPSRequest(String data) {';
-		$ligne[] = '';
+		$ligne[] = '// -----------------------------------------------------------';
+		$ligne[] = '// Send to TOCIO serveur data giving in parameter.';
+		$ligne[] = '// @param data : String concatenation by the website payload';
+		$ligne[] = '// -----------------------------------------------------------';
+		$ligne[] = 'String sendDataInHTTPSRequest(String data)';
+		$ligne[] = '{';
 		$ligne[] = '	// If we are connecte to the WIFI';
-		$ligne[] = '	if (WiFi.status() == WL_CONNECTED) {';
-		$ligne[] = '';
+		$ligne[] = '	if (WiFi.status() == WL_CONNECTED)';
+		$ligne[] = '    {';
 		$ligne[] = '		//  Create an https client';
 		$ligne[] = '		WiFiClientSecure client;';
 		$ligne[] = '';
@@ -833,7 +819,8 @@ class modulesWidget extends Widget
 		$ligne[] = '';
 		$ligne[] = '		// We don\'t validate the certificat, buit we use https (port 443 of the server).';
 		$ligne[] = '		int port = 443;';
-		$ligne[] = '		if (!client.connect(host, port)) {';
+		$ligne[] = '		if (!client.connect(host, port))';
+		$ligne[] = '        {';
 		$ligne[] = '			Serial.println("connection failed");';
 		$ligne[] = '			return "nok";';
 		$ligne[] = '		}';
@@ -844,16 +831,18 @@ class modulesWidget extends Widget
 		$ligne[] = '				"Host: " + host + "\r\n" +';
 		$ligne[] = '				"Connection: close\r\n\r\n");';
 		$ligne[] = '';
-		$ligne[] = '		// Lecture de ce qui est renvoyée par le serveur';
-		$ligne[] = '		while (client.available()) {';
+		$ligne[] = '		// reading of the server answer';
+		$ligne[] = '		while (client.available())';
+		$ligne[] = '        {';
 		$ligne[] = '			String line = client.readStringUntil(\'\r\');';
 		$ligne[] = '			Serial.print(line);';
 		$ligne[] = '		}';
 		$ligne[] = '';
 		$ligne[] = '		client.stop();';
 		$ligne[] = '		return "ok";';
-		$ligne[] = '';
-		$ligne[] = '	} else {';
+		$ligne[] = '    }';
+		$ligne[] = '    else';
+		$ligne[] = '	{';
 		$ligne[] = '		return "nok";';
 		$ligne[] = '	}';
 		$ligne[] = '';
