@@ -773,17 +773,19 @@ class modulesWidget extends Widget
 		$ligne[] = "	// ".strtolower($this->_stripAccents($natureValue))." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
 		$ligne[] = "	float ".$this->_stripAccents($natureValue)." = 0.0 ; // <- Your code to read value from sensor goes here ";
 		$ligne[] = "	//form data from ".$this->_stripAccents($natureValue);
+
 		$arr1  = str_split($grandeur['format']);
+
 		if( $arr1[0] === '-')
 		{
-			$valmax = $arr1[1] + $arr1[3];
-			$val2 = $arr1[3];
+			$valmax = explode('.',$grandeur['format'])[0]*-1 + explode('.',$grandeur['format'])[1];
+			$val2 = explode('.',$grandeur['format'])[1];
 			$formatt = "%+0".$valmax."d";
 		}
 		else
 		{
-			$valmax = $arr1[0] + $arr1[2];
-			$val2 = $arr1[2];
+			$valmax = explode('.',$grandeur['format'])[0] + explode('.',$grandeur['format'])[1];
+			$val2 = explode('.',$grandeur['format'])[1];
 			$formatt = "%0".$valmax."d";
 		}
 		if($val2 != '0')
