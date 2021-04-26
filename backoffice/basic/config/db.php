@@ -7,10 +7,10 @@ return [
 		'charset' => 'utf8',
 
 		// Timezone pour Paris
-		'on afterOpen' => function ( $event ) {
+		//'on afterOpen' => function ( $event ) {
 			// set 'Europe/Paris' timezone
-			$event->sender->createCommand( "SET time_zone='+02:00';" )->execute();
-		}
+			//$event->sender->createCommand( "SET time_zone='+05:00';" )->execute();
+		//}
 		// Schema cache options (for production environment)
 // 'enableSchemaCache' => true,
 // 'schemaCacheDuration' => 60,

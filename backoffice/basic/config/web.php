@@ -7,11 +7,10 @@ $config = [
     'basePath' => dirname(__DIR__),
     'homeUrl' => '/',
     'language' => 'fr-FR',
-	'sourceLanguage' => 'fr-FR',
+    'sourceLanguage' => 'fr-FR',
     'bootstrap' => [
         'log'
     ],
-    'timeZone' => 'Europe/Paris',
     'version' => '1.2.7',
     'aliases' => [
         // Do not define anything here, but in web_local.php
@@ -107,7 +106,7 @@ $config = [
     	// Pour ubn formattage par défaut de la date et de l'heure
 		'formatter' => [
     			'dateFormat' => 'dd/MM/yyyy',
-    			'datetimeFormat' => 'dd/MM/yyyy hh:mm:ss',
+    			'datetimeFormat' => 'dd/MM/yyyy HH:mm:ss',
     			'decimalSeparator' => '.',
     			'thousandSeparator' => ' ',
     			'currencyCode' => 'EUR',
