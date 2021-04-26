@@ -70,10 +70,20 @@ AppAsset::register($this);
 					'<li class="dropdown-header">Outils de diagnostique divers</li>',
 				[ 'label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Tables des données', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+				[ 'label' => 'Exports de données', 'url' => ['/site/export'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Import de journaux CSV', 'url' => ['/site/upload'], 'linkOptions' => ['class' => 'nav-link'] ],
 			],
 		];
-	}
+    } else {
+    	$menuItems[] = [
+    			'label' => 'Outils',
+    			'linkOptions' => ['class' => 'nav-link'],
+    			'items' => [
+    					[ 'label' => 'Tables des données', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+    					[ 'label' => 'Exports de données', 'url' => ['/site/export'], 'linkOptions' => ['class' => 'nav-link'] ],
+    			],
+    	];
+    }
 	
    	// UTILISATEURS --------------------------------------------------------------------------------
    	if( Yii::$app->user->can('createUser') ) {

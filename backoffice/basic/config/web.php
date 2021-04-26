@@ -40,10 +40,13 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'keW0Qn2MixxqzkfRxEWni-Frzm3VJoFim',
 
-            // Autorisation pour avoir du JSON en entrée (POST par exemple)
-            'parsers' => [
-                'application/json' => 'yii\web\JsonParser'
-            ]
+        		'parsers' => [
+        				// Parser pour avoir du JSON en entrée (POST par exemple)
+        				'application/json' => 'yii\web\JsonParser',
+        				
+        				// Parser allowing file's upload vi REST API
+        				'multipart/form-data' => 'yii\web\MultipartFormDataParser'
+        		]
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache'
@@ -125,7 +128,8 @@ $config = [
                     'controller' => 'mesure',
                     'pluralize' => false,
                     'patterns' => [
-                        'POST addlora' => 'addlora',
+                    	'PUT uploadcsv' => 'uploadcsv',
+                    	'POST addlora' => 'addlora',
                         'GET addlora' => 'addloraget',
                         'GET add/<moduleid>/<mesures>' => 'add',
                         'GET get/<moduleid>' => 'get'
@@ -145,8 +149,9 @@ $config = [
                     'controller' => 'grandeur',
                     'pluralize' => false,
                     'patterns' => [
-                        'GET getgrandeur/<id:\d+>' => 'getgrandeur',
-                        'GET getgrandeurs' => 'getgrandeurs'
+                    	'GET getgrandeur/<id:\d+>' => 'getgrandeur',
+                    	'GET getgrandeurs' => 'getgrandeurs',
+                    	'GET export' => 'getexport'
                     ]
                 ]
             ]
