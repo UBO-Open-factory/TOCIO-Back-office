@@ -11,7 +11,7 @@ $config = [
     'bootstrap' => [
         'log'
     ],
-    'timeZone' => 'GMT',
+    'timeZone' => 'Europe/Paris',
     'version' => '1.2.6',
     'aliases' => [
         // Do not define anything here, but in web_local.php
@@ -97,6 +97,18 @@ $config = [
                 ]
             ]
         ],
+    	// Pour affichage par défault de la date et de l'heure.
+    	'localtime'=>array(
+    			'class'=>'LocalTime',
+    	),
+    	// Pour ubn formattage par défaut de la date et de l'heure
+		'formatter' => [
+    			'dateFormat' => 'dd/MM/yyyy',
+    			'datetimeFormat' => 'dd/MM/yyyy hh:mm:ss',
+    			'decimalSeparator' => '.',
+    			'thousandSeparator' => ' ',
+    			'currencyCode' => 'EUR',
+    	],
         'db' => $db,
         'urlManager' => [
             'baseUrl' => "@urlbehindproxy",
