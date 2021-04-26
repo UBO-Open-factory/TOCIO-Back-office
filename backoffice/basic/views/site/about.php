@@ -144,11 +144,18 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.2.6..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>'
+		git log v1.2.8..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>'
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.2.7</h2>
+	<li>2021-04-26 <b>&bull;</b> Prise en compte du fuseau horaire pour le formattage des dates et de l'heure et affichage à la norme Française.</li>
+<li>2021-04-26 <b>&bull;</b> Modification du footer</li>
+<li>2021-04-14 <b>&bull;</b> Dump Mysl pour la structure de la BDD</li>
+<li>2021-04-14 <b>&bull;</b> Mise à jour du fichier d'installation</li>
+<li>2021-03-08 <b>&bull;</b> Mise à jour du Readme</li>
+
 	<h2>V 1.2.6</h2>
 	<li>2021-03-04 <b>&bull;</b> Il est maintenant possible d'uploader un fichier journal de Mesures au format CSV.</li>
 <li>2021-03-04 <b>&bull;</b> Suppression de fichiers innutiles.</li>
