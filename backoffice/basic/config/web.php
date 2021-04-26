@@ -16,16 +16,21 @@ $config = [
     'aliases' => [
         // Do not define anything here, but in web_local.php
     ],
-    'components' => [
+    'components' => 
+    [
         // Gestion des ressources ( les assets )
         // On rajoute un timestamp pour que cette ressource ne soit pas mise en cache
-        'assetManager' => [
+        'assetManager' => 
+        [
             'baseUrl' => "@urlbehindproxy/assets/",
             'appendTimestamp' => true,
-            'converter' => [
+            'converter' => 
+            [
                 'class' => 'yii\web\AssetConverter',
-                'commands' => [
-                    'scss' => [
+                'commands' => 
+                [
+                    'scss' => 
+                    [
                         'css',
                         'sass {from} {to} --sourcemap --style=compressed'
                     ]
@@ -33,8 +38,15 @@ $config = [
             ]
         ],
         // Gestion des authentifications par groupe d'accès.
-        'authManager' => [
+        'authManager' => 
+        [
             'class' => 'yii\rbac\DbManager'
+        ],
+        'formatter' => 
+        [
+            'class' => '\yii\i18n\Formatter',
+
+            'datetimeFormat' => 'MM/dd/yy hh:mm:ss',
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
