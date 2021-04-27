@@ -4,4 +4,4 @@
 // NE PAS MODIFIER CE FICHIER À LA MAIN
 // ---------------------------------------------------------------------
 var g_urlbehindproxy = '/';	// Set in /config/web.php
-var g_host = 'https://tocio.alex-design.fr';
+var g_host = 'https://192.168.0.40:8888';

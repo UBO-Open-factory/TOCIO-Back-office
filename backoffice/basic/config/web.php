@@ -7,12 +7,11 @@ $config = [
     'basePath' => dirname(__DIR__),
     'homeUrl' => '/',
     'language' => 'fr-FR',
-	'sourceLanguage' => 'fr-FR',
+    'sourceLanguage' => 'fr-FR',
     'bootstrap' => [
         'log'
     ],
-    'timeZone' => 'GMT',
-    'version' => '1.2.6',
+    'version' => '1.2.7',
     'aliases' => [
         // Do not define anything here, but in web_local.php
     ],
@@ -52,10 +51,13 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'keW0Qn2MixxqzkfRxEWni-Frzm3VJoFim',
 
-            // Autorisation pour avoir du JSON en entrée (POST par exemple)
-            'parsers' => [
-                'application/json' => 'yii\web\JsonParser'
-            ]
+        		'parsers' => [
+        				// Parser pour avoir du JSON en entrée (POST par exemple)
+        				'application/json' => 'yii\web\JsonParser',
+        				
+        				// Parser allowing file's upload vi REST API
+        				'multipart/form-data' => 'yii\web\MultipartFormDataParser'
+        		]
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache'
@@ -109,6 +111,18 @@ $config = [
                 ]
             ]
         ],
+    	// Pour affichage par défault de la date et de l'heure.
+    	'localtime'=>array(
+    			'class'=>'LocalTime',
+    	),
+    	// Pour ubn formattage par défaut de la date et de l'heure
+		'formatter' => [
+    			'dateFormat' => 'dd/MM/yyyy',
+    			'datetimeFormat' => 'dd/MM/yyyy HH:mm:ss',
+    			'decimalSeparator' => '.',
+    			'thousandSeparator' => ' ',
+    			'currencyCode' => 'EUR',
+    	],
         'db' => $db,
         'urlManager' => [
             'baseUrl' => "@urlbehindproxy",
@@ -125,7 +139,8 @@ $config = [
                     'controller' => 'mesure',
                     'pluralize' => false,
                     'patterns' => [
-                        'POST addlora' => 'addlora',
+                    	'PUT uploadcsv' => 'uploadcsv',
+                    	'POST addlora' => 'addlora',
                         'GET addlora' => 'addloraget',
                         'GET add/<moduleid>/<mesures>' => 'add',
                         'GET get/<moduleid>' => 'get'
@@ -145,8 +160,9 @@ $config = [
                     'controller' => 'grandeur',
                     'pluralize' => false,
                     'patterns' => [
-                        'GET getgrandeur/<id:\d+>' => 'getgrandeur',
-                        'GET getgrandeurs' => 'getgrandeurs'
+                    	'GET getgrandeur/<id:\d+>' => 'getgrandeur',
+                    	'GET getgrandeurs' => 'getgrandeurs',
+                    	'GET export' => 'getexport'
                     ]
                 ]
             ]

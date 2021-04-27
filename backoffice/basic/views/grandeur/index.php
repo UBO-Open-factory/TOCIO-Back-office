@@ -5,6 +5,7 @@ use yii\widgets\Pjax;
 use app\components\tocioRegles;
 use app\components\messageAlerte;
 use yii\helpers\Url;
+use app\models\User;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\GrandeurSearch */
@@ -66,7 +67,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 <p>
-		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une Grandeur', ['create'], ['class' => 'btn btn-primary pull-right'])?>
+		<?php
+		if( Yii::$app->user->can('createGrandeur') ) {
+			echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une Grandeur', ['create'], ['class' => 'btn btn-primary pull-right']);
+		}
+		?>
 	</p>
     <?php Pjax::end(); ?>
 

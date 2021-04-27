@@ -3,8 +3,8 @@ info:
   title: TOCIO API
   description: Acces aux données du projet TOCIO
   version: '0.1'
-servers:
-  - url: 'https://uboopenfactory.univ-brest.fr/data/passerelle/'
+  contact:
+    email: peretjatko@univ-brest.fr
 paths:
   /mesure/get:
     get:
@@ -68,6 +68,46 @@ paths:
       tags:
         - Mesures
       summary: "Enregistre les mesures d'un module provenant du réseau LORA."
+
+  /mesure/uploadcsv:
+      put:
+        description: |-
+          This allow you  to upload a csv file with recorded data, for that you have to call the url with a PUT method and pass your CSV file in the *file* parameter.
+
+          Every line in the CSV file must have a Module's data recorded at a specific time (one line per Module). You can have as many line you want.
+
+          Each line must have every Sensors you attached  for the Module in the Back office. (if that's not the case, data will be rejected).
+
+          Each line is build regarding the above pattern :
+
+          **"moduleID";"timestamp";data**
+           
+          **moduleID** : The module ID you define in the Module settiings.
+
+          **timestamp** : the timestamp the data have been collected.
+
+          **data** : Sensor's data (all sensors you attach to this Module)  collected at this **timestamp**. Every sensor' data have to be in a seprataed field.
+
+          For exemple,  let's imagine you have 2 Modules (*module1* and *module2*) that have 1 sensor for module1 and 3 sensors for module2. You muste send a CSV file like : 
+            
+              "module2";"1618307702";"-01234";"012";"-01201"
+              "module1";"1618307703";"-01234"
+              "module1";"1618307704";"-01235
+              "module2";"1618307703";"-01234";"012";"-01201"
+        parameters: 
+          - name: file
+            in: query
+            schema:
+              type: string
+            example: myCSVFile.csv
+        responses:
+          '200':
+           description: a JSON array with result of the storage. Every rejected line will be notice in a *parse error* field.     
+        tags:
+          - Mesures
+        summary: "This allow to upload a csv file from CSV file."
+
+
   /capteur/getcapteur:
     get:
       description: |-

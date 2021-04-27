@@ -8,6 +8,8 @@ use yii\db\Query;
 use yii\filters\VerbFilter;
 use function GuzzleHttp\Psr7\str;
 use Elasticsearch\ClientBuilder;
+use yii\web\UploadedFile;
+use app\models\UploadImageForm;
 
 
 
@@ -24,12 +26,92 @@ class MesureController extends ActiveController {
 	
 	//==============================================================================================
 	/**
+	 * This allow to upload a csv file with Mesure data according to something like :
+	 * "TEST_1";"1618307702";"-01234";"012";"-01201"
+	 * where :
+	 *     field 1 is module ID
+	 *     field 2 is timestamp when Data have been take.
+	 *     field 3 and next are data formatted as describ in Grandeur format.
+	 *     
+	 * @return array in JSON with success, error, parse error 
+	 */
+	public function actionUploadcsv(){
+		// DISABLE CSRF VALIDATION (?)
+		yii::$app->request->enableCsrfValidation = false;
+		Yii::$app->request->getBodyParams();
+		
+		// GET THE UPLOADED FILE
+		$uploadedFile	= UploadedFile::getInstancesByName('file');
+
+		// we didn't have the "file" param
+		if( sizeof($uploadedFile) ==0) {
+			return ["error" => "Invalid file transfert. Pleas use PUT method with file=<YourCSFFile.csv> parameter."];
+		}
+		$uploadedFile	= $uploadedFile[0];
+		
+		
+		
+		// WE NEED A REAL CSV FILE (ACCORDING TO MIME TYPE) ------------------------------
+		if ($uploadedFile->type == "text/csv" ){
+			
+
+			// Attach the uploaded file to UploadImageForm model
+			$model = new UploadImageForm();
+			$model->CSVFile = $uploadedFile;
+			
+			// file is uploaded successfully
+			if ($model->upload()) {
+				
+				// Insert data from file in data base
+				if( ! SiteController::insertDataFromFile($model)) {
+					
+					$l_TAB_Retour = ["success" => "ok"];
+				
+				// There is a parsing error in a line (or more)
+				} else {
+					$l_TAB_Retour = [
+								"success" => "Partial imports, there is some error.",
+								"error" => "Parse error in the CSV file", 
+								"parse error" => $model->ErrorMessages];
+				}
+				
+
+			// file can't be upload
+			} else {
+				
+				$l_TAB_Retour = ["error" => "Unable to upload this file"];
+			}
+			
+			
+			
+			
+
+				
+			
+			
+		// THIS IS NOT A CSV FILE, RETURN AN ERROR ---------------------------------------
+		} else {
+			$l_TAB_Retour = ["error" => "Need a csv file"];
+		}
+		
+		
+		
+		// SEND RESULT IN JSON -----------------------------------------------------------
+		// Le format de l'affichage du message sera en JSON
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		return json_encode( $l_TAB_Retour );
+		
+	}
+	
+	
+	//==============================================================================================
+	/**
 	 * Renvoie les 100 dernières mesures d'un modules.
 	 *
 	 * @return array au format JSON.
 	 */
 	public function actionGet(){
-		// RECUPERATION DU PARAMETRE PASSÉ EN GET --------------------------------------------------
+		// RECUPERATION DU PARAMETRE PASSÉ EN GET ----------------------------------------
 		// @see https://www.yiiframework.com/doc/guide/2.0/fr/runtime-requests
 		$request = Yii::$app->request;
 		
@@ -37,12 +119,12 @@ class MesureController extends ActiveController {
 		$moduleID = $get['moduleid'];
 		
 		
-		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
+		// TEST SI LE MODULEID EXISTE DANS LA BASE ---------------------------------------
 		if( ! $this::_moduleIdIsValid($moduleID)){
 			return json_encode( array('error', "Module ".$moduleID." not declared.") );
 		}
 		
-		// RÉCUPÉRATION DE LA LISTE DES TABLES UTILISÉES PAR CE MODULE -----------------------------
+		// RÉCUPÉRATION DE LA LISTE DES TABLES UTILISÉES PAR CE MODULE -------------------
 		/*
 		 SELECT DISTINCT g.tablename
 		 FROM module as m
@@ -64,7 +146,7 @@ class MesureController extends ActiveController {
 		->all();
 		
 		
-		// RECUPERATION DES DONNÉES DU MODULES DANS LES TABLES DE MESURES --------------------------
+		// RECUPERATION DES DONNÉES DU MODULES DANS LES TABLES DE MESURES ----------------
 		$l_TAB_Retour	= array();
 		foreach( $l_TAB_TableNames as $l_TAB_Temp){
 			foreach( $l_TAB_Temp as $l_STR_TableName)
@@ -77,7 +159,7 @@ class MesureController extends ActiveController {
 				->all();
 				
 		}
-		// RETOUR ----------------------------------------------------------------------------------
+		// RETOUR ------------------------------------------------------------------------
 		// Le format de l'affichage du message sera en JSON
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$l_TAB_Retour['error']	= "";
@@ -152,7 +234,7 @@ class MesureController extends ActiveController {
 		$moduleID 	= $params['metadata']['network']['lora']['devEUI'];
 		
 		
-		// SI L'ID DU MODULE N'EST PAS RÉFÉRENCÉ DANS LA BASE --------------------------------------
+		// SI L'ID DU MODULE N'EST PAS RÉFÉRENCÉ DANS LA BASE ----------------------------
 		if( !$this->_moduleIdIsValid($moduleID)){
 			// On fait une trace dans la base
 			Yii::error("Module <".$moduleID."> inconnu dans la base.", "tocio");
@@ -162,7 +244,7 @@ class MesureController extends ActiveController {
 		}
 		
 		
-		// SI LE MODULE EST DESACTIVE --------------------------------------------------------------
+		// SI LE MODULE EST DESACTIVE ----------------------------------------------------
 		$module = Module::findOne($moduleID);
 		if( $module->actif == 0){
 			// On fait une trace dans la base
@@ -178,7 +260,7 @@ class MesureController extends ActiveController {
 		$mesures		= $this->_hex2str($payloadBrute);
 		
 		
-		// ENREGISTRE LA MESURE --------------------------------------------------------------------
+		// ENREGISTRE LA MESURE ----------------------------------------------------------
 		return $this->_storeMesure($moduleID, $mesures);
 		
 	}
@@ -207,7 +289,7 @@ class MesureController extends ActiveController {
 	 *
 	 */
 	public function actionAdd(){
-		// RECUPERATION DU PARAMETRE PASSÉ EN GET --------------------------------------------------
+		// RECUPERATION DU PARAMETRE PASSÉ EN GET ----------------------------------------
 		// @see https://www.yiiframework.com/doc/guide/2.0/fr/runtime-requests
 		$request = Yii::$app->request;
 		
@@ -216,7 +298,7 @@ class MesureController extends ActiveController {
 		$mesures = $get['mesures'];
 		
 		
-		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
+		// TEST SI LE MODULEID EXISTE DANS LA BASE ---------------------------------------
 		if( ! $this::_moduleIdIsValid($moduleID)){
 			// On fait une trace dans la base
 			Yii::error("Trame <".$moduleID."> inconnu dans la base.", "tocio");
@@ -243,7 +325,7 @@ class MesureController extends ActiveController {
 	 */
 	public function enregistreMesure($moduleID, $mesures, $timeStamp){
 		
-		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
+		// TEST SI LE MODULEID EXISTE DANS LA BASE ---------------------------------------
 		if( MesureController::_moduleIdIsValid($moduleID)){
 			
 			// ENREGISTRE LA MESURE
@@ -310,7 +392,7 @@ class MesureController extends ActiveController {
 									
 									
 									
-		// CALCUL DU NOMBRE DE CARACTÈRES ATTENDU DANS LA TRAME ------------------------------------
+		// CALCUL DU NOMBRE DE CARACTÈRES ATTENDU DANS LA TRAME --------------------------
 		$l_INT_LongeurAttendu = 0;
 		foreach( $l_TAB_Results as $l_INT_Key => $l_TAB_Format){
 			// Remplacement des virgules par des points
@@ -346,7 +428,7 @@ class MesureController extends ActiveController {
 
 		
 		
-		// TEST SI LA TRAME FAIT LE BON NOMBRE DE CARACTÈRES ---------------------------------------
+		// TEST SI LA TRAME FAIT LE BON NOMBRE DE CARACTÈRES -----------------------------
 		if( strlen( $mesures ) <> $l_INT_LongeurAttendu) {
 			$l_TAB_Retour['error']	= "Longeur de trame ($mesures) incorrecte. ".$l_INT_LongeurAttendu." caract. attendu (".strlen( $mesures )." recus)";
 			
@@ -364,7 +446,7 @@ class MesureController extends ActiveController {
 		$elasticRespons		= array();
 		
 		
-		// ENREGISTREMENT DE LA TRAME DANS LES TABLES DE MESURES -----------------------------------
+		// ENREGISTREMENT DE LA TRAME DANS LES TABLES DE MESURES -------------------------
 		// On découpe la partie des mesures de la trame selon le formattage récupéré
 		$l_TAB_ChaineMesure = str_split($mesures, 1);	// Convertion de la chaine en array
 		foreach ( $l_TAB_Results as $l_INT_IndiceMesure => $l_TAB_Capteur){
@@ -412,24 +494,31 @@ class MesureController extends ActiveController {
 			
 			// Insertion dans Elastic Search
 			// @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/indexing_documents.html
-			$params['timestamp']	= is_null($timeStamp) ?date(DATE_ATOM, time()) : date(DATE_ATOM, $timeStamp);
-			$params['Module identifiant reseau'] = $l_TAB_Capteur['identifiantReseau'];
-			$params['Module description'] 		= $l_TAB_Capteur['description'];
-			$params['Module nom'] 				= $l_TAB_Capteur['nom'];
-			$params['Capteur nom custom'] 		= $l_TAB_Capteur['nomcapteur'];
-			$params['Capteur nom'] 				= $l_TAB_Capteur['capteurnom'];
-			$params['Mesure nature'] 			= $l_TAB_Capteur['nature'];
-			$elasticData		= ['index' 	=> Yii::getAlias('@elasticsearchindex'),
-									'body'	=> $params
-									];
-			$respons 			= $l_OBJ_ClientElastic->index($elasticData);
-			$elasticRespons[] 	= $respons;
+			if( Yii::getAlias('@elasticsearchindex') != "") {
+				$params['timestamp']	= is_null($timeStamp) ?date(DATE_ATOM, time()) : date(DATE_ATOM, $timeStamp);
+				$params['Module identifiant reseau'] = $l_TAB_Capteur['identifiantReseau'];
+				$params['Module description'] 		= $l_TAB_Capteur['description'];
+				$params['Module nom'] 				= $l_TAB_Capteur['nom'];
+				$params['Capteur nom custom'] 		= $l_TAB_Capteur['nomcapteur'];
+				$params['Capteur nom'] 				= $l_TAB_Capteur['capteurnom'];
+				$params['Mesure nature'] 			= $l_TAB_Capteur['nature'];
+				$elasticData		= ['index' 	=> Yii::getAlias('@elasticsearchindex'),
+										'body'	=> $params
+										];
+				$respons 			= $l_OBJ_ClientElastic->index($elasticData);
+				$elasticRespons[] 	= $respons;
+			
+			// No index defined in setting
+			} else  {
+				$elasticData = "";
+				$elasticRespons[] 	= ['warning' => "No Elasticsearch's index defined in config/web_local.php file. No document store in ElasticSearch."];
+			}
 		}
 		
 		
 		
 		
-		// RETOUR ----------------------------------------------------------------------------------
+		// RETOUR ------------------------------------------------------------------------
 		// Le format de l'affichage du message sera en JSON
 // 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		
@@ -452,7 +541,7 @@ class MesureController extends ActiveController {
 	 * 	@version 18 mai 2020	: APE	- L'ID réseau n'est pas sensible à la casse.
 	 */
 	private function _moduleIdIsValid($moduleID){
-		// TEST SI LE MODULEID EXISTE DANS LA BASE -------------------------------------------------
+		// TEST SI LE MODULEID EXISTE DANS LA BASE ---------------------------------------
 		$module = Module::findOne(strtoupper($moduleID));
 		if( is_null($module)) {
 			

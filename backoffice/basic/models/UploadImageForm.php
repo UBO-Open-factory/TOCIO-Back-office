@@ -21,7 +21,7 @@ class UploadImageForm extends Model {
 
 	// _____________________________________________________________________________________________
 	/**
-	 * Ajoute un labelle lisible par un humain pour les différents champs du model UploadImageForm
+	 * Ajoute un label lisible par un humain pour les différents champs du model UploadImageForm
 	 * {@inheritDoc}
 	 * @see \yii\base\Model::attributeLabels()
 	 */
