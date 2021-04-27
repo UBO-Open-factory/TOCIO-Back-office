@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Relcapteurgrandeur;
+use app\models\Grandeur;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
 
@@ -183,13 +184,61 @@ class CapteurController extends Controller
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
+
+        /*
         
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	
-//             return $this->redirect(['index', 'id' => $model->id]);
+        
+        */
+        if ($model->load(Yii::$app->request->post()) && $model->save()) 
+        {
+            $path = "../components/capteurs/".$model->nom;
+            //try and create main folder (sensor named folder)
+            if(!is_dir($path))
+            {
+                mkdir($path, 0777);
+            }
+            //try and create declaration file with comment for complet auto-generated code
+            if(!file_exists($path.'/declaration.txt'))
+            {
+                file_put_contents($path.'/declaration.txt', '//set your declaration method ');
+            }
+            //try and create include file with comment for complet auto-generated code
+            if(!file_exists($path.'/include.txt'))
+            {
+                file_put_contents($path.'/include.txt', '//set your include method ');
+            }
+            //try and create setup file with comment for complet auto-generated code
+            if(!file_exists($path.'/setup.txt'))
+            {
+                file_put_contents($path.'/setup.txt', ' //set your setup method ');
+            }
+        	//try and create grandeur folder (sensor named folder)
+            if(!is_dir($path."/grandeurs"))
+            {
+                mkdir($path."/grandeurs", 0777);
+            }
+            //for each grandeur in this sensor , create a folder and a file with his access method if it isn't already created 
+            foreach(Relcapteurgrandeur::find()->where(["idCapteur" => $model->id])->all()  as $l_OBJ_CapteurGrandeurs)
+            {
+                foreach(Grandeur::find()->where(["id" => $l_OBJ_CapteurGrandeurs->idGrandeur])->all() as $sortie)
+                {
+                    //folder creation 
+                    if(!is_dir($path."/grandeurs/". explode(' ',$sortie->nature)[0]))
+                    {
+                        mkdir($path."/grandeurs/". explode(' ',$sortie->nature)[0], 0777);
+                    }
+                    //file creation 
+                    if(!file_exists($path."/grandeurs/". explode(' ',$sortie->nature)[0]."/reading.txt"))
+                    {
+                        file_put_contents($path."/grandeurs/". explode(' ',$sortie->nature)[0]."/reading.txt", '0.0; //set up your reading method ');
+                    }
+                }
+            }
+
+            //return $this->redirect(['index', 'id' => $model->id]);
         	return $this->redirect([Url::previous(), 'id' => $model->id]);
         }
-
+        
         return $this->render('update', [
             'model' => $model,
         ]);

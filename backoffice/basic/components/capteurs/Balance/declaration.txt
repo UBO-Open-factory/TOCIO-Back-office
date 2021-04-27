@@ -1,0 +1,2 @@
+BALANCE 
+(PIN,kg); //Setup your pin connection

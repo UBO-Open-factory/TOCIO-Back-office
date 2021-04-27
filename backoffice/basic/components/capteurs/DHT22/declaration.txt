@@ -1,0 +1,2 @@
+DHT 
+("SETUP PIN CONNECTION",DHT22); //Setup your pin connection

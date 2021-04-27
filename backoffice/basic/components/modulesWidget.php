@@ -113,7 +113,8 @@ class modulesWidget extends Widget
 			// PARCOURS DE TOUT LES CAPTEURS DU MODULE----------------------------------------------
 			$l_TAB_CapteursDuModule =  [];
 			$l_TAB_Grandeurs = [];
-			foreach( $l_TAB_Capteurs as $l_OBJ_ModuleCapteur){
+			foreach( $l_TAB_Capteurs as $l_OBJ_ModuleCapteur)
+			{
 				// Boutons d'édition du capteur custom
 				$l_TAB_BtnCustomCapteur	= [];
 
@@ -123,10 +124,14 @@ class modulesWidget extends Widget
 
 				// Position du capteur
 				$l_STR_Position = $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
-				$l_STR_Position = Html::tag("span", $l_STR_Position, ['class'=>"dblClick alert-secondary",
-																	'data' => ["idModule" 	=> $l_OBJ_ModuleCapteur['idModule'], 
-																	"url"		=> Url::to(["/relmodulecapteur/updateajax"]),
-																	"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']]
+				$l_STR_Position = Html::tag("span", $l_STR_Position, [
+																	'class'=>"dblClick alert-secondary",
+																	'data' => 
+																		[
+																		"idModule" 	=> $l_OBJ_ModuleCapteur['idModule'], 
+																		"url"		=> Url::to(["/relmodulecapteur/updateajax"]),
+																		"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']
+																		]
 																	]);
 				$l_STR_Position .= " ".$l_STR_iconDoubleClick;
 				
@@ -172,7 +177,8 @@ class modulesWidget extends Widget
 					// Formattage des libellés de la grandeur
 					$format = $l_OBJ_Grandeurs->idGrandeur0['formatCapteur'];
 					$l_STR_Nature		= $this->_toolTip($l_OBJ_Grandeurs->idGrandeur0['nature'], "Nature de la mesure");
-					$l_STR_Format		= $this->_toolTip($format, "Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeur0['nature'].
+					$l_STR_Format		= $this->_toolTip($format, 
+															"Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeur0['nature'].
 															" du capteur ".$l_STR_NomCapteur.
 															"\nExemple : ".$this->_exempleFormatGrandeur($format));
 					//$l_STR_GrandeurID	= $l_OBJ_Grandeurs->idGrandeurs['id'];
@@ -725,20 +731,115 @@ class modulesWidget extends Widget
 	 * 
 	 * @version 12 févr. 2021	: APE	- protection contre les noms de Granndeur n'ayant pas d'espaces.
 	 */
-	private function _codeArduino($url, $id, $params ){
-		$ligne = [];
-		
+	private function _codeArduino($url, $id, $params )
+	{
+		$ligne = [];	
 		$format = [];
 		$natures = [];
 		$compteur = 0;
+		$save = null;
 
+		$path =  '../components/capteurs/';
+
+		//Rewriting all the sensor name 
+		foreach( $params as &$grandeur_1)
+		{
+			//catch every new sensor name and add a number to them
+			if(!$save==$grandeur_1['nomCapteur'])
+			{
+				$save = $grandeur_1['nomCapteur'];
+				$compteur++;
+			}
+			$grandeur_1['nomCapteur'] = explode(" ", $grandeur_1['nomCapteur'])[0]." ".$compteur;
+		}
+		//reset data
+		$compteur = 0;
+		$save = null;
+		$save_list = array();
+		//==============================
 		//generation of the Arduino code 
+		//==============================
+
+		//generation of #include lines
+		$ligne[] = "//....................................";
+		$ligne[] = '//INCLUDE LIST';
+		$ligne[] = '';
+		foreach( $params as $grandeur_2)
+		{
+			//if program find a new sensor type not in the list
+			if(!in_array(explode(' ',$grandeur_2['nomCapteur'])[0],$save_list))
+			{
+				array_push($save_list, explode(' ',$grandeur_2['nomCapteur'])[0]);
+				//test of the existence of the sensor include method
+				if(file_exists($path.explode(' ',$grandeur_2['nomCapteur'])[0].'/include.txt'))
+				{
+					$ressource = fopen($path.explode(' ',$grandeur_2['nomCapteur'])[0].'/include.txt', 'r');
+					$ligne[] = fgets($ressource);
+				}
+				//auto generated comment if file doesn't exist
+				else
+				{
+					$ligne[] = '//eventual include of your sensor "'.$grandeur_2['nomCapteur'] . '"';
+				}
+				$ligne[] = "";
+			}
+		}
+		$ligne[] = "//....................................";
+		$ligne[] = '//DECLARATION LIST';
+		$ligne[] = '';
+		foreach( $params as $grandeur_3)
+		{
+			if($save!=$grandeur_3['nomCapteur'])
+			{
+				$save=$grandeur_3['nomCapteur'];
+				if(file_exists($path.explode(' ',$grandeur_3['nomCapteur'])[0].'/declaration.txt'))
+				{
+					$ressource = fopen($path.explode(' ',$grandeur_3['nomCapteur'])[0].'/declaration.txt', 'r');
+					$ligne[] = fgets($ressource) . explode(' ',$grandeur_3['nomCapteur'])[0].$compteur . fgets($ressource);
+					$compteur++;
+				}
+				else
+				{
+					$ligne[] = '//eventual declaration of your sensor "'.$grandeur_3['nomCapteur'] . '"';
+				}
+				$ligne[] = "";
+			}
+		}
+
+		$save = null;
+		$compteur = 0;
+		$ligne[] = "//....................................";
+		$ligne[] = '//WIFI METHODE AND CONST';
+		$ligne[] = "";
 		$ligne[] = 'const String host = "'.$url.'";';
 		$ligne[] = 'const String url  = "'. \Yii::getAlias('@urlbehindproxy').'/mesure/add/'.$id.'";';
 		$ligne[] = "";
 		$ligne[] = 'void setup()';
 		$ligne[] = '{';
 		$ligne[] = '	Serial.begin(9600);';
+
+		foreach( $params as $grandeur)
+		{
+			if($save!=$grandeur['nomCapteur'])
+			{
+				$save=$grandeur['nomCapteur'];
+				if(file_exists($path.explode(' ',$grandeur['nomCapteur'])[0].'/setup.txt'))
+				{
+					$ressource = fopen($path.explode(' ',$grandeur['nomCapteur'])[0].'/setup.txt', 'r');
+					$ligne[] = fgets($ressource) . "\t" . explode(' ',$grandeur['nomCapteur'])[0].$compteur . fgets($ressource);
+					$compteur++;
+					$ligne[] = "";
+				}
+				else
+				{
+					$ligne[] = '//eventual begin of your sensor';
+					$ligne[] = "";
+				}
+				
+			}
+		}
+		$save = null;
+		$compteur = 0;
 		$ligne[] = '}';
 		$ligne[] = "";
 		$ligne[] = 'void loop()';
@@ -749,6 +850,10 @@ class modulesWidget extends Widget
 		$ligne[] = '	delay(60 * 1000);';
 		$ligne[] = '}';
 		$ligne[] = "";
+		$ligne[] = '// -----------------------------------------------------------';
+		$ligne[] = '// Read all data from all sensor setup in TOCIO.';
+		$ligne[] = '// no parameter , this function is independent';
+		$ligne[] = '// -----------------------------------------------------------';
 		$ligne[] = 'void readconcatsend_data()';
 		$ligne[] = '{';
 		$ligne[] = '	//create data_string save and concat data';
@@ -756,49 +861,78 @@ class modulesWidget extends Widget
 		$ligne[] = '	//create temp variable saving and form data from sensor';
 		$ligne[] = '	char data[30];';
 		$ligne[] = '	int i = 0;';
+
+		$compteur_variable=-1;
 		foreach ( $params as $grandeur )
 		{
-		// If Grandeur as space in his name
-		if( stripos( $grandeur['nature']," ") !== false)
-		{
-			list($nature, $null) = explode(" ", $grandeur['nature']);
-		} 
-		else 
-		{
-			$nature = $grandeur['nature'];
+			// If Grandeur as space in his name
+			$nature = explode(" ", $grandeur['nature'])[0];
+			$natureValue = $nature.$compteur++;
+			$natures[] = strtolower($this->_stripAccents($natureValue));
+			//try to find file existence, if the file is find, arduino generator will concate data from the file
+			//else , he will concate basic float data (0.0)
+			if($save!=$grandeur['nomCapteur'])
+			{
+				//if a new sensor is find , create a new comment box with his name
+				$save=$grandeur['nomCapteur'];
+				$compteur_variable++;
+				$ligne[] = "";
+				$ligne[] = "";
+				$ligne[] = "	//....................................";
+				$ligne[] = "	//";
+				$ligne[] = "	// ".explode(' ',$grandeur['nomCapteur'])[0] . ' - ' .  $compteur_variable;
+				$ligne[] = "	//";
+				$ligne[] = "	//....................................";
+			}
+			//comment text
+			$ligne[] = "";
+			$ligne[] = "	//....................................";
+			$ligne[] = "	//".strtolower($this->_stripAccents($natureValue))." is the '".$nature."' value from your sensor '".explode(' ',$grandeur['nomCapteur'])[0].$compteur_variable."' (as float)";
+			$ligne[] = "	//....................................";
+			//find if the sensor have a reading method and set it
+			if(file_exists($path.explode(' ',$grandeur['nomCapteur'])[0].'/grandeurs/'.$nature.'/reading.txt'))
+			{
+				//open reading method file
+				$ressource = fopen($path.explode(' ',$grandeur['nomCapteur'])[0].'/grandeurs/'.$nature.'/reading.txt', 'r');
+				$ligne[] = "	float ".$this->_stripAccents($natureValue)." = ". fgets($ressource) . "\t" .explode(' ',$grandeur['nomCapteur'])[0] . $compteur_variable. fgets($ressource);;
+			}
+			//if no file finded set this non reading method 
+			else
+			{
+				$ligne[] = "	float ".$this->_stripAccents($natureValue)." = 0.0 ; // <- Your code to read value from sensor goes here ";
+			}
+			
+			$arr1  = str_split($grandeur['format']);
+			//find all signed format and concat them '+' carc in sprintf 
+			if( $arr1[0] === '-')
+			{
+				$valmax = explode('.',$grandeur['format'])[0]*-1 + explode('.',$grandeur['format'])[1];
+				$val2 = explode('.',$grandeur['format'])[1];
+				$formatt = "%+0".$valmax."d";
+			}
+			//else , if format isn't signed , don't used '+' carc 
+			else
+			{
+				$valmax = explode('.',$grandeur['format'])[0] + explode('.',$grandeur['format'])[1];
+				$val2 = explode('.',$grandeur['format'])[1];
+				$formatt = "%0".$valmax."d";
+			}
+			//find if format need value after deciaml point
+			if($val2 != '0')
+			{
+				//this method use for to multiply data by 10 by decimal length
+				$ligne[] = "	//form data from ".$this->_stripAccents($natureValue);
+				$ligne[] = "	for( i = 0 ; i < ".$val2." ; i++ )  ";
+				$ligne[] = '	{';
+				$ligne[] = "	".$this->_stripAccents($natureValue)." = ".$this->_stripAccents($natureValue)."*10;";
+				$ligne[] = '	}';
+			}
+			//concat data in mesures varibale after every sprintf
+			$ligne[] = "	//concat data in Mesures variable";
+			$ligne[] = "	sprintf(data,\"".$formatt."\",(int)".$this->_stripAccents($natureValue).");";
+			$ligne[] = "	Mesures.concat(data);";
 		}
-		$natureValue = $nature.$compteur++;
-		$natures[] = strtolower($this->_stripAccents($natureValue));
 		$ligne[] = "";
-		$ligne[] = "	// ".strtolower($this->_stripAccents($natureValue))." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
-		$ligne[] = "	float ".$this->_stripAccents($natureValue)." = 0.0 ; // <- Your code to read value from sensor goes here ";
-		$ligne[] = "	//form data from ".$this->_stripAccents($natureValue);
-
-		$arr1  = str_split($grandeur['format']);
-
-		if( $arr1[0] === '-')
-		{
-			$valmax = explode('.',$grandeur['format'])[0]*-1 + explode('.',$grandeur['format'])[1];
-			$val2 = explode('.',$grandeur['format'])[1];
-			$formatt = "%+0".$valmax."d";
-		}
-		else
-		{
-			$valmax = explode('.',$grandeur['format'])[0] + explode('.',$grandeur['format'])[1];
-			$val2 = explode('.',$grandeur['format'])[1];
-			$formatt = "%0".$valmax."d";
-		}
-		if($val2 != '0')
-		{
-		$ligne[] = "	for( i = 0 ; i < ".$val2." ; i++ )  ";
-		$ligne[] = '	{';
-		$ligne[] = "	".$this->_stripAccents($natureValue)." = ".$this->_stripAccents($natureValue)."*10;";
-		$ligne[] = '	}';
-		}
-		$ligne[] = "	//concat data in Mesures variable";
-		$ligne[] = "	sprintf(data,\"".$formatt."\",(int)".$this->_stripAccents($natureValue).");";
-		$ligne[] = "	Mesure.concat(data);";	
-		}
 		$ligne[] = "";
 		$ligne[] = '	// Send data to TOCIO ....................................';
 		$ligne[] = '	sendDataInHTTPSRequest( Mesures );';
@@ -810,9 +944,9 @@ class modulesWidget extends Widget
 		$ligne[] = '// -----------------------------------------------------------';
 		$ligne[] = 'String sendDataInHTTPSRequest(String data)';
 		$ligne[] = '{';
-		$ligne[] = '	// If we are connecte to the WIFI';
+		$ligne[] = "	//If we are connecte to the WIFI";
 		$ligne[] = '	if (WiFi.status() == WL_CONNECTED)';
-		$ligne[] = '    {';
+		$ligne[] = '	{';
 		$ligne[] = '		//  Create an https client';
 		$ligne[] = '		WiFiClientSecure client;';
 		$ligne[] = '';
@@ -822,7 +956,7 @@ class modulesWidget extends Widget
 		$ligne[] = '		// We don\'t validate the certificat, buit we use https (port 443 of the server).';
 		$ligne[] = '		int port = 443;';
 		$ligne[] = '		if (!client.connect(host, port))';
-		$ligne[] = '        {';
+		$ligne[] = '		{';
 		$ligne[] = '			Serial.println("connection failed");';
 		$ligne[] = '			return "nok";';
 		$ligne[] = '		}';
@@ -835,15 +969,15 @@ class modulesWidget extends Widget
 		$ligne[] = '';
 		$ligne[] = '		// reading of the server answer';
 		$ligne[] = '		while (client.available())';
-		$ligne[] = '        {';
+		$ligne[] = '		{';
 		$ligne[] = '			String line = client.readStringUntil(\'\r\');';
 		$ligne[] = '			Serial.print(line);';
 		$ligne[] = '		}';
 		$ligne[] = '';
 		$ligne[] = '		client.stop();';
 		$ligne[] = '		return "ok";';
-		$ligne[] = '    }';
-		$ligne[] = '    else';
+		$ligne[] = '	}';
+		$ligne[] = '	else';
 		$ligne[] = '	{';
 		$ligne[] = '		return "nok";';
 		$ligne[] = '	}';
