@@ -39,15 +39,6 @@ return array (
       '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
     ),
   ),
-  'kartik-v/yii2-krajee-base' => 
-  array (
-    'name' => 'kartik-v/yii2-krajee-base',
-    'version' => '2.0.5.0',
-    'alias' => 
-    array (
-      '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base/src',
-    ),
-  ),
   'kartik-v/yii2-widget-growl' => 
   array (
     'name' => 'kartik-v/yii2-widget-growl',
@@ -91,6 +82,33 @@ return array (
     'alias' => 
     array (
       '@yii/debug' => $vendorDir . '/yiisoft/yii2-debug/src',
+    ),
+  ),
+  'yii2tech/csv-grid' => 
+  array (
+    'name' => 'yii2tech/csv-grid',
+    'version' => '1.0.5.0',
+    'alias' => 
+    array (
+      '@yii2tech/csvgrid' => $vendorDir . '/yii2tech/csv-grid/src',
+    ),
+  ),
+  'nex/yii2-datepicker' => 
+  array (
+    'name' => 'nex/yii2-datepicker',
+    'version' => 'dev-master',
+    'alias' => 
+    array (
+      '@nex/datepicker' => $vendorDir . '/nex/yii2-datepicker',
+    ),
+  ),
+  'kartik-v/yii2-krajee-base' => 
+  array (
+    'name' => 'kartik-v/yii2-krajee-base',
+    'version' => '2.0.6.0',
+    'alias' => 
+    array (
+      '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base/src',
     ),
   ),
 );
