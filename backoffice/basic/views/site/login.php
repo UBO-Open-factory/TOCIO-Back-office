@@ -6,6 +6,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 $this->title = 'Authentification';
 $this->params['breadcrumbs'][] = $this->title;
@@ -16,10 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $form = ActiveForm::begin([
     	'action' => "@urlbehindproxy/site/login",
         'id' => 'login-form',
-        'layout' => 'horizontal',
         'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
+            'template' => "<div class='row'><div class=\"col-lg-2\">{label}\n</div><div class=\"col-lg-4\">{input}</div>\n<div class=\"col-lg-12\">{error}</div></div>",
+            'labelOptions' => ['class' => 'col-lg-2 control-label'],
         ],
     ]); ?>
 
@@ -30,7 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'rememberMe')->checkbox([
             'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
         ]) ?>
+        <?php
 
+        
+        ?>
+	<a href="/Utilisateur/pwdforgot">Mot de passe oublié ?</a>
         <div class="form-group">
             <div class="col-lg-offset-1 col-lg-11">
                 <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>

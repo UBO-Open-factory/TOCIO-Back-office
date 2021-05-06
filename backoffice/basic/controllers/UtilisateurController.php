@@ -201,4 +201,88 @@ class UtilisateurController extends Controller {
 
 		throw new NotFoundHttpException( 'The requested page does not exist.' );
 	}
+	
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Give a user from it's token.
+	 *
+	 * @param unknown user's $token
+	 * @throws HttpException
+	 * @return User Model
+	 */
+	public function getToken( $token ) {
+		$model = Utilisateur::model()->findByAttributes( array( 'token' => $token ) );
+		if( $model === null )
+			throw new NotFoundHttpException( 'The requested page does not exist.' );
+			return $model;
+	}
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Verify user's token.
+	 * @param unknown $token
+	 */
+	public function actionVerToken( $token ) {
+		$model = $this->getToken( $token );
+		if( isset( $_POST['Ganti'] ) ) {
+			if( $model->token == $_POST['Ganti']['tokenhid'] ) {
+				$model->password = md5( $_POST['Ganti']['password'] );
+				$model->token = "null";
+				$model->save();
+				Yii::app()->user->setFlash( 'ganti', '<b>Password has been successfully changed! please login</b>' );
+				$this->redirect( '?r=site/login' );
+				$this->refresh();
+			}
+		}
+		$this->render( 'pwdverif', array(
+				'model' => $model ) );
+	}
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 *
+	 *@todo : Lire l'email à partir du fichier de config/web.php
+	 */
+	public function actionPwdforgot() {
+
+		// Read Post Params
+		$post 	= Yii::$app->request->post();
+		if( isset( $post['email'] )) {
+			
+			// get Utilisateur from email passed in POST param
+			$model	= Utilisateur::model()->findByAttributes( array(
+					'email' => $post['email'] ) );
+					
+					
+			// Creat a token with random number and date
+			$model->token = md5( rand( 0, 99999 ).date( "H:i:s" ) );
+			
+			$emailSenderName 	= "Administration TOCIO";
+			$emailsSenderEmail 	= "no_reply_tocio@univ-brest.fr";
+			$emailSubject 		= "Reset Password";
+			$emailContent 		= "you have successfully reset your password<br/>
+                    <a href='http://yourdomain.com/index.php?r=site/vertoken/view&token=".$model->token."'>Click Here to Reset Password</a>";
+			
+			if( $model->validate() ) {
+				$name = '=?UTF-8?B?'.base64_encode( $emailSenderName ).'?=';
+				$subject = '=?UTF-8?B?'.base64_encode( $emailSubject ).'?=';
+				$headers = "From: $name <{$emailsSenderEmail}>\r\n"."Reply-To: {$emailsSenderEmail}\r\n"."MIME-Version: 1.0\r\n"."Content-type: text/html; charset=UTF-8";
+				
+				// Save the model
+				$model->save();
+				
+				// ?
+				Yii::app()->user->setFlash( 'forgot', 'link to reset your password has been sent to your email' );
+				
+				// Send email
+				mail( $getEmail, $subject, $emailContent, $headers );
+				$this->refresh();
+			}
+		}
+		$this->render( 'pwdforgot' );
+	}
 }

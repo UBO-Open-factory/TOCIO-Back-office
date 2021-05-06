@@ -74,7 +74,9 @@ $config = [
                 'port' => 'your_smtp_port',
                 'username' => 'your_username',
                 'password' => 'your_password'
-            ]
+            ],
+        	'adminEmail' => "no_reply_tocio@univ-brest.fr",
+        	"adminName" => "Administration TOCIO",
         ],
 
         // le composant "log" traite les messages avec un horodatage (timestamp).
