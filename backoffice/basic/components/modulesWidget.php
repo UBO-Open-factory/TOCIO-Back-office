@@ -716,7 +716,7 @@ class modulesWidget extends Widget
 		$ligne = [];	
 		$format = [];
 		$natures = [];
-		$compteur = 0;
+		$compteur = -1;
 		$save = null;
 
 		$path =  '../components/capteurs/';
@@ -725,7 +725,7 @@ class modulesWidget extends Widget
 		foreach( $params as &$grandeur_1)
 		{
 			//catch every new sensor name and add a number to them
-			if(!$save==$grandeur_1['nomCapteur'])
+			if(strcmp($save,$grandeur_1['nomCapteur'])!=0)
 			{
 				$save = $grandeur_1['nomCapteur'];
 				$compteur++;
