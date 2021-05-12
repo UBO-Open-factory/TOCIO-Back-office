@@ -796,6 +796,7 @@ class modulesWidget extends Widget
 		$ligne[] = "";
 		$ligne[] = 'void setup()';
 		$ligne[] = '{';
+		$ligne[] = '	String Mesures;';
 		$ligne[] = '	Serial.begin(9600);';
 
 		foreach( $params as $grandeur)
@@ -825,7 +826,8 @@ class modulesWidget extends Widget
 		$ligne[] = 'void loop()';
 		$ligne[] = '{';
 		$ligne[] = '	//Call readconcatsend_data function ......................';
-		$ligne[] = '	readconcatsend_data();';
+		$ligne[] = '	Mesures = Read_Concat_Data();';
+		$ligne[] = '	sendDataInHTTPSRequest(Mesures);';
 		$ligne[] = '	// Pause of 1 minute .....................................';
 		$ligne[] = '	delay(60 * 1000);';
 		$ligne[] = '}';
@@ -834,7 +836,7 @@ class modulesWidget extends Widget
 		$ligne[] = '// Read all data from all sensor setup in TOCIO.';
 		$ligne[] = '// no parameter , this function is independent';
 		$ligne[] = '// -----------------------------------------------------------';
-		$ligne[] = 'void readconcatsend_data()';
+		$ligne[] = 'String  Read_Concat_Data()';
 		$ligne[] = '{';
 		$ligne[] = '	//create data_string save and concat data';
 		$ligne[] = '	String Mesures = "";';
@@ -915,7 +917,7 @@ class modulesWidget extends Widget
 		$ligne[] = "";
 		$ligne[] = "";
 		$ligne[] = '	// Send data to TOCIO ....................................';
-		$ligne[] = '	sendDataInHTTPSRequest( Mesures );';
+		$ligne[] = '	return Mesures;';
 		$ligne[] = "";
 		$ligne[] = '}';
 		$ligne[] = '// -----------------------------------------------------------';

@@ -67,17 +67,7 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 			foreach(relcartesmethod::find()->where(["id_carte" => $model['id']])->all() as $method)
 			{
 				$l_STR_BtnWarning = Html::tag("span", "", ["class" => "glyphicon glyphicon-exclamation-sign"]);
-				$l_STR_BtnWarning = Html::a($l_STR_BtnWarning,
-																[
-																	"/cartes/update",
- 		  				         									"id" => $model['id']
-																],
-	 				  				         					[
-		 		  				         							"aria-label" => "Warning",
-		 		  				         							"title" => "Warning",
-		 		  				         							"data-confirm" => "Cette méthode n'a pas été initialement conçu pour cette carte",
-				  				         							"data-method"=>"post"
-			  				         							]);
+
 
 				$l_STR_BtnModify = Html::tag("span", "", ["class" => "glyphicon glyphicon-cog "]);
 				$l_STR_BtnModify = Html::a($l_STR_BtnModify,	
@@ -112,7 +102,7 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 				echo "<div class='col-1'>" . $l_STR_BtnDelete . "</div>";
 				if( !in_array(str_replace(" ","",$model['nom']),explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])))
 				{
-					echo "<div class='col-2'>" . $l_STR_BtnWarning . "<h8 style='color:orange'> Warning</h></div>";
+					echo "<div class='col-2'id='methodwarninglink'>" . $l_STR_BtnWarning .  " <h8 style='color:orange'>Warning</h></div>";
 				}
 				else
 				{
@@ -122,6 +112,8 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 				echo "<div class='col-1'>" . $l_STR_BtnModify . "</div>";
 
 				echo "<br>";
+				echo "</div>";
+				echo "<div id='sortiemethodwarninglink'>";
 				echo "</div>";
 			}
 			?>

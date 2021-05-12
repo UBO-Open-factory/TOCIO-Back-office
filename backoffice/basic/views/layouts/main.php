@@ -64,7 +64,7 @@ AppAsset::register($this);
 	// OUTILS --------------------------------------------------------------------------------------
     if( ! Yii::$app->user->isGuest ) 
     {
-        $menuItems['Gen'] = 
+        $menuGen['Gen'] = 
         [ 
             'label' => 'Generation',
             'linkOptions' => ['class' => 'nav-link'],
@@ -86,6 +86,14 @@ AppAsset::register($this);
 				[ 'label' => 'Tables des données', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Exports de données', 'url' => ['/site/export'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Import de journaux CSV', 'url' => ['/site/upload'], 'linkOptions' => ['class' => 'nav-link'] ],
+                [ 'label' => 'Outils de génération de code'],
+                [ 'label' => 'Generation' , 'linkOptions' => ['class' => 'nav-link'],'items' => 
+                [
+                        '<li class="dropdown-header">Outils de génération de code Arduino</li>',
+                    [ 'label' => 'Method', 'url' => ['/method/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+                    [ 'label' => 'Cartes', 'url' => ['/cartes/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+                ],
+                ],
 			],       
 		];
 
