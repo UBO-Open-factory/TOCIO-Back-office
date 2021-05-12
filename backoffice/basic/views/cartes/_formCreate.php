@@ -69,7 +69,8 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 				$l_STR_BtnWarning = Html::tag("span", "", ["class" => "glyphicon glyphicon-exclamation-sign"]);
 				$l_STR_BtnWarning = Html::a($l_STR_BtnWarning,
 																[
-																	"",
+																	"/method/update",
+ 		  				         									"id" => $method['id_method']
 																],
 	 				  				         					[
 		 		  				         							"aria-label" => "Warning",
@@ -111,7 +112,7 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 				echo "<div class='col-1'>" . $l_STR_BtnDelete . "</div>";
 				if( !in_array(str_replace(" ","",$model['nom']),explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])))
 				{
-					echo "<div class='col-2'>" . $l_STR_BtnWarning . " Warning</div>";
+					echo "<div class='col-2'>" . $l_STR_BtnWarning . "<h8 style='color:orange'> Warning</h></div>";
 				}
 				else
 				{
