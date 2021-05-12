@@ -71,19 +71,22 @@ function CapteurCreate(p_nom, p_id, p_idGrandeur, p_url){
 					data : {"idCapteur": lastID,
 							"idGrandeur": p_idGrandeur},
 					success : function(results) {
-						 var retour2 = JSON.parse( $.trim(results) );
-						 var success2 = retour2['success'];
+						var retour2 = JSON.parse( $.trim(results) );
+						var success2 = retour2['success'];
 						 
-						 // Succes lors de la création de la relation entre le Capteur et la Grandeur
-						 if( success2 == "ok"){
+						// Succes lors de la création de la relation entre le Capteur et la Grandeur
+						if( success2 == "ok")
+						{
 							 return retour2['url'];  
 
 						// Problème lors de la création
-						 } else {
-							 var error = retour2['errors'];
-							 alert( "Erreur !\n"+success2+"\n"+error );
-							 return false;
-						 }
+						} 
+						else 
+						{
+							var error = retour2['errors'];
+							alert( "Erreur !\n"+success2+"\n"+error );
+							return false;
+						}
 					}
 							
 				// Voila les ajouts se sont bien passés...

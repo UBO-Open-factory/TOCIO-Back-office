@@ -20,6 +20,7 @@ class m210120_170703_create_rel_capteurgrandeur_table extends Migration
 			] 
 			, $tableOptions 
 		);
+		$this->addPrimaryKey( 'pk_rel_capteurgrandeur', '{{%rel_capteurgrandeur}}', [ 'idCapteur' , 'idGrandeur' ] );
 
 		$this->createIndex( 'cle', '{{%rel_capteurgrandeur}}', 
 			[

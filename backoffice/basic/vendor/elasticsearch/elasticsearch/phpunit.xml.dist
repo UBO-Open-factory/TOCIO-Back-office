@@ -12,7 +12,6 @@
     <testsuites>
         <testsuite name="Unit tests">
             <directory>tests</directory>
-            <exclude>tests/Elasticsearch/Tests/YamlRunnerTest.php</exclude>
         </testsuite>
     </testsuites>
     <groups>

@@ -15,8 +15,6 @@ class m210114_165013_create_capteur_table extends Migration
     {
     	$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
 
-
-
         $this->createTable('{{%rel_modulecapteur}}', 
         	[
             'idModule' => $this->string(50),

@@ -13,6 +13,7 @@ class m210112_165606_create_module_table extends Migration
 	public function safeUp() 
 	{
 		$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+
 		$this->createTable( '{{%capteur}}', 
 			[
 				'id' => $this->primaryKey( 4 ),
@@ -20,6 +21,7 @@ class m210112_165606_create_module_table extends Migration
 			] 
 			, $tableOptions 
 		);
+
 		$this->createIndex( 'id', '{{%capteur}}', 'id' );
 		$this->alterColumn( '{{%capteur}}', 'id', $this->integer( 4 ).' NOT NULL AUTO_INCREMENT' );
 

@@ -28,32 +28,39 @@ Url::remember();
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php
-//     GridView::widget([
-//         'dataProvider' => $dataProvider,
-//         'filterModel' => $searchModel,
-//         'columns' => [
-//             // ['class' => 'yii\grid\SerialColumn'],
+    /*
+	     GridView::widget(
+	     	[
+	        'dataProvider' => $dataProvider,
+	        'filterModel' => $searchModel,
+	        'columns' => 
+	        [
+	           	[
+	           		'class' => 'yii\grid\SerialColumn'
+	           	],
+	          	'id',
+	            'nom:ntext',
+	        	[
+	        		'attribute' => 'relmodulecapteur.idCapteur',
+	        		'format' => 'html',
+	        		'label' => "Grandeurs rattachées",
+	        		'value' => function($model)
+	        			{
+	        			return implode(',<br/> ', ArrayHelper::map($model->idGrandeurs, 'id', 'nature'));
+	        			}
+	       		],
 
-//             'id',
-//             'nom:ntext',
-//         	['attribute' => 'relmodulecapteur.idCapteur',
-//         	'format' => 'html',
-//         	'label' => "Grandeurs rattachées",
-//         	'value' => function($model){
-//         					return implode(',<br/> ', ArrayHelper::map($model->idGrandeurs, 'id', 'nature'));
-//         	],
-
-//         	['class' => 'yii\grid\ActionColumn',
-//         			'visibleButtons' => ['view' => false,'update' => true, 'delete' => true]
-//         	],
-//         ],
-//     ]); 
-?>
+	         	[
+	         		'class' => 'yii\grid\ActionColumn',
+	        		'visibleButtons' => ['view' => false,'update' => true, 'delete' => true]
+	         	],
+	        ],
+	    ]);
+	*/ 
+	?>
     
-    	<?php
-		echo capteursWidget::widget([
-				'dataProvider' => $dataProvider,
-		]);
+    <?php
+		echo capteursWidget::widget(['dataProvider' => $dataProvider,]);
 	?>
 	
 	<p>

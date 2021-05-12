@@ -196,9 +196,6 @@ class SiteController extends Controller {
 				// Récupération des data correspondant à la saisie .......................
 				$data = $this->_getGrandeurGroupBy( $model );
 				
-				
-				
-				
 				// Construction du povot pour le tableau .................................
 				// Extraction des dates
 				$dates = [];

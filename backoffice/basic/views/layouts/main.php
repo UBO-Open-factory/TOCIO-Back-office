@@ -62,23 +62,44 @@ AppAsset::register($this);
     }
     
 	// OUTILS --------------------------------------------------------------------------------------
-    if( ! Yii::$app->user->isGuest ) {
-		$menuItems[] = [ 
+    if( ! Yii::$app->user->isGuest ) 
+    {
+        $menuItems['Gen'] = 
+        [ 
+            'label' => 'Generation',
+            'linkOptions' => ['class' => 'nav-link'],
+            'items' => 
+            [ 
+                    '<li class="dropdown-header">Outils de génération de code Arduino</li>',
+                [ 'label' => 'Method', 'url' => ['/method/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+                [ 'label' => 'Cartes', 'url' => ['/cartes/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+            ],       
+        ];
+		$menuItems['Outils'] = 
+        [ 
 			'label' => 'Outils',
 			'linkOptions' => ['class' => 'nav-link'],
-			'items' => [ 
+			'items' => 
+            [ 
 					'<li class="dropdown-header">Outils de diagnostique divers</li>',
 				[ 'label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Tables des données', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Exports de données', 'url' => ['/site/export'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Import de journaux CSV', 'url' => ['/site/upload'], 'linkOptions' => ['class' => 'nav-link'] ],
-			],
+			],       
 		];
-    } else {
-    	$menuItems[] = [
+
+        
+        
+    } 
+    else 
+    {
+    	$menuItems[] = 
+        [
     			'label' => 'Outils',
     			'linkOptions' => ['class' => 'nav-link'],
-    			'items' => [
+    			'items' => 
+                [
     					[ 'label' => 'Tables des données', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
     					[ 'label' => 'Exports de données', 'url' => ['/site/export'], 'linkOptions' => ['class' => 'nav-link'] ],
     			],
@@ -118,6 +139,7 @@ AppAsset::register($this);
     				'items' => $menuItems,
     				'dropDownCaret' => "",
     				]);
+
     NavBar::end();
     ?>
    	<div class="arcEnCiel"></div>

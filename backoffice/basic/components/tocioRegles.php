@@ -27,15 +27,19 @@ class tocioRegles extends Widget {
 		$this->listeRegles = [ 
 				'tociodefinition' => "Le projet TOCIO permet de déployer un ensemble de Modules comportant des Capteurs afin de faire des remontées de Mesures de Grandeurs.<br/>
 										Ce Back Office (BO) permet d'administrer cette flotte de Modules et fourni une API vers la base de stockage des données.",
+
 				"capteurdefinition" => "<p>Un <i>Capteur</i> est un élément éléctronique permettant de faire des <i>Mesures</i>.</p>
 										<p>Il doit être défini avec un <b>nom</b> en toutes lettres et une <b>liste</b> de <i>Grandeurs</i>.<br/>
 											Une <i>Grandeur</i> est la caractéristique d'une <i>Mesure</i>.<br/>
 											La liste doit contenir au moins un élément, sinon le <i>Capteur</i> ne pourra pas stocker de <i>Mesures</i>.
 										</p>",
+
 				"encodageformatdefinition" => "Le <b>Formatage</b> des valeurs mesurées est fait selon la règle <b>[-]chiffreAvantLaVirgule.chiffreApresLaVirgule</b>.<br/> 
 										Par exemple : pour un Formatage de la forme -3.2, si on veut encoder 
 										une température de 12.5°C, il faut écrire +01250, pour -1.02°C il faut écrire -00102",
+
 				"moduledefinition" =>	"Un <i>Module</i> est un ensemble de capteurs.",
+
 				"utilisateursgroupe" =>	"<p>un <i>Utilisateur</i> est une personne pouvant accéder au BackOffice de TOCIO (ce site).<br/>
 											Chaque <i>Utilisateur</i> doit être rattaché à un <i>Groupe</i> afin de lui définir des droits d'accés.</p>
 											<p>Le <i>Groupe</i> <b>Utilisateur</b> à tout les droits sur l'ensemble du contenu du site.<br/>
@@ -44,13 +48,16 @@ class tocioRegles extends Widget {
 										",
 				"localisationmodule" =>	"<p>La <i>Localisation</i> d'un <i>Module</i> permet de définir un emplacement géolocalisé d'un <i>Module</i>.</p>
 										Une <i>Localisation</i> ne peut pas être supprimée si un <i>Module</i> l'utilise.",
+
 				"grandeurdefinition" => "<p>Une grandeur est composée de :</p>
 									    <ul>
 									    	<li>un <b>Libelé</b> (la nature de la Grandeur en toutes lettres suivies de l'unité entre parenthèses, comme <i>Température (°C)</i>),</li>
 									    	<li>un <b>Formatage</b> de la chaine (qui servira à extraire la valeur numérique du capteur de la trame envoyée par le module).</li>
 									    	<li>un <b>Type</b> qui sera utilisé pour le type des valeurs (des capteurs) stockée dans la table MySQL.</li>
 									    </ul>",
+
 				"tablemesuredefinition" => "<p>Une Table de mesure contient un type de données envoyées par un capteur.</p>",
+
 				"fichiercsv" => "<p>Un fichier CSV (autrement dit, un journal de <i>Mesures</i>) peut contenir autant de ligne que souhaité.<br/>
 								Chaque ligne doit contenir les champs dans l'ordre défini par l'ordre des <i>Capteurs</i> du <i>Module</i>.<br/>
 								Chaque champ doit être séparé par une point virgule ( <b>;</b> ) et encadré par des doubles cote ( <b>\"</b> ).<br/>
@@ -58,7 +65,27 @@ class tocioRegles extends Widget {
 								Une ligne peut contenir les <i>Mesures</i> d'un <i>Module</i> et la ligne suivante les <i>Mesures</i> d'un autre <i>Module</i>.<br/>
 								Toute ligne mal formatée sera ignorée lors de l'import (il peut donc y avoir une entête de colonne au fichier, elle sera ignorée lors de l'insertion).<br/>
 								</p>",
-				
+
+				"methoddefinition" => "<p> Une méthode est un ensemble d'instructions informatique regroupé en étapes composant le squelette d'un programme </p>
+									    
+									    		<ul>
+									    			<li>un <b>Include</b> qui permet au programme d'importer la bibliothèque correspondant au capteur</i>,</li>
+									    			<li>un <b>Statement</b> qui permet de déclarer le capteur avant de commencer le programme</i>,</li>
+									    			<li>un <b>Setup</b> qui permet d'initialiser le capteur</i>,</li>
+									    			<li>un <b>Read</b> qui est une concaténation des méthodes d'accès aux données de toutes les grandeurs du capteur</i>,</li>
+									    			<li>un <b>Nom </b> qui est composé de la concaténation du <b>Nom du capteur </b> du nom de la <b>Carte </b> pour laquelle la méthode est initialement définie et de <b>l'ID </b>de la méthode sous la forme : <b> [nom_capteur]_[nom_carte]_[id] </b>.</li>
+									    		</ul>
+									    Cette méthode n'est élaborée que pour relier un capteur à un processeur, éventuellement elle pourra être associée à d'autres processeurs au fonctionnement similaire.<br><br>",
+
+				"cartesdefinition" => "<p> Une <i>Carte</i> est composé de méthodes compatibles</p>
+											Elle possède cependant des contraintes
+									    		<ul>
+									    			<li>Un capteur ne peut être représenté que par une seul méthode à la fois </li>
+									    			<li>Un capteur non représenté par une méthode est remplacé par des commentaires </li>
+									    		</ul>
+									    Ces cartes se retrouvent ensuite dans l'onglet module ou une liste déroulante propose de choisir une carte pour générer le code.<br><br>",
+
+
 		];
 		
 	}

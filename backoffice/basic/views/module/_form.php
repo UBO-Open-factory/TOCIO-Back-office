@@ -32,9 +32,7 @@ use yii\helpers\ArrayHelper;
 			<div class="row">
 				<div class="col-md-7">
 				    <?php	/* Liste déroulante des Localisations */
-				    echo $form->field($model, 'idLocalisationModule')->dropDownList(
-				    Localisationmodule::find()->select(['CONCAT(description," (coord. ", coordX, ",", coordY, ",", coordZ, ")")', 'id'])->indexBy('id')->column()
-				    	);
+				    echo $form->field($model, 'idLocalisationModule')->dropDownList(Localisationmodule::find()->select(['CONCAT(description," (coord. ", coordX, ",", coordY, ",", coordZ, ")")', 'id'])->indexBy('id')->column());
 				   ?>
 				</div>
 				<div class="col-md-5">
