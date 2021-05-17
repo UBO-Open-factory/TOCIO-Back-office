@@ -813,7 +813,7 @@ class modulesWidget extends Widget
 				}
 				else
 				{
-					$ligne[] = '//eventual begin of your sensor';
+					$ligne[] = '	//eventual begin of your sensor';
 					$ligne[] = "";
 				}
 				

@@ -99,7 +99,7 @@ class methodWidget extends Widget
 			$param_textbox = " spellcheck='false' style='resize:none;' ";
 			foreach( method::find()->where(["id" => $l_STR_IDmethod])->all() as $l_OBJ_method)
 			{
-				$methode_lecture = explode(";",$l_OBJ_method['method_read']);
+				$methode_lecture = explode("<CutBalise>",$l_OBJ_method['method_read']);
 				//création des champs de textes simples, pour les include , statement , setup (ils n'apparraissent qu'une fois par méthode et n'ont qu'un champ unique)
 				$contents[] = 	"<div class='col-sm-12'>";
 				$contents[] = 		"<label>CAPTEUR : <h2>" . capteur::find(['nom'])->where(['id' => $l_OBJ_method['id_capteur']])->one()['nom'] . " </h></label><br> ";
@@ -141,7 +141,7 @@ class methodWidget extends Widget
 					}
 					if(count($methode_lecture)-1>$i)
 					{
-						$contents[] = "<textarea rows='2' cols='70'" . $param_textbox . ">" . $methode_lecture[$i] ."; </textarea> ";
+						$contents[] = "<textarea rows='2' cols='70'" . $param_textbox . ">" . $methode_lecture[$i] ."</textarea> ";
 					}
 					else
 					{

@@ -34,51 +34,59 @@ use app\models\grandeur;
             echo $form->field($model, 'nom_method',['options' => ['class' => 'invisible']])->hiddenInput(['value'=> '','class' => 'form-control sortie_method','id' => 'sortie_method']);
             ?>
         </div>
-        <div class="col-sm-6" style="margin-left:0%">
+        <div class="col-sm-6" style="margin-left:30%">
             <?= $form->field($model, 'method_include')->textarea(['rows' => 1 , 'value' => $method_pre['include'],'class' => 'form-control method_include ','id' => 'method_include']) ?>
             <?= $form->field($model, 'method_statement')->textarea(['rows' => 2 , 'value' => $method_pre['statement'],'class' => 'form-control','id' => 'method_statement']) ?>
             <?= $form->field($model, 'method_setup')->textarea(['rows' => 2 , 'value' => $method_pre['setup'],'class' => 'form-control','id' => 'method_setup']) ?>
-        <label style="margin-left:1%"><h2> Instruction de lecture des grandeurs </h1></label>
-            <?php
-            $i = 0;
-            $methode_lecture = explode(";",$method_pre['read']);
-            $param_textbox = " spellcheck='false' style='resize:none;' ";
-            foreach (relcapteurgrandeur::find()->where(["idCapteur" => 1])->all() 
-            as $id_relgrandeur) 
-            {                   
-                foreach (grandeur::find()->where(["id" => $id_relgrandeur["idGrandeur"]])->all() 
-                as $nom_grandeur) 
-                {
-                    echo "<label>" . $nom_grandeur['nature'] . "</label><br> ";
-                    if(count($methode_lecture)-1>$i)
-                    {
-                        echo "<textarea class=\"read\" rows='2' cols='70'".$param_textbox.">".$methode_lecture[$i].";</textarea> ";
-                    }
-                    else
-                    {
-                        echo "<textarea class='read' rows='2' cols='70'".$param_textbox."></textarea> "; 
-                    }
-                    $i++;
-                }
-            }
-            ?>
-            <?php
-            echo $form->field($model, 'method_read',['options' => ['class' => 'invisible']])->hiddenInput(['value'=> '','class' => 'sortie_read_method','id' => 'sortie_read_method',]);
-            ?>
+        	<label style="margin-left:1%"><h2> Instruction de lecture des grandeurs </h2></label>
+        	<?php
+        	$taillemax = 0;
+        	$taillesave = 0;
+        	foreach(capteur::find()->all() as $taillecapteur)
+        	{
+        		foreach(relcapteurgrandeur::find()->where(["idCapteur" => $taillecapteur['id']])->all() as $taillegrandeur)
+        		{
+        			$taillesave++;
+        		}
+        		if($taillesave > $taillemax)
+        		{
+        			$taillemax = $taillesave;
+        		}
+        		$taillesave = 0;
+        	}
+        	?>
+        	<div id = "FullMenu" style ="width: 100%;height: <?php echo $taillemax*100; ?>px;">
+	            <?php
+	            $param_textbox = " spellcheck='false' style='resize:none;' ";
+	            foreach(capteur::find()->all() as $capteurid)
+	            {
+	            	echo "<div class='grandeurTextBox ". $capteurid['nom'] ."' style='position: absolute;'>"; 
+		            foreach (relcapteurgrandeur::find()->where(["idCapteur" => $capteurid['id']])->all() as $id_relgrandeur)
+		            {        
+		                foreach (grandeur::find()->where(["id" => $id_relgrandeur["idGrandeur"]])->all() as $nom_grandeur) 
+		                {
+		                	echo "<label class='grandeurTextBox ". $capteurid['nom'] ."' id='". $capteurid['nom'] . "' >" . $nom_grandeur['nature'] . "</label><br>";
+		                	echo "<textarea class='grandeurTextBox read ". $capteurid['nom'] ."' id='". $capteurid['nom'] ."' rows='2' cols='70'".$param_textbox."></textarea> "; 
+		                }
+		                
+		            }
+		            echo "</div>";
+		        }
+	            ?>
+	            <?php
+	            echo $form->field($model, 'method_read',['options' => ['class' => 'invisible']])->hiddenInput(['value'=> '','class' => 'sortie_read_method','id' => 'sortie_read_method',]);
+	            ?>
+
+
+	        </div>
+	        <div class="form-group">
+		        <div class="col-sm-10"></div>
+		        <?= Html::submitButton('Save', ['class' => 'btn btn-info','id' => 'methodsubmitbutton' ]) ?>
+		    </div>
         </div>
             
     </div>
-    <div class="form-group">
-        <div class="col-sm-10"></div>
-        <?= Html::submitButton('Save', ['class' => 'btn btn-info', 
-        'onclick'=>
-        'var elems = document.getElementsByClassName("read");
-        for(var i=0; i<elems.length; i++) 
-        {
-            document.getElementById("sortie_read_method").value += elems[i].value;
-        }'
-        ]) ?>
-    </div>
+    
 
     	
     <?php ActiveForm::end(); ?>
