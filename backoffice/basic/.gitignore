@@ -1,3 +1,4 @@
 web/assets/*
 assets/*
 vendor/*
+config/web_local.php

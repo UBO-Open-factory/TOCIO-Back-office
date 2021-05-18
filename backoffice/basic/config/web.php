@@ -8,6 +8,7 @@ $config = [
     'homeUrl' => '/',
     'language' => 'fr-FR',
     'sourceLanguage' => 'fr-FR',
+	'timeZone' => 'Europe/Paris',
     'bootstrap' => [
         'log'
     ],
@@ -109,6 +110,7 @@ $config = [
 		'formatter' => [
     			'dateFormat' => 'dd/MM/yyyy',
     			'datetimeFormat' => 'dd/MM/yyyy HH:mm:ss',
+				'defaultTimeZone' => "Europe/Paris",
     			'decimalSeparator' => '.',
     			'thousandSeparator' => ' ',
     			'currencyCode' => 'EUR',
