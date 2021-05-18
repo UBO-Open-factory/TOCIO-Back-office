@@ -154,7 +154,15 @@ $config = [
                     	'GET getgrandeurs' => 'getgrandeurs',
                     	'GET export' => 'getexport'
                     ]
-                ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'utilisateur',
+                    'pluralize' => false,
+                    'patterns' => [
+                    	'GET pwdverif<token:\d+>' => 'pwdverif',
+                    ]
+                ],
             ]
         ]
     ],

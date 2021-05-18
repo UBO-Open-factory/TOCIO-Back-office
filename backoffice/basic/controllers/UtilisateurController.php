@@ -10,6 +10,10 @@ use yii\filters\VerbFilter;
 use app\models\UtilisateurSearch;
 use yii\filters\AccessControl;
 use app\models\AuthAssignment;
+use app\models\LoginForm;
+use PharIo\Manifest\Url;
+use yii\web\UrlManager;
+use Elasticsearch\Endpoints\Cat\Aliases;
 
 /**
  * UtilisateurController implements the CRUD actions for Utilisateur model.
@@ -133,7 +137,7 @@ class UtilisateurController extends Controller {
 		// Est-ce que le mot de passe a changé ?
 		if( isset( $post['Utilisateur']['password'] )) {
 			
-			// on compar le mot de passe en BDD et celui venant du formulaire
+			// on compare le mot de passe en BDD et celui venant du formulaire
 			$passwdHasChange = ($model->password <> $post['Utilisateur']['password']);
 		}
 
@@ -222,67 +226,134 @@ class UtilisateurController extends Controller {
 	
 	// _____________________________________________________________________________________________
 	/**
-	 * Verify user's token.
-	 * @param unknown $token
+	 * Verify user's token to allow password reset.
+	 * 
+	 * @param string $token
 	 */
-	public function actionVerToken( $token ) {
-		$model = $this->getToken( $token );
-		if( isset( $_POST['Ganti'] ) ) {
-			if( $model->token == $_POST['Ganti']['tokenhid'] ) {
-				$model->password = md5( $_POST['Ganti']['password'] );
-				$model->token = "null";
-				$model->save();
-				Yii::app()->user->setFlash( 'ganti', '<b>Password has been successfully changed! please login</b>' );
-				$this->redirect( '?r=site/login' );
-				$this->refresh();
+	public function actionPwdverif( $token ) {
+		// Read token in URL 
+		$get = Yii::$app->request->get();
+		
+		if( isset( $get['token'])) {
+			$token = $get['token'];
+			
+			// Get the Utilisateur model from token
+			$model = Utilisateur::findOne(['accessToken' => $get['token']]);
+
+			// We got a Utilisateur with this token
+			if( !is_null($model)) {
+				
+				// Reset the password (to avoid it to be displayed in the form)
+				$model->password = "";
+				
+				
+				// Display the page
+				return $this->render( 'pwdverif', array(
+						'model' => $model ) );
 			}
 		}
-		$this->render( 'pwdverif', array(
-				'model' => $model ) );
+		
+		// Redirection to the home page
+		return $this->goHome();
 	}
 	
 	
 	// _____________________________________________________________________________________________
 	/**
-	 *
-	 *@todo : Lire l'email à partir du fichier de config/web.php
+	 * This create a tocken to allow password reset.
+	 * The tocken is send in a link in an email to the user. When he click on the lihnk, the sended tocken is
+	 * compare to the database tocken for the input email & passwd. If it match, the password will be saved.
+	 * 
+	 *@todo : Lire l'email du sender à partir du fichier de config/web.php et envoyer l'email avec l'URL
+	 * au lieux de faire la redirection sur l'URL.
 	 */
 	public function actionPwdforgot() {
 
 		// Read Post Params
 		$post 	= Yii::$app->request->post();
-		if( isset( $post['email'] )) {
+		if( isset( $post['Utilisateur']['email'] )) {
+			
+			// Input Email (from the form)
+			$userEmail = $post['Utilisateur']['email'];
 			
 			// get Utilisateur from email passed in POST param
-			$model	= Utilisateur::model()->findByAttributes( array(
-					'email' => $post['email'] ) );
+			$model	= Utilisateur::findOne(['email' => $userEmail] );
 					
+			// If we got a Utilisateur with this email
+			if( !is_null($model)) {
+						
+				// Create a token with random number and date
+				$model->accessToken = md5( rand( 0, 99999 ).date( "H:i:s" ) );
+	
+				// Create URL with the token
+				$url = \yii\helpers\Url::toRoute(['utilisateur/pwdverif', "token" => $model->accessToken]);
+				
+				
+				
+				
+				if( $model->validate() ) {
 					
-			// Creat a token with random number and date
-			$model->token = md5( rand( 0, 99999 ).date( "H:i:s" ) );
-			
-			$emailSenderName 	= "Administration TOCIO";
-			$emailsSenderEmail 	= "no_reply_tocio@univ-brest.fr";
-			$emailSubject 		= "Reset Password";
-			$emailContent 		= "you have successfully reset your password<br/>
-                    <a href='http://yourdomain.com/index.php?r=site/vertoken/view&token=".$model->token."'>Click Here to Reset Password</a>";
-			
-			if( $model->validate() ) {
-				$name = '=?UTF-8?B?'.base64_encode( $emailSenderName ).'?=';
-				$subject = '=?UTF-8?B?'.base64_encode( $emailSubject ).'?=';
-				$headers = "From: $name <{$emailsSenderEmail}>\r\n"."Reply-To: {$emailsSenderEmail}\r\n"."MIME-Version: 1.0\r\n"."Content-type: text/html; charset=UTF-8";
+					// Save the model (specially the token)
+					$model->save();
+					
+					// Display short message on screen
+					Yii::$app->session->setFlash('forgot', 'A link to reset your password has been sent to your email' );
 				
-				// Save the model
-				$model->save();
+					
+				// Create email content
+// 				$name = '=?UTF-8?B?'.base64_encode( $emailSenderName ).'?=';
+// 				$subject = '=?UTF-8?B?'.base64_encode( $emailSubject ).'?=';
+// 				$headers = "From: $name <{$emailsSenderEmail}>\r\n"."Reply-To: {$emailsSenderEmail}\r\n"."MIME-Version: 1.0\r\n"."Content-type: text/html; charset=UTF-8";
 				
-				// ?
-				Yii::app()->user->setFlash( 'forgot', 'link to reset your password has been sent to your email' );
-				
+// 				$emailSenderName 	= "Administration TOCIO";
+// 				$emailsSenderEmail 	= "no_reply_tocio@univ-brest.fr";
+// 				$emailSubject 		= "Reset Password";
+// 				$emailContent 		= "You ask to reset your password<br/>
+// 	                    <a href='$url'>Click Here to Reset Password</a>";
+
 				// Send email
-				mail( $getEmail, $subject, $emailContent, $headers );
-				$this->refresh();
+// 				mail( $userEmail, $subject, $emailContent, $headers );
+// 				$this->refresh();
+				
+				// Redirection to the verification page
+					return $this->redirect($url);
+				
+				}
 			}
 		}
-		$this->render( 'pwdforgot' );
+		$model = new Utilisateur();
+		
+		// Send Utilisateur modele to the "pwdforgot" page
+		return $this->render( 'pwdforgot', array(
+				'model' => $model ));
+	}
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Updates an existing Utilisateur model.
+	 * If update is successful, the browser will be redirected to the 'login' page.
+	 *
+	 * @return mixed
+	 */
+	public function actionPwdupdate() {
+		$post 	= Yii::$app->request->post();
+		$id = $post['Utilisateur']['id'];
+		
+		// Récupération de l'Utilisateur
+		$model	= $this->findModel( $id );
+		
+		// Encodage du nouveau mot de passe
+		$model->password = Yii::$app->getSecurity()->generatePasswordHash( $post['Utilisateur']['password'] );
+		
+		// Suppression du token
+		$model->accessToken = "";
+			
+		// On sauve la modification de l'Utilisateur
+		$model->save();
+			
+		// redirect to the login page
+		$model = new LoginForm();
+		return $this->render( \yii\helpers\Url::toRoute(['site/login']), array(
+				'model' => $model ));
 	}
 }
