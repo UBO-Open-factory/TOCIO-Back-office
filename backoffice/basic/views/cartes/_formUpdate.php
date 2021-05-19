@@ -16,13 +16,27 @@ use yii\helpers\ArrayHelper;
 $l_TAB_MethodAssociees = relcartesmethod::find()->select(['id_method'])->where(["id_carte" => $model->id])->column();
 
 $l_TAB_Options = [];
-foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as $id => $nature){
+$l_TAB_Options_same = [];
+$l_TAB_Options_indisponible = [];
+foreach(relcartesmethod::find()->where(["id_carte" => $model['id']])->all() as $method)
+{
+	$l_TAB_Options_same[] = explode("_",method::find()->where(["id" => $method['id_method']])->one()["nom_method"])[0];
+}
+foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as $id => $nature)
+{
 	// si la grandeur n'est pas déjà associée à cette carte, on la met dans la liste
-	if( !in_array($id, $l_TAB_MethodAssociees)) {
-		$l_TAB_Options[] = '<option value="'. $id .'">' . $nature. '</option>';
+	if( !in_array($id, $l_TAB_MethodAssociees))
+	{
+		if(!in_array(explode("_",$nature)[0], $l_TAB_Options_same))
+		{
+			$l_TAB_Options[] = '<option value="'. $id .'">' . $nature. '</option>';
+		}
+		else
+		{
+			$l_TAB_Options_indisponible[] = $nature;
+		}
 	}
 }
-
 ?>
 
 
@@ -43,11 +57,11 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 				</select>
 				<div class="input-group-append">
 					<?php echo Html::tag("button", "<i class='glyphicon glyphicon-plus'></i> Associer cette méthode", 
-								[
-									"class" => "btn btn-secondary",
-									"type" => "button",
-									"id" => "btnAddMethod"
-								]);
+						[
+							"class" => "btn btn-secondary",
+							"type" => "button",
+							"id" => "btnAddMethod"
+						]);
 					?>
 				</div>
 			</div>
@@ -55,6 +69,20 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 		<?php }?>
 
 		<div class="col-sm-12">
+			<?php
+			if($l_TAB_Options_indisponible)
+			{
+				echo "<legend class='col row'> Methodes indisponibles</legend>";
+				echo "Ces méthodes sont conçu pour des capteurs déjà mis en place pour cette carte, ils ne sont donc pas disponible. Pour les ajouter veuillez supprimer les méthodes comportant le même capteur.<br><br>";
+			}
+			foreach($l_TAB_Options_indisponible as $indis)
+			{
+				echo "<div class='btn btn-info' style='padding: 5px;color:black'>";
+				echo $indis;
+				echo "</div>";
+			}
+			echo "<br>";echo "<br>";
+			?>
 			<div class="row">
 				<legend class='col'> Nom method</legend>
 				<legend class='col'> Capteur associé</legend>

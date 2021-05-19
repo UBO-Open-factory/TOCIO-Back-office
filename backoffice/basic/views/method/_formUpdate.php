@@ -29,7 +29,7 @@ use app\models\grandeur;
         <label style="margin-left:1%"><h2> Instruction de lecture des grandeurs </h1></label>
             <?php
             $i = 0;
-            $methode_lecture = explode("<CutBalise>",$method_pre['read']);
+            $methode_lecture = explode("|CutBalise|",$method_pre['read']);
             $param_textbox = " spellcheck='false' style='resize:none;' ";
             foreach (relcapteurgrandeur::find()->where(["idCapteur" => $method_pre['id_capteur']])->all() 
             as $id_relgrandeur) 

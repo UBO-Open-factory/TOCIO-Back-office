@@ -4,10 +4,12 @@ use yii\helpers\Html;
 use app\components\messageAlerte;
 use app\components\modulesWidget;
 use app\assets\ModuleAsset;
+use app\assets\ModuleGenCodeAsset;
 use app\components\capteursWidget;
 use yii\data\SqlDataProvider;
 use yii\jui\Draggable;
 use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ModuleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -17,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 // Utilisation des ressources pour les modules (JS + CSS)
 ModuleAsset::register($this);
+ModuleGenCodeAsset::register($this);
 
 // Enregistrement de l'URL courante pour les retours
 Url::remember();

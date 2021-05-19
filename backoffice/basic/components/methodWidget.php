@@ -11,6 +11,7 @@ use app\models\capteur;
 use app\models\relcapteurgrandeur;
 use app\models\grandeur;
 use yii\helpers\Url;
+
 /**
  * Widget pour la page des methods.
  * 
@@ -46,6 +47,7 @@ class methodWidget extends Widget
 	public function run() 
 	{
 		// Le bouton pour plier/déplier les boites.
+		$l_STR_BtnPliage 		= Html::tag("span","", ['class'	=> "triangle pull-right glyphicon glyphicon-triangle-bottom"]);
 		$l_STR_BtnDelete 		= Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
 		$l_STR_iconDeplacer 	= Html::tag("i", "", ["class" => "glyphicon glyphicon-move"]). " ";
 		$methods = [];
@@ -99,7 +101,7 @@ class methodWidget extends Widget
 			$param_textbox = " spellcheck='false' style='resize:none;' ";
 			foreach( method::find()->where(["id" => $l_STR_IDmethod])->all() as $l_OBJ_method)
 			{
-				$methode_lecture = explode("<CutBalise>",$l_OBJ_method['method_read']);
+				$methode_lecture = explode("|CutBalise|",$l_OBJ_method['method_read']);
 				//création des champs de textes simples, pour les include , statement , setup (ils n'apparraissent qu'une fois par méthode et n'ont qu'un champ unique)
 				$contents[] = 	"<div class='col-sm-12'>";
 				$contents[] = 		"<label>CAPTEUR : <h2>" . capteur::find(['nom'])->where(['id' => $l_OBJ_method['id_capteur']])->one()['nom'] . " </h></label><br> ";
@@ -155,8 +157,8 @@ class methodWidget extends Widget
 			$contents[] = "</div>";
 			
 			// BOITE DU method
-			$methods[] = $this->_cardBox([	"header" 	=> $l_STR_iconDeplacer.$l_STR_nom_methodmethod. Html::tag("span",implode(" ", $l_TAB_BtnEditionmethod),['class' => "pull-right"]),
-											"content"	=> implode("", $contents),
+			$methods[] = $this->_cardBox([	"header" 	=> $l_STR_nom_methodmethod . $l_STR_BtnPliage,
+											"content"	=> Html::tag("span",implode(" ", $l_TAB_BtnEditionmethod),['class' => "pull-right"]) . implode("", $contents),
 											"class"		=> "border-info mb-3 px-0 methodOriginal",
 											"data" 		=> $l_STR_nom_methodmethod."|".$l_STR_IDmethod,
 											"style" 	=> null,

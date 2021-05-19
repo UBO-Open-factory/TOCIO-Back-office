@@ -11,9 +11,14 @@ namespace app\components;
 use yii\base\Widget;
 use yii\bootstrap\Html;
 use app\models\Relcapteurgrandeur;
+use app\models\relmodulecapteur;
 use app\models\Capteur;
+use app\models\Cartes;
+use app\models\Method;
+use app\models\relcartesmethod;
 use function Opis\Closure\serialize;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 class modulesWidget extends Widget
 {
@@ -239,12 +244,61 @@ class modulesWidget extends Widget
 					"style" 	=> "max-width: 90rem",
 			]);
 
-			// Construction du contenu pour le code Arduino
 			$host = substr(Url::base(''), 2);
-			$l_STR_CodeArduino =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Arduino',
-					"content"	=> Html::tag("h3","Exemple") 
-									.Html::tag("p","Ceci est un exemple de code écrit pour un Arduino pour envoyer une Payload formatée dans la base TOCIO.")
-									.Html::tag("pre", $this->_codeArduino( $host, $l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code Arduino
+
+			// Construction de la liste déroulante pour la selection des cartes pour la génération du code Arduino
+			//
+			//===================================
+			//
+			//On génère une liste comprennant les noms de toutes les cartes disponible auquelles on associes la valeur de leur ID 
+			//On cherche ensuite toutes les méthodes lié à cette carte qui serait compatible avec un capteur de la liste du module
+			//On génère ensuite des Input Hidden (un pour chaque carte) qui contiennent toutes les informations
+			//pour générer le code des capteurs et qui sera ensuite récupérer par le Java-Script pour générer et afficher le code
+			//
+			//===================================
+
+			$l_STR_SelectCartes = "";
+			$l_STR_SelectCartes .= "<select class = 'selectCartesClass btn btn-info' id = 'SelectCartesId'>";
+			$l_STR_SelectCartes .= "  <option >Select...</option>";
+			$l_STR_SelectCartes .= "  <option >Code Test</option>";
+			foreach(cartes::find()->all() as $GEN_card_selected)
+			{
+				$l_STR_SelectCartes .= "  <option value=".$GEN_card_selected['id'].">".$GEN_card_selected['nom']."</option>";
+		        
+				$GEN_value = "";
+
+				foreach(relmodulecapteur::find()->orderBy('ordre')->all() as $GEN_capteur)
+				{
+					$Method_Finded = 0;
+					$GEN_value = $GEN_value . $GEN_capteur['nomcapteur'] . "|a|";
+					foreach(relcartesmethod::find()->where(['id_carte' => $GEN_card_selected['id']])->all() as $GEN_method_rel)
+					{
+						$GEN_method_try = method::find()->where(['id' => $GEN_method_rel['id_method']])->one();
+						if(explode("_",$GEN_method_try['nom_method'])[0] == $GEN_capteur['nomcapteur'])
+						{
+							$Method_Finded = 1;
+							$GEN_value = $GEN_value . $GEN_method_try['method_include'] . "|a|";
+							$GEN_value = $GEN_value . $GEN_method_try['method_statement']. "|a|";
+							$GEN_value = $GEN_value . $GEN_method_try['method_setup']. "|a|";
+							$GEN_value = $GEN_value . $GEN_method_try['method_read']. "|CapteurEnd|";
+						}
+					}
+					if($Method_Finded == 0)
+					{
+						$GEN_value = $GEN_value . "//No method find for " . $GEN_capteur['nomcapteur'] . "|a|";
+						$GEN_value = $GEN_value . "//No method find for " . $GEN_capteur['nomcapteur'] . "|a|";
+						$GEN_value = $GEN_value . "//No method find for " . $GEN_capteur['nomcapteur'] . "|a|";
+						$GEN_value = $GEN_value . "//No method find for " . $GEN_capteur['nomcapteur'] . "|CutBalise||CapteurEnd|";
+					}
+				}
+
+		        echo '<textarea id='. $GEN_card_selected['nom'] .' style="display:none;">'. $GEN_value .'</textarea>';
+			}
+			$l_STR_SelectCartes .= "</select>";
+
+			// Construction de l'afficheur de code (celui-ci est modifiable par le JS pendant l'utilisation)
+			$l_STR_GenCodeDisplay =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Arduino',
+					"content"	=> Html::tag("pre class='GenCodeDisplay' id = 'GenCodeDisplay'", "Aucune carte sélectionné"),
 					"class"		=> "mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
 			]);
@@ -261,8 +315,6 @@ class modulesWidget extends Widget
 					"class"		=> "mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
 			]);
-			
-			
 			
 			// Construction du contenu de la boite sur 3 colonnes.
 			$l_STR_ModuleActivationStatus = $l_OBJ_Module->actif == "0" ? "checked": "";
@@ -296,8 +348,13 @@ class modulesWidget extends Widget
 			$contents[] = 		Html::tag("legend", "Format pour transmission Wifi");
 			$contents[] = 		"Url pour ajouter les données de ce Module:<br/><code>".Url::toRoute('/mesure/add/[payload]', "https")."</code>";
 			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
+
+			// Select des cartes
+			$contents[] = 		$l_STR_SelectCartes;
+			$contents[] = 		"<br><br>";
+			$contents[] = 		$l_STR_GenCodeDisplay;
+
 			$contents[] = 		Html::tag("p", $l_STR_CodePython);
-			$contents[] = 		Html::tag("p", $l_STR_CodeArduino);
 			$contents[] = 		Html::tag("p", $l_STR_CodeCSV);
 			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
