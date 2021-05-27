@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php echo tocioRegles::widget(['regle' => 'cartesDefinition']); ?>
     <p>
-        <?= Html::a('Create Cartes', ['create'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a('Create Cartes', ['create'], ['class' => 'btn btn-light']) ?>
     </p>
 
     <?php
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
     <p style="text-align:right">
-        <?= Html::a('Create Cartes', ['create'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a('Create Cartes', ['create'], ['class' => 'btn btn-light']) ?>
     </p>
 
 </div>

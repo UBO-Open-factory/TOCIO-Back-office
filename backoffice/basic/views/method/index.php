@@ -25,13 +25,13 @@ MethodIndexAsset::register($this);
     <h1><?= Html::encode($this->title) ?></h1>
     <?php echo tocioRegles::widget(['regle' => 'methodDefinition']); ?>
     <p>
-        <?= Html::a('Create Method', ['create'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a('Create Method', ['create'], ['class' => 'btn btn-secondary']) ?>
     </p>
 
     <?php
         echo methodWidget::widget(['dataProvider' => $dataProvider,]);
     ?>
     <p style="text-align:right">
-        <?= Html::a('Create Method', ['create'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a('Create Method', ['create'], ['class' => 'btn btn-secondary']) ?>
     </p>
 </div>

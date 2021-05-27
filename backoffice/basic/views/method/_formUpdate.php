@@ -58,7 +58,7 @@ use app\models\grandeur;
     </div>
     <div class="form-group">
         <div class="col-sm-10"></div>
-        <?= Html::submitButton('Save', ['class' => 'btn btn-info', 'id' => 'methodsubmitbutton'
+        <?= Html::submitButton('Save', ['class' => 'btn btn-secondary', 'id' => 'methodsubmitbutton'
         ]) ?>
     </div>
     <?php ActiveForm::end(); ?>

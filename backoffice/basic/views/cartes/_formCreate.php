@@ -130,7 +130,7 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 		?>
 	    <div class="col-sm-12 ">
 	    	<div class="pull-right">
-	        	<?= Html::submitButton('Save', ['class' => 'btn btn-info']) ?>
+	        	<?= Html::submitButton('Save', ['class' => 'btn btn-light']) ?>
 	    	</div>
 	    </div>
 	</div>
