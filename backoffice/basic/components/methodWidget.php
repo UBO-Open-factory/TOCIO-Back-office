@@ -6,10 +6,10 @@ use yii\bootstrap\Html;
 use yii\helpers\VarDumper;
 use app\models\Relmethodgrandeur;
 use app\models\Relmodulemethod;
-use app\models\method;
-use app\models\capteur;
-use app\models\relcapteurgrandeur;
-use app\models\grandeur;
+use app\models\Method;
+use app\models\Capteur;
+use app\models\Relcapteurgrandeur;
+use app\models\Grandeur;
 use yii\helpers\Url;
 
 /**
