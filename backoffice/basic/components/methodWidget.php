@@ -167,7 +167,7 @@ class methodWidget extends Widget
 		
 		// Bouton d'ajout d'un method
 		$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
-		$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter un method", ["class" => "btn btn-info pull-right"]);
+		$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter un method", ["class" => "btn btn-secondary pull-right"]);
 		$l_STR_BtnAjoutmethod = Html::a($l_STR_Temp, ['method/create'], ['class' => 'profile-link']);
 		
 		// AFFICHAGE DE LA LISTE DES methods ------------------------------------------------------

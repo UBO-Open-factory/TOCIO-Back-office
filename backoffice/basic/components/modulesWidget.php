@@ -13,6 +13,7 @@ use yii\bootstrap\Html;
 use app\models\Relcapteurgrandeur;
 use app\models\relmodulecapteur;
 use app\models\Capteur;
+use app\models\Grandeur;
 use app\models\Cartes;
 use app\models\Method;
 use app\models\relcartesmethod;
@@ -163,7 +164,7 @@ class modulesWidget extends Widget
 				$contents[] = "</div>";
 				$contents[] = "<div class='col-md-9'>";
 				$contents[] = "		<div class='row'>";
-		
+				
 				// Recuperation de chacune des grandeurs rattachées à ce capteur
 				foreach( Relcapteurgrandeur::find()->where(["idCapteur" => $l_OBJ_ModuleCapteur->idCapteur])->all() as $l_OBJ_Grandeurs){
 					// Formattage des libellés de la grandeur
@@ -257,52 +258,28 @@ class modulesWidget extends Widget
 			//
 			//===================================
 
+			//liste contenant toutes les cartes disponible et une fonction Code Test
 			$l_STR_SelectCartes = "";
-			$l_STR_SelectCartes .= "<select class = 'selectCartesClass btn btn-info' id = 'SelectCartesId'>";
-			$l_STR_SelectCartes .= "  <option >Select...</option>";
-			$l_STR_SelectCartes .= "  <option >Code Test</option>";
+			//création de la liste
+			$l_STR_SelectCartes .= "<select class = 'SelectCartesClass btn btn-light' id = '". $l_OBJ_Module->identifiantReseau ."SelectCartesId'>";
+			$l_STR_SelectCartes .= "  <option value=". $l_OBJ_Module->identifiantReseau .">Select...</option>";	        
+	        $l_STR_SelectCartes .= "  <option value=". $l_OBJ_Module->identifiantReseau .">CodeTest</option>";
+
+	        //=====================================================
+			//fonction pour ajouter toutes les cartes
 			foreach(cartes::find()->all() as $GEN_card_selected)
 			{
-				$l_STR_SelectCartes .= "  <option value=".$GEN_card_selected['id'].">".$GEN_card_selected['nom']."</option>";
-		        
-				$GEN_value = "";
-
-				foreach(relmodulecapteur::find()->orderBy('ordre')->all() as $GEN_capteur)
-				{
-					$Method_Finded = 0;
-					$GEN_value = $GEN_value . $GEN_capteur['nomcapteur'] . "|a|";
-					foreach(relcartesmethod::find()->where(['id_carte' => $GEN_card_selected['id']])->all() as $GEN_method_rel)
-					{
-						$GEN_method_try = method::find()->where(['id' => $GEN_method_rel['id_method']])->one();
-						if(explode("_",$GEN_method_try['nom_method'])[0] == $GEN_capteur['nomcapteur'])
-						{
-							$Method_Finded = 1;
-							$GEN_value = $GEN_value . $GEN_method_try['method_include'] . "|a|";
-							$GEN_value = $GEN_value . $GEN_method_try['method_statement']. "|a|";
-							$GEN_value = $GEN_value . $GEN_method_try['method_setup']. "|a|";
-							$GEN_value = $GEN_value . $GEN_method_try['method_read']. "|CapteurEnd|";
-						}
-					}
-					if($Method_Finded == 0)
-					{
-						$GEN_value = $GEN_value . "//No method find for " . $GEN_capteur['nomcapteur'] . "|a|";
-						$GEN_value = $GEN_value . "//No method find for " . $GEN_capteur['nomcapteur'] . "|a|";
-						$GEN_value = $GEN_value . "//No method find for " . $GEN_capteur['nomcapteur'] . "|a|";
-						$GEN_value = $GEN_value . "//No method find for " . $GEN_capteur['nomcapteur'] . "|CutBalise||CapteurEnd|";
-					}
-				}
-
-		        echo '<textarea id='. $GEN_card_selected['nom'] .' style="display:none;">'. $GEN_value .'</textarea>';
+				$l_STR_SelectCartes .= "  <option value=". $l_OBJ_Module->identifiantReseau .">".$GEN_card_selected['nom']."</option>";
 			}
 			$l_STR_SelectCartes .= "</select>";
 
 			// Construction de l'afficheur de code (celui-ci est modifiable par le JS pendant l'utilisation)
 			$l_STR_GenCodeDisplay =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Arduino',
-					"content"	=> Html::tag("pre class='GenCodeDisplay' id = 'GenCodeDisplay'", "Aucune carte sélectionné"),
-					"class"		=> "mb-3 px-0 PythonCode",
+					"content"	=> Html::tag("pre class='". $l_OBJ_Module->identifiantReseau ."GenCodeDisplay' id = '". $l_OBJ_Module->identifiantReseau ."GenCodeDisplay'", "Aucune carte sélectionné"),
+					"class"		=> " mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
 			]);
-			
+
 			// Construction du contenu pour le code dans un fichier CSV
 			$l_STR_CodeCSV =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Formattage d\'un fichier CSV',
 					"content"	=> Html::tag("h3","Exemple") 
@@ -350,9 +327,18 @@ class modulesWidget extends Widget
 			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
 
 			// Select des cartes
-			$contents[] = 		$l_STR_SelectCartes;
-			$contents[] = 		"<br><br>";
+			$contents[] = 		"<div class='col-md-3'>" . $l_STR_SelectCartes . "</div>";
+			$contents[] = 		'<div class="col-md-9">';
+			$contents[] = 			'<input class="col-md-1 btn" type="checkbox" id="bouchon'. $l_OBJ_Module->identifiantReseau .'">';
+			$contents[] = 			'<label class="col-md-11">Appliquer un bouchon pour simuler la lecture des données</label>';
+			$contents[] = 		'</div>';
+			$contents[] = 		'<div class="col-md-9">';
+			$contents[] = 			'<input class="col-md-1 btn" type="checkbox" id="debug'. $l_OBJ_Module->identifiantReseau .'">';
+			$contents[] = 			'<label class="col-md-11">Afficher les traces de debugs</label>';
+			$contents[] = 		'</div>';
+			$contents[] = 		"<br><br><br>";
 			$contents[] = 		$l_STR_GenCodeDisplay;
+			
 
 			$contents[] = 		Html::tag("p", $l_STR_CodePython);
 			$contents[] = 		Html::tag("p", $l_STR_CodeCSV);
@@ -756,276 +742,7 @@ class modulesWidget extends Widget
 		$ligne[] = 'print( url, response.json() )';
 		return implode("<br/>",$ligne);
 	}
-	
-	// _____________________________________________________________________________________________
-	/**
-	 * Formattage de code Arduino (C++) pour envoyer la trame WIFI.
-	 *
-	 * @param string $url : URL sur laquelle envoyer la payload.
-	 * @param string $id : l'ID du module (son identifiant réseau)
-	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
-	 * @return string
-	 * 
-	 * @version 12 févr. 2021	: APE	- protection contre les noms de Granndeur n'ayant pas d'espaces.
-	 */
-	private function _codeArduino($url, $id, $params )
-	{
-		$ligne = [];	
-		$format = [];
-		$natures = [];
-		$compteur = -1;
-		$save = null;
 
-		$path =  '../components/capteurs/';
-
-		//Rewriting all the sensor name 
-		foreach( $params as &$grandeur_1)
-		{
-			//catch every new sensor name and add a number to them
-			if(strcmp($save,$grandeur_1['nomCapteur'])!=0)
-			{
-				$save = $grandeur_1['nomCapteur'];
-				$compteur++;
-			}
-			$grandeur_1['nomCapteur'] = explode(" ", $grandeur_1['nomCapteur'])[0]." ".$compteur;
-		}
-		//reset data
-		$compteur = 0;
-		$save = null;
-		$save_list = array();
-		//==============================
-		//generation of the Arduino code 
-		//==============================
-
-		//generation of #include lines
-		$ligne[] = "//....................................";
-		$ligne[] = '//INCLUDE LIST';
-		$ligne[] = '';
-		foreach( $params as $grandeur_2)
-		{
-			//if program find a new sensor type not in the list
-			if(!in_array(explode(' ',$grandeur_2['nomCapteur'])[0],$save_list))
-			{
-				array_push($save_list, explode(' ',$grandeur_2['nomCapteur'])[0]);
-				//test of the existence of the sensor include method
-				if(file_exists($path.explode(' ',$grandeur_2['nomCapteur'])[0].'/include.txt'))
-				{
-					$ressource = fopen($path.explode(' ',$grandeur_2['nomCapteur'])[0].'/include.txt', 'r');
-					$ligne[] = fgets($ressource);
-				}
-				//auto generated comment if file doesn't exist
-				else
-				{
-					$ligne[] = '//eventual include of your sensor "'.$grandeur_2['nomCapteur'] . '"';
-				}
-				$ligne[] = "";
-			}
-		}
-		$ligne[] = "//....................................";
-		$ligne[] = '//DECLARATION LIST';
-		$ligne[] = '';
-		foreach( $params as $grandeur_3)
-		{
-			if($save!=$grandeur_3['nomCapteur'])
-			{
-				$save=$grandeur_3['nomCapteur'];
-				if(file_exists($path.explode(' ',$grandeur_3['nomCapteur'])[0].'/declaration.txt'))
-				{
-					$ressource = fopen($path.explode(' ',$grandeur_3['nomCapteur'])[0].'/declaration.txt', 'r');
-					$ligne[] = fgets($ressource) . explode(' ',$grandeur_3['nomCapteur'])[0].$compteur . fgets($ressource);
-					$compteur++;
-				}
-				else
-				{
-					$ligne[] = '//eventual declaration of your sensor "'.$grandeur_3['nomCapteur'] . '"';
-				}
-				$ligne[] = "";
-			}
-		}
-
-		$save = null;
-		$compteur = 0;
-		$ligne[] = "//....................................";
-		$ligne[] = '//WIFI METHODE AND CONST';
-		$ligne[] = "";
-		$ligne[] = 'const String host = "'.$url.'";';
-		$ligne[] = 'const String url  = "'. \Yii::getAlias('@urlbehindproxy').'/mesure/add/'.$id.'";';
-		$ligne[] = "";
-		$ligne[] = 'void setup()';
-		$ligne[] = '{';
-		$ligne[] = '	String Mesures;';
-		$ligne[] = '	Serial.begin(9600);';
-
-		foreach( $params as $grandeur)
-		{
-			if($save!=$grandeur['nomCapteur'])
-			{
-				$save=$grandeur['nomCapteur'];
-				if(file_exists($path.explode(' ',$grandeur['nomCapteur'])[0].'/setup.txt'))
-				{
-					$ressource = fopen($path.explode(' ',$grandeur['nomCapteur'])[0].'/setup.txt', 'r');
-					$ligne[] = fgets($ressource) . "\t" . explode(' ',$grandeur['nomCapteur'])[0].$compteur . fgets($ressource);
-					$compteur++;
-					$ligne[] = "";
-				}
-				else
-				{
-					$ligne[] = '	//eventual begin of your sensor';
-					$ligne[] = "";
-				}
-				
-			}
-		}
-		$save = null;
-		$compteur = 0;
-		$ligne[] = '}';
-		$ligne[] = "";
-		$ligne[] = 'void loop()';
-		$ligne[] = '{';
-		$ligne[] = '	//Call readconcatsend_data function ......................';
-		$ligne[] = '	Mesures = Read_Concat_Data();';
-		$ligne[] = '	sendDataInHTTPSRequest(Mesures);';
-		$ligne[] = '	// Pause of 1 minute .....................................';
-		$ligne[] = '	delay(60 * 1000);';
-		$ligne[] = '}';
-		$ligne[] = "";
-		$ligne[] = '// -----------------------------------------------------------';
-		$ligne[] = '// Read all data from all sensor setup in TOCIO.';
-		$ligne[] = '// no parameter , this function is independent';
-		$ligne[] = '// -----------------------------------------------------------';
-		$ligne[] = 'String  Read_Concat_Data()';
-		$ligne[] = '{';
-		$ligne[] = '	//create data_string save and concat data';
-		$ligne[] = '	String Mesures = "";';
-		$ligne[] = '	//create temp variable saving and form data from sensor';
-		$ligne[] = '	char data[30];';
-		$ligne[] = '	int i = 0;';
-
-		$compteur_variable=-1;
-		foreach ( $params as $grandeur )
-		{
-			// If Grandeur as space in his name
-			$nature = explode(" ", $grandeur['nature'])[0];
-			$natureValue = $nature.$compteur++;
-			$natures[] = strtolower($this->_stripAccents($natureValue));
-			//try to find file existence, if the file is find, arduino generator will concate data from the file
-			//else , he will concate basic float data (0.0)
-			if($save!=$grandeur['nomCapteur'])
-			{
-				//if a new sensor is find , create a new comment box with his name
-				$save=$grandeur['nomCapteur'];
-				$compteur_variable++;
-				$ligne[] = "";
-				$ligne[] = "";
-				$ligne[] = "	//....................................";
-				$ligne[] = "	//";
-				$ligne[] = "	// ".explode(' ',$grandeur['nomCapteur'])[0] . ' - ' .  $compteur_variable;
-				$ligne[] = "	//";
-				$ligne[] = "	//....................................";
-			}
-			//comment text
-			$ligne[] = "";
-			$ligne[] = "	//....................................";
-			$ligne[] = "	//".strtolower($this->_stripAccents($natureValue))." is the '".$nature."' value from your sensor '".explode(' ',$grandeur['nomCapteur'])[0].$compteur_variable."' (as float)";
-			$ligne[] = "	//....................................";
-			//find if the sensor have a reading method and set it
-			if(file_exists($path.explode(' ',$grandeur['nomCapteur'])[0].'/grandeurs/'.$nature.'/reading.txt'))
-			{
-				//open reading method file
-				$ressource = fopen($path.explode(' ',$grandeur['nomCapteur'])[0].'/grandeurs/'.$nature.'/reading.txt', 'r');
-				$ligne[] = "	float ".$this->_stripAccents($natureValue)." = ". fgets($ressource) . "\t" .explode(' ',$grandeur['nomCapteur'])[0] . $compteur_variable. fgets($ressource);;
-			}
-			//if no file finded set this non reading method 
-			else
-			{
-				$ligne[] = "	float ".$this->_stripAccents($natureValue)." = 0.0 ; // <- Your code to read value from sensor goes here ";
-			}
-			
-			$arr1  = str_split($grandeur['format']);
-			//find all signed format and concat them '+' carc in sprintf 
-			if( $arr1[0] === '-')
-			{
-				$valmax = explode('.',$grandeur['format'])[0]*-1 + explode('.',$grandeur['format'])[1];
-				$val2 = explode('.',$grandeur['format'])[1];
-				$formatt = "%+0".$valmax."d";
-			}
-			//else , if format isn't signed , don't used '+' carc 
-			else
-			{
-				$valmax = explode('.',$grandeur['format'])[0] + explode('.',$grandeur['format'])[1];
-				$val2 = explode('.',$grandeur['format'])[1];
-				$formatt = "%0".$valmax."d";
-			}
-			//find if format need value after deciaml point
-			if($val2 != '0')
-			{
-				//this method use for to multiply data by 10 by decimal length
-				$ligne[] = "	//form data from ".$this->_stripAccents($natureValue);
-				$ligne[] = "	for( i = 0 ; i < ".$val2." ; i++ )  ";
-				$ligne[] = '	{';
-				$ligne[] = "	".$this->_stripAccents($natureValue)." = ".$this->_stripAccents($natureValue)."*10;";
-				$ligne[] = '	}';
-			}
-			//concat data in mesures varibale after every sprintf
-			$ligne[] = "	//concat data in Mesures variable";
-			$ligne[] = "	sprintf(data,\"".$formatt."\",(int)".$this->_stripAccents($natureValue).");";
-			$ligne[] = "	Mesures.concat(data);";
-		}
-		$ligne[] = "";
-		$ligne[] = "";
-		$ligne[] = '	// Send data to TOCIO ....................................';
-		$ligne[] = '	return Mesures;';
-		$ligne[] = "";
-		$ligne[] = '}';
-		$ligne[] = '// -----------------------------------------------------------';
-		$ligne[] = '// Send to TOCIO serveur data giving in parameter.';
-		$ligne[] = '// @param data : String concatenation by the website payload';
-		$ligne[] = '// -----------------------------------------------------------';
-		$ligne[] = 'String sendDataInHTTPSRequest(String data)';
-		$ligne[] = '{';
-		$ligne[] = "	//If we are connecte to the WIFI";
-		$ligne[] = '	if (WiFi.status() == WL_CONNECTED)';
-		$ligne[] = '	{';
-		$ligne[] = '		//  Create an https client';
-		$ligne[] = '		WiFiClientSecure client;';
-		$ligne[] = '';
-		$ligne[] = '		// Don\'t validate the certificat (and avoid fingerprint).';
-		$ligne[] = '		client.setInsecure();';
-		$ligne[] = '';
-		$ligne[] = '		// We don\'t validate the certificat, buit we use https (port 443 of the server).';
-		$ligne[] = '		int port = 443;';
-		$ligne[] = '		if (!client.connect(host, port))';
-		$ligne[] = '		{';
-		$ligne[] = '			Serial.println("connection failed");';
-		$ligne[] = '			return "nok";';
-		$ligne[] = '		}';
-		$ligne[] = '';
-		$ligne[] = '		// Send data to the client with a GET method';
-		$ligne[] = '		String request = url + "/" + data;';
-		$ligne[] = '		client.print(String("GET ") + request + " HTTP/1.1\r\n" +';
-		$ligne[] = '				"Host: " + host + "\r\n" +';
-		$ligne[] = '				"Connection: close\r\n\r\n");';
-		$ligne[] = '';
-		$ligne[] = '		// reading of the server answer';
-		$ligne[] = '		while (client.available())';
-		$ligne[] = '		{';
-		$ligne[] = '			String line = client.readStringUntil(\'\r\');';
-		$ligne[] = '			Serial.print(line);';
-		$ligne[] = '		}';
-		$ligne[] = '';
-		$ligne[] = '		client.stop();';
-		$ligne[] = '		return "ok";';
-		$ligne[] = '	}';
-		$ligne[] = '	else';
-		$ligne[] = '	{';
-		$ligne[] = '		return "nok";';
-		$ligne[] = '	}';
-		$ligne[] = '';
-		$ligne[] = '}';
-
-		return implode("<br/>",$ligne);
-	}
-	
 	// _____________________________________________________________________________________________
 	/**
 	 * Entete de fichier pour Formattage d'un fichier journal au format CSV.
