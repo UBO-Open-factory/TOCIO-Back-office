@@ -11,6 +11,8 @@ use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
 /* @var $model app\models\Method */
 /* @var $form yii\widgets\ActiveForm */
+
+$l_TAB_ListeNomCapteur = array_combine(Capteur::find()->select(['id'])->indexBy('id')->column(),Capteur::find()->select(['nom'])->indexBy('nom')->column());
 ?>
 
 <div class="method-form">
@@ -21,12 +23,7 @@ use yii\helpers\ArrayHelper;
 
     <div class="row">
         <div class="col-sm-4">
-            <?php
-
-            $list_nom = array_combine(Capteur::find()->select(['id'])->indexBy('id')->column(),Capteur::find()->select(['nom'])->indexBy('nom')->column());
-
-            ?>
-            <?= $form->field($model, 'id_capteur')->dropDownList($list_nom)?>
+            <?= $form->field($model, 'id_capteur')->dropDownList($l_TAB_ListeNomCapteur)?>
         </div>
         <div class="col-sm-12">
             <div class="col-sm-2">

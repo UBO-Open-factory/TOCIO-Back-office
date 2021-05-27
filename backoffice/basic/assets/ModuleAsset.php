@@ -4,7 +4,9 @@
  * 
  * 	@file ModuleAsset.php
  * @author : Alexandre PERETJATKO (APE)
- * @version 16 avr. 2020	: APE	- Création. 
+ * 		 - Kilian LE GALL (KLG)
+ * @version 16 avr. 2020	: APE	- Création.
+ * @version 27 mai 2021	: KLG	- adaptation pour les cartes 
  * 
  */
 

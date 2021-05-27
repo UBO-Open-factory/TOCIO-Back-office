@@ -149,6 +149,18 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.3.0</h2>
+<li>2021-05-27 <b>&bull;</b> Correction of "crash when open carte page"</li>
+<li>2021-05-27 <b>&bull;</b> Change method and cartes button color</li>
+<li>2021-05-27 <b>&bull;</b> Del JS files ignore in github</li>
+<li>2021-05-27 <b>&bull;</b> Change color button to match with application</li>
+<li>2021-05-19 <b>&bull;</b> ModuleWidget can now find all method and push them into JS</li>
+<li>2021-05-19 <b>&bull;</b> Cartes method added</li>
+<li>2021-05-17 <b>&bull;</b> Fixe method visual and create view</li>
+<li>2021-05-12 <b>&bull;</b> Orange warning button</li>
+<li>2021-05-12 <b>&bull;</b> Génération de code</li>
+	
+	
 	<h2>V 1.2.7</h2>
 	<li>2021-04-26 <b>&bull;</b>Mise à jour de Yii.</li>
 <li>2021-04-26 <b>&bull;</b> Prise en compte du fuseau horaire pour le formattage des dates et de l'heure et affichage à la norme Française.</li>
