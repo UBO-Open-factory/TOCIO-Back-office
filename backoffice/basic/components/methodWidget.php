@@ -6,10 +6,10 @@ use yii\bootstrap\Html;
 use yii\helpers\VarDumper;
 use app\models\Relmethodgrandeur;
 use app\models\Relmodulemethod;
-use app\models\method;
-use app\models\capteur;
-use app\models\relcapteurgrandeur;
-use app\models\grandeur;
+use app\models\Method;
+use app\models\Capteur;
+use app\models\Relcapteurgrandeur;
+use app\models\Grandeur;
 use yii\helpers\Url;
 
 /**
@@ -168,7 +168,7 @@ class methodWidget extends Widget
 		// Bouton d'ajout d'un method
 		$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
 		$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter un method", ["class" => "btn btn-secondary pull-right"]);
-		$l_STR_BtnAjoutmethod = Html::a($l_STR_Temp, ['method/create'], ['class' => 'profile-link']);
+		$l_STR_BtnAjoutmethod = Html::a($l_STR_Temp, ['method/create'], ['class' => 'btn btn-secondary profile-link']);
 		
 		// AFFICHAGE DE LA LISTE DES methods ------------------------------------------------------
 		return implode("", $methods);

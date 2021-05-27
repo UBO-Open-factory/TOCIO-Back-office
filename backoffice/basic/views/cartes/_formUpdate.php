@@ -33,7 +33,10 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 		}
 		else
 		{
-			$l_TAB_Options_indisponible[] = $nature;
+			
+			$l_TAB_Options_indisponible_temp["nature"] = $nature;
+			$l_TAB_Options_indisponible_temp["id"] = $id;
+			array_push($l_TAB_Options_indisponible,$l_TAB_Options_indisponible_temp);
 		}
 	}
 }
@@ -77,9 +80,7 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 			}
 			foreach($l_TAB_Options_indisponible as $indis)
 			{
-				echo "<div class='btn btn-info' style='padding: 5px;color:black'>";
-				echo $indis;
-				echo "</div>";
+				echo Html::a($indis["nature"], ['method/update?id='.$indis["id"]], ['class' => 'btn btn-secondary']);
 			}
 			echo "<br>";echo "<br>";
 			?>
@@ -130,7 +131,7 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 				echo "<div class='col-1'>" . $l_STR_BtnDelete . "</div>";
 				if( !in_array(str_replace(" ","",$model['nom']),explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])))
 				{
-					echo "<div class='col-2'id='methodwarninglink'>" . $l_STR_BtnWarning .  " <h8 style='color:orange'>Warning</h></div>";
+					echo "<div class='col-2'>" . $l_STR_BtnWarning .  " <h8 style='color:orange'>Warning</h></div>";
 				}
 				else
 				{
@@ -138,10 +139,6 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 				}
 				
 				echo "<div class='col-1'>" . $l_STR_BtnModify . "</div>";
-
-				echo "<br>";
-				echo "</div>";
-				echo "<div id='sortiemethodwarninglink'>";
 				echo "</div>";
 			}
 			?>

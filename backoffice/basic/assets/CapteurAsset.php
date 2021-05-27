@@ -3,7 +3,7 @@
  * Fichier de déclaration des ressources pour la page des Capteur.
  * 
  * 	@file ModuleAsset.php
- *  @author : Alexandre PERETJATKO (APE)
+ * @author : Alexandre PERETJATKO (APE)
  * 	@version 23 avr. 2020	: APE	- Création.
  * 
  */

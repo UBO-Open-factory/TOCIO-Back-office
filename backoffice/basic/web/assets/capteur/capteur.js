@@ -7,6 +7,7 @@
  * - faire une redirection sur la page des Capteurs.
  */
 $(document).on('click', '#btnAddGrandeur', function() {
+	
 	// RECUPERATION DE LA SAISIE -------------------------------------------------------------------
 	var nomCapteur = $('#capteur-nom').val();
 	var idGrandeur = $('#capteur-idgrandeurs').val();

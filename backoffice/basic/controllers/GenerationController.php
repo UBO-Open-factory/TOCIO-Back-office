@@ -21,6 +21,10 @@ use yii\filters\AccessControl;
 
 /**
  * GenerationController implements the SELECT request for module arduino code generation.
+ * créer un tableau de capteur pour une association module - carte
+ * chaque capteur est aussi un tableau composé de son nom , ses différentes méthodes et son tableau de grandeur
+ * le tableau de grandeur est quand à lui composé des grandeurs , leurs noms , leurs format et les méthodes d'accès
+ * à ces grandeurs pour ce capteur
  */
 class GenerationController extends Controller
 {
@@ -50,6 +54,7 @@ class GenerationController extends Controller
 
         foreach($model_relmodulecapteur as $model_relmodulecapteur1)
         {
+            //variable pour déterminer si il faut ou non ajouter du code (au cas ou aucune méthode n'ai été trouvé)
             $var_method_finded = 0;
             foreach($model_cartesmethod as $model_cartesmethod1)
             {
@@ -57,6 +62,7 @@ class GenerationController extends Controller
                 $model_method = method::find()->where(['id' => $model_cartesmethod1['id_method']])->one();
                 if(explode(" ",$model_relmodulecapteur1['nomcapteur'])[0] === explode("_",$model_method['nom_method'])[0])
                 {
+                    //on met la variable de vérification à 1
                     $var_method_finded = 1;
                     $data = array();
 
@@ -66,6 +72,7 @@ class GenerationController extends Controller
                     $data["method_setup"] = $model_method["method_setup"];
                     $data["grandeur"] = array();
                     $i = 0;
+                    //ajout de toutes les grandeurs associé à un capteur ainsi que leur format et méthode d'accès
                     foreach(Relcapteurgrandeur::find()->where(["idCapteur" => $model_relmodulecapteur1["idCapteur"]])->all() as $Grandeur_finded)
                     {
                         $l_STR_READ_METHOD = array();
@@ -78,6 +85,7 @@ class GenerationController extends Controller
                     array_push($model,$data);
                 }
             }
+            //boucle pour ajouter du code si aucune méthode n'a été trouvé pour ce capteur
             if($var_method_finded == 0)
             {
                 $var_method_finded = 1;
@@ -88,7 +96,7 @@ class GenerationController extends Controller
                 $data["method_declaration"] = "//No method find for " . explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
                 $data["method_setup"] = "//No method find for " . explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
                 $data["grandeur"] = array();
-                $i = 0;
+                //ajout de toutes les grandeurs associé à un capteur ainsi que leur format et commentaires aux emplacement des méthodes d'accès
                 foreach(Relcapteurgrandeur::find()->where(["idCapteur" => $model_relmodulecapteur1["idCapteur"]])->all() as $Grandeur_finded)
                 {
                     $l_STR_READ_METHOD = array();
@@ -96,7 +104,6 @@ class GenerationController extends Controller
                     $l_STR_READ_METHOD[1] = "//No method find for " . explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
                     $l_STR_READ_METHOD[2] = Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["formatCapteur"];
                     array_push($data["grandeur"],$l_STR_READ_METHOD);
-                    $i++;
                 }
                 array_push($model,$data);
             }

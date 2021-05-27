@@ -54,7 +54,7 @@ use app\models\grandeur;
         		$taillesave = 0;
         	}
         	?>
-        	<div id = "FullMenu" style ="width: 100%;height: <?php echo $taillemax*100; ?>px;">
+        	<div id = "FullMenu" style ="height: <?php echo $taillemax*100; ?>px;">
 	            <?php
 	            $param_textbox = " spellcheck='false' style='resize:none;' ";
 	            foreach(capteur::find()->all() as $capteurid)
