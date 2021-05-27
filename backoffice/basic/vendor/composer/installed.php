@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => '723ef1127703b6305d4527969c9d2f637ad004b4',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -888,7 +888,11 @@
       'aliases' => 
       array (
       ),
+<<<<<<< Updated upstream
       'reference' => NULL,
+=======
+      'reference' => '723ef1127703b6305d4527969c9d2f637ad004b4',
+>>>>>>> Stashed changes
     ),
     'yiisoft/yii2-bootstrap' => 
     array (

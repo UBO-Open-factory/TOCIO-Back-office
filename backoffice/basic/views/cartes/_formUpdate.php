@@ -18,21 +18,17 @@ $l_TAB_MethodAssociees = relcartesmethod::find()->select(['id_method'])->where([
 $l_TAB_Options = [];
 $l_TAB_Options_same = [];
 $l_TAB_Options_indisponible = [];
-foreach(relcartesmethod::find()->where(["id_carte" => $model['id']])->all() as $method)
-{
-	$l_TAB_Options_same[] = explode("_",method::find()->where(["id" => $method['id_method']])->one()["nom_method"])[0];
+foreach( relcartesmethod::find()->where( ["id_carte" => $model['id'] ] )->all() as $method ) {
+	$l_TAB_Options_same[] = explode( "_", method::find()->where( [
+			"id" => $method['id_method'] ] )->one()["nom_method"] )[0];
 }
-foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as $id => $nature)
-{
+foreach( method::find()->select( ['nom_method','id' ] )->indexBy( 'id' )->column() as $id => $nature ) {
+	
 	// si la grandeur n'est pas déjà associée à cette carte, on la met dans la liste
-	if( !in_array($id, $l_TAB_MethodAssociees))
-	{
-		if(!in_array(explode("_",$nature)[0], $l_TAB_Options_same))
-		{
-			$l_TAB_Options[] = '<option value="'. $id .'">' . $nature. '</option>';
-		}
-		else
-		{
+	if( ! in_array( $id, $l_TAB_MethodAssociees ) ) {
+		if( ! in_array( explode( "_", $nature )[0], $l_TAB_Options_same ) ) {
+			$l_TAB_Options[] = '<option value="'.$id.'">'.$nature.'</option>';
+		} else {
 			$l_TAB_Options_indisponible[] = $nature;
 		}
 	}
@@ -92,8 +88,7 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 			</div>
 			<br>
 			<?php
-			foreach(relcartesmethod::find()->where(["id_carte" => $model['id']])->all() as $method)
-			{
+			foreach(relcartesmethod::find()->where(["id_carte" => $model['id']])->all() as $method) {
 				$l_STR_BtnWarning = Html::tag("span", "", ["class" => "glyphicon glyphicon-exclamation-sign"]);
 
 
@@ -128,12 +123,9 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 				echo "<div class='col'>" . method::find()->where(["id" => $method["id_method"]])->one()["nom_method"] . "</div>";
 				echo "<div class='col'>" . explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])[0] . "</div>";
 				echo "<div class='col-1'>" . $l_STR_BtnDelete . "</div>";
-				if( !in_array(str_replace(" ","",$model['nom']),explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])))
-				{
-					echo "<div class='col-2'id='methodwarninglink'>" . $l_STR_BtnWarning .  " <h8 style='color:orange'>Warning</h></div>";
-				}
-				else
-				{
+				if( !in_array( str_replace( " ", "", $model['nom'] ), explode( "_", method::find()->where( ["id" => $method["id_method"] ] )->one()["nom_method"] ) ) ) {
+					echo "<div class='col-2' id='methodwarninglink'>".$l_STR_BtnWarning." <h8 style='color:orange'>Warning</h></div>";
+				} else {
 					echo "<div class='col-2'> </div>";
 				}
 				

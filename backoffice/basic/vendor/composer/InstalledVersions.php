@@ -1,24 +1,8 @@
 <?php
-
-
-
-
-
-
-
-
-
-
-
 namespace Composer;
 
 use Composer\Autoload\ClassLoader;
 use Composer\Semver\VersionParser;
-
-
-
-
-
 
 class InstalledVersions
 {
@@ -30,7 +14,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => '723ef1127703b6305d4527969c9d2f637ad004b4',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -912,7 +896,11 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
+<<<<<<< Updated upstream
       'reference' => NULL,
+=======
+      'reference' => '723ef1127703b6305d4527969c9d2f637ad004b4',
+>>>>>>> Stashed changes
     ),
     'yiisoft/yii2-bootstrap' => 
     array (

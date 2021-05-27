@@ -45,43 +45,37 @@ class cartesWidget extends Widget
 		// Le bouton pour plier/déplier les boites.
 		$l_STR_BtnDelete 		= Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
 		$l_STR_iconDeplacer 	= Html::tag("i", "", ["class" => "glyphicon glyphicon-move"]). " ";
-		$cartes = [];
 
 		// RÉCUPÉRATION DU JEUX DE DONNÉES ---------------------------------------------------------
 		// @see https://www.yiiframework.com/doc/guide/2.0/fr/output-data-providers
-		if(isset($this->dataProvider)) 
-		{
-			$models = array_values($this->dataProvider->getModels());
-		} 
-		else 
-		{
+		if( isset( $this->dataProvider ) ) {
+			$models = array_values( $this->dataProvider->getModels() );
+			
+		} else {
 			$models = $this->data;
 		}
 
 		// PARCOURS DE CHACUN DES MODELS (DES CARTES) --------------------------------------------
 		$carte = [];
-		foreach ($models as $l_OBJ_CARTE) 
-		{
+		foreach ($models as $l_OBJ_carte) {
 			// EXTRACTION DES DONNÉES DES CARTES
 			// On peut avoir :
 			// - un objet quand le dataprovider est celui de Yii (cas de la page method/index)
 			// - un tableau quand le dataprovider est le résultat d'une requète SQL ( cas de module/index)
-			if( is_object( $l_OBJ_CARTE )) 
-			{
-				$l_STR_ID_CARTE = $l_OBJ_CARTE->id;
-				$l_STR_nom_CARTE 	= $l_OBJ_CARTE->nom;
-			} 
-			else 
-			{
-				$l_STR_ID_CARTE = $l_OBJ_CARTE['id'];
-				$l_STR_NOM_CARTE 	= $l_OBJ_CARTE['nom'];
+			if( is_object( $l_OBJ_carte ) ) {
+				$l_STR_IDCarte 	= $l_OBJ_carte->id;
+				$l_STR_nomCarte = $l_OBJ_carte->nom;
+			
+			} else {
+				$l_STR_IDCarte 	= $l_OBJ_carte['id'];
+				$l_STR_nomCarte	= $l_OBJ_carte['nom'];
 			}
 			// BOUTONS D'ÉDITION DE LA CARTE --------------------------------------------------------
-			$l_TAB_BtnEditiocarte = [];
-			$l_TAB_BtnEditiocarte[] = $this->_btnEdition("cartes/update", "glyphicon glyphicon-pencil", $l_STR_ID_CARTE);
-			$l_TAB_BtnEditiocarte[] = Html::a($l_STR_BtnDelete, 
+			$l_TAB_BtnEditionCarte = [];
+			$l_TAB_BtnEditionCarte[] = $this->_btnEdition("cartes/update", "glyphicon glyphicon-pencil", $l_STR_IDCarte);
+			$l_TAB_BtnEditionCarte[] = Html::a($l_STR_BtnDelete, 
 				[
-				"cartes/delete", "id" => $l_STR_ID_CARTE
+				"cartes/delete", "id" => $l_STR_IDCarte
 				],
 				[
 				'data-pjax' => "0",
@@ -99,8 +93,7 @@ class cartesWidget extends Widget
 			$contents[] = "<legend class='col-1'> </legend>";
 			$contents[] = "<legend class='col-2'> </legend>";
 			$contents[] = "<legend class='col-1'> </legend>";
-			foreach(relcartesmethod::find()->where(["id_carte" => $l_STR_ID_CARTE])->all() as $method)
-			{
+			foreach(relcartesmethod::find()->where(["id_carte" => $l_STR_IDCarte])->all() as $method){
 				$l_STR_BtnWarning = Html::tag("span", "", ["class" => "glyphicon glyphicon-exclamation-sign"]);
 				$l_STR_BtnWarning = Html::a($l_STR_BtnWarning,
 																[
@@ -131,13 +124,12 @@ class cartesWidget extends Widget
 				$contents[] = "<div class='row'>";
 				$contents[] = 	"<div class='col'>" . method::find()->where(["id" => $method["id_method"]])->one()["nom_method"] . "</div>";
 				$contents[] = 	"<div class='col'>" . explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])[0] . "</div>";
-				if( !in_array(str_replace(" ","",$l_OBJ_CARTE['nom']),explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])))
-				{
-				$contents[] = 	"<div class='col-2'>" . $l_STR_BtnWarning . "<h8 style='color:orange'> Warning</h></div>";
-				}
-				else
-				{
-				$contents[] = 	"<div class='col-2'> </div>";
+				
+				if( !in_array(str_replace( " ", "", $l_OBJ_carte['nom'] ), explode( "_", method::find()->where( ["id" => $method["id_method"] ] )->one()["nom_method"] ) ) ) {
+					$contents[] = "<div class='col-2'>".$l_STR_BtnWarning."<h8 style='color:orange'> Warning</h></div>";
+					
+				} else {
+					$contents[] = "<div class='col-2'> </div>";
 				}
 				
 				$contents[] = "	<div class='col-2'>" . $l_STR_BtnModify . "</div>";
@@ -148,10 +140,10 @@ class cartesWidget extends Widget
 			$contents[] = "</div>";
 
 			// BOITE DE LA CARTE
-			$carte[] = $this->_cardBox([	"header" 	=> $l_STR_iconDeplacer.$l_STR_nom_CARTE. Html::tag("span",implode(" ", $l_TAB_BtnEditiocarte),['class' => "pull-right"]),
+			$carte[] = $this->_cardBox([	"header" 	=> $l_STR_iconDeplacer.$l_STR_nomCarte. Html::tag("span",implode(" ", $l_TAB_BtnEditionCarte),['class' => "pull-right"]),
 											"content"	=> implode("", $contents),
 											"class"		=> "border-info mb-3 px-0 methodOriginal",
-											"data" 		=> $l_STR_nom_CARTE."|".$l_STR_ID_CARTE,
+											"data" 		=> $l_STR_nomCarte."|".$l_STR_IDCarte,
 											"style" 	=> null,
 									]);
 		}

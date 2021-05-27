@@ -51,15 +51,12 @@ class methodWidget extends Widget
 		$l_STR_BtnDelete 		= Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
 		$l_STR_iconDeplacer 	= Html::tag("i", "", ["class" => "glyphicon glyphicon-move"]). " ";
 		$methods = [];
-		
-		// RÉCUPÉRATION DU JEUX DE DONNÉES ---------------------------------------------------------
-		// @see https://www.yiiframework.com/doc/guide/2.0/fr/output-data-providers
-		if(isset($this->dataProvider)) 
-		{
-			$models = array_values($this->dataProvider->getModels());
-		} 
-		else 
-		{
+
+			// RÉCUPÉRATION DU JEUX DE DONNÉES ---------------------------------------------------------
+			// @see https://www.yiiframework.com/doc/guide/2.0/fr/output-data-providers
+		if( isset( $this->dataProvider ) ) {
+			$models = array_values( $this->dataProvider->getModels() );
+		} else {
 			$models = $this->data;
 		}
 
@@ -133,21 +130,16 @@ class methodWidget extends Widget
 				//=======================================
 
 				$i = 0;
-				foreach (relcapteurgrandeur::find()->where(["idCapteur" => $l_OBJ_method['id_capteur']])->all() 
-				as $id_relgrandeur) 
-				{					
-					foreach (grandeur::find()->where(["id" => $id_relgrandeur["idGrandeur"]])->all() 
-					as $nom_grandeur) 
-					{
-						$contents[] = "<label>" . $nom_grandeur['nature'] . "</label><br> ";
+				foreach( relcapteurgrandeur::find()->where( [
+						"idCapteur" => $l_OBJ_method['id_capteur'] ] )->all() as $id_relgrandeur ) {
+					foreach( grandeur::find()->where( [
+							"id" => $id_relgrandeur["idGrandeur"] ] )->all() as $nom_grandeur ) {
+						$contents[] = "<label>".$nom_grandeur['nature']."</label><br> ";
 					}
-					if(count($methode_lecture)-1>$i)
-					{
-						$contents[] = "<textarea rows='2' cols='70'" . $param_textbox . ">" . $methode_lecture[$i] ."</textarea> ";
-					}
-					else
-					{
-						$contents[] = "<textarea rows='2' cols='70'" . $param_textbox . "></textarea> ";
+					if( count( $methode_lecture ) - 1 > $i ) {
+						$contents[] = "<textarea rows='2' cols='70'".$param_textbox.">".$methode_lecture[$i]."</textarea> ";
+					} else {
+						$contents[] = "<textarea rows='2' cols='70'".$param_textbox."></textarea> ";
 					}
 					$contents[] = "<br>";
 					$i++;
@@ -205,26 +197,24 @@ class methodWidget extends Widget
 		$header 	= ($params['header'] !== null) ? Html::tag("div", $params['header'], array("class" => "card-header toggleAffichage")):"";
 		
 		// CONTENU
-		if( !isset($params['content']) )
-		{
-			$titre 	= ($params['titre'] !== null) ? Html::tag("h4",$params['titre'], array("class" => "card-title") ):"";
-			$text	= ($params['text'] !== null) ? Html::tag('p', $params['text'], array("class"=>"card-text")):"";
-		} 
-		else 
-		{
+		if( ! isset( $params['content'] ) ) {
+			$titre = ($params['titre'] !== null) ? Html::tag( "h4", $params['titre'], array(
+					"class" => "card-title" ) ) : "";
+			$text = ($params['text'] !== null) ? Html::tag( 'p', $params['text'], array(
+					"class" => "card-text" ) ) : "";
+		} else {
 			$titre = "";
 			$text = $params['content'];
 		}
 		
 		// le BODY du card
-		if( isset($params['id'])) 
-		{
-			$body	= Html::tag("div", $titre . $text, array("class" => "card-body", 'id' => $params['id']));
-		} 
-		else 
-		{
-			$body	= Html::tag("div", $titre . $text, array("class" => "card-body"));
-			
+		if( isset( $params['id'] ) ) {
+			$body = Html::tag( "div", $titre.$text, array(
+					"class" => "card-body",
+					'id' => $params['id'] ) );
+		} else {
+			$body = Html::tag( "div", $titre.$text, array(
+					"class" => "card-body" ) );
 		}
 		
 		
@@ -232,18 +222,15 @@ class methodWidget extends Widget
 		$class 	= ($params['class'] !== null ) ? $params['class'] : "";
 		$style 	= ($params['style'] !== null ) ? $params['style'] : "";
 		//si on a un data
-		if( isset( $params['data'])){
-			$cardBox = Html::tag("div",$header . $body , array("class" => "card  ".$class,
-																"style" => $style,
-																"data-value"=> Html::encode($params['data']),
-																));
-			
-		} 
-		else 
-		{
-			$cardBox = Html::tag("div",$header . $body , array("class" => "card  ".$class,
-															"style" => $style,
-															));
+		if( isset( $params['data'] ) ) {
+			$cardBox = Html::tag( "div", $header.$body, array(
+					"class" => "card  ".$class,
+					"style" => $style,
+					"data-value" => Html::encode( $params['data'] ) ) );
+		} else {
+			$cardBox = Html::tag( "div", $header.$body, array(
+					"class" => "card  ".$class,
+					"style" => $style ) );
 		}
 		// AFFICHAGE DE LA BOITE
 		return $cardBox;
@@ -268,20 +255,17 @@ class methodWidget extends Widget
 		
 		// Si ce qui est avant la virgule doit contenir un signe
 		$l_STR_Signe = "";
-		if( strpos($l_STR_Avant, "-") !== false )
-		{
+		if( strpos( $l_STR_Avant, "-" ) !== false ) {
 			$l_STR_Signe = "-";
 		}
-		
+
 		$l_TAB_Avant = [];
-		for( $i=0; $i < $l_INT_Avant; $i++)
-		{
+		for( $i = 0; $i < $l_INT_Avant; $i++ ) {
 			$l_TAB_Avant[] = $i;
 		}
-		$l_TAB_Apres= [];
-		
-		for( $i=0; $i < $l_INT_Apres; $i++)
-		{
+		$l_TAB_Apres = [];
+
+		for( $i = 0; $i < $l_INT_Apres; $i++ ) {
 			$l_TAB_Apres[] = $i;
 		}
 		
