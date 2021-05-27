@@ -6,6 +6,7 @@ $(document).on('click', '#methodsubmitbutton', function()
     {
         document.getElementById("sortie_read_method").value += elems[i].value + "|CutBalise|";
     }
+    document.getElementById("sortie_method").value = $("#id_capteur option:selected").text() + "_" + $("#nom_method option:selected").text();
 });
 
 [].forEach.call(document.querySelectorAll('.grandeurTextBox'), function (el) 
