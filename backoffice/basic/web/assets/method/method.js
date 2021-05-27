@@ -1,6 +1,7 @@
 $(document).on('click', '#methodsubmitbutton', function() 
 {
-    var elems = document.getElementsByClassName("read");
+	var capteur_name = document.getElementById("id_capteur");
+    var elems = document.getElementsByClassName(capteur_name.value);
     for(var i=0; i<elems.length; i++) 
     {
         document.getElementById("sortie_read_method").value += elems[i].value + "|CutBalise|";

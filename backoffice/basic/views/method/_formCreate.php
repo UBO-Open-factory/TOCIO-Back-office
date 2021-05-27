@@ -19,7 +19,7 @@ use app\models\grandeur;
 
 <div class="method-form">
 
-    <?php $form = ActiveForm::begin(['id'=>'test']);?>
+    <?php $form = ActiveForm::begin();?>
 
     <div class="row">
         <div class="col-sm-3">
@@ -27,8 +27,7 @@ use app\models\grandeur;
             $list_nom = array_combine(Capteur::find()->select(['id'])->indexBy('id')->column(),Capteur::find()->select(['nom'])->indexBy('nom')->column());
             ?>
             <?= $form->field($model, 'id_capteur')->dropDownList($list_nom , ['class' => 'form-control id_capteur','id' => 'id_capteur','prompt'=>'Select ...'])?>
-            <?= $form->field($model, 'nom_method')->dropDownList($method_pre["list"],['class' => 'form-control nom_method','id' => 'nom_method', 'onclick'=>'document.getElementById("sortie_method").value = $("#id_capteur option:selected").text() + "_" + $("#nom_method option:selected").text();','prompt'=>'Select ...']
-            );
+            <?= $form->field($model, 'nom_method')->dropDownList($method_pre["list"],['class' => 'form-control nom_method','id' => 'nom_method', 'onclick'=>'document.getElementById("sortie_method").value = $("#id_capteur option:selected").text() + "_" + $("#nom_method option:selected").text();','prompt'=>'Select ...']);
             ?>
             <?php
             echo $form->field($model, 'nom_method',['options' => ['class' => 'invisible']])->hiddenInput(['value'=> '','class' => 'form-control sortie_method','id' => 'sortie_method']);
@@ -66,7 +65,7 @@ use app\models\grandeur;
 		                foreach (grandeur::find()->where(["id" => $id_relgrandeur["idGrandeur"]])->all() as $nom_grandeur) 
 		                {
 		                	echo "<label class='grandeurTextBox ". $capteurid['nom'] ."' id='". $capteurid['nom'] . "' >" . $nom_grandeur['nature'] . "</label><br>";
-		                	echo "<textarea class='grandeurTextBox read ". $capteurid['nom'] ."' id='". $capteurid['nom'] ."' rows='2' cols='70'".$param_textbox."></textarea> "; 
+		                	echo "<textarea class='grandeurTextBox  ". $capteurid['nom'] ." ". $capteurid['id'] ."' id='". $capteurid['nom'] ."' rows='2' cols='70'".$param_textbox."></textarea> "; 
 		                }
 		                
 		            }

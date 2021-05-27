@@ -19,13 +19,14 @@ use app\models\grandeur;
 
 <div class="method-form">
 
-    <?php $form = ActiveForm::begin(['id'=>'test']);?>
+    <?php $form = ActiveForm::begin();?>
 
     <div class="row">
         <div class="col-sm-6" style="margin-left:30%">
                 <?= $form->field($model, 'method_include')->textarea(['rows' => 1 , 'value' => $method_pre['include'],'class' => 'form-control method_include ','id' => 'method_include']) ?>
                 <?= $form->field($model, 'method_statement')->textarea(['rows' => 2 , 'value' => $method_pre['statement'],'class' => 'form-control','id' => 'method_statement']) ?>
                 <?= $form->field($model, 'method_setup')->textarea(['rows' => 2 , 'value' => $method_pre['setup'],'class' => 'form-control','id' => 'method_setup']) ?>
+                <?php echo "<textarea class='hidden' id='id_capteur' rows='2' cols='70'>".capteur::find()->where(["id"=>$method_pre['id_capteur']])->one()["nom"]."</textarea> ";  ?>
         <label style="margin-left:1%"><h2> Instruction de lecture des grandeurs </h1></label>
             <?php
             $i = 0;
@@ -40,11 +41,11 @@ use app\models\grandeur;
                     echo "<label>" . $nom_grandeur['nature'] . "</label><br> ";
                     if(count($methode_lecture)-1>$i)
                     {
-                        echo "<textarea class='read' rows='2' cols='70'".$param_textbox.">".$methode_lecture[$i]."</textarea> ";
+                        echo "<textarea class='". capteur::find()->where(["id"=>$method_pre['id_capteur']])->one()["nom"] ."' rows='2' cols='70'".$param_textbox.">".$methode_lecture[$i]."</textarea> ";
                     }
                     else
                     {
-                        echo "<textarea class='read' rows='2' cols='70'".$param_textbox."></textarea> "; 
+                        echo "<textarea class='". capteur::find()->where(["id"=>$method_pre['id_capteur']])->one()["nom"] ."' rows='2' cols='70'".$param_textbox."></textarea> "; 
                     }
                     $i++;
                 }
