@@ -59,9 +59,10 @@ class cartesWidget extends Widget
 		}
 
 		// PARCOURS DE CHACUN DES MODELS (DES CARTES) --------------------------------------------
+		$carte = [];
 		foreach ($models as $l_OBJ_CARTE) 
 		{
-			// EXTRACTION DES DONNÉES DU method
+			// EXTRACTION DES DONNÉES DES CARTES
 			// On peut avoir :
 			// - un objet quand le dataprovider est celui de Yii (cas de la page method/index)
 			// - un tableau quand le dataprovider est le résultat d'une requète SQL ( cas de module/index)
@@ -146,7 +147,7 @@ class cartesWidget extends Widget
 			}
 			$contents[] = "</div>";
 
-			// BOITE DU method
+			// BOITE DE LA CARTE
 			$carte[] = $this->_cardBox([	"header" 	=> $l_STR_iconDeplacer.$l_STR_nom_CARTE. Html::tag("span",implode(" ", $l_TAB_BtnEditiocarte),['class' => "pull-right"]),
 											"content"	=> implode("", $contents),
 											"class"		=> "border-info mb-3 px-0 methodOriginal",
@@ -154,12 +155,12 @@ class cartesWidget extends Widget
 											"style" 	=> null,
 									]);
 		}
-		// Bouton d'ajout d'un method
+		// Bouton d'ajout d'une carte
 		$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
 		$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter une carte", ["class" => "btn btn-light pull-right"]);
 		$l_STR_BtnAjoutcarte = Html::a($l_STR_Temp, ['carte/create'], ['class' => 'profile-link']);
 		
-		// AFFICHAGE DE LA LISTE DES methods ------------------------------------------------------
+		// AFFICHAGE DE LA LISTE DES CARTES ------------------------------------------------------
 		return implode("", $carte);
 
 	}
