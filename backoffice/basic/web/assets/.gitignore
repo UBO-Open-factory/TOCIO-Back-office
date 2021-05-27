@@ -1,3 +1,8 @@
 capteur/config.js
+capteur/capteur.js
 module/config.js
+module/*
 cartes/config.js
+cartes/*
+method/config.js
+method/*
