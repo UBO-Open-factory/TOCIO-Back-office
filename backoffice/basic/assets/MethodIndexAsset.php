@@ -1,9 +1,9 @@
 <?php
 /**
- * Fichier de déclaration des ressources pour la page des Capteur.
+ * Fichier de déclaration des ressources pour la page des Cartes.
  * 
  * 	@file ModuleAsset.php
- *  @author : Alexandre PERETJATKO (APE)
+ * @author : Alexandre PERETJATKO (APE) - Kilian LE GALL (adaptation pour les methods)
  * 	@version 23 avr. 2020	: APE	- Création.
  * 
  */
@@ -12,7 +12,7 @@ namespace app\assets;
 
 use yii\web\AssetBundle;
 
-class CapteurAsset extends AssetBundle {
+class MethodIndexAsset extends AssetBundle {
     public $basePath = '@webroot';
     //     public $baseUrl = '@web';
     public $baseUrl = '@urlbehindproxy';
@@ -21,7 +21,7 @@ class CapteurAsset extends AssetBundle {
 //     ];
     public $js = [
         'assets/config.js',
-        'assets/capteur/capteur.js',
+        'assets/method/methodIndex.js',
     ];
     public $depends = [
     		'\yii\web\JqueryAsset'
