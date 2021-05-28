@@ -156,7 +156,12 @@ class MethodController extends Controller {
 	}
 	
 	
-	
+	/**
+	 * update a method model with ajax
+	 * @param int $_POST["id"]
+	 * @return string succes
+	 * @version 28 mai 2021
+	 */	
 	public function actionUpdateajax() {
 		$request = Yii::$app->request;
 		// UPDATE FAIT À L'AIDE D'UNE REQUÈTE AJAX -------------------------------------------------

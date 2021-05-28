@@ -15,7 +15,7 @@ $(document).on('click', '.toggleAffichage', function()
 // _________________________________________________________________________________________________
 /**
  * Lorsque la page est chargée on replie les modules.
- * Saufe celui dont l'ID est passé en paramètre dans l'URL
+ * Sauf celui dont l'ID est passé en paramètre dans l'URL
  */
 $(document).ready(function() {
 	$('.card-body').slideToggle("fast");

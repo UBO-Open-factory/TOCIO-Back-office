@@ -1,3 +1,9 @@
+//__________________________________________________________________________________________
+/**
+ * setup JS function for dropdownlist in every module
+ * @version 28 mai 2021
+ */
+
 $(document).ready(function ()
 {
     $('.SelectCartesClass').each(function () 
@@ -43,34 +49,41 @@ $(document).ready(function ()
     });
 });
 
+//__________________________________________________________________________________________
+/**
+ * Create a div in selected color
+ * @param string color 
+ * @return string
+ * @version 28 mai 2021
+ */
 function Color(color)
 {
 	return  "<font color='"+color+"'>";
 }
 
+//__________________________________________________________________________________________
+/**
+ * Create a /div to end color div
+ * @return string
+ * @version 28 mai 2021
+ */
 function ColorEnd()
 {
 	return "</font>";
 }
-//====================================================================================
-//GENERATION FUNCTION
-//
-//Need 
-//	@l_TAB_DATAJSON
-//			=> tab of sensor , one sensor is compose of 
-//					=> INCLUDE
-//					=> DECLARATION
-//					=> SETUP
-//					=> READING TAB compose of 
-//						=> "grandeur X" reading method for each "grandeur"
-//	@l_TAB_DATAJSON_length 
-//			=> number of sensor in the module
-//	@URL
-//			=> URL
-// @HOST
-//			=> HOST
-//
-//====================================================================================
+
+//__________________________________________________________________________________________
+/**
+ * Generate Arduino code with method find in database
+ * @param string tab
+ * @param int tab_length
+ * @param string URL
+ * @param string HOST
+ * @param bool bouchon
+ * @param bool debug
+ * @return string
+ * @version 28 mai 2021
+ */
 function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_bool,debug_bool)
 {
 	var displayTab = "";
@@ -87,6 +100,8 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += Color("green");
 	displayTab += '<br>' + '#include "WIFI.h"';
 	displayTab += ColorEnd();
+	//find all include in tab and display every new include
+	//if finded without // , line will be displayed in green
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
 		if(!TEMP_SAVE_DATA.includes(l_TAB_DATAJSON[i]["nom_capteur"]))
@@ -115,6 +130,8 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '//....................................';
 	displayTab += '<br>' +  '//PIN LIST';
 	displayTab += '<br>';
+	//create pin declaration line , one int for every sensor
+	//created in this form : PIN_"sensor_name"_"sensor_number_in_order"
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
 		displayTab += '<br>' + Color("blue") + "int " + ColorEnd() + "PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + ' = ' + Color("steelblue") + " 000 ;" + ColorEnd();
@@ -130,6 +147,10 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '//DECLARATION OF ALL SENSOR';
 	displayTab += '<br>';
 	var DECLARATION_TEMP = "";
+	//setup every sensor
+	//sensor have auto generated name , form : "sensor_name"_"sensor_number_in_order"
+	//replace every {{var}} finded with sensor 
+	//replace every {{pin}} finded with his PIN name declared
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
 		if(l_TAB_DATAJSON[i]["method_declaration"].split('{{var}}').length > 1)
@@ -164,6 +185,8 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  'void setup()';
 	displayTab += '<br>' +  '{';
 	var SETUP_TEMP = "";
+	//if sensor need a initialisation and his method is finded in database :
+	//replace {{var}} with sensor auto generate name
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
 		if(l_TAB_DATAJSON[i]["method_setup"].split('{{var}}').length > 1)
@@ -178,6 +201,8 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	}
 	displayTab += '<br>';
 	
+	//if user need "bouchon" option
+	//setup a randomNumber generator
 	displayTab += '<br>' +  '	Serial.begin(' + Color("steelblue") + '9600' + ColorEnd() +');';
 	if(bouchon_bool)
 	{
@@ -195,6 +220,8 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '{';
 	displayTab += '<br>' +  '	String Mesures;';
 	displayTab += '<br>' +  '	//Call readconcatsend_data function ......................';
+	//if user choose "debug" option
+	//add a print to separate every new data collection
 	if(debug_bool)
 	{
 		displayTab += '<br>';
@@ -206,6 +233,8 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 		displayTab += '<br>';
 	}
 	displayTab += '<br>' +  '	Mesures = Read_Concat_Data();';
+	//if user choose "debug" option
+	//add a line to display every new data collection in one
 	if(debug_bool)
 	{
 		displayTab += '<br>';
@@ -238,15 +267,21 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '	int i = ' + Color("steelblue") + '0;' + ColorEnd();;
 	displayTab += '<br>';
 
+	//for every sensor in list
+	//
 	var MAIN_TEMP = "";
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
+		//display SENSOR separator 
 		displayTab += '<br>' +  '	//=========================';
 		displayTab += '<br>' +  '	// ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + ';';
 		displayTab += '<br>' +  '	//=========================';
 		var READ_SENSOR_LENGTH = l_TAB_DATAJSON[i]["grandeur"].length;
+		//select every size in the selected sensor
 		for(y=0;y<READ_SENSOR_LENGTH;y++)
 		{
+			//calculate low part and hight part of size 
+			//used after for concat function
 			var Hight_part = parseInt(l_TAB_DATAJSON[i]["grandeur"][y][2]);
 			var Low_part = l_TAB_DATAJSON[i]["grandeur"][y][2] - Hight_part;
 
@@ -261,60 +296,70 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 			{
 				multi_higth_part = multi_higth_part *10;
 			}
-
+			//display SIZE separator
 			displayTab += '<br>';
 			displayTab += '<br>' + '		//======================' ;
 			displayTab += '<br>' + '		//' + l_TAB_DATAJSON[i]["grandeur"][y][0];
 			displayTab += '<br>' + '		//======================' ;
+			//if user selected "bouchn" option
+			//setup a random number generator for every size of the sensor 
+			//value will be set between his max value and his max value *-1 if hight part < 0
+			//value will be set between his max value and 0 if hight par > 0 
 			if(bouchon_bool)
+			{
+				if(Hight_part<0)
 				{
-					if(Hight_part<0)
+					
+					if(parseInt(Math.abs(Low_part)*10) != 0)
 					{
-						
-						if(parseInt(Math.abs(Low_part)*10) != 0)
-						{
-							displayTab += '<br>' + '		float sub_part = random('+ multi_low_part  +');';
-							displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(-' + multi_higth_part + ' , ' + multi_higth_part + ') + sub_part/'+multi_low_part+';';
-						}
-						else
-						{
-							displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(-' + multi_higth_part + ' , ' + multi_higth_part + ');';
-						}
-
+						displayTab += '<br>' + '		float sub_part = random('+ multi_low_part  +');';
+						displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(-' + multi_higth_part + ' , ' + multi_higth_part + ') + sub_part/'+multi_low_part+';';
 					}
 					else
 					{
-						if(parseInt(Math.abs(Low_part)*10) != 0)
-						{
-							displayTab += '<br>' + '		float sub_part = random('+ multi_low_part  +');';
-							displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(' + multi_higth_part + ') + sub_part/'+multi_low_part+';';
-						}
-						else
-						{
-							displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(' + multi_higth_part + ');';
-						}
+						displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(-' + multi_higth_part + ' , ' + multi_higth_part + ');';
 					}
+
 				}
 				else
 				{
-					displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' ;
-					if(l_TAB_DATAJSON[i]["grandeur"][y] === "")
+					if(parseInt(Math.abs(Low_part)*10) != 0)
 					{
-						displayTab += Color("steelblue") + '0.0;' + ColorEnd();
+						displayTab += '<br>' + '		float sub_part = random('+ multi_low_part  +');';
+						displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(' + multi_higth_part + ') + sub_part/'+multi_low_part+';';
 					}
 					else
 					{
-						if(l_TAB_DATAJSON[i]["grandeur"][y][1].split('{{var}}').length > 1)
-						{
-							SETUP_TEMP = l_TAB_DATAJSON[i]["grandeur"][y][1].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
-							displayTab += SETUP_TEMP;
-						}
-						else
-						{
-							displayTab += Color("steelblue") + '0.0;' + ColorEnd();
-						}
+						displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(' + multi_higth_part + ');';
 					}
 				}
+			}
+			//if user doesn't select "bouchon" option
+			//add reading method of every size of every sensor
+			//if method doesn't have {{var}} balise , programm would replace method by 0.0 declaration
+			//if method ins't declared, programm would replace method by 0.0 declaration
+			else
+			{
+				displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' ;
+				if(l_TAB_DATAJSON[i]["grandeur"][y] === "")
+				{
+					displayTab += Color("steelblue") + '0.0;' + ColorEnd();
+				}
+				else
+				{
+					if(l_TAB_DATAJSON[i]["grandeur"][y][1].split('{{var}}').length > 1)
+					{
+						SETUP_TEMP = l_TAB_DATAJSON[i]["grandeur"][y][1].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+						displayTab += SETUP_TEMP;
+					}
+					else
+					{
+						displayTab += Color("steelblue") + '0.0;' + ColorEnd();
+					}
+				}
+			}
+			//if user choose "debug" option
+			//add a display for every size var
 			if(debug_bool)
 			{
 				displayTab += '<br>' + '		//Affichage des données pour debug';
@@ -323,6 +368,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 				displayTab += '<br>';
 			}				
 			displayTab += '<br>' + '		//Concat data in grandeur format';
+			//create concat function
 			if(parseInt(Math.abs(Low_part)*10) != 0)
 			{
 				displayTab += '<br>' + '		' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + Color("steelblue") + '*' + multi_low_part +';' + ColorEnd();
@@ -335,6 +381,8 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 			displayTab += '0' + (Math.abs(Hight_part)) + 'd",(int)' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ');';
 			displayTab += '<br>' + '		Mesures.concat(data);';
 			displayTab += '<br>';
+			//if user choose "debug" option
+			//add a concat data display for every size of every sensor
 			if(debug_bool)
 			{
 				displayTab += '<br>' + '		//Affichage des données pour debug';
@@ -394,6 +442,8 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '	}';
 	displayTab += '<br>' +  '}';
 
+	//setup color scheme in programm
+	//all type (int,float,string,char,void,const...) will have blue color
 	displayTab = displayTab.split("<br>void ").join(Color("Blue")+"<br>void "+ColorEnd());
 	displayTab = displayTab.split("String ").join(Color("Blue")+"String "+ColorEnd());
 	displayTab = displayTab.split("int ").join(Color("Blue")+"int "+ColorEnd());
@@ -402,6 +452,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab = displayTab.split("const ").join(Color("Blue")+"const "+ColorEnd());
 	displayTab = displayTab.split("char ").join(Color("Blue")+"char "+ColorEnd());
 
+	//all loop declaration would haev red color
 	displayTab = displayTab.split("if(").join(Color("red")+"if"+ColorEnd()+"(");
 	displayTab = displayTab.split("if (").join(Color("red")+"if "+ColorEnd()+"(");
 
@@ -414,13 +465,16 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab = displayTab.split("else<br>").join(Color("red")+"else"+ColorEnd()+'<br>');
 	displayTab = displayTab.split("else ").join(Color("red")+"else "+ColorEnd());
 
+	//return is in red too
 	displayTab = displayTab.split("return ").join(Color("red")+"return "+ColorEnd());
 
+	//bracket in red too
 	displayTab = displayTab.split("{").join(Color("red")+"{"+ColorEnd());
 	displayTab = displayTab.split("}").join(Color("red")+"}"+ColorEnd());
 
 	var end = "";
 
+	//find all comments and setup their line in light blue
 	for(i=0;i<displayTab.split('<br>').length;i++)
 	{
 		if(displayTab.split('<br>')[i].split('//').length>1)

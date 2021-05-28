@@ -124,13 +124,6 @@ class methodWidget extends Widget
 				//	nom du capteur de la méthode => donne => l'id du capteur
 				//	l'id du capteur concerné => donne => les id des grandeurs concerné
 				//	les id des grandeurs => donnent => leurs noms
-				//
-				//	si il y a moins de méthodes que de champs ils sont formé mais sont vide
-				// 	si il y a plus de méthodes que de champs elles ne sont pas prisent en compte 
-				//	/!\ elles ne seront d'ailleurs pas prise en compte lors de la génération du code
-				//
-				//	les méthodes sont repéré par leur ';'
-				//=======================================
 
 				$i = 0;
 				foreach (relcapteurgrandeur::find()->where(["idCapteur" => $l_OBJ_method['id_capteur']])->all() 

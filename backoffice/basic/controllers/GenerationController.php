@@ -25,6 +25,10 @@ use yii\filters\AccessControl;
  * chaque capteur est aussi un tableau composé de son nom , ses différentes méthodes et son tableau de grandeur
  * le tableau de grandeur est quand à lui composé des grandeurs , leurs noms , leurs format et les méthodes d'accès
  * à ces grandeurs pour ce capteur
+ * @param int $idmodule
+ * @param string $nomcarte
+ * @return string[] tab
+ * @version 28 mai 2021
  */
 class GenerationController extends Controller
 {

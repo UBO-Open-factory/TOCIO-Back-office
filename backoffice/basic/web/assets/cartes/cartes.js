@@ -35,7 +35,7 @@ $(document).on('click', '#btnAddMethod', function()
 	//document.write(nomCartes);
 	//
 	
-	// CRÉATION/MODIFICATION DU Cartes ------------------------------------------------------------
+	// CRÉATION/MODIFICATION D'UNE CARTE ------------------------------------------------------------
 	// Vérificaiton du mode dans lequel on se trouve ( update ou creation ).
 	// ( il existe une class Cartes-update ou Cartes-create )
 	if ($(".cartes-create")[0])
