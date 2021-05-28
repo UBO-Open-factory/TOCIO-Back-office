@@ -284,4 +284,29 @@ class CapteurController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    // _____________________________________________________________________________________________
+    /**
+     * Finds the Capteur model based on its primary key value.
+     * Renvoie le capteur et ses grandeurs sous forme json
+     * @param int id
+     * @return string[] tab
+     * @version 28 mai 2021
+     */
+    public function actionAjaxgetgrandeur($id)
+    {
+        // Le retour sera au format JSON
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        
+        $model = array();
+        // RECHERCHE DES MODELS DANS LA BASE -------------------------------------------------------
+        foreach(Relcapteurgrandeur::find()->where(["idCapteur"=>$id])->all() as $l_TAB_Capteur_grandeur)
+        {
+            $data = array();
+            $data = Grandeur::find()->where(["id"=>$l_TAB_Capteur_grandeur["idGrandeur"]])->one()["nature"];
+            array_push($model,$data);
+        }
+        return $model;
+    }
 }

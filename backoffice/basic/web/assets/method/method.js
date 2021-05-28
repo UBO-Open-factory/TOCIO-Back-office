@@ -12,7 +12,7 @@ $(document).on('click', '#methodsubmitbutton', function()
 	//find sensor drop down list 
 	var capteur_name = document.getElementById("id_capteur");
 	//find all the textfield with the sensor id id 
-    var elems = document.getElementsByClassName(capteur_name.value);
+    var elems = document.getElementsByClassName("grandeurTextBox");
     //concat all finded textfield value with separator balise
     for(var i=0; i<elems.length; i++) 
     {
@@ -20,12 +20,6 @@ $(document).on('click', '#methodsubmitbutton', function()
     }
     //concat sensor name and card name in hidden textfield for method name
     document.getElementById("sortie_method").value = $("#id_capteur option:selected").text() + "_" + $("#nom_method option:selected").text();
-});
-
-//hide every textfield
-[].forEach.call(document.querySelectorAll('.grandeurTextBox'), function (el) 
-{
-	el.style.visibility = 'hidden';
 });
 
 //__________________________________________________________________________________________
@@ -50,11 +44,23 @@ document.getElementById('id_capteur').onchange = function()
 	var e = document.getElementById("id_capteur");
     var visibleText = e.options[e.selectedIndex].text;
 
-    //set visible for every textfield of a sensor
-    [].forEach.call(document.querySelectorAll('.'+visibleText), function (el) 
-	{
-		el.style.visibility = 'visible';
-		el.style.zIndex = '10';
-	});
+    $.ajax({
+		type : "POST",
+		url : g_host + "/capteur/ajaxgetgrandeur?id=" + e.options[e.selectedIndex].value,
+		cache : false,
+		dataType : "text",
+		
+		success : function(results) 
+		{
+			var retour = JSON.parse( $.trim(results) );
+			var display = "";
+			for(i = 0;i<retour.length;i++)
+			{
+				display += "<label>" + retour[i] + "</label><br>";
+		        display += "<textarea class='grandeurTextBox' rows='2' cols='70' spellcheck='false' style='resize:none;'></textarea> "; 
+			}
+			document.getElementById("DisplayBalise").innerHTML = display;
+		}
+	});	
 
 };

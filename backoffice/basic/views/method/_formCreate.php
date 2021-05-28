@@ -54,29 +54,11 @@ use app\models\grandeur;
         		$taillesave = 0;
         	}
         	?>
-        	<div id = "FullMenu" style ="height: <?php echo $taillemax*100; ?>px;">
-	            <?php
-	            $param_textbox = " spellcheck='false' style='resize:none;' ";
-	            foreach(capteur::find()->all() as $capteurid)
-	            {
-	            	echo "<div class='grandeurTextBox ". $capteurid['nom'] ."' style='position: absolute;'>"; 
-		            foreach (relcapteurgrandeur::find()->where(["idCapteur" => $capteurid['id']])->all() as $id_relgrandeur)
-		            {        
-		                foreach (grandeur::find()->where(["id" => $id_relgrandeur["idGrandeur"]])->all() as $nom_grandeur) 
-		                {
-		                	echo "<label class='grandeurTextBox ". $capteurid['nom'] ."' id='". $capteurid['nom'] . "' >" . $nom_grandeur['nature'] . "</label><br>";
-		                	echo "<textarea class='grandeurTextBox  ". $capteurid['nom'] ." ". $capteurid['id'] ."' id='". $capteurid['nom'] ."' rows='2' cols='70'".$param_textbox."></textarea> "; 
-		                }
-		                
-		            }
-		            echo "</div>";
-		        }
-	            ?>
+        	<div id = "FullMenu">
+	            <div id = "DisplayBalise"></div>
 	            <?php
 	            echo $form->field($model, 'method_read',['options' => ['class' => 'invisible']])->hiddenInput(['value'=> '','class' => 'sortie_read_method','id' => 'sortie_read_method',]);
 	            ?>
-
-
 	        </div>
 	        <div class="form-group">
 		        <div class="col-sm-10"></div>
