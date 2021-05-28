@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\relcartesmethod;
-use app\models\relcartesmethodSearch;
+use app\models\Relcartesmethod;
+use app\models\RelcartesmethodSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

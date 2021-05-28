@@ -7,7 +7,7 @@ use app\assets\MethodAsset;
 /* @var $this yii\web\View */
 /* @var $model app\models\Method */
 
-$this->title = 'Create Method';
+$this->title = "Création d'une méthode";
 $this->params['breadcrumbs'][] = ['label' => 'Methods', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 

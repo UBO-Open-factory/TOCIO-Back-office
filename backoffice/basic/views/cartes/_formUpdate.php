@@ -2,9 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\relcartesmethod;
+use app\models\Relcartesmethod;
 use app\models\Method;
-use app\models\capteur;
+use app\models\Capteur;
 use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;

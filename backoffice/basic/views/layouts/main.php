@@ -87,15 +87,15 @@ AppAsset::register($this);
 				[ 'label' => 'Exports de données', 'url' => ['/site/export'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Import de journaux CSV', 'url' => ['/site/upload'], 'linkOptions' => ['class' => 'nav-link'] ],
                 [ 
-                    'label' => 'Generation', 
+                    'label' => 'Génération de code', 
                     'linkOptions' => ['class' => 'nav-link'],
                     'itemsOptions'=>['class'=>'dropdown-submenu'],
                     'submenuOptions'=>['class'=>'dropdown-menu'],
                     'items' => 
                 [
                         '<li class="dropdown-header">Outils de génération de code Arduino</li>',
-                    [ 'label' => 'Method', 'url' => ['/method/index'], 'linkOptions' => ['class' => 'nav-link'] ],
                     [ 'label' => 'Cartes', 'url' => ['/cartes/index'], 'linkOptions' => ['class' => 'nav-link'] ],
+                    [ 'label' => 'Méthode', 'url' => ['/method/index'], 'linkOptions' => ['class' => 'nav-link'] ],
                 ],
                 ],
 			],       

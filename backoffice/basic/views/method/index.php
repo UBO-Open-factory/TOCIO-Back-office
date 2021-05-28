@@ -14,7 +14,7 @@ use app\assets\MethodIndexAsset;
 /* @var $searchModel app\models\MethodSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Method';
+$this->title = 'Méthode';
 $this->params['breadcrumbs'][] = $this->title;
 
 MethodIndexAsset::register($this);
