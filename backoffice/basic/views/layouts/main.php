@@ -86,8 +86,12 @@ AppAsset::register($this);
 				[ 'label' => 'Tables des données', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Exports de données', 'url' => ['/site/export'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Import de journaux CSV', 'url' => ['/site/upload'], 'linkOptions' => ['class' => 'nav-link'] ],
-                [ 'label' => 'Outils de génération de code'],
-                [ 'label' => 'Generation' , 'linkOptions' => ['class' => 'nav-link'],'items' => 
+                [ 
+                    'label' => 'Generation', 
+                    'linkOptions' => ['class' => 'nav-link'],
+                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                    'items' => 
                 [
                         '<li class="dropdown-header">Outils de génération de code Arduino</li>',
                     [ 'label' => 'Method', 'url' => ['/method/index'], 'linkOptions' => ['class' => 'nav-link'] ],
@@ -96,8 +100,6 @@ AppAsset::register($this);
                 ],
 			],       
 		];
-
-        
         
     } 
     else 
