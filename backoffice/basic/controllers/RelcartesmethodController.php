@@ -77,26 +77,6 @@ class RelcartesmethodController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing relcartesmethod model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id_carte
-     * @param integer $id_method
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id_carte, $id_method)
-    {
-        $model = $this->findModel($id_carte, $id_method);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id_carte' => $model->id_carte, 'id_method' => $model->id_method]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
 
     /**
      * Deletes an existing relcartesmethod model.
@@ -163,7 +143,6 @@ class RelcartesmethodController extends Controller
             }
         }
     }
-
 
     /**
      * Finds the relcartesmethod model based on its primary key value.

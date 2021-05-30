@@ -129,14 +129,7 @@ class cartesWidget extends Widget
 				$contents[] = "<div class='row'>";
 				$contents[] = 	"<div class='col'>" . method::find()->where(["id" => $method["id_method"]])->one()["nom_method"] . "</div>";
 				$contents[] = 	"<div class='col'>" . explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])[0] . "</div>";
-				if( !in_array(str_replace(" ","",$l_OBJ_CARTE['nom']),explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])))
-				{
-				$contents[] = 	"<div class='col-2'>" . $l_STR_BtnWarning . "<h8 style='color:orange'> Warning</h></div>";
-				}
-				else
-				{
 				$contents[] = 	"<div class='col-2'> </div>";
-				}
 				
 				$contents[] = "	<div class='col-2'>" . $l_STR_BtnModify . "</div>";
 				$contents[] = "</div>";

@@ -16,30 +16,6 @@ use yii\helpers\ArrayHelper;
 $l_TAB_MethodAssociees = relcartesmethod::find()->select(['id_method'])->where(["id_carte" => $model->id])->column();
 
 $l_TAB_Options = [];
-$l_TAB_Options_same = [];
-$l_TAB_Options_indisponible = [];
-foreach(relcartesmethod::find()->where(["id_carte" => $model['id']])->all() as $method)
-{
-	$l_TAB_Options_same[] = explode("_",method::find()->where(["id" => $method['id_method']])->one()["nom_method"])[0];
-}
-foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as $id => $nature)
-{
-	// si la grandeur n'est pas déjà associée à cette carte, on la met dans la liste
-	if( !in_array($id, $l_TAB_MethodAssociees))
-	{
-		if(!in_array(explode("_",$nature)[0], $l_TAB_Options_same))
-		{
-			$l_TAB_Options[] = '<option value="'. $id .'">' . $nature. '</option>';
-		}
-		else
-		{
-			
-			$l_TAB_Options_indisponible_temp["nature"] = $nature;
-			$l_TAB_Options_indisponible_temp["id"] = $id;
-			array_push($l_TAB_Options_indisponible,$l_TAB_Options_indisponible_temp);
-		}
-	}
-}
 ?>
 
 
@@ -73,15 +49,7 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 
 		<div class="col-sm-12">
 			<?php
-			if($l_TAB_Options_indisponible)
-			{
-				echo "<legend class='col row'> Methodes indisponibles</legend>";
-				echo "Ces méthodes sont conçu pour des capteurs déjà mis en place pour cette carte, ils ne sont donc pas disponible. Pour les ajouter veuillez supprimer les méthodes comportant le même capteur.<br><br>";
-			}
-			foreach($l_TAB_Options_indisponible as $indis)
-			{
-				echo Html::a($indis["nature"], ['method/update?id='.$indis["id"]], ['class' => 'btn btn-secondary']);
-			}
+		
 			echo "<br>";echo "<br>";
 			?>
 			<div class="row">
@@ -129,14 +97,7 @@ foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as
 				echo "<div class='col'>" . method::find()->where(["id" => $method["id_method"]])->one()["nom_method"] . "</div>";
 				echo "<div class='col'>" . explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])[0] . "</div>";
 				echo "<div class='col-1'>" . $l_STR_BtnDelete . "</div>";
-				if( !in_array(str_replace(" ","",$model['nom']),explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])))
-				{
-					echo "<div class='col-2'>" . $l_STR_BtnWarning .  " <h8 style='color:orange'>Warning</h></div>";
-				}
-				else
-				{
-					echo "<div class='col-2'> </div>";
-				}
+				echo "<div class='col-2'> </div>";
 				
 				echo "<div class='col-1'>" . $l_STR_BtnModify . "</div>";
 				echo "</div>";
