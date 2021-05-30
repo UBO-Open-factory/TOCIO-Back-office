@@ -38,10 +38,10 @@ use app\models\grandeur;
 						echo "<label>".$nom_grandeur['nature']."</label><br> ";
 						if( count( $methode_lecture ) - 1 > $i ) {
 							echo "<textarea class='".capteur::find()->where( [
-									"id" => $method_pre['id_capteur'] ] )->one()["nom"]."' rows='2' cols='70'".$param_textbox.">".$methode_lecture[$i]."</textarea> ";
+									"id" => $method_pre['id_capteur'] ] )->one()["nom"]." grandeurTextBox' rows='2' cols='70'".$param_textbox.">".$methode_lecture[$i]."</textarea> ";
 						} else {
 							echo "<textarea class='".capteur::find()->where( [
-									"id" => $method_pre['id_capteur'] ] )->one()["nom"]."' rows='2' cols='70'".$param_textbox."></textarea> ";
+									"id" => $method_pre['id_capteur'] ] )->one()["nom"]." grandeurTextBox' rows='2' cols='70'".$param_textbox."></textarea> ";
 						}
 						$i++;
 					}

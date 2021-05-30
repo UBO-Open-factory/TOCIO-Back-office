@@ -113,9 +113,19 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 			}
 			else
 			{
-				displayTab += Color("green");
-				displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"];
-				displayTab += ColorEnd();
+				if(l_TAB_DATAJSON[i]["method_include"].charAt(0) != '#')
+				{
+					displayTab += Color("black");
+					displayTab += '<br>' + "/*Erreur dans le code , aucun # trouvé, l'include de " + l_TAB_DATAJSON[i]["nom_capteur"] + " est invalide, code : ";
+					displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"].replace(/</g, '&#8249').replace(/>/g,'&#8250')+ "*/";
+					displayTab += ColorEnd();
+				}
+				else
+				{
+					displayTab += Color("green");
+					displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"].replace(/</g, '&#8249').replace(/>/g,'&#8250');
+					displayTab += ColorEnd();
+				}
 			}
 		}
 	}
@@ -153,14 +163,41 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	//replace every {{pin}} finded with his PIN name declared
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
-		if(l_TAB_DATAJSON[i]["method_declaration"].split('{{var}}').length > 1)
+		var method_validation = 1;
+		if(l_TAB_DATAJSON[i]["method_declaration"].split('{{var}}').length < 2)
 		{
-			DECLARATION_TEMP = l_TAB_DATAJSON[i]["method_declaration"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
-			displayTab += '<br>' + DECLARATION_TEMP;
+			displayTab += Color("black");
+			displayTab += '<br>' +  "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/";
+			displayTab += ColorEnd();
+			method_validation = 0;
+		}
+		if(l_TAB_DATAJSON[i]["method_declaration"].split("{{pin}}").length < 2)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no pin location*/";
+			displayTab += ColorEnd();
+			method_validation = 0;
+		}
+		if(l_TAB_DATAJSON[i]["method_declaration"].split(';').length < 2)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/";
+			displayTab += ColorEnd();
+			method_validation = 0;
+		}
+
+		DECLARATION_TEMP = l_TAB_DATAJSON[i]["method_declaration"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+
+		if(method_validation == 0)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "/* This method will be set in comment*/";
+			displayTab += ColorEnd();
+			displayTab += '<br>' + "//" + DECLARATION_TEMP;
 		}
 		else
 		{
-			displayTab += '<br>' + l_TAB_DATAJSON[i]["method_declaration"] + '_' + i;
+			displayTab += '<br>' + DECLARATION_TEMP;
 		}
 	}
 	displayTab += '<br>';
@@ -189,14 +226,34 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	//replace {{var}} with sensor auto generate name
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
-		if(l_TAB_DATAJSON[i]["method_setup"].split('{{var}}').length > 1)
+		var setup_validation = 1;
+		if(l_TAB_DATAJSON[i]["method_setup"].split('{{var}}').length < 2)
 		{
-			SETUP_TEMP = l_TAB_DATAJSON[i]["method_setup"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
-			displayTab += '<br>' + '	' + SETUP_TEMP;
+			displayTab += Color("black");
+			displayTab += '<br>' +  "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/";
+			displayTab += ColorEnd();
+			setup_validation = 0;
+		}
+		if(l_TAB_DATAJSON[i]["method_setup"].split(';').length < 2)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/";
+			displayTab += ColorEnd();
+			setup_validation = 0;
+		}
+
+		SETUP_TEMP = l_TAB_DATAJSON[i]["method_setup"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+
+		if(setup_validation == 0)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "	/* This method will be set in comment*/";
+			displayTab += ColorEnd();
+			displayTab += '<br>' +  '	//' + SETUP_TEMP;
 		}
 		else
 		{
-			displayTab += '<br>' + '	' + l_TAB_DATAJSON[i]["method_setup"] + '_' + i;
+			displayTab += '<br>' +  '	' + SETUP_TEMP;
 		}
 	}
 	displayTab += '<br>';
@@ -273,9 +330,8 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
 		//display SENSOR separator 
-		displayTab += '<br>' +  '	//=========================';
+		displayTab += '<br>' +  '	//**********************************************************';
 		displayTab += '<br>' +  '	// ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + ';';
-		displayTab += '<br>' +  '	//=========================';
 		var READ_SENSOR_LENGTH = l_TAB_DATAJSON[i]["grandeur"].length;
 		//select every size in the selected sensor
 		for(y=0;y<READ_SENSOR_LENGTH;y++)
@@ -298,9 +354,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 			}
 			//display SIZE separator
 			displayTab += '<br>';
-			displayTab += '<br>' + '		//======================' ;
-			displayTab += '<br>' + '		//' + l_TAB_DATAJSON[i]["grandeur"][y][0];
-			displayTab += '<br>' + '		//======================' ;
+			displayTab += '<br>' + '	//' + l_TAB_DATAJSON[i]["grandeur"][y][0];
 			//if user selected "bouchn" option
 			//setup a random number generator for every size of the sensor 
 			//value will be set between his max value and his max value *-1 if hight part < 0
@@ -312,12 +366,12 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 					
 					if(parseInt(Math.abs(Low_part)*10) != 0)
 					{
-						displayTab += '<br>' + '		float sub_part = random('+ multi_low_part  +');';
-						displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(-' + multi_higth_part + ' , ' + multi_higth_part + ') + sub_part/'+multi_low_part+';';
+						displayTab += '<br>' + '	float sub_part = random('+ multi_low_part  +');';
+						displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(-' + multi_higth_part + ' , ' + multi_higth_part + ') + sub_part/'+multi_low_part+';';
 					}
 					else
 					{
-						displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(-' + multi_higth_part + ' , ' + multi_higth_part + ');';
+						displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(-' + multi_higth_part + ' , ' + multi_higth_part + ');';
 					}
 
 				}
@@ -325,12 +379,12 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 				{
 					if(parseInt(Math.abs(Low_part)*10) != 0)
 					{
-						displayTab += '<br>' + '		float sub_part = random('+ multi_low_part  +');';
-						displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(' + multi_higth_part + ') + sub_part/'+multi_low_part+';';
+						displayTab += '<br>' + '	float sub_part = random('+ multi_low_part  +');';
+						displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(' + multi_higth_part + ') + sub_part/'+multi_low_part+';';
 					}
 					else
 					{
-						displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(' + multi_higth_part + ');';
+						displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = random(' + multi_higth_part + ');';
 					}
 				}
 			}
@@ -340,54 +394,66 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 			//if method ins't declared, programm would replace method by 0.0 declaration
 			else
 			{
-				displayTab += '<br>' + '		float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' ;
-				if(l_TAB_DATAJSON[i]["grandeur"][y] === "")
+				var grandeur_validation = 1;
+				if(l_TAB_DATAJSON[i]["grandeur"][y][1].split('{{var}}').length < 2)
 				{
-					displayTab += Color("steelblue") + '0.0;' + ColorEnd();
+					displayTab += '<br>' +  Color("black") + "	/* WARNING /!\\ your reading method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/";
+					displayTab += ColorEnd();
+					grandeur_validation = 0;
+				}
+				if(l_TAB_DATAJSON[i]["grandeur"][y][1].split(';').length < 2)
+				{
+					displayTab += Color("black");
+					displayTab += '<br>' +  "	/* WARNING /!\\ your reading method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/";
+					displayTab += ColorEnd();
+					grandeur_validation = 0;
+				}
+
+				SETUP_TEMP = l_TAB_DATAJSON[i]["grandeur"][y][1].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+
+				if(grandeur_validation == 0)
+				{
+					displayTab += Color("black");
+					displayTab += '<br>' +  "	/* This method will be set in comment*/";
+					displayTab += ColorEnd();
+					displayTab += '<br>' +  '	//' + SETUP_TEMP;
+					displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + Color("steelblue") + '0.0' + ColorEnd() + ';';
 				}
 				else
 				{
-					if(l_TAB_DATAJSON[i]["grandeur"][y][1].split('{{var}}').length > 1)
-					{
-						SETUP_TEMP = l_TAB_DATAJSON[i]["grandeur"][y][1].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
-						displayTab += SETUP_TEMP;
-					}
-					else
-					{
-						displayTab += Color("steelblue") + '0.0;' + ColorEnd();
-					}
+					displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + SETUP_TEMP;
 				}
 			}
 			//if user choose "debug" option
 			//add a display for every size var
 			if(debug_bool)
 			{
-				displayTab += '<br>' + '		//Affichage des données pour debug';
-				displayTab += '<br>' + '		Serial.print("'+l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y+' est la mesure de la '+ l_TAB_DATAJSON[i]["grandeur"][y][0] +' = ");';
-				displayTab += '<br>' + '		Serial.println('+l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y+');';
+				displayTab += '<br>' + '	//Affichage des données pour debug';
+				displayTab += '<br>' + '	Serial.print("'+l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y+' est la mesure de la '+ l_TAB_DATAJSON[i]["grandeur"][y][0] +' = ");';
+				displayTab += '<br>' + '	Serial.println('+l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y+');';
 				displayTab += '<br>';
 			}				
-			displayTab += '<br>' + '		//Concat data in grandeur format';
+			displayTab += '<br>' + '	//Concat data in grandeur format';
 			//create concat function
 			if(parseInt(Math.abs(Low_part)*10) != 0)
 			{
-				displayTab += '<br>' + '		' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + Color("steelblue") + '*' + multi_low_part +';' + ColorEnd();
+				displayTab += '<br>' + '	' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + Color("steelblue") + '*' + multi_low_part +';' + ColorEnd();
 			}
-			displayTab += '<br>' + '		sprintf(data,"%';
+			displayTab += '<br>' + '	sprintf(data,"%';
 			if(Hight_part<0)
 			{
 				displayTab += "+";
 			}
 			displayTab += '0' + (Math.abs(Hight_part)) + 'd",(int)' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ');';
-			displayTab += '<br>' + '		Mesures.concat(data);';
+			displayTab += '<br>' + '	Mesures.concat(data);';
 			displayTab += '<br>';
 			//if user choose "debug" option
 			//add a concat data display for every size of every sensor
 			if(debug_bool)
 			{
-				displayTab += '<br>' + '		//Affichage des données pour debug';
-				displayTab += '<br>' + '		Serial.print("une fois concaténé elle donne = ");';
-				displayTab += '<br>' + '		Serial.println(data);';
+				displayTab += '<br>' + '	//Affichage des données pour debug';
+				displayTab += '<br>' + '	Serial.print("une fois concaténé elle donne = ");';
+				displayTab += '<br>' + '	Serial.println(data);';
 				displayTab += '<br>';
 			}
 		}

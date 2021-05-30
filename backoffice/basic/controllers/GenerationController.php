@@ -112,7 +112,6 @@ class GenerationController extends Controller
                 array_push($model,$data);
             }
         }
-        //$model[1]["grandeur"][1][0]
 		return $model;
     }
 }
