@@ -9,7 +9,6 @@ use app\models\Capteur;
 use app\models\Relcapteurgrandeur;
 use app\models\Grandeur;
 use app\models\Cartes;
-use app\models\Relcartesmethod;
 use app\models\method;
 
 use app\models\CapteurSearch;
@@ -52,7 +51,7 @@ class GenerationController extends Controller
                         ->one();
 
         //on récupère toutes les méthodes associé à cette carte
-        $model_cartesmethod = relcartesmethod::find()
+        $model_cartesmethod = method::find()
                         ->where(['id_carte' => $model_carte_id["id"]])
                         ->all();
 
@@ -63,7 +62,7 @@ class GenerationController extends Controller
             foreach($model_cartesmethod as $model_cartesmethod1)
             {
                 //on récupère le nom de la méthode et on le compare au nom du capteur
-                $model_method = method::find()->where(['id' => $model_cartesmethod1['id_method']])->one();
+                $model_method = method::find()->where(['id' => $model_cartesmethod1['id']])->one();
                 if(explode(" ",$model_relmodulecapteur1['nomcapteur'])[0] === explode("_",$model_method['nom_method'])[0])
                 {
                     //on met la variable de vérification à 1
