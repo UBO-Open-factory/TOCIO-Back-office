@@ -75,10 +75,7 @@ class MethodController extends Controller {
 		$method_pre['setup'] = "//add setup methode to begin your sensor";
 		$method_pre['read'] = "//add all reading methode for your sensor , foreach length";
 
-		$list = str_replace( ' ', '', Cartes::find()->select( [
-				'nom' ] )->indexBy( 'nom' )->column() );
-
-		$method_pre['list'] = array_combine( $list, $list );
+		$method_pre['list'] = array_combine( Cartes::find()->select( ['id' ] )->indexBy( 'nom' )->column(), Cartes::find()->select( ['nom' ] )->indexBy( 'nom' )->column() );
 
 		return $this->render( 'create', [
 				'model' => $model,

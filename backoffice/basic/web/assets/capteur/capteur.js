@@ -22,12 +22,14 @@ $(document).on('click', '#btnAddGrandeur', function() {
 	// CRÉATION/MODIFICATION DU CAPTEUR ------------------------------------------------------------
 	// Vérificaiton du mode dans lequel on se trouve ( update ou creation ).
 	// ( il existe une class capteur-update ou capteur-create )
-	if ($(".capteur-create")[0]){
+	if ($(".capteur-create")[0])
+	{
 		// On est en mode Création
 		url = "ajaxcreate";
 		idCapteur	= -1;
-	} else {
-		
+	} 
+	else 
+	{
 		// On est en mode Mise a jour
 		url = "ajaxupdate";
 		idCapteur = GetURLParameter('id');
@@ -77,7 +79,7 @@ function CapteurCreate(p_nom, p_id, p_idGrandeur, p_url){
 						// Succes lors de la création de la relation entre le Capteur et la Grandeur
 						if( success2 == "ok")
 						{
-							 return retour2['url'];  
+							return retour2['url'];  
 
 						// Problème lors de la création
 						} 

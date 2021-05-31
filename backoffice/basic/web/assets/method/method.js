@@ -11,6 +11,7 @@ $(document).on('click', '#methodsubmitbutton', function()
 {
 	//find sensor drop down list 
 	var capteur_name = document.getElementById("id_capteur");
+	var carte_name = document.getElementById("nom_method");
 	//find all the textfield with the sensor id id 
     var elems = document.getElementsByClassName("grandeurTextBox");
     //concat all finded textfield value with separator balise
@@ -18,8 +19,33 @@ $(document).on('click', '#methodsubmitbutton', function()
     {
         document.getElementById("sortie_read_method").value += elems[i].value + "|CutBalise|";
     }
-    //concat sensor name and card name in hidden textfield for method name
-    document.getElementById("sortie_method").value = $("#id_capteur option:selected").text() + "_" + $("#nom_method option:selected").text();
+    if ($(".method-create")[0])
+	{
+		// On est en mode Création
+		document.getElementById("sortie_method").value = $("#id_capteur option:selected").text() + "_" + $("#nom_method option:selected").text();
+		var l_data = {"id_carte": carte_name.value};
+		$.ajax({
+			type : "POST",
+			url : g_host + "/relcartesmethod/ajaxcreate",
+			cache : false,
+			dataType : "text",
+			data : l_data,
+			
+			success : function(results) 
+			{
+				var retour = JSON.parse( $.trim(results) );
+				document.write("retour");
+				if( retour['success'] == "ok")
+				{
+					document.write(" OUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+				}
+				else
+				{
+					document.write(" hle");
+				}
+			}
+		});	
+	} 
 });
 
 //__________________________________________________________________________________________
