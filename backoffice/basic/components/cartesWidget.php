@@ -98,8 +98,7 @@ class cartesWidget extends Widget
 			$contents[] = "<legend class='col-4'> </legend>";
 			foreach(method::find()->where(["id_carte" => $l_STR_ID_CARTE])->all() as $method)
 			{
-
-				$l_STR_BtnModify = Html::tag("span", "", ["class" => "glyphicon glyphicon-cog "]);
+				$l_STR_BtnModify = Html::tag("span", "", ["class" => "glyphicon glyphicon-pencil "]);
 				$l_STR_BtnModify = Html::a($l_STR_BtnModify,	
 																[
 	 		  				         								"/method/update",
@@ -113,13 +112,20 @@ class cartesWidget extends Widget
 			  				         							]);
 
 				$l_STR_BtnDelete = Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
+				$l_STR_BtnDelete = Html::a($l_STR_BtnDelete, ["/method/delete", "id" => $method['id']],
+																	['data-pjax' => "0",
+																	"aria-label" => "Supprimer",
+																	"title" => "Supprimer",
+																	"data-confirm" => "Êtes-vous sûr de vouloir supprimer cette méthode ?",
+																	"data-method"=>"post"]);
+				
 				$contents[] = "<div class='col-sm-12'>";	
 				$contents[] = "<div class='row'>";
 				$contents[] = 	"<div class='col'>" . method::find()->where(["id" => $method["id"]])->one()["nom_method"] . "</div>";
 				$contents[] = 	"<div class='col'>" . explode("_",method::find()->where(["id" => $method["id"]])->one()["nom_method"])[0] . "</div>";
-				$contents[] = 	"<div class='col-2'> </div>";
-				
-				$contents[] = "	<div class='col-2'>" . $l_STR_BtnModify . "</div>";
+				$contents[] = "	<div class='col-2'></div>";
+				$contents[] = "	<div class='col-1'>" . $l_STR_BtnModify . "</div>";
+				$contents[] = "	<div class='col-1'>" . $l_STR_BtnDelete . "</div>";
 				$contents[] = "</div>";
 				$contents[] = "</div>";
 				
