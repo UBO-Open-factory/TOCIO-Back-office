@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\Relcartesmethod;
 use app\models\Method;
 use app\models\Capteur;
 use yii\helpers\Url;
@@ -13,14 +12,10 @@ use yii\helpers\ArrayHelper;
 /* @var $model app\models\Cartes */
 /* @var $form yii\widgets\ActiveForm */
 
-$l_TAB_MethodAssociees = relcartesmethod::find()->select(['id_method'])->where(["id_carte" => $model->id])->column();
-
 $l_TAB_Options = [];
-foreach( method::find()->select(['nom_method','id'])->indexBy('id')->column() as $id => $nature){
-	// si la grandeur n'est pas déjà associée à cette carte, on la met dans la liste
-	if( !in_array($id, $l_TAB_MethodAssociees)) {
-		$l_TAB_Options[] = '<option value="'. $id .'">' . $nature. '</option>';
-	}
+foreach( method::find()->select(['nom_method','id'])->where(["id_carte" => $model->id])->indexBy('id')->column() as $id => $nature)
+{
+	$l_TAB_Options[] = '<option value="'. $id .'">' . $nature. '</option>';
 }
 
 ?>

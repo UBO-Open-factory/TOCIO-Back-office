@@ -4,7 +4,6 @@ namespace app\components;
 use yii\base\Widget;
 use yii\bootstrap\Html;
 use yii\helpers\VarDumper;
-use app\models\Relcartesmethod;
 use app\models\Relmodulecarte;
 use app\models\carte;
 use yii\helpers\Url;
@@ -97,7 +96,7 @@ class cartesWidget extends Widget
 			$contents[] = "<legend class='col'> Nom method</legend>";
 			$contents[] = "<legend class='col'> Capteur associé</legend>";
 			$contents[] = "<legend class='col-4'> </legend>";
-			foreach(relcartesmethod::find()->where(["id_carte" => $l_STR_ID_CARTE])->all() as $method)
+			foreach(method::find()->where(["id_carte" => $l_STR_ID_CARTE])->all() as $method)
 			{
 				$l_STR_BtnWarning = Html::tag("span", "", ["class" => "glyphicon glyphicon-exclamation-sign"]);
 				$l_STR_BtnWarning = Html::a($l_STR_BtnWarning,

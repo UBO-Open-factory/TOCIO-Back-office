@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $id_capteur
+ * @property int $id_carte
  * @property string $nom_method
  * @property string $method_include
  * @property string $method_statement
@@ -16,8 +17,7 @@ use Yii;
  * @property string $method_read
  *
  * @property Capteur $capteur
- * @property RelCartesmethod[] $relCartesmethods
- * @property Cartes[] $cartes
+ * @property Cartes $carte
  */
 class Method extends \yii\db\ActiveRecord
 {
@@ -35,10 +35,12 @@ class Method extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_capteur', 'nom_method'], 'required'],
-            [['id_capteur'], 'integer'],
+            [['id_capteur', 'id_carte', 'nom_method'], 'required'],
+            [['id_capteur', 'id_carte'], 'integer'],
             [['nom_method', 'method_include', 'method_statement', 'method_setup', 'method_read'], 'string'],
+            [['id_capteur', 'id_carte'], 'unique', 'targetAttribute' => ['id_capteur', 'id_carte']],
             [['id_capteur'], 'exist', 'skipOnError' => true, 'targetClass' => Capteur::className(), 'targetAttribute' => ['id_capteur' => 'id']],
+            [['id_carte'], 'exist', 'skipOnError' => true, 'targetClass' => Cartes::className(), 'targetAttribute' => ['id_carte' => 'id']],
         ];
     }
 
@@ -50,6 +52,7 @@ class Method extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'id_capteur' => 'Id Capteur',
+            'id_carte' => 'Id Carte',
             'nom_method' => 'Nom Method',
             'method_include' => 'Method Include',
             'method_statement' => 'Method Statement',
@@ -69,22 +72,12 @@ class Method extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[RelCartesmethods]].
+     * Gets query for [[Carte]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRelCartesmethods()
+    public function getCarte()
     {
-        return $this->hasMany(RelCartesmethod::className(), ['id_method' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Cartes]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCartes()
-    {
-        return $this->hasMany(Cartes::className(), ['id' => 'id_carte'])->viaTable('rel_cartesmethod', ['id_method' => 'id']);
+        return $this->hasOne(Cartes::className(), ['id' => 'id_carte']);
     }
 }

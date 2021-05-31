@@ -22,29 +22,7 @@ $(document).on('click', '#methodsubmitbutton', function()
     if ($(".method-create")[0])
 	{
 		// On est en mode Création
-		document.getElementById("sortie_method").value = $("#id_capteur option:selected").text() + "_" + $("#nom_method option:selected").text();
-		var l_data = {"id_carte": carte_name.value};
-		$.ajax({
-			type : "POST",
-			url : g_host + "/relcartesmethod/ajaxcreate",
-			cache : false,
-			dataType : "text",
-			data : l_data,
-			
-			success : function(results) 
-			{
-				var retour = JSON.parse( $.trim(results) );
-				document.write("retour");
-				if( retour['success'] == "ok")
-				{
-					document.write(" OUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
-				}
-				else
-				{
-					document.write(" hle");
-				}
-			}
-		});	
+		document.getElementById("sortie_method").value = $("#id_capteur option:selected").text() + "_" + $("#nom_method option:selected").text();	
 	} 
 });
 

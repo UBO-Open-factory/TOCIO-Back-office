@@ -9,7 +9,6 @@ use app\models\MethodSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\Relcartesmethod;
 
 /**
  * MethodController implements the CRUD actions for Method model.
@@ -98,13 +97,14 @@ class MethodController extends Controller {
 					'index',
 					'id' => $model->id ] );
 		}
-
+		$method_pre['id'] = $model['id'];
+		$method_pre['id_carte'] = $model['id_carte'];
 		$method_pre['id_capteur'] = $model['id_capteur'];
 		$method_pre['include'] = $model['method_include'];
 		$method_pre['statement'] = $model['method_statement'];
 		$method_pre['setup'] = $model['method_setup'];
 		$method_pre['read'] = $model['method_read'];
-		$method_pre['id'] = $model['method_include'];
+		
 
 		$list = str_replace( ' ', '', Cartes::find()->select( [
 				'nom' ] )->indexBy( 'nom' )->column() );
@@ -124,16 +124,10 @@ class MethodController extends Controller {
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	public function actionDelete( $id ) {
-		foreach( relcartesmethod::find()->where( [
-				"id_method" => $id ] )->all() as $id_method ) {
-			relcartesmethod::find()->where( [
-					"id_method" => $id ] )->one()->delete();
-		}
 
 		$this->findModel( $id )->delete();
 
-		return $this->redirect( [
-				'index' ] );
+		return $this->redirect( ['index' ] );
 	}
 
 	/**

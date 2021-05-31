@@ -17,7 +17,7 @@ class MethodSearch extends Method
     public function rules()
     {
         return [
-            [['id', 'id_capteur'], 'integer'],
+            [['id', 'id_capteur','id_carte'], 'integer'],
             [['nom_method', 'method_include', 'method_statement', 'method_setup', 'method_read'], 'safe'],
         ];
     }
@@ -60,6 +60,7 @@ class MethodSearch extends Method
         $query->andFilterWhere([
             'id' => $this->id,
             'id_capteur' => $this->id_capteur,
+            'id_carte' => $this->id_carte,
         ]);
 
         $query->andFilterWhere(['like', 'nom_method', $this->nom_method])

@@ -3,8 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Cartes;
-use app\models\Relcartesmethod;
+use app\models\Cartes
 use app\models\CartesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -102,17 +101,16 @@ class CartesController extends Controller {
 	 * @return mixed
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
-	public function actionDelete( $id ) {
-		foreach( relcartesmethod::find()->where( [
-				"id_carte" => $id ] )->all() as $id_method ) {
-			relcartesmethod::find()->where( [
-					"id_carte" => $id ] )->one()->delete();
+	public function actionDelete( $id ) 
+	{
+		foreach( method::find()->where( ["id_carte" => $id ])->all() as $id_method ) 
+		{
+			method::find()->where( ["id_carte" => $id ])->one()->delete();
 		}
 
 		$this->findModel( $id )->delete();
 
-		return $this->redirect( [
-				'index' ] );
+		return $this->redirect( ['index' ] );
 	}
 
 	/**

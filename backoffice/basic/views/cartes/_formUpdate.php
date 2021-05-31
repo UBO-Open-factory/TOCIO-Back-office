@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\Relcartesmethod;
 use app\models\Method;
 use app\models\Capteur;
 use yii\helpers\Url;
@@ -13,7 +12,6 @@ use yii\helpers\ArrayHelper;
 /* @var $model app\models\Cartes */
 /* @var $form yii\widgets\ActiveForm */
 
-$l_TAB_MethodAssociees = relcartesmethod::find()->select(['id_method'])->where(["id_carte" => $model->id])->column();
 
 $l_TAB_Options = [];
 ?>
@@ -61,7 +59,7 @@ $l_TAB_Options = [];
 			</div>
 			<br>
 			<?php
-			foreach(relcartesmethod::find()->where(["id_carte" => $model['id']])->all() as $method)
+			foreach(method::find()->where(["id_carte" => $model['id']])->all() as $method)
 			{
 				$l_STR_BtnWarning = Html::tag("span", "", ["class" => "glyphicon glyphicon-exclamation-sign"]);
 
@@ -82,14 +80,13 @@ $l_TAB_Options = [];
 				$l_STR_BtnDelete = Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
 				$l_STR_BtnDelete = Html::a($l_STR_BtnDelete,
 	 		  				         							[
-	 		  				         								"/relcartesmethod/delete",
- 		  				         									"id_carte" => $model->id,
- 		  				         									"id_method" => $method['id_method']],
+	 		  				         								"/method/delete",
+ 		  				         									"id" => $method['id_method']],
 	 				  				         					[
 	 				  				         						'data-pjax' => "0",
 		 		  				         							"aria-label" => "Supprimer",
 		 		  				         							"title" => "Supprimer",
-		 		  				         							"data-confirm" => "Êtes-vous sur de vouloir dissocier cette méthode à cette carte ?",
+		 		  				         							"data-confirm" => "Êtes-vous sur de vouloir supprimer cette méthode ?",
 				  				         							"data-method"=>"post"
 			  				         							]);
 
