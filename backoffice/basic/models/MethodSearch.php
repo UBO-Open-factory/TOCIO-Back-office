@@ -17,7 +17,7 @@ class MethodSearch extends Method
     public function rules()
     {
         return [
-            [['id', 'id_capteur','id_carte'], 'integer'],
+            [['id', 'id_capteur', 'id_carte'], 'integer'],
             [['nom_method', 'method_include', 'method_statement', 'method_setup', 'method_read'], 'safe'],
         ];
     }

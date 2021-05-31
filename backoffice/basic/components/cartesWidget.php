@@ -93,28 +93,17 @@ class cartesWidget extends Widget
 
 			$contents = [];
 			$contents[] = "<div class='row'>";
-			$contents[] = "<legend class='col'> Nom method</legend>";
+			$contents[] = "<legend class='col'> Nom de la méthode</legend>";
 			$contents[] = "<legend class='col'> Capteur associé</legend>";
 			$contents[] = "<legend class='col-4'> </legend>";
 			foreach(method::find()->where(["id_carte" => $l_STR_ID_CARTE])->all() as $method)
 			{
-				$l_STR_BtnWarning = Html::tag("span", "", ["class" => "glyphicon glyphicon-exclamation-sign"]);
-				$l_STR_BtnWarning = Html::a($l_STR_BtnWarning,
-																[
-																	"",
-																],
-	 				  				         					[
-		 		  				         							"aria-label" => "Warning",
-		 		  				         							"title" => "Warning",
-		 		  				         							"data-confirm" => "Cette méthode n'a pas été initialement conçu pour cette carte",
-				  				         							"data-method"=>"post"
-			  				         							]);
 
 				$l_STR_BtnModify = Html::tag("span", "", ["class" => "glyphicon glyphicon-cog "]);
 				$l_STR_BtnModify = Html::a($l_STR_BtnModify,	
 																[
 	 		  				         								"/method/update",
- 		  				         									"id" => $method['id_method']
+ 		  				         									"id" => $method['id']
  		  				         								],
 	 				  				         					[
 	 				  				         						'data-pjax' => "0",
@@ -126,8 +115,8 @@ class cartesWidget extends Widget
 				$l_STR_BtnDelete = Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
 				$contents[] = "<div class='col-sm-12'>";	
 				$contents[] = "<div class='row'>";
-				$contents[] = 	"<div class='col'>" . method::find()->where(["id" => $method["id_method"]])->one()["nom_method"] . "</div>";
-				$contents[] = 	"<div class='col'>" . explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])[0] . "</div>";
+				$contents[] = 	"<div class='col'>" . method::find()->where(["id" => $method["id"]])->one()["nom_method"] . "</div>";
+				$contents[] = 	"<div class='col'>" . explode("_",method::find()->where(["id" => $method["id"]])->one()["nom_method"])[0] . "</div>";
 				$contents[] = 	"<div class='col-2'> </div>";
 				
 				$contents[] = "	<div class='col-2'>" . $l_STR_BtnModify . "</div>";

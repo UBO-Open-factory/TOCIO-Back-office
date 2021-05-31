@@ -19,11 +19,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id_capteur') ?>
 
+    <?= $form->field($model, 'id_carte') ?>
+
     <?= $form->field($model, 'nom_method') ?>
 
     <?= $form->field($model, 'method_include') ?>
 
-    <?= $form->field($model, 'method_statement') ?>
+    <?php // echo $form->field($model, 'method_statement') ?>
 
     <?php // echo $form->field($model, 'method_setup') ?>
 

@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Cartes
+use app\models\Cartes;
 use app\models\CartesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
