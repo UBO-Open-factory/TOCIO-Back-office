@@ -89,12 +89,25 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	var displayTab = "";
 	var TEMP_SAVE_DATA = [];
 
+	displayTab += '//══════════════════════════════════════════════════';
+	displayTab += '<br>' + '// _____   ___    ___  ___   ___  	';
+	displayTab += '<br>' + '//|_   _| / _ \\  / __||_ _| / _ \\ 	';
+	displayTab += '<br>' + '//  | |  | (_) || (__  | | | (_) |	';
+	displayTab += '<br>' + '//  |_|   \\___/  \\___||___| \\___/ 	';
+	displayTab += '<br>' + '//ARDUINO CODE GENERATOR';
+	displayTab += '<br>' + '//SENSOR : ';
+	for(i=0;i<l_TAB_DATAJSON_length;i++)
+	{
+		displayTab += ' ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' ';
+	}	
+	displayTab += '<br>' + '//══════════════════════════════════════════════════';
+	displayTab += '<br>';
 	//================================================
 	//
 	//	INCLUDE PART 
 	//
 	//================================================
-	displayTab += '//....................................';
+    displayTab += '<br>' +  '//....................................';
 	displayTab += '<br>' +  '//INCLUDE LIST';
 	displayTab += '<br>';
 	displayTab += Color("green");
