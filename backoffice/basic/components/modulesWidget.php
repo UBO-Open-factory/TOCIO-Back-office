@@ -16,7 +16,6 @@ use app\models\Capteur;
 use app\models\Grandeur;
 use app\models\Cartes;
 use app\models\Method;
-use app\models\relcartesmethod;
 use function Opis\Closure\serialize;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
