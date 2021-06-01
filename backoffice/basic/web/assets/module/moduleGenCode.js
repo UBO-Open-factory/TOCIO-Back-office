@@ -457,7 +457,9 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 			{
 				displayTab += "+";
 			}
-			displayTab += '0' + (Math.abs(Hight_part)) + 'd",(int)' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ');';
+
+			var valeur_concat = Math.abs(Hight_part) + parseInt(Math.abs(Low_part)*10);
+			displayTab += '0' + valeur_concat + 'd",(int)' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ');';
 			displayTab += '<br>' + '	Mesures.concat(data);';
 			displayTab += '<br>';
 			//if user choose "debug" option
