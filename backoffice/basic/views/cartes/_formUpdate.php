@@ -68,7 +68,7 @@ $l_TAB_Options = [];
 				$l_STR_BtnModify = Html::a($l_STR_BtnModify,	
 																[
 	 		  				         								"/method/update",
- 		  				         									"id" => $method['id_method']
+ 		  				         									"id" => $method['id']
  		  				         								],
 	 				  				         					[
 	 				  				         						'data-pjax' => "0",
@@ -81,7 +81,7 @@ $l_TAB_Options = [];
 				$l_STR_BtnDelete = Html::a($l_STR_BtnDelete,
 	 		  				         							[
 	 		  				         								"/method/delete",
- 		  				         									"id" => $method['id_method']],
+ 		  				         									"id" => $method['id']],
 	 				  				         					[
 	 				  				         						'data-pjax' => "0",
 		 		  				         							"aria-label" => "Supprimer",
@@ -91,8 +91,8 @@ $l_TAB_Options = [];
 			  				         							]);
 
 				echo "<div class='row'>";
-				echo "<div class='col'>" . method::find()->where(["id" => $method["id_method"]])->one()["nom_method"] . "</div>";
-				echo "<div class='col'>" . explode("_",method::find()->where(["id" => $method["id_method"]])->one()["nom_method"])[0] . "</div>";
+				echo "<div class='col'>" . method::find()->where(["id" => $method["id"]])->one()["nom_method"] . "</div>";
+				echo "<div class='col'>" . explode("_",method::find()->where(["id" => $method["id"]])->one()["nom_method"])[0] . "</div>";
 				echo "<div class='col-1'>" . $l_STR_BtnDelete . "</div>";
 				echo "<div class='col-2'> </div>";
 				
