@@ -214,7 +214,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '// Read all data from all sensor setup in TOCIO.';
 	displayTab += '<br>' +  '// no parameter , this function is independent';
 	displayTab += '<br>' +  '// -----------------------------------------------------------';
-	displayTab += '<br>' +  'String Read_Concat_Data()';
+	displayTab += '<br>' +  'String ' + Color("b0f2b6") + 'Read_Concat_Data' + ColorEnd() + '()';
 	displayTab += '<br>' +  '{';
 	displayTab += '<br>' +  '	//create data_string save and concat data';
 	displayTab += '<br>' +  '	String Mesures = "";';
@@ -234,9 +234,9 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	//================================================
 	displayTab += '<br>' +  '// -----------------------------------------------------------';
 	displayTab += '<br>' +  '// Send to TOCIO serveur data giving in parameter.';
-	displayTab += '<br>' +  '// @param data : String concatenation by the website payload';
+	displayTab += '<br>' +  '// @param data : string concatenation by the website payload';
 	displayTab += '<br>' +  '// -----------------------------------------------------------';
-	displayTab += '<br>' +  'String sendDataInHTTPSRequest(String data)';
+	displayTab += '<br>' +  'String + ' + Color("b0f2b6") + 'sendDataInHTTPSRequest' + ColorEnd() + '(String data)';
 	displayTab += '<br>' +  '{';
 	displayTab += '<br>' +  '	//If we are connecte to the WIFI';
 	displayTab += '<br>' +  '	if (WiFi.status() == WL_CONNECTED)';
@@ -274,29 +274,29 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 
 	//setup color scheme in programm
 	//all type (int,float,string,char,void,const...) will have blue color
-	displayTab = displayTab.split("<br>void ").join(Color("Blue")+"<br>void "+ColorEnd());
-	displayTab = displayTab.split("String ").join(Color("Blue")+"String "+ColorEnd());
-	displayTab = displayTab.split("int ").join(Color("Blue")+"int "+ColorEnd());
-	displayTab = displayTab.split("(int)").join( '(' + Color("Blue")+"int"+ColorEnd() + ')');
-	displayTab = displayTab.split("float ").join(Color("Blue")+"float "+ColorEnd());
-	displayTab = displayTab.split("const ").join(Color("Blue")+"const "+ColorEnd());
-	displayTab = displayTab.split("char ").join(Color("Blue")+"char "+ColorEnd());
+	displayTab = displayTab.split("<br>void ").join(Color("#0f056b")+"<br>void "+ColorEnd());
+	//displayTab = displayTab.split("String ").join(Color("turquoise")+"String "+ColorEnd());#FBF2B7
+	displayTab = displayTab.split("int ").join(Color("deepskyblue")+"int "+ColorEnd());
+	displayTab = displayTab.split("(int)").join( '(' + Color("deepskyblue")+"int"+ColorEnd() + ')');
+	displayTab = displayTab.split("float ").join(Color("deepskyblue")+"float "+ColorEnd());
+	displayTab = displayTab.split("const ").join(Color("deepskyblue")+"const "+ColorEnd());
+	displayTab = displayTab.split("char ").join(Color("deepskyblue")+"char "+ColorEnd());
 
 	//all loop declaration would haev red color
-	displayTab = displayTab.split("if(").join(Color("red")+"if"+ColorEnd()+"(");
-	displayTab = displayTab.split("if (").join(Color("red")+"if "+ColorEnd()+"(");
+	displayTab = displayTab.split("if(").join(Color("#EE82EE")+"if"+ColorEnd()+"(");
+	displayTab = displayTab.split("if (").join(Color("#EE82EE")+"if "+ColorEnd()+"(");
 
-	displayTab = displayTab.split("for(").join(Color("red")+"for"+ColorEnd()+"(");
-	displayTab = displayTab.split("for (").join(Color("red")+"for "+ColorEnd()+"(");
+	displayTab = displayTab.split("for(").join(Color("#EE82EE")+"for"+ColorEnd()+"(");
+	displayTab = displayTab.split("for (").join(Color("#EE82EE")+"for "+ColorEnd()+"(");
 
-	displayTab = displayTab.split("while(").join(Color("red")+"while"+ColorEnd()+"(");
-	displayTab = displayTab.split("while (").join(Color("red")+"while "+ColorEnd()+"(");
+	displayTab = displayTab.split("while(").join(Color("#EE82EE")+"while"+ColorEnd()+"(");
+	displayTab = displayTab.split("while (").join(Color("#EE82EE")+"while "+ColorEnd()+"(");
 
-	displayTab = displayTab.split("else<br>").join(Color("red")+"else"+ColorEnd()+'<br>');
-	displayTab = displayTab.split("else ").join(Color("red")+"else "+ColorEnd());
+	displayTab = displayTab.split("else<br>").join(Color("#EE82EE")+"else"+ColorEnd()+'<br>');
+	displayTab = displayTab.split("else ").join(Color("#EE82EE")+"else "+ColorEnd());
 
 	//return is in red too
-	displayTab = displayTab.split("return ").join(Color("red")+"return "+ColorEnd());
+	displayTab = displayTab.split("return ").join(Color("#EE82EE")+"return "+ColorEnd());
 
 	//bracket in red too
 	displayTab = displayTab.split("{").join(Color("red")+"{"+ColorEnd());
@@ -311,13 +311,13 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 		{
 			if(displayTab.split('<br>')[i].split('//')[0].split("\"").length < 2 ||  displayTab.split('<br>')[i].split('//')[0].split("\"").length > 3)
 			{
-				end += '<br>' + displayTab.split('<br>')[i].split('//')[0] + Color("deepskyblue") + "//" + displayTab.split('<br>')[i].split('//')[1] + ColorEnd();
+				end += '<br>' + displayTab.split('<br>')[i].split('//')[0] + Color("green") + "//" + displayTab.split('<br>')[i].split('//')[1] + ColorEnd();
 			}
 			else
 			{
 				if(displayTab.split('<br>')[i].split('\"').length>2)
 				{
-					end += '<br>' + displayTab.split('<br>')[i].split('\"')[0] + Color("yellowgreen") + '\"' + displayTab.split('<br>')[i].split('"')[1] + '\"' + ColorEnd() + displayTab.split('<br>')[i].split('"')[2] ;
+					end += '<br>' + displayTab.split('<br>')[i].split('\"')[0] + Color("coral") + '\"' + displayTab.split('<br>')[i].split('"')[1] + '\"' + ColorEnd() + displayTab.split('<br>')[i].split('"')[2] ;
 				}
 				else
 				{
@@ -329,7 +329,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 		{
 			if(displayTab.split('<br>')[i].split('\"').length>2)
 			{
-				end += '<br>' + displayTab.split('<br>')[i].split('\"')[0] + Color("yellowgreen") + '\"' + displayTab.split('<br>')[i].split('"')[1] + '\"' + ColorEnd() + displayTab.split('<br>')[i].split('"')[2] ;
+				end += '<br>' + displayTab.split('<br>')[i].split('\"')[0] + Color("coral") + '\"' + displayTab.split('<br>')[i].split('"')[1] + '\"' + ColorEnd() + displayTab.split('<br>')[i].split('"')[2] ;
 			}
 			else
 			{
@@ -349,9 +349,9 @@ function Generate_INCLUDE(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 	var TEMP_SAVE_DATA = [];
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
-		if(!TEMP_SAVE_DATA.includes(l_TAB_DATAJSON[i]["nom_capteur"]))
+		if(!TEMP_SAVE_DATA.includes(l_TAB_DATAJSON[i]["method_include"]))
 		{
-			TEMP_SAVE_DATA.push(l_TAB_DATAJSON[i]["nom_capteur"]);
+			TEMP_SAVE_DATA.push(l_TAB_DATAJSON[i]["method_include"]);
 			if(l_TAB_DATAJSON[i]["method_include"].split('//').length > 1)
 			{
 				displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"];
