@@ -309,7 +309,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	{
 		if(displayTab.split('<br>')[i].split('//').length>1)
 		{
-			end += '<br>' + Color("deepskyblue") + displayTab.split('<br>')[i] + ColorEnd();
+			end += '<br>' + displayTab.split('<br>')[i].split('//')[0] + Color("deepskyblue") + "//" + displayTab.split('<br>')[i].split('//')[1] + ColorEnd();
 		}
 		else
 		{
@@ -378,33 +378,40 @@ function Generate_DECLARATION(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,
 	//replace every {{pin}} finded with his PIN name declared
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
-		var method_validation = 1;
-		if(l_TAB_DATAJSON[i]["method_declaration"].split('{{var}}').length < 2)
+		if(l_TAB_DATAJSON[i]["method_declaration"].split('//Code test for').length < 2)
 		{
-			displayTab += '<br>' +  Color("black") + "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/" + ColorEnd();
-			method_validation = 0;
-		}
-		if(l_TAB_DATAJSON[i]["method_declaration"].split("{{pin}}").length < 2)
-		{
-			displayTab += '<br>' + Color("black") + "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no pin location*/" + ColorEnd();
-			method_validation = 0;
-		}
-		if(l_TAB_DATAJSON[i]["method_declaration"].split(';').length < 2)
-		{
-			displayTab += '<br>' + Color("black") + "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/" + ColorEnd();
-			method_validation = 0;
-		}
+			var method_validation = 1;
+			if(l_TAB_DATAJSON[i]["method_declaration"].split('{{var}}').length < 2)
+			{
+				displayTab += '<br>' +  Color("black") + "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/" + ColorEnd();
+				method_validation = 0;
+			}
+			if(l_TAB_DATAJSON[i]["method_declaration"].split("{{pin}}").length < 2)
+			{
+				displayTab += '<br>' + Color("black") + "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no pin location*/" + ColorEnd();
+				method_validation = 0;
+			}
+			if(l_TAB_DATAJSON[i]["method_declaration"].split(';').length < 2)
+			{
+				displayTab += '<br>' + Color("black") + "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/" + ColorEnd();
+				method_validation = 0;
+			}
 
-		DECLARATION_TEMP = l_TAB_DATAJSON[i]["method_declaration"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+			DECLARATION_TEMP = l_TAB_DATAJSON[i]["method_declaration"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
 
-		if(method_validation == 0)
-		{
-			displayTab += '<br>' + Color("black") + "/* This method will be set in comment*/" + ColorEnd();
-			displayTab += '<br>' + "//" + DECLARATION_TEMP;
+			if(method_validation == 0)
+			{
+				displayTab += '<br>' + Color("black") + "/* This method will be set in comment*/" + ColorEnd();
+				displayTab += '<br>' + "//" + DECLARATION_TEMP;
+			}
+			else
+			{
+				displayTab += '<br>' + DECLARATION_TEMP;
+			}
 		}
 		else
 		{
-			displayTab += '<br>' + DECLARATION_TEMP;
+			displayTab += '<br>' + l_TAB_DATAJSON[i]["method_declaration"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
 		}
 	}
 	return displayTab;
@@ -418,28 +425,35 @@ function Generate_SETUP(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_
 	//replace {{var}} with sensor auto generate name
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
-		var setup_validation = 1;
-		if(l_TAB_DATAJSON[i]["method_setup"].split('{{var}}').length < 2)
+		if(l_TAB_DATAJSON[i]["method_setup"].split('//Code test for').length < 2)
 		{
-			displayTab += '<br>' + Color("black") + "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/" + ColorEnd();
-			setup_validation = 0;
-		}
-		if(l_TAB_DATAJSON[i]["method_setup"].split(';').length < 2)
-		{
-			displayTab += '<br>' + Color("black") + "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/" + ColorEnd();
-			setup_validation = 0;
-		}
+			var setup_validation = 1;
+			if(l_TAB_DATAJSON[i]["method_setup"].split('{{var}}').length < 2)
+			{
+				displayTab += '<br>' + Color("black") + "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/" + ColorEnd();
+				setup_validation = 0;
+			}
+			if(l_TAB_DATAJSON[i]["method_setup"].split(';').length < 2)
+			{
+				displayTab += '<br>' + Color("black") + "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/" + ColorEnd();
+				setup_validation = 0;
+			}
 
-		SETUP_TEMP = l_TAB_DATAJSON[i]["method_setup"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+			SETUP_TEMP = l_TAB_DATAJSON[i]["method_setup"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
 
-		if(setup_validation == 0)
-		{
-			displayTab += '<br>' +  Color("black") + "	/* This method will be set in comment*/" + ColorEnd();
-			displayTab += '<br>' +  '	//' + SETUP_TEMP;
+			if(setup_validation == 0)
+			{
+				displayTab += '<br>' +  Color("black") + "	/* This method will be set in comment*/" + ColorEnd();
+				displayTab += '<br>' +  '	//' + SETUP_TEMP;
+			}
+			else
+			{
+				displayTab += '<br>' +  '	' + SETUP_TEMP;
+			}
 		}
 		else
 		{
-			displayTab += '<br>' +  '	' + SETUP_TEMP;
+			displayTab += '<br>' +  '	' + l_TAB_DATAJSON[i]["method_setup"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
 		}
 	}
 	return displayTab;
@@ -518,30 +532,37 @@ function Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 			//if method ins't declared, programm would replace method by 0.0 declaration
 			else
 			{
-				var grandeur_validation = 1;
-				if(l_TAB_DATAJSON[i]["grandeur"][y][1].split('{{var}}').length < 2)
+				if(l_TAB_DATAJSON[i]["method_setup"].split('//Code test for').length < 2)
 				{
-					displayTab += '<br>' +  Color("black") + "	/* WARNING /!\\ your reading method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/";
-					displayTab += ColorEnd();
-					grandeur_validation = 0;
-				}
-				if(l_TAB_DATAJSON[i]["grandeur"][y][1].split(';').length < 2)
-				{
-					displayTab += '<br>' + Color("black") + "	/* WARNING /!\\ your reading method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/" + ColorEnd();
-					grandeur_validation = 0;
-				}
+					var grandeur_validation = 1;
+					if(l_TAB_DATAJSON[i]["grandeur"][y][1].split('{{var}}').length < 2)
+					{
+						displayTab += '<br>' +  Color("black") + "	/* WARNING /!\\ your reading method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/";
+						displayTab += ColorEnd();
+						grandeur_validation = 0;
+					}
+					if(l_TAB_DATAJSON[i]["grandeur"][y][1].split(';').length < 2)
+					{
+						displayTab += '<br>' + Color("black") + "	/* WARNING /!\\ your reading method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/" + ColorEnd();
+						grandeur_validation = 0;
+					}
 
-				SETUP_TEMP = l_TAB_DATAJSON[i]["grandeur"][y][1].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+					SETUP_TEMP = l_TAB_DATAJSON[i]["grandeur"][y][1].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
 
-				if(grandeur_validation == 0)
-				{
-					displayTab += '<br>' + Color("black") + "	/* This method will be set in comment*/" + ColorEnd();
-					displayTab += '<br>' +  '	//' + SETUP_TEMP;
-					displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + Color("steelblue") + '0.0' + ColorEnd() + ';';
+					if(grandeur_validation == 0)
+					{
+						displayTab += '<br>' + Color("black") + "	/* This method will be set in comment*/" + ColorEnd();
+						displayTab += '<br>' +  '	//' + SETUP_TEMP;
+						displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + Color("steelblue") + '0.0' + ColorEnd() + ';';
+					}
+					else
+					{
+						displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + SETUP_TEMP;
+					}
 				}
 				else
 				{
-					displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + SETUP_TEMP;
+					displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + l_TAB_DATAJSON[i]["grandeur"][y][1];
 				}
 			}
 			//if user choose "debug" option
