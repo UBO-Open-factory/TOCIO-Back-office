@@ -220,7 +220,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '	String Mesures = "";';
 	displayTab += '<br>' +  '	//create temp variable saving and form data from sensor';
 	displayTab += '<br>' +  '	char data[' + Color("steelblue") + '100' + ColorEnd() +'];';
-	displayTab += '<br>' +  '	int i = ' + Color("steelblue") + '0;' + ColorEnd();;
+	displayTab += '<br>' +  '	int i = ' + Color("steelblue") + '0' + ColorEnd() + ';';
 	displayTab += '<br>';
 	displayTab += Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool);
 	displayTab += '<br>' +  '	return Mesures;';
@@ -309,11 +309,32 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	{
 		if(displayTab.split('<br>')[i].split('//').length>1)
 		{
-			end += '<br>' + displayTab.split('<br>')[i].split('//')[0] + Color("deepskyblue") + "//" + displayTab.split('<br>')[i].split('//')[1] + ColorEnd();
+			if(displayTab.split('<br>')[i].split('//')[0].split("\"").length < 2 ||  displayTab.split('<br>')[i].split('//')[0].split("\"").length > 3)
+			{
+				end += '<br>' + displayTab.split('<br>')[i].split('//')[0] + Color("deepskyblue") + "//" + displayTab.split('<br>')[i].split('//')[1] + ColorEnd();
+			}
+			else
+			{
+				if(displayTab.split('<br>')[i].split('\"').length>2)
+				{
+					end += '<br>' + displayTab.split('<br>')[i].split('\"')[0] + Color("yellowgreen") + '\"' + displayTab.split('<br>')[i].split('"')[1] + '\"' + ColorEnd() + displayTab.split('<br>')[i].split('"')[2] ;
+				}
+				else
+				{
+					end += '<br>' + displayTab.split('<br>')[i];
+				}
+			}
 		}
 		else
 		{
-			end += '<br>' + displayTab.split('<br>')[i];
+			if(displayTab.split('<br>')[i].split('\"').length>2)
+			{
+				end += '<br>' + displayTab.split('<br>')[i].split('\"')[0] + Color("yellowgreen") + '\"' + displayTab.split('<br>')[i].split('"')[1] + '\"' + ColorEnd() + displayTab.split('<br>')[i].split('"')[2] ;
+			}
+			else
+			{
+				end += '<br>' + displayTab.split('<br>')[i];
+			}
 		}
 	}
 
@@ -340,8 +361,8 @@ function Generate_INCLUDE(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 				if(l_TAB_DATAJSON[i]["method_include"].charAt(0) != '#')
 				{
 					displayTab += Color("black");
-					displayTab += '<br>' + "/*Erreur dans le code , aucun # trouvé, l'include de " + l_TAB_DATAJSON[i]["nom_capteur"] + " est invalide, code : ";
-					displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"].replace(/</g, '&#8249').replace(/>/g,'&#8250')+ "*/";
+					displayTab += '<br>' + '/*Erreur dans le code , aucun # trouvé, l\'include de ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' est invalide, code : ';
+					displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"].replace(/</g, '&#8249').replace(/>/g,'&#8250')+ '*/';
 					displayTab += ColorEnd();
 				}
 				else
@@ -363,7 +384,7 @@ function Generate_PIN(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bo
 	//created in this form : PIN_"sensor_name"_"sensor_number_in_order"
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
-		displayTab += '<br>' + Color("blue") + "int " + ColorEnd() + "PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + ' = ' + Color("steelblue") + " 000 ;" + ColorEnd();
+		displayTab += '<br>' + Color("blue") + 'int ' + ColorEnd() + 'PIN' + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + ' = ' + Color("steelblue") + ' 000 ;' + ColorEnd();
 	}
 	return displayTab;
 }
@@ -383,17 +404,17 @@ function Generate_DECLARATION(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,
 			var method_validation = 1;
 			if(l_TAB_DATAJSON[i]["method_declaration"].split('{{var}}').length < 2)
 			{
-				displayTab += '<br>' +  Color("black") + "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/" + ColorEnd();
+				displayTab += '<br>' +  Color("black") + '/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/' + ColorEnd();
 				method_validation = 0;
 			}
 			if(l_TAB_DATAJSON[i]["method_declaration"].split("{{pin}}").length < 2)
 			{
-				displayTab += '<br>' + Color("black") + "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no pin location*/" + ColorEnd();
+				displayTab += '<br>' + Color("black") + '/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no pin location*/' + ColorEnd();
 				method_validation = 0;
 			}
 			if(l_TAB_DATAJSON[i]["method_declaration"].split(';').length < 2)
 			{
-				displayTab += '<br>' + Color("black") + "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/" + ColorEnd();
+				displayTab += '<br>' + Color("black") + '/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no terminator*/' + ColorEnd();
 				method_validation = 0;
 			}
 
@@ -401,8 +422,8 @@ function Generate_DECLARATION(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,
 
 			if(method_validation == 0)
 			{
-				displayTab += '<br>' + Color("black") + "/* This method will be set in comment*/" + ColorEnd();
-				displayTab += '<br>' + "//" + DECLARATION_TEMP;
+				displayTab += '<br>' + Color("black") + '/* This method will be set in comment*/' + ColorEnd();
+				displayTab += '<br>' + '//' + DECLARATION_TEMP;
 			}
 			else
 			{
@@ -430,12 +451,12 @@ function Generate_SETUP(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_
 			var setup_validation = 1;
 			if(l_TAB_DATAJSON[i]["method_setup"].split('{{var}}').length < 2)
 			{
-				displayTab += '<br>' + Color("black") + "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/" + ColorEnd();
+				displayTab += '<br>' + Color("black") + '	/* WARNING /!\\ your setup method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/' + ColorEnd();
 				setup_validation = 0;
 			}
 			if(l_TAB_DATAJSON[i]["method_setup"].split(';').length < 2)
 			{
-				displayTab += '<br>' + Color("black") + "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/" + ColorEnd();
+				displayTab += '<br>' + Color("black") + '	/* WARNING /!\\ your setup method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no terminator*/' + ColorEnd();
 				setup_validation = 0;
 			}
 
@@ -443,7 +464,7 @@ function Generate_SETUP(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_
 
 			if(setup_validation == 0)
 			{
-				displayTab += '<br>' +  Color("black") + "	/* This method will be set in comment*/" + ColorEnd();
+				displayTab += '<br>' +  Color("black") + '	/* This method will be set in comment*/' + ColorEnd();
 				displayTab += '<br>' +  '	//' + SETUP_TEMP;
 			}
 			else
@@ -537,13 +558,13 @@ function Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 					var grandeur_validation = 1;
 					if(l_TAB_DATAJSON[i]["grandeur"][y][1].split('{{var}}').length < 2)
 					{
-						displayTab += '<br>' +  Color("black") + "	/* WARNING /!\\ your reading method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/";
+						displayTab += '<br>' +  Color("black") + '	/* WARNING /!\\ your reading method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/';
 						displayTab += ColorEnd();
 						grandeur_validation = 0;
 					}
 					if(l_TAB_DATAJSON[i]["grandeur"][y][1].split(';').length < 2)
 					{
-						displayTab += '<br>' + Color("black") + "	/* WARNING /!\\ your reading method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/" + ColorEnd();
+						displayTab += '<br>' + Color("black") + '	/* WARNING /!\\ your reading method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no terminator*/' + ColorEnd();
 						grandeur_validation = 0;
 					}
 
@@ -551,7 +572,7 @@ function Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 
 					if(grandeur_validation == 0)
 					{
-						displayTab += '<br>' + Color("black") + "	/* This method will be set in comment*/" + ColorEnd();
+						displayTab += '<br>' + Color("black") + '	/* This method will be set in comment*/' + ColorEnd();
 						displayTab += '<br>' +  '	//' + SETUP_TEMP;
 						displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + Color("steelblue") + '0.0' + ColorEnd() + ';';
 					}

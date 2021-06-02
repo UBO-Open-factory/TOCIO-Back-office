@@ -138,7 +138,7 @@ class GenerationController extends Controller
                 {
                     $l_STR_READ_METHOD = array();
                     $l_STR_READ_METHOD[0] = explode(" ",Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["nature"])[0];
-                    $l_STR_READ_METHOD[1] = " 0.0; //Code test for ".explode(" ",$model_relmodulecapteur1['nomcapteur'])[0] ." reading of ". explode(" ",Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["nature"])[0];
+                    $l_STR_READ_METHOD[1] = "0.0; //Code test for ".explode(" ",$model_relmodulecapteur1['nomcapteur'])[0] ." reading of ". explode(" ",Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["nature"])[0];
                     $l_STR_READ_METHOD[2] = Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["formatCapteur"];
                     array_push($data["grandeur"],$l_STR_READ_METHOD);
                     $i++;
