@@ -37,9 +37,7 @@ $(document).ready(function ()
 						var HOST = "yolo";
 						var URL = "yalta";
 						var retour = JSON.parse( $.trim(results) );
-						//retour[1]["grandeur"][1][0]
 						document.getElementById(DisplayBalise).innerHTML = GenerateFullCode(retour,retour.length,this.value,g_host,Bouchon,debug);
-						//document.write(GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST));
 					}
 				});	
 				
@@ -87,7 +85,6 @@ function ColorEnd()
 function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_bool,debug_bool)
 {
 	var displayTab = "";
-	var TEMP_SAVE_DATA = [];
 
 	displayTab += '//══════════════════════════════════════════════════';
 	displayTab += '<br>' + '// _____   ___    ___  ___   ___  	';
@@ -113,36 +110,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += Color("green");
 	displayTab += '<br>' + '#include "WIFI.h"';
 	displayTab += ColorEnd();
-	//find all include in tab and display every new include
-	//if finded without // , line will be displayed in green
-	for(i=0;i<l_TAB_DATAJSON_length;i++)
-	{
-		if(!TEMP_SAVE_DATA.includes(l_TAB_DATAJSON[i]["nom_capteur"]))
-		{
-			TEMP_SAVE_DATA.push(l_TAB_DATAJSON[i]["nom_capteur"]);
-			if(l_TAB_DATAJSON[i]["method_include"].split('//').length > 1)
-			{
-				displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"];
-			}
-			else
-			{
-				if(l_TAB_DATAJSON[i]["method_include"].charAt(0) != '#')
-				{
-					displayTab += Color("black");
-					displayTab += '<br>' + "/*Erreur dans le code , aucun # trouvé, l'include de " + l_TAB_DATAJSON[i]["nom_capteur"] + " est invalide, code : ";
-					displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"].replace(/</g, '&#8249').replace(/>/g,'&#8250')+ "*/";
-					displayTab += ColorEnd();
-				}
-				else
-				{
-					displayTab += Color("green");
-					displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"].replace(/</g, '&#8249').replace(/>/g,'&#8250');
-					displayTab += ColorEnd();
-				}
-			}
-		}
-	}
-	var TEMP_SAVE_DATA = [];
+	displayTab += Generate_INCLUDE(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool);
 	displayTab += '<br>';
 
 	//================================================
@@ -153,12 +121,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '//....................................';
 	displayTab += '<br>' +  '//PIN LIST';
 	displayTab += '<br>';
-	//create pin declaration line , one int for every sensor
-	//created in this form : PIN_"sensor_name"_"sensor_number_in_order"
-	for(i=0;i<l_TAB_DATAJSON_length;i++)
-	{
-		displayTab += '<br>' + Color("blue") + "int " + ColorEnd() + "PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + ' = ' + Color("steelblue") + " 000 ;" + ColorEnd();
-	}
+	displayTab += Generate_PIN(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool);
 	displayTab += '<br>';
 
 	//================================================
@@ -169,50 +132,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '//....................................';
 	displayTab += '<br>' +  '//DECLARATION OF ALL SENSOR';
 	displayTab += '<br>';
-	var DECLARATION_TEMP = "";
-	//setup every sensor
-	//sensor have auto generated name , form : "sensor_name"_"sensor_number_in_order"
-	//replace every {{var}} finded with sensor 
-	//replace every {{pin}} finded with his PIN name declared
-	for(i=0;i<l_TAB_DATAJSON_length;i++)
-	{
-		var method_validation = 1;
-		if(l_TAB_DATAJSON[i]["method_declaration"].split('{{var}}').length < 2)
-		{
-			displayTab += Color("black");
-			displayTab += '<br>' +  "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/";
-			displayTab += ColorEnd();
-			method_validation = 0;
-		}
-		if(l_TAB_DATAJSON[i]["method_declaration"].split("{{pin}}").length < 2)
-		{
-			displayTab += Color("black");
-			displayTab += '<br>' +  "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no pin location*/";
-			displayTab += ColorEnd();
-			method_validation = 0;
-		}
-		if(l_TAB_DATAJSON[i]["method_declaration"].split(';').length < 2)
-		{
-			displayTab += Color("black");
-			displayTab += '<br>' +  "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/";
-			displayTab += ColorEnd();
-			method_validation = 0;
-		}
-
-		DECLARATION_TEMP = l_TAB_DATAJSON[i]["method_declaration"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
-
-		if(method_validation == 0)
-		{
-			displayTab += Color("black");
-			displayTab += '<br>' +  "/* This method will be set in comment*/";
-			displayTab += ColorEnd();
-			displayTab += '<br>' + "//" + DECLARATION_TEMP;
-		}
-		else
-		{
-			displayTab += '<br>' + DECLARATION_TEMP;
-		}
-	}
+	displayTab += Generate_DECLARATION(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool);
 	displayTab += '<br>';
 
 	//================================================
@@ -234,41 +154,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	//================================================
 	displayTab += '<br>' +  'void setup()';
 	displayTab += '<br>' +  '{';
-	var SETUP_TEMP = "";
-	//if sensor need a initialisation and his method is finded in database :
-	//replace {{var}} with sensor auto generate name
-	for(i=0;i<l_TAB_DATAJSON_length;i++)
-	{
-		var setup_validation = 1;
-		if(l_TAB_DATAJSON[i]["method_setup"].split('{{var}}').length < 2)
-		{
-			displayTab += Color("black");
-			displayTab += '<br>' +  "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/";
-			displayTab += ColorEnd();
-			setup_validation = 0;
-		}
-		if(l_TAB_DATAJSON[i]["method_setup"].split(';').length < 2)
-		{
-			displayTab += Color("black");
-			displayTab += '<br>' +  "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/";
-			displayTab += ColorEnd();
-			setup_validation = 0;
-		}
-
-		SETUP_TEMP = l_TAB_DATAJSON[i]["method_setup"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
-
-		if(setup_validation == 0)
-		{
-			displayTab += Color("black");
-			displayTab += '<br>' +  "	/* This method will be set in comment*/";
-			displayTab += ColorEnd();
-			displayTab += '<br>' +  '	//' + SETUP_TEMP;
-		}
-		else
-		{
-			displayTab += '<br>' +  '	' + SETUP_TEMP;
-		}
-	}
+	displayTab += Generate_SETUP(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool);
 	displayTab += '<br>';
 	
 	//if user need "bouchon" option
@@ -336,7 +222,246 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '	char data[' + Color("steelblue") + '100' + ColorEnd() +'];';
 	displayTab += '<br>' +  '	int i = ' + Color("steelblue") + '0;' + ColorEnd();;
 	displayTab += '<br>';
+	displayTab += Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool);
+	displayTab += '<br>' +  '	return Mesures;';
+	displayTab += '<br>' +  '}';
+	displayTab += '<br>';
 
+	//================================================
+	//
+	//	SEND PART 
+	//
+	//================================================
+	displayTab += '<br>' +  '// -----------------------------------------------------------';
+	displayTab += '<br>' +  '// Send to TOCIO serveur data giving in parameter.';
+	displayTab += '<br>' +  '// @param data : String concatenation by the website payload';
+	displayTab += '<br>' +  '// -----------------------------------------------------------';
+	displayTab += '<br>' +  'String sendDataInHTTPSRequest(String data)';
+	displayTab += '<br>' +  '{';
+	displayTab += '<br>' +  '	//If we are connecte to the WIFI';
+	displayTab += '<br>' +  '	if (WiFi.status() == WL_CONNECTED)';
+	displayTab += '<br>' +  '	{';
+	displayTab += '<br>' +  '		//  Create an https client';
+	displayTab += '<br>' +  '		WiFiClientSecure client;';
+	displayTab += '<br>' +  '		// Don\'t validate the certificat (and avoid fingerprint).';
+	displayTab += '<br>' +  '		client.setInsecure();';
+	displayTab += '<br>' +  '		// We don\'t validate the certificat, buit we use https (port 443 of the server).';
+	displayTab += '<br>' +  '		int port = 443;';
+	displayTab += '<br>' +  '		if (!client.connect(host, port))';
+	displayTab += '<br>' +  '		{';
+	displayTab += '<br>' +  '			Serial.println("connection failed");';
+	displayTab += '<br>' +  '			return "nok";';
+	displayTab += '<br>' +  '		}';
+	displayTab += '<br>' +  '		// Send data to the client with a GET method';
+	displayTab += '<br>' +  '		String request = url + "/" + data;';
+	displayTab += '<br>' +  '		client.print(String("GET ") + request + " HTTP/1.1\\r\\n" +';
+	displayTab += '<br>' +  '				"Host: " + host + "\\r\\n" +';
+	displayTab += '<br>' +  '				"Connection: close\\r\\n\\r\\n");';
+	displayTab += '<br>' +  '		// reading of the server answer';
+	displayTab += '<br>' +  '		while (client.available())';
+	displayTab += '<br>' +  '		{';
+	displayTab += '<br>' +  '			String line = client.readStringUntil(\'\\r\');';
+	displayTab += '<br>' +  '			Serial.print(line);';
+	displayTab += '<br>' +  '		}';
+	displayTab += '<br>' +  '		client.stop();';
+	displayTab += '<br>' +  '		return "ok";';
+	displayTab += '<br>' +  '	}';
+	displayTab += '<br>' +  '	else';
+	displayTab += '<br>' +  '	{';
+	displayTab += '<br>' +  '		return "nok";';
+	displayTab += '<br>' +  '	}';
+	displayTab += '<br>' +  '}';
+
+	//setup color scheme in programm
+	//all type (int,float,string,char,void,const...) will have blue color
+	displayTab = displayTab.split("<br>void ").join(Color("Blue")+"<br>void "+ColorEnd());
+	displayTab = displayTab.split("String ").join(Color("Blue")+"String "+ColorEnd());
+	displayTab = displayTab.split("int ").join(Color("Blue")+"int "+ColorEnd());
+	displayTab = displayTab.split("(int)").join( '(' + Color("Blue")+"int"+ColorEnd() + ')');
+	displayTab = displayTab.split("float ").join(Color("Blue")+"float "+ColorEnd());
+	displayTab = displayTab.split("const ").join(Color("Blue")+"const "+ColorEnd());
+	displayTab = displayTab.split("char ").join(Color("Blue")+"char "+ColorEnd());
+
+	//all loop declaration would haev red color
+	displayTab = displayTab.split("if(").join(Color("red")+"if"+ColorEnd()+"(");
+	displayTab = displayTab.split("if (").join(Color("red")+"if "+ColorEnd()+"(");
+
+	displayTab = displayTab.split("for(").join(Color("red")+"for"+ColorEnd()+"(");
+	displayTab = displayTab.split("for (").join(Color("red")+"for "+ColorEnd()+"(");
+
+	displayTab = displayTab.split("while(").join(Color("red")+"while"+ColorEnd()+"(");
+	displayTab = displayTab.split("while (").join(Color("red")+"while "+ColorEnd()+"(");
+
+	displayTab = displayTab.split("else<br>").join(Color("red")+"else"+ColorEnd()+'<br>');
+	displayTab = displayTab.split("else ").join(Color("red")+"else "+ColorEnd());
+
+	//return is in red too
+	displayTab = displayTab.split("return ").join(Color("red")+"return "+ColorEnd());
+
+	//bracket in red too
+	displayTab = displayTab.split("{").join(Color("red")+"{"+ColorEnd());
+	displayTab = displayTab.split("}").join(Color("red")+"}"+ColorEnd());
+
+	var end = "";
+
+	//find all comments and setup their line in light blue
+	for(i=0;i<displayTab.split('<br>').length;i++)
+	{
+		if(displayTab.split('<br>')[i].split('//').length>1)
+		{
+			end += '<br>' + Color("deepskyblue") + displayTab.split('<br>')[i] + ColorEnd();
+		}
+		else
+		{
+			end += '<br>' + displayTab.split('<br>')[i];
+		}
+	}
+
+	return end;
+}
+
+function Generate_INCLUDE(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool)
+{
+	var displayTab = "";
+	//find all include in tab and display every new include
+	//if finded without // , line will be displayed in green
+	var TEMP_SAVE_DATA = [];
+	for(i=0;i<l_TAB_DATAJSON_length;i++)
+	{
+		if(!TEMP_SAVE_DATA.includes(l_TAB_DATAJSON[i]["nom_capteur"]))
+		{
+			TEMP_SAVE_DATA.push(l_TAB_DATAJSON[i]["nom_capteur"]);
+			if(l_TAB_DATAJSON[i]["method_include"].split('//').length > 1)
+			{
+				displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"];
+			}
+			else
+			{
+				if(l_TAB_DATAJSON[i]["method_include"].charAt(0) != '#')
+				{
+					displayTab += Color("black");
+					displayTab += '<br>' + "/*Erreur dans le code , aucun # trouvé, l'include de " + l_TAB_DATAJSON[i]["nom_capteur"] + " est invalide, code : ";
+					displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"].replace(/</g, '&#8249').replace(/>/g,'&#8250')+ "*/";
+					displayTab += ColorEnd();
+				}
+				else
+				{
+					displayTab += Color("green");
+					displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"].replace(/</g, '&#8249').replace(/>/g,'&#8250');
+					displayTab += ColorEnd();
+				}
+			}
+		}
+	}
+	return displayTab;
+}
+
+function Generate_PIN(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool)
+{
+	var displayTab = "";
+	//create pin declaration line , one int for every sensor
+	//created in this form : PIN_"sensor_name"_"sensor_number_in_order"
+	for(i=0;i<l_TAB_DATAJSON_length;i++)
+	{
+		displayTab += '<br>' + Color("blue") + "int " + ColorEnd() + "PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + ' = ' + Color("steelblue") + " 000 ;" + ColorEnd();
+	}
+	return displayTab;
+}
+
+function Generate_DECLARATION(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool)
+{
+	var displayTab = "";
+	var DECLARATION_TEMP = "";
+	//setup every sensor
+	//sensor have auto generated name , form : "sensor_name"_"sensor_number_in_order"
+	//replace every {{var}} finded with sensor 
+	//replace every {{pin}} finded with his PIN name declared
+	for(i=0;i<l_TAB_DATAJSON_length;i++)
+	{
+		var method_validation = 1;
+		if(l_TAB_DATAJSON[i]["method_declaration"].split('{{var}}').length < 2)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/";
+			displayTab += ColorEnd();
+			method_validation = 0;
+		}
+		if(l_TAB_DATAJSON[i]["method_declaration"].split("{{pin}}").length < 2)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no pin location*/";
+			displayTab += ColorEnd();
+			method_validation = 0;
+		}
+		if(l_TAB_DATAJSON[i]["method_declaration"].split(';').length < 2)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "/* WARNING /!\\ your declaration method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/";
+			displayTab += ColorEnd();
+			method_validation = 0;
+		}
+
+		DECLARATION_TEMP = l_TAB_DATAJSON[i]["method_declaration"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+
+		if(method_validation == 0)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "/* This method will be set in comment*/";
+			displayTab += ColorEnd();
+			displayTab += '<br>' + "//" + DECLARATION_TEMP;
+		}
+		else
+		{
+			displayTab += '<br>' + DECLARATION_TEMP;
+		}
+	}
+	return displayTab;
+}
+
+function Generate_SETUP(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool)
+{
+	var displayTab = "";
+	var SETUP_TEMP = "";
+	//if sensor need a initialisation and his method is finded in database :
+	//replace {{var}} with sensor auto generate name
+	for(i=0;i<l_TAB_DATAJSON_length;i++)
+	{
+		var setup_validation = 1;
+		if(l_TAB_DATAJSON[i]["method_setup"].split('{{var}}').length < 2)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no variable location*/";
+			displayTab += ColorEnd();
+			setup_validation = 0;
+		}
+		if(l_TAB_DATAJSON[i]["method_setup"].split(';').length < 2)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "	/* WARNING /!\\ your setup method for the " + l_TAB_DATAJSON[i]["nom_capteur"] + " has no terminator*/";
+			displayTab += ColorEnd();
+			setup_validation = 0;
+		}
+
+		SETUP_TEMP = l_TAB_DATAJSON[i]["method_setup"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+
+		if(setup_validation == 0)
+		{
+			displayTab += Color("black");
+			displayTab += '<br>' +  "	/* This method will be set in comment*/";
+			displayTab += ColorEnd();
+			displayTab += '<br>' +  '	//' + SETUP_TEMP;
+		}
+		else
+		{
+			displayTab += '<br>' +  '	' + SETUP_TEMP;
+		}
+	}
+	return displayTab;
+}
+
+function Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool)
+{
+	var displayTab = "";
 	//for every sensor in list
 	//
 	var MAIN_TEMP = "";
@@ -474,99 +599,5 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 		}
 		displayTab += '<br>';
 	}
-	displayTab += '<br>' +  '	return Mesures;';
-	displayTab += '<br>' +  '}';
-	displayTab += '<br>';
-
-	//================================================
-	//
-	//	SEND PART 
-	//
-	//================================================
-	displayTab += '<br>' +  '// -----------------------------------------------------------';
-	displayTab += '<br>' +  '// Send to TOCIO serveur data giving in parameter.';
-	displayTab += '<br>' +  '// @param data : String concatenation by the website payload';
-	displayTab += '<br>' +  '// -----------------------------------------------------------';
-	displayTab += '<br>' +  'String sendDataInHTTPSRequest(String data)';
-	displayTab += '<br>' +  '{';
-	displayTab += '<br>' +  '	//If we are connecte to the WIFI';
-	displayTab += '<br>' +  '	if (WiFi.status() == WL_CONNECTED)';
-	displayTab += '<br>' +  '	{';
-	displayTab += '<br>' +  '		//  Create an https client';
-	displayTab += '<br>' +  '		WiFiClientSecure client;';
-	displayTab += '<br>' +  '		// Don\'t validate the certificat (and avoid fingerprint).';
-	displayTab += '<br>' +  '		client.setInsecure();';
-	displayTab += '<br>' +  '		// We don\'t validate the certificat, buit we use https (port 443 of the server).';
-	displayTab += '<br>' +  '		int port = 443;';
-	displayTab += '<br>' +  '		if (!client.connect(host, port))';
-	displayTab += '<br>' +  '		{';
-	displayTab += '<br>' +  '			Serial.println("connection failed");';
-	displayTab += '<br>' +  '			return "nok";';
-	displayTab += '<br>' +  '		}';
-	displayTab += '<br>' +  '		// Send data to the client with a GET method';
-	displayTab += '<br>' +  '		String request = url + "/" + data;';
-	displayTab += '<br>' +  '		client.print(String("GET ") + request + " HTTP/1.1\\r\\n" +';
-	displayTab += '<br>' +  '				"Host: " + host + "\\r\\n" +';
-	displayTab += '<br>' +  '				"Connection: close\\r\\n\\r\\n");';
-	displayTab += '<br>' +  '		// reading of the server answer';
-	displayTab += '<br>' +  '		while (client.available())';
-	displayTab += '<br>' +  '		{';
-	displayTab += '<br>' +  '			String line = client.readStringUntil(\'\\r\');';
-	displayTab += '<br>' +  '			Serial.print(line);';
-	displayTab += '<br>' +  '		}';
-	displayTab += '<br>' +  '		client.stop();';
-	displayTab += '<br>' +  '		return "ok";';
-	displayTab += '<br>' +  '	}';
-	displayTab += '<br>' +  '	else';
-	displayTab += '<br>' +  '	{';
-	displayTab += '<br>' +  '		return "nok";';
-	displayTab += '<br>' +  '	}';
-	displayTab += '<br>' +  '}';
-
-	//setup color scheme in programm
-	//all type (int,float,string,char,void,const...) will have blue color
-	displayTab = displayTab.split("<br>void ").join(Color("Blue")+"<br>void "+ColorEnd());
-	displayTab = displayTab.split("String ").join(Color("Blue")+"String "+ColorEnd());
-	displayTab = displayTab.split("int ").join(Color("Blue")+"int "+ColorEnd());
-	displayTab = displayTab.split("(int)").join( '(' + Color("Blue")+"int"+ColorEnd() + ')');
-	displayTab = displayTab.split("float ").join(Color("Blue")+"float "+ColorEnd());
-	displayTab = displayTab.split("const ").join(Color("Blue")+"const "+ColorEnd());
-	displayTab = displayTab.split("char ").join(Color("Blue")+"char "+ColorEnd());
-
-	//all loop declaration would haev red color
-	displayTab = displayTab.split("if(").join(Color("red")+"if"+ColorEnd()+"(");
-	displayTab = displayTab.split("if (").join(Color("red")+"if "+ColorEnd()+"(");
-
-	displayTab = displayTab.split("for(").join(Color("red")+"for"+ColorEnd()+"(");
-	displayTab = displayTab.split("for (").join(Color("red")+"for "+ColorEnd()+"(");
-
-	displayTab = displayTab.split("while(").join(Color("red")+"while"+ColorEnd()+"(");
-	displayTab = displayTab.split("while (").join(Color("red")+"while "+ColorEnd()+"(");
-
-	displayTab = displayTab.split("else<br>").join(Color("red")+"else"+ColorEnd()+'<br>');
-	displayTab = displayTab.split("else ").join(Color("red")+"else "+ColorEnd());
-
-	//return is in red too
-	displayTab = displayTab.split("return ").join(Color("red")+"return "+ColorEnd());
-
-	//bracket in red too
-	displayTab = displayTab.split("{").join(Color("red")+"{"+ColorEnd());
-	displayTab = displayTab.split("}").join(Color("red")+"}"+ColorEnd());
-
-	var end = "";
-
-	//find all comments and setup their line in light blue
-	for(i=0;i<displayTab.split('<br>').length;i++)
-	{
-		if(displayTab.split('<br>')[i].split('//').length>1)
-		{
-			end += '<br>' + Color("deepskyblue") + displayTab.split('<br>')[i] + ColorEnd();
-		}
-		else
-		{
-			end += '<br>' + displayTab.split('<br>')[i];
-		}
-	}
-
-	return end;
+	return displayTab;
 }
