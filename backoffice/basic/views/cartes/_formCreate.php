@@ -30,7 +30,7 @@ foreach( method::find()->select(['nom_method','id'])->where(["id_carte" => $mode
 		</div>
 	    <div class="col-sm-12 ">
 	    	<div class="pull-right">
-	        	<?= Html::submitButton('Save', ['class' => 'button buttonCarte']) ?>
+	        	<?= Html::submitButton('Enregistrer', ['class' => 'button buttonCarte']) ?>
 	    	</div>
 	    </div>
 	</div>

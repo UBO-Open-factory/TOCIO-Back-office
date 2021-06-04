@@ -105,7 +105,7 @@ $l_TAB_Options = [];
 		?>
 	    <div class="col-sm-12 ">
 	    	<div class="pull-right">
-	        	<?= Html::submitButton('Save', ['class' => 'button buttonCarte']) ?>
+	        	<?= Html::submitButton('Enregistrer', ['class' => 'button buttonCarte']) ?>
 	    	</div>
 	    </div>
 	</div>
