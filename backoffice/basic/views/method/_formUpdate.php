@@ -59,7 +59,7 @@ use app\models\Grandeur;
     </div>
 	<div class="form-group">
 		<div class="col-sm-10"></div>
-        <?=Html::submitButton( 'Save', ['class' => 'button buttonMethod','id' => 'methodsubmitbutton' ] )?>
+        <?=Html::submitButton( 'Enregistrer', ['class' => 'button buttonMethod','id' => 'methodsubmitbutton' ] )?>
     </div>
     <?php ActiveForm::end(); ?>
 
