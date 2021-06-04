@@ -7,8 +7,8 @@ use app\models\Method;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 
-use app\models\relcapteurgrandeur;
-use app\models\grandeur;
+use app\models\Relcapteurgrandeur;
+use app\models\Grandeur;
 /* @var $this yii\web\View */
 /* @var $model app\models\Method */
 /* @var $form yii\widgets\ActiveForm */

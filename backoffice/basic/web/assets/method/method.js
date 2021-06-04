@@ -89,7 +89,7 @@ $(document).on('click', '#methodsubmitbutton', function()
     if ($(".method-create")[0])
 	{
 		// On est en mode Création
-		document.getElementById("sortie_method").value = $("#id_capteur option:selected").text() + "_" + $("#nom_method option:selected").text();	
+		document.getElementById("sortie_method").value = "méthode " + $("#id_capteur option:selected").text() + " pour carte " + $("#nom_method option:selected").text();	
 	} 
 });
 
