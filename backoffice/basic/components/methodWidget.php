@@ -106,7 +106,7 @@ class methodWidget extends Widget
 				$contents[] = 	"<div class='col-sm-12'>";
 				$contents[] = 		"<label>CAPTEUR : <h2>" . capteur::find(['nom'])->where(['id' => $l_OBJ_method['id_capteur']])->one()['nom'] . " </h></label><br> ";
 				$contents[] = 	"</div><br><br><br>";
-				$contents[] = 	"<div class='col-sm-4'>";
+				$contents[] = 	"<div class='col-sm-5'>";
 				$contents[] = 		"<label>Ligne d'INCLUDE</label><br> ";
 				$contents[] = 		"<textarea rows='1' cols='40'" . $param_textbox . ">" .$l_OBJ_method['method_include'] . " </textarea> ";
 				$contents[] = 		"<label>Ligne de DECLARATION</label><br> ";
