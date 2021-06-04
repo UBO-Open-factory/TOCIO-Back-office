@@ -7,6 +7,7 @@ use app\models\Cartes;
 use app\models\Method;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 use app\models\Relcapteurgrandeur;
 use app\models\Grandeur;
@@ -20,7 +21,7 @@ use app\models\Grandeur;
 <div class="method-form">
 
     <?php $form = ActiveForm::begin();?>
-
+    <?php Url::remember(); ?>
     <div class="row">
         <div class="col-sm-3">
             <?php

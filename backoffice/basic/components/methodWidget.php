@@ -46,6 +46,7 @@ class methodWidget extends Widget
 	 */
 	public function run() 
 	{
+		Url::remember();
 		// Le bouton pour plier/déplier les boites.
 		$l_STR_BtnPliage 		= Html::tag("span","", ['class'	=> "triangle pull-right glyphicon glyphicon-triangle-bottom"]);
 		$l_STR_BtnDelete 		= Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);

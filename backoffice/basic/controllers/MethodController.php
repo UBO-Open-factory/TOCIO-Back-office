@@ -9,6 +9,7 @@ use app\models\MethodSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 
 /**
  * MethodController implements the CRUD actions for Method model.
@@ -98,10 +99,9 @@ class MethodController extends Controller
     {
         $model = $this->findModel($id);
 
-        if( $model->load( Yii::$app->request->post() ) && $model->save() ) {
-            return $this->redirect( [
-                    'index',
-                    'id' => $model->id ] );
+        if( $model->load( Yii::$app->request->post() ) && $model->save() ) 
+        {
+            return $this->redirect([Url::previous()]);
         }
         $method_pre['id'] = $model['id'];
         $method_pre['id_carte'] = $model['id_carte'];

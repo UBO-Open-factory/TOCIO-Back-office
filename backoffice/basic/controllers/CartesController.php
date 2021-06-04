@@ -64,9 +64,7 @@ class CartesController extends Controller {
 		$model = new Cartes();
 
 		if( $model->load( Yii::$app->request->post() ) && $model->save() ) {
-			return $this->redirect( [
-					'index',
-					'id' => $model->id ] );
+			return $this->redirect([Url::previous()]);
 		}
 		return $this->render( 'create', ['model' => $model ] );
 	}

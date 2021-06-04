@@ -70,19 +70,14 @@ class tocioRegles extends Widget {
 									    
 									    		<ul>
 									    			<li>un <b>Include</b> qui permet au programme d'importer la bibliothèque correspondant au capteur</i>,</li>
-									    			<li>un <b>Statement</b> qui permet de déclarer le capteur avant de commencer le programme</i>,</li>
-									    			<li>un <b>Setup</b> qui permet d'initialiser le capteur</i>,</li>
-									    			<li>un <b>Read</b> qui est une concaténation des méthodes d'accès aux données de toutes les grandeurs du capteur</i>,</li>
-									    			<li>un <b>Nom </b> qui est composé de la concaténation du <b>Nom du capteur </b> du nom de la <b>Carte </b> pour laquelle la méthode est initialement définie et de <b>l'ID </b>de la méthode sous la forme : <b> [nom_capteur]_[nom_carte]</b>.</li>
+									    			<li>une <b>déclaration</b> qui permet de déclarer le capteur avant de commencer le programme</i>,</li>
+									    			<li>une <b>initialisation</b> qui permet d'initialiser le capteur</i>,</li>
+									    			<li>une <b>lecture</b> qui est une concaténation des méthodes d'accès aux données de toutes les grandeurs du capteur</i>,</li>
+									    			<li>un <b>Nom </b> qui est composé de la concaténation du <b>Nom du capteur </b> et du nom de la <b>Carte </b> pour laquelle la méthode est initialement définie sous la forme : <b> [nom_capteur]_[nom_carte]</b>.</li>
 									    		</ul>
 									    Cette méthode n'est élaborée que pour relier un capteur à un processeur, éventuellement elle pourra être associée à d'autres processeurs au fonctionnement similaire.<br><br>",
 
-				"cartesdefinition" => "<p> Une <i>Carte</i> est composé de méthodes compatibles</p>
-											Elle possède cependant des contraintes
-									    		<ul>
-									    			<li>Un capteur ne peut être représenté que par une seul méthode à la fois </li>
-									    			<li>Un capteur non représenté par une méthode est remplacé par des commentaires </li>
-									    		</ul>
+				"cartesdefinition" => "<p> Une <i>Carte</i> est un microcontrôleur auquel on associe des méthodes compatibles</p>
 									    Ces cartes se retrouvent ensuite dans l'onglet module ou une liste déroulante propose de choisir une carte pour générer le code.<br><br>",
 
 

@@ -41,6 +41,7 @@ class cartesWidget extends Widget
 	 */
 	public function run() 
 	{			
+		Url::remember();
 		// Le bouton pour plier/déplier les boites.
 		$l_STR_BtnDelete 		= Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
 		$l_STR_iconDeplacer 	= Html::tag("i", "", ["class" => "glyphicon glyphicon-move"]). " ";
