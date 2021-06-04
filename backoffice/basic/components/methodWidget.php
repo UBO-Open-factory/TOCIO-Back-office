@@ -104,15 +104,17 @@ class methodWidget extends Widget
 			{
 				$methode_lecture = explode("|CutBalise|",$l_OBJ_method['method_read']);
 				//création des champs de textes simples, pour les include , statement , setup (ils n'apparraissent qu'une fois par méthode et n'ont qu'un champ unique)
+				$OBJ_method = new Method();
+
 				$contents[] = 	"<div class='col-sm-12'>";
 				$contents[] = 		"<label>CAPTEUR : <h2>" . capteur::find(['nom'])->where(['id' => $l_OBJ_method['id_capteur']])->one()['nom'] . " </h></label><br> ";
 				$contents[] = 	"</div><br><br><br>";
 				$contents[] = 	"<div class='col-sm-5'>";
-				$contents[] = 		"<label>Ligne d'INCLUDE</label><br> ";
+				$contents[] = 		"<label>". $OBJ_method->getAttributeLabel('method_include') ."</label><br> ";
 				$contents[] = 		"<textarea rows='1' cols='40'" . $param_textbox . ">" .$l_OBJ_method['method_include'] . " </textarea> ";
-				$contents[] = 		"<label>Ligne de DECLARATION</label><br> ";
+				$contents[] = 		"<label>". $OBJ_method->getAttributeLabel('method_statement') ."</label><br> ";
 				$contents[] = 		"<textarea rows='2' cols='40'" . $param_textbox . ">" .$l_OBJ_method['method_statement']. " </textarea> ";
-				$contents[] = 		"<label>Ligne d'INITIALISATION</label><br> ";
+				$contents[] = 		"<label>". $OBJ_method->getAttributeLabel('method_setup') ."</label><br> ";
 				$contents[] = 		"<textarea rows='2' cols='40'" . $param_textbox . ">" .$l_OBJ_method['method_setup']. " </textarea> ";
 				$contents[] = 	"</div>";
 
