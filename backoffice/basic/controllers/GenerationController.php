@@ -9,7 +9,7 @@ use app\models\Capteur;
 use app\models\Relcapteurgrandeur;
 use app\models\Grandeur;
 use app\models\Cartes;
-use app\models\method;
+use app\models\Method;
 
 use app\models\CapteurSearch;
 use yii\web\Controller;
