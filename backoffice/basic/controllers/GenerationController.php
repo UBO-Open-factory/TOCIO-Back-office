@@ -77,7 +77,7 @@ class GenerationController extends Controller
 	            {
 	                //on récupère le nom de la méthode et on le compare au nom du capteur
 	                $liste_ajax_method = method::find()->where(['id' => $liste_ajax_cartesmethod1['id']])->one();
-	                if(explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0] === explode("_",$liste_ajax_method['nom_method'])[0])
+	                if($liste_ajax_relmodulecapteur1["idCapteur"] == $liste_ajax_method['id_capteur'])
 	                {
 	                    //on met la variable de vérification à 1
 	                    $var_method_finded = 1;
