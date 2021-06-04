@@ -112,7 +112,7 @@ class cartesWidget extends Widget
 			  				         							]);
 
 				$l_STR_BtnDelete = Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
-				$l_STR_BtnDelete = Html::a($l_STR_BtnDelete, ["/method/delete", "id" => $method['id']],
+				$l_STR_BtnDelete = Html::a($l_STR_BtnDelete, ["/cartes/delete", "id" => $l_OBJ_CARTE['id']],
 																	['data-pjax' => "0",
 																	"aria-label" => "Supprimer",
 																	"title" => "Supprimer",

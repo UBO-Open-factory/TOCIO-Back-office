@@ -27,8 +27,13 @@ use app\models\Grandeur;
             $list_nom = array_combine(Capteur::find()->select(['id'])->indexBy('id')->column(),Capteur::find()->select(['nom'])->indexBy('nom')->column());
             ?>
             <?= $form->field($model, 'id_capteur')->dropDownList($list_nom , ['class' => 'form-control id_capteur','id' => 'id_capteur','prompt'=>'Select ...'])?>
-            <?= $form->field($model, 'id_carte')->dropDownList($method_pre["list"],['class' => 'form-control nom_method','id' => 'nom_method','prompt'=>'Select ...']);
+            <?= $form->field($model, 'id_carte')->dropDownList($method_pre["list"],['class' => 'form-control nom_method','id' => 'nom_method','prompt'=>'Select ...']);?>
+            <?php
+            echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une carte', 
+                    ['cartes/create'], 
+                    ['class' => 'btn btn-light pull-right']);
             ?>
+            
             <?php
             echo $form->field($model, 'nom_method',['options' => ['class' => 'invisible']])->hiddenInput(['value'=> '','class' => 'form-control sortie_method','id' => 'sortie_method']);
             ?>
