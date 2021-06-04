@@ -78,10 +78,7 @@ class cartesWidget extends Widget
 			// BOUTONS D'ÉDITION DE LA CARTE --------------------------------------------------------
 			$l_TAB_BtnEditiocarte = [];
 			$l_TAB_BtnEditiocarte[] = $this->_btnEdition("cartes/update", "glyphicon glyphicon-pencil", $l_STR_ID_CARTE);
-			$l_TAB_BtnEditiocarte[] = Html::a($l_STR_BtnDelete, 
-				[
-				"cartes/delete", "id" => $l_STR_ID_CARTE
-				],
+			$l_TAB_BtnEditiocarte[] = Html::a($l_STR_BtnDelete, ["cartes/delete", "id" => $l_STR_ID_CARTE],
 				[
 				'data-pjax' => "0",
 				"aria-label" => "Supprimer",
@@ -112,7 +109,7 @@ class cartesWidget extends Widget
 			  				         							]);
 
 				$l_STR_BtnDelete = Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
-				$l_STR_BtnDelete = Html::a($l_STR_BtnDelete, ["/cartes/delete", "id" => $l_OBJ_CARTE['id']],
+				$l_STR_BtnDeleteMethod = Html::a($l_STR_BtnDelete, ["/method/delete", "id" => $method['id']],
 																	['data-pjax' => "0",
 																	"aria-label" => "Supprimer",
 																	"title" => "Supprimer",
@@ -125,7 +122,7 @@ class cartesWidget extends Widget
 				$contents[] = 	"<div class='col'>" . explode("_",method::find()->where(["id" => $method["id"]])->one()["nom_method"])[0] . "</div>";
 				$contents[] = "	<div class='col-2'></div>";
 				$contents[] = "	<div class='col-1'>" . $l_STR_BtnModify . "</div>";
-				$contents[] = "	<div class='col-1'>" . $l_STR_BtnDelete . "</div>";
+				$contents[] = "	<div class='col-1'>" . $l_STR_BtnDeleteMethod . "</div>";
 				$contents[] = "</div>";
 				$contents[] = "</div>";
 				

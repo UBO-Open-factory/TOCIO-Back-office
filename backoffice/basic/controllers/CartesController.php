@@ -68,7 +68,6 @@ class CartesController extends Controller {
 					'index',
 					'id' => $model->id ] );
 		}
-
 		return $this->render( 'create', ['model' => $model ] );
 	}
 
@@ -103,9 +102,9 @@ class CartesController extends Controller {
 	 */
 	public function actionDelete( $id ) 
 	{
-		foreach( method::find()->where( ["id_carte" => $id ])->all() as $id_method ) 
+		foreach( method::find()->where( ["id_carte" => $id ])->all() as $method ) 
 		{
-			method::find()->where( ["id_carte" => $id ])->one()->delete();
+			method::find()->where(["id_carte" => $id ])->one()->delete();
 		}
 
 		$this->findModel( $id )->delete();
