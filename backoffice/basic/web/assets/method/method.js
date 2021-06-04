@@ -115,12 +115,15 @@ document.getElementById('id_capteur').onchange = function()
 	var e = document.getElementById("id_capteur");
     var visibleText = e.options[e.selectedIndex].text;
 
+    l_data = {"id": e.options[e.selectedIndex].value};
+
     $.ajax({
 		type : "POST",
-		url : g_host + "/capteur/ajaxgetgrandeur?id=" + e.options[e.selectedIndex].value,
+		url : g_host + "/capteur/ajaxgetgrandeur",
 		cache : false,
 		dataType : "text",
-		
+		data : l_data,
+
 		success : function(results) 
 		{
 			var retour = JSON.parse( $.trim(results) );

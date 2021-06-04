@@ -152,7 +152,8 @@ $config = [
                     'pluralize' => false,
                     'patterns' => [
                         'GET getcapteur/<id:\d+>' => 'getcapteur',
-                        'GET,POST getcapteurs' => 'getcapteurs'
+                        'GET,POST getcapteurs' => 'getcapteurs',
+                        'POST ajaxgetgrandeur' => 'ajaxgetgrandeur',
                     ]
                 ],
                 [
@@ -163,6 +164,14 @@ $config = [
                     	'GET getgrandeur/<id:\d+>' => 'getgrandeur',
                     	'GET getgrandeurs' => 'getgrandeurs',
                     	'GET export' => 'getexport'
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'generation',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'POST getdata' => 'getdata',
                     ]
                 ]
             ]

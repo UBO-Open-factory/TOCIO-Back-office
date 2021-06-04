@@ -31,10 +31,15 @@ use yii\filters\AccessControl;
  */
 class GenerationController extends Controller
 {
-    public function actionGetdata($idModule,$nomcarte)
+    public function actionGetdata()
     {
     	// Le retour sera au format JSON
     	Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+    	$request = Yii::$app->request;
+
+    	$idModule = $request->post("idModule");
+    	$nomcarte = $request->post("nomCarte");
 
         $model = array();
         $data = array();

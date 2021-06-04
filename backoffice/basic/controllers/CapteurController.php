@@ -293,11 +293,14 @@ class CapteurController extends Controller
      * @return string[] tab
      * @version 28 mai 2021
      */
-    public function actionAjaxgetgrandeur($id)
+    public function actionAjaxgetgrandeur()
     {
         // Le retour sera au format JSON
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
+        $request = Yii::$app->request;
+
+        $id = $request->post("id");
         
         $model = array();
         // RECHERCHE DES MODELS DANS LA BASE -------------------------------------------------------

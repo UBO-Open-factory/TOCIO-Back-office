@@ -22,14 +22,15 @@ $(document).ready(function ()
 			}
 			else
 			{		
+				l_data = {"idModule": this.value,"nomCarte": this.options[this.selectedIndex].text};
 				var BouchonName = "bouchon" + this.value;
 				var debugName = "debug" + this.value;
 				$.ajax({
 					type : "POST",
-					url : g_host + "/generation/getdata?idModule=" + this.value + "&nomcarte=" + this.options[this.selectedIndex].text,
+					url : g_host + "/generation/getdata",
 					cache : false,
 					dataType : "text",
-					
+					data : l_data,
 					success : function(results) 
 					{
 						var Bouchon = document.getElementById(BouchonName).checked;
