@@ -6,7 +6,7 @@ use app\components\tocioRegles;
 /* @var $this yii\web\View */
 /* @var $model app\models\Cartes */
 
-$this->title = 'Create Cartes';
+$this->title = 'Créer une Cartes';
 $this->params['breadcrumbs'][] = ['label' => 'Cartes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 

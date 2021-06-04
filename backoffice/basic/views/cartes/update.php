@@ -6,7 +6,7 @@ use app\components\tocioRegles;
 /* @var $this yii\web\View */
 /* @var $model app\models\Cartes */
 
-$this->title = 'Update Cartes: ' . $model->id . " => " . $model->nom;
+$this->title = 'Mise à jour de la carte : ' . $model->id . " => " . $model->nom;
 $this->params['breadcrumbs'][] = ['label' => 'Cartes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
