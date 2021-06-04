@@ -80,7 +80,7 @@ foreach( Grandeur::find()->select(['nature','id'])->indexBy('id')->column() as $
 		
 	    <div class="col-sm-12 ">
 	    	<p class="pull-right">
-	        	<?= Html::submitButton('Save', ['class' => 'button buttonCapteur']) ?>
+	        	<?= Html::submitButton('Enregistrer', ['class' => 'button buttonCapteur']) ?>
 	        </p>
 	    </div>
 	</div>

@@ -45,7 +45,7 @@ use yii\helpers\Url;
 		
 	    <div class="col-sm-12 ">
 	    	<p class="pull-right">
-	        	<?= Html::submitButton('Save', ['class' => 'button buttonCapteur']) ?>
+	        	<?= Html::submitButton('Enregistrer', ['class' => 'button buttonCapteur']) ?>
 	        </p>
 	    </div>
 	</div>
