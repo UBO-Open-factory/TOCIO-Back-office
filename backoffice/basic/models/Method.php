@@ -54,9 +54,9 @@ class Method extends \yii\db\ActiveRecord
             'id_capteur' => 'Id Capteur',
             'id_carte' => 'Id Carte',
             'nom_method' => 'Nom Method',
-            'method_include' => 'Method Include',
-            'method_statement' => 'Method Statement',
-            'method_setup' => 'Method Setup',
+            'method_include' => 'Librairie du capteur ( #include )',
+            'method_statement' => 'Déclaration du capteur',
+            'method_setup' => 'Initialisation du capteur ( setup() ) ',
             'method_read' => 'Method Read',
         ];
     }
