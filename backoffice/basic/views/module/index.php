@@ -70,10 +70,10 @@ Url::remember();
     <div class="row">
     	<div class="col-sm-9">
 			<?php
-				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'btn btn-success ']);
+				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'button buttonModule ']);
 				echo Draggable::widget();
 				echo modulesWidget::widget(['dataProvider' => $dataProvider,]);
-				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'btn btn-success pull-right']);
+				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'button buttonModule pull-right']);
 			?>
     	</div>
     	<div class="col-sm-3" id="listeCapteursFix">
@@ -85,7 +85,7 @@ Url::remember();
 		    		]);
 	
 					echo capteursWidget::widget(['dataProvider' => $capteurProvider,]);
-					echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Capteur', ['capteur/create'], ['class' => 'btn btn-info pull-right']);
+					echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Capteur', ['capteur/create'], ['class' => 'button buttonCapteur pull-right']);
 		    	?>
     		</div>
     	</div>

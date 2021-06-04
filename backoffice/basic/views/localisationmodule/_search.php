@@ -30,8 +30,8 @@ use yii\helpers\Url;
     <?= $form->field($model, 'coordZ') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::submitButton('Search', ['class' => 'button buttonLocalisation']) ?>
+        <?= Html::resetButton('Reset', ['class' => 'button buttonLocalisation']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

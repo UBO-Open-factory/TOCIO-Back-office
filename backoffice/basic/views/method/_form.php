@@ -60,7 +60,7 @@ $l_TAB_ListeNomCapteur = array_combine(Capteur::find()->select(['id'])->indexBy(
 
     <div class="form-group">
         <div class="col-sm-10"></div>
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Save', ['class' => 'button buttonMethod']) ?>
 
     </div>
 

@@ -64,7 +64,7 @@ Url::remember();
 	?>
 	
 	<p>
-		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Capteur', ['create'], ['class' => 'btn btn-info pull-right'])?>
+		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Capteur', ['create'], ['class' => 'button buttonCapteur pull-right'])?>
 	</p>
     <?php Pjax::end(); ?>
 </div>

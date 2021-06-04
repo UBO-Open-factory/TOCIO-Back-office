@@ -44,7 +44,7 @@ foreach( Grandeur::find()->select(['nature','id'])->indexBy('id')->column() as $
 				</select>
 				<div class="input-group-append">
 					<?php echo Html::tag("button", "<i class='glyphicon glyphicon-plus'></i> Associer cette Grandeur", 
-								["class" => "btn btn-secondary",
+								["class" => "button buttonGrandeur",
 									"type" => "button",
 									"id" => "btnAddGrandeur"]);?>
 				</div>
@@ -80,7 +80,7 @@ foreach( Grandeur::find()->select(['nature','id'])->indexBy('id')->column() as $
 		
 	    <div class="col-sm-12 ">
 	    	<p class="pull-right">
-	        	<?= Html::submitButton('Save', ['class' => 'btn btn-info']) ?>
+	        	<?= Html::submitButton('Save', ['class' => 'button buttonCapteur']) ?>
 	        </p>
 	    </div>
 	</div>

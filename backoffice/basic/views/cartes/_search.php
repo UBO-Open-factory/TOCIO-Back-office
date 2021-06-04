@@ -20,8 +20,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'nom') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::submitButton('Search', ['class' => 'button buttonCarte']) ?>
+        <?= Html::resetButton('Reset', ['class' => 'button buttonCarte']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

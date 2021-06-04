@@ -35,7 +35,7 @@ $l_TAB_Options = [];
 				<div class="input-group-append">
 					<?php echo Html::tag("button", "<i class='glyphicon glyphicon-plus'></i> Associer cette méthode", 
 						[
-							"class" => "btn btn-secondary",
+							"class" => "button buttonCarte",
 							"type" => "button",
 							"id" => "btnAddMethod"
 						]);
@@ -105,7 +105,7 @@ $l_TAB_Options = [];
 		?>
 	    <div class="col-sm-12 ">
 	    	<div class="pull-right">
-	        	<?= Html::submitButton('Save', ['class' => 'btn btn-light']) ?>
+	        	<?= Html::submitButton('Save', ['class' => 'button buttonCarte']) ?>
 	    	</div>
 	    </div>
 	</div>

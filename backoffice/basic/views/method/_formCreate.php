@@ -32,7 +32,7 @@ use app\models\Grandeur;
             <?php
             echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une carte', 
                     ['cartes/create'], 
-                    ['class' => 'btn btn-light pull-right']);
+                    ['class' => 'button buttonCarte pull-right']);
             ?>
             
             <?php
@@ -67,7 +67,7 @@ use app\models\Grandeur;
 	            ?>
 	        </div>
 	        <div class="form-group">
-		        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-secondary pull-right','id' => 'methodsubmitbutton' ]) ?>
+		        <?= Html::submitButton('Enregistrer', ['class' => 'button buttonMethod pull-right','id' => 'methodsubmitbutton' ]) ?>
 		    </div>
         </div>
             

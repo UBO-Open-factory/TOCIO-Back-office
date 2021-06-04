@@ -25,7 +25,7 @@ use yii\helpers\Url;
 	<div class="col-md-4">
 	    <div class="form-group">
 	    	<label class="control-label">&nbsp;</label><br/>
-	        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+	        <?= Html::submitButton('Search', ['class' => 'button buttonCapteur']) ?>
 	        <?php // echo Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
 	    </div>
 	</div>	

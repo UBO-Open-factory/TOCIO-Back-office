@@ -32,7 +32,7 @@ use yii\helpers\Url;
 				?>
 		</div>
 		<div class="col-sm-12 ">
-		        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-primary pull-right']) ?>
+		        <?= Html::submitButton('Enregistrer', ['class' => 'button buttonGrandeur pull-right']) ?>
 	    </div>
 	</div>
 

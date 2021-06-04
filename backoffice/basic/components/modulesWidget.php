@@ -228,7 +228,7 @@ class modulesWidget extends Widget
 			
 			// Bouton d'ajout d'un capteur
 			$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
-			$l_STR_Temp 	= Html::button($l_STR_Icon. " Associer un capteur", ["class" => "btn btn-info pull-right btnAjoutCapteur"]);
+			$l_STR_Temp 	= Html::button($l_STR_Icon. " Associer un capteur", ["class" => "button buttonCapteur pull-right btnAjoutCapteur"]);
 			$l_STR_BtnAjoutCapteur = Html::a($l_STR_Temp, ['/relmodulecapteur/create', 'idModule' => $l_OBJ_Module['identifiantReseau']], ['class' => 'profile-link']);
 			
 			
@@ -260,7 +260,7 @@ class modulesWidget extends Widget
 			//liste contenant toutes les cartes disponible et une fonction Code Test
 			$l_STR_SelectCartes = "";
 			//création de la liste
-			$l_STR_SelectCartes .= "<select class = 'SelectCartesClass btn btn-light' id = '". $l_OBJ_Module->identifiantReseau ."SelectCartesId'>";
+			$l_STR_SelectCartes .= "<select class = 'SelectCartesClass button buttonCarte' id = '". $l_OBJ_Module->identifiantReseau ."SelectCartesId'>";
 			$l_STR_SelectCartes .= "  <option value=". $l_OBJ_Module->identifiantReseau .">Select...</option>";	        
 	        $l_STR_SelectCartes .= "  <option value=". $l_OBJ_Module->identifiantReseau .">CodeTest</option>";
 

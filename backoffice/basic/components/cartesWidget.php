@@ -140,7 +140,7 @@ class cartesWidget extends Widget
 		}
 		// Bouton d'ajout d'une carte
 		$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
-		$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter une carte", ["class" => "btn btn-light pull-right"]);
+		$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter une carte", ["class" => "button buttonCarte pull-right"]);
 		$l_STR_BtnAjoutcarte = Html::a($l_STR_Temp, ['carte/create'], ['class' => 'profile-link']);
 		
 		// AFFICHAGE DE LA LISTE DES CARTES ------------------------------------------------------

@@ -40,7 +40,7 @@ use yii\helpers\ArrayHelper;
 					<?php
 						echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Ajouter une localisation', 
 								['localisationmodule/create'], 
-								['class' => 'btn btn-primary pull-right']);
+								['class' => 'button buttonModule pull-right']);
 		    		?>
 				</div>
 			</div>
@@ -55,7 +55,7 @@ use yii\helpers\ArrayHelper;
 	</div>
 
     <div class="form-group push-right">
-        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success pull-right']) ?>
+        <?= Html::submitButton('Enregistrer', ['class' => 'button buttonModule pull-right']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

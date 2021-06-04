@@ -56,7 +56,7 @@ Url::remember();
     ]); ?>
     
 	<p>
-		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une Localisation', ['create'], ['class' => 'btn btn-primary pull-right'])?>
+		<?= Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une Localisation', ['create'], ['class' => 'button buttonLocalisation pull-right'])?>
 	</p>
     <?php Pjax::end(); ?>
 

@@ -129,7 +129,7 @@ class capteursWidget extends Widget
 		
 		// Bouton d'ajout d'un capteur
 		$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
-		$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter un Capteur", ["class" => "btn btn-info pull-right"]);
+		$l_STR_Temp 	= Html::button($l_STR_Icon. " Ajouter un Capteur", ["class" => "button buttonModule pull-right"]);
 		$l_STR_BtnAjoutCapteur = Html::a($l_STR_Temp, ['capteur/create'], ['class' => 'profile-link']);
 		
 		
