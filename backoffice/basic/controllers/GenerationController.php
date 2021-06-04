@@ -41,57 +41,65 @@ class GenerationController extends Controller
     	$idModule = $request->post("idModule");
     	$nomcarte = $request->post("nomCarte");
 
-        $model = array();
+        $liste_ajax = array();
+        $retour_ajax = array();
+        $liste_URL = array();
+
+        array_push($liste_URL,substr(Url::base(''), 2));
+        array_push($liste_URL,\Yii::getAlias('@urlbehindproxy').'/mesure/add/'.$idModule);
+
+        array_push($retour_ajax,$liste_URL);
+
         $data = array();
         if($nomcarte != "CodeTest")
         {
 	        //on récupère tout les capteurs associé au module
-	        $model_relmodulecapteur = Relmodulecapteur::find()
+	        $liste_ajax_relmodulecapteur = Relmodulecapteur::find()
 	                        ->where(["idModule" => $idModule])
 	                        ->orderBy(['ordre'=>SORT_ASC ])
 	                        ->all();
 
 	        //on récupère l'id de la carte sélectionné 
-	                        $model_carte_id = cartes::find()
+	                        $liste_ajax_carte_id = cartes::find()
 	                        ->where(["nom" => $nomcarte])
 	                        ->one();
 
 	        //on récupère toutes les méthodes associé à cette carte
-	        $model_cartesmethod = method::find()
-	                        ->where(['id_carte' => $model_carte_id["id"]])
+	        $liste_ajax_cartesmethod = method::find()
+	                        ->where(['id_carte' => $liste_ajax_carte_id["id"]])
 	                        ->all();
 
-	        foreach($model_relmodulecapteur as $model_relmodulecapteur1)
+	        foreach($liste_ajax_relmodulecapteur as $liste_ajax_relmodulecapteur1)
 	        {
 	            //variable pour déterminer si il faut ou non ajouter du code (au cas ou aucune méthode n'ai été trouvé)
 	            $var_method_finded = 0;
-	            foreach($model_cartesmethod as $model_cartesmethod1)
+	            foreach($liste_ajax_cartesmethod as $liste_ajax_cartesmethod1)
 	            {
 	                //on récupère le nom de la méthode et on le compare au nom du capteur
-	                $model_method = method::find()->where(['id' => $model_cartesmethod1['id']])->one();
-	                if(explode(" ",$model_relmodulecapteur1['nomcapteur'])[0] === explode("_",$model_method['nom_method'])[0])
+	                $liste_ajax_method = method::find()->where(['id' => $liste_ajax_cartesmethod1['id']])->one();
+	                if(explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0] === explode("_",$liste_ajax_method['nom_method'])[0])
 	                {
 	                    //on met la variable de vérification à 1
 	                    $var_method_finded = 1;
 	                    $data = array();
 
-	                    $data["nom_capteur"] = explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
-	                    $data["method_include"] = $model_method["method_include"];
-	                    $data["method_declaration"] = $model_method["method_statement"];
-	                    $data["method_setup"] = $model_method["method_setup"];
+	                    $data["nom_capteur"] = explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0];
+	                    $data["method_include"] = $liste_ajax_method["method_include"];
+	                    $data["method_declaration"] = $liste_ajax_method["method_statement"];
+	                    $data["method_setup"] = $liste_ajax_method["method_setup"];
 	                    $data["grandeur"] = array();
 	                    $i = 0;
 	                    //ajout de toutes les grandeurs associé à un capteur ainsi que leur format et méthode d'accès
-	                    foreach(Relcapteurgrandeur::find()->where(["idCapteur" => $model_relmodulecapteur1["idCapteur"]])->all() as $Grandeur_finded)
+	                    foreach(Relcapteurgrandeur::find()->where(["idCapteur" => $liste_ajax_relmodulecapteur1["idCapteur"]])->all() as $Grandeur_finded)
 	                    {
 	                        $l_STR_READ_METHOD = array();
 	                        $l_STR_READ_METHOD[0] = explode(" ",Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["nature"])[0];
-	                        $l_STR_READ_METHOD[1] = explode("|CutBalise|",$model_method['method_read'])[$i];
+	                        $l_STR_READ_METHOD[1] = explode("|CutBalise|",$liste_ajax_method['method_read'])[$i];
 	                        $l_STR_READ_METHOD[2] = Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["formatCapteur"];
 	                        array_push($data["grandeur"],$l_STR_READ_METHOD);
 	                        $i++;
 	                    }
-	                    array_push($model,$data);
+	                    array_push($liste_ajax,$data);
 	                }
 	            }
 	            //boucle pour ajouter du code si aucune méthode n'a été trouvé pour ce capteur
@@ -100,57 +108,59 @@ class GenerationController extends Controller
 	                $var_method_finded = 1;
 	                $data = array();
 
-	                $data["nom_capteur"] = explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
-	                $data["method_include"] = "//No method find for " . explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
-	                $data["method_declaration"] = "//No method find for " . explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
-	                $data["method_setup"] = "//No method find for " . explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
+	                $data["nom_capteur"] = explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0];
+	                $data["method_include"] = "//No method find for " . explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0];
+	                $data["method_declaration"] = "//No method find for " . explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0];
+	                $data["method_setup"] = "//No method find for " . explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0];
 	                $data["grandeur"] = array();
 	                //ajout de toutes les grandeurs associé à un capteur ainsi que leur format et commentaires aux emplacement des méthodes d'accès
-	                foreach(Relcapteurgrandeur::find()->where(["idCapteur" => $model_relmodulecapteur1["idCapteur"]])->all() as $Grandeur_finded)
+	                foreach(Relcapteurgrandeur::find()->where(["idCapteur" => $liste_ajax_relmodulecapteur1["idCapteur"]])->all() as $Grandeur_finded)
 	                {
 	                    $l_STR_READ_METHOD = array();
 	                    $l_STR_READ_METHOD[0] = explode(" ",Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["nature"])[0];
-	                    $l_STR_READ_METHOD[1] = "//No method find for " . explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
+	                    $l_STR_READ_METHOD[1] = "//No method find for " . explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0];
 	                    $l_STR_READ_METHOD[2] = Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["formatCapteur"];
 	                    array_push($data["grandeur"],$l_STR_READ_METHOD);
 	                }
-	                array_push($model,$data);
+	                array_push($liste_ajax,$data);
 	            }
 	        }
-			return $model;
+	        array_push($retour_ajax,$liste_ajax);
+			return $retour_ajax;
 		}
 		else
 		{
 	        //on récupère tout les capteurs associé au module
-	        $model_relmodulecapteur = Relmodulecapteur::find()
+	        $liste_ajax_relmodulecapteur = Relmodulecapteur::find()
 	                        ->where(["idModule" => $idModule])
 	                        ->orderBy(['ordre'=>SORT_ASC ])
 	                        ->all();
-	        foreach($model_relmodulecapteur as $model_relmodulecapteur1)
+	        foreach($liste_ajax_relmodulecapteur as $liste_ajax_relmodulecapteur1)
 	        {	     
                 //on met la variable de vérification à 1
                 $var_method_finded = 1;
                 $data = array();
 
-                $data["nom_capteur"] = explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
-                $data["method_include"] = "//Code test for include of ".explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
-                $data["method_declaration"] = "//Code test for declaration of ".explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
-                $data["method_setup"] = "//Code test for setup of ".explode(" ",$model_relmodulecapteur1['nomcapteur'])[0];
+                $data["nom_capteur"] = explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0];
+                $data["method_include"] = "//Code test for include of ".explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0];
+                $data["method_declaration"] = "//Code test for declaration of ".explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0];
+                $data["method_setup"] = "//Code test for setup of ".explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0];
                 $data["grandeur"] = array();
                 $i = 0;
                 //ajout de toutes les grandeurs associé à un capteur ainsi que leur format et méthode d'accès
-                foreach(Relcapteurgrandeur::find()->where(["idCapteur" => $model_relmodulecapteur1["idCapteur"]])->all() as $Grandeur_finded)
+                foreach(Relcapteurgrandeur::find()->where(["idCapteur" => $liste_ajax_relmodulecapteur1["idCapteur"]])->all() as $Grandeur_finded)
                 {
                     $l_STR_READ_METHOD = array();
                     $l_STR_READ_METHOD[0] = explode(" ",Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["nature"])[0];
-                    $l_STR_READ_METHOD[1] = "0.0; //Code test for ".explode(" ",$model_relmodulecapteur1['nomcapteur'])[0] ." reading of ". explode(" ",Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["nature"])[0];
+                    $l_STR_READ_METHOD[1] = "0.0; //Code test for ".explode(" ",$liste_ajax_relmodulecapteur1['nomcapteur'])[0] ." reading of ". explode(" ",Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["nature"])[0];
                     $l_STR_READ_METHOD[2] = Grandeur::find()->where(["id"=>$Grandeur_finded["idGrandeur"]])->one()["formatCapteur"];
                     array_push($data["grandeur"],$l_STR_READ_METHOD);
                     $i++;
                 }
-                array_push($model,$data);
+                array_push($liste_ajax,$data);
 	        }
-			return $model;			
+			array_push($retour_ajax,$liste_ajax);
+			return $retour_ajax;		
 		}
     }
 }
