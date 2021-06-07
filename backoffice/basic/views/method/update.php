@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use app\components\tocioRegles;
-use app\assets\MethodAsset;
+use app\assets\MethodUpdateAsset;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Method */
@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Methods', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 
-MethodAsset::register($this);
+MethodUpdateAsset::register($this);
 ?>
 <div class="method-update">
 

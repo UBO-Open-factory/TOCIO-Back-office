@@ -14,7 +14,7 @@ namespace app\assets;
 
 use yii\web\AssetBundle;
 
-class MethodAsset extends AssetBundle {
+class MethodUpdateAsset extends AssetBundle {
     public $basePath = '@webroot';
     //     public $baseUrl = '@web';
     public $baseUrl = '@urlbehindproxy';
@@ -23,7 +23,7 @@ class MethodAsset extends AssetBundle {
 //     ];
     public $js = [
         'assets/config.js',
-        'assets/method/method.js',
+        'assets/method/methodUpdate.js',
     ];
     public $depends = [
     		'\yii\web\JqueryAsset'

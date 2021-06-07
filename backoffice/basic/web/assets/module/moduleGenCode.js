@@ -396,19 +396,19 @@ function Generate_DECLARATION(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,
 	var DECLARATION_TEMP = "";
 	//setup every sensor
 	//sensor have auto generated name , form : "sensor_name"_"sensor_number_in_order"
-	//replace every {{var}} finded with sensor 
-	//replace every {{pin}} finded with his PIN name declared
+	//replace every {{sensorName}} finded with sensor 
+	//replace every {{sensorPin}} finded with his PIN name declared
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
 		if(l_TAB_DATAJSON[i]["method_declaration"].split('//Code test for').length < 2)
 		{
 			var method_validation = 1;
-			if(l_TAB_DATAJSON[i]["method_declaration"].split('{{var}}').length < 2)
+			if(l_TAB_DATAJSON[i]["method_declaration"].split('{{sensorName}}').length < 2)
 			{
 				displayTab += '<br>' +  Color("black") + '/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/' + ColorEnd();
 				method_validation = 0;
 			}
-			if(l_TAB_DATAJSON[i]["method_declaration"].split("{{pin}}").length < 2)
+			if(l_TAB_DATAJSON[i]["method_declaration"].split("{{sensorPin}}").length < 2)
 			{
 				displayTab += '<br>' + Color("black") + '/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no pin location*/' + ColorEnd();
 				method_validation = 0;
@@ -419,7 +419,7 @@ function Generate_DECLARATION(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,
 				method_validation = 0;
 			}
 
-			DECLARATION_TEMP = l_TAB_DATAJSON[i]["method_declaration"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+			DECLARATION_TEMP = l_TAB_DATAJSON[i]["method_declaration"].split("{{sensorName}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{sensorPin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
 
 			if(method_validation == 0)
 			{
@@ -433,7 +433,7 @@ function Generate_DECLARATION(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,
 		}
 		else
 		{
-			displayTab += '<br>' + l_TAB_DATAJSON[i]["method_declaration"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+			displayTab += '<br>' + l_TAB_DATAJSON[i]["method_declaration"].split("{{sensorName}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{sensorPin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
 		}
 	}
 	return displayTab;
@@ -444,13 +444,13 @@ function Generate_SETUP(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_
 	var displayTab = "";
 	var SETUP_TEMP = "";
 	//if sensor need a initialisation and his method is finded in database :
-	//replace {{var}} with sensor auto generate name
+	//replace {{sensorName}} with sensor auto generate name
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
 		if(l_TAB_DATAJSON[i]["method_setup"].split('//Code test for').length < 2)
 		{
 			var setup_validation = 1;
-			if(l_TAB_DATAJSON[i]["method_setup"].split('{{var}}').length < 2)
+			if(l_TAB_DATAJSON[i]["method_setup"].split('{{sensorName}}').length < 2)
 			{
 				displayTab += '<br>' + Color("black") + '	/* WARNING /!\\ your setup method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/' + ColorEnd();
 				setup_validation = 0;
@@ -461,7 +461,7 @@ function Generate_SETUP(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_
 				setup_validation = 0;
 			}
 
-			SETUP_TEMP = l_TAB_DATAJSON[i]["method_setup"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+			SETUP_TEMP = l_TAB_DATAJSON[i]["method_setup"].split("{{sensorName}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{sensorPin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
 
 			if(setup_validation == 0)
 			{
@@ -475,7 +475,7 @@ function Generate_SETUP(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_
 		}
 		else
 		{
-			displayTab += '<br>' +  '	' + l_TAB_DATAJSON[i]["method_setup"].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+			displayTab += '<br>' +  '	' + l_TAB_DATAJSON[i]["method_setup"].split("{{sensorName}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{sensorPin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
 		}
 	}
 	return displayTab;
@@ -550,14 +550,14 @@ function Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 			}
 			//if user doesn't select "bouchon" option
 			//add reading method of every size of every sensor
-			//if method doesn't have {{var}} balise , programm would replace method by 0.0 declaration
+			//if method doesn't have {{sensorName}} balise , programm would replace method by 0.0 declaration
 			//if method ins't declared, programm would replace method by 0.0 declaration
 			else
 			{
 				if(l_TAB_DATAJSON[i]["method_setup"].split('//Code test for').length < 2)
 				{
 					var grandeur_validation = 1;
-					if(l_TAB_DATAJSON[i]["grandeur"][y][1].split('{{var}}').length < 2)
+					if(l_TAB_DATAJSON[i]["grandeur"][y][1].split('{{sensorName}}').length < 2)
 					{
 						displayTab += '<br>' +  Color("black") + '	/* WARNING /!\\ your reading method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/';
 						displayTab += ColorEnd();
@@ -569,7 +569,7 @@ function Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 						grandeur_validation = 0;
 					}
 
-					SETUP_TEMP = l_TAB_DATAJSON[i]["grandeur"][y][1].split("{{var}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{pin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
+					SETUP_TEMP = l_TAB_DATAJSON[i]["grandeur"][y][1].split("{{sensorName}}").join(l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i).split("{{sensorPin}}").join("PIN" + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i);
 
 					if(grandeur_validation == 0)
 					{

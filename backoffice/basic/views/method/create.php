@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use app\components\tocioRegles;
-use app\assets\MethodAsset;
+use app\assets\MethodCreateAsset;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Method */
@@ -11,7 +11,7 @@ $this->title = "Création d'une méthode";
 $this->params['breadcrumbs'][] = ['label' => 'Methods', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-MethodAsset::register($this);
+MethodCreateAsset::register($this);
 ?>
 <div class="method-create">
 

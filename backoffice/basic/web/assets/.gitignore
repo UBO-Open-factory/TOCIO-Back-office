@@ -1,8 +1,5 @@
 capteur/config.js
-capteur/capteur.js
-module/config.js
+capteur/*
 module/*
-cartes/config.js
 cartes/*
-method/config.js
 method/*

@@ -51,13 +51,20 @@ use app\models\Grandeur;
 					}
 				}
 				?>
-        </div>
+        
         <?= $form->field( $model, 'method_read', [
 					'options' => ['class' => 'invisible' ] ] )->hiddenInput( [
 														'value' => '',
 														'class' => 'sortie_read_method',
 														'id' => 'sortie_read_method' ] );
 			?>
+		</div>
+		<div class="col-sm-3">
+            <label> Ajouter des balises </label><br>
+            <?= Html::Button('Nom capteur', ['class' => 'button buttonBalise','id' => 'variable' ]) ?>
+            <?= Html::Button('Pin capteur', ['class' => 'button buttonBalise','id' => 'pin' ]) ?>
+            Ces balises permettent au générateur de code de placer les variables et les pins dans le programme.
+        </div>
     </div>
 	<div class="form-group">
 		<div class="col-sm-10"></div>
