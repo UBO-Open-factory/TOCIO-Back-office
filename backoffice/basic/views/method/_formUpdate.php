@@ -21,7 +21,9 @@ use app\models\Grandeur;
     <?php $form = ActiveForm::begin();?>
 
     <div class="row">
-		<div class="col-sm-6" style="margin-left: 30%">
+    	<div class="col-sm-3">
+    	</div>
+		<div class="col-sm-6">
                 <?= $form->field($model, 'method_include')->textarea(['rows' => 1 , 'value' => $method_pre['include'],'class' => 'form-control method_include ','id' => 'method_include']) ?>
                 <?= $form->field($model, 'method_statement')->textarea(['rows' => 2 , 'value' => $method_pre['statement'],'class' => 'form-control','id' => 'method_statement']) ?>
                 <?= $form->field($model, 'method_setup')->textarea(['rows' => 2 , 'value' => $method_pre['setup'],'class' => 'form-control','id' => 'method_setup']) ?>
@@ -38,12 +40,12 @@ use app\models\Grandeur;
 						if( count( $methode_lecture ) - 1 > $i ) 
 						{
 							echo "<textarea class='".capteur::find()->where( [
-									"id" => $method_pre['id_capteur'] ] )->one()["nom"]." grandeurTextBox' rows='2' cols='70'".$param_textbox.">".$methode_lecture[$i]."</textarea> ";
+									"id" => $method_pre['id_capteur'] ] )->one()["nom"]." grandeurTextBox' rows='2' cols='64'".$param_textbox.">".$methode_lecture[$i]."</textarea> ";
 						} 
 						else 
 						{
 							echo "<textarea class='".capteur::find()->where( [
-									"id" => $method_pre['id_capteur'] ] )->one()["nom"]." grandeurTextBox' rows='2' cols='70'".$param_textbox."></textarea> ";
+									"id" => $method_pre['id_capteur'] ] )->one()["nom"]." grandeurTextBox' rows='2' cols='64'".$param_textbox."></textarea> ";
 						}
 						$i++;
 					}

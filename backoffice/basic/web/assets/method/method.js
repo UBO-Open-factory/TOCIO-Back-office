@@ -131,7 +131,7 @@ document.getElementById('id_capteur').onchange = function()
 			for(i = 0;i<retour.length;i++)
 			{
 				display += "<label>" + retour[i] + "</label><br>";
-		        display += "<textarea class='grandeurTextBox' rows='2' cols='70' spellcheck='false' style='resize:none;'></textarea><br> "; 
+		        display += "<textarea class='grandeurTextBox' rows='2' cols='64' spellcheck='false' style='resize:none;'></textarea><br> "; 
 			}
 			document.getElementById("DisplayBalise").innerHTML = display;
 		}

@@ -75,10 +75,10 @@ class MethodController extends Controller
                     'id' => $model->id ] );
         }
 
-        $method_pre['include'] = "//add include methode for librairies";
-        $method_pre['statement'] = "//add declaration methode for your sensor";
-        $method_pre['setup'] = "//add setup methode to begin your sensor";
-        $method_pre['read'] = "//add all reading methode for your sensor , foreach length";
+        $method_pre['include'] = "";
+        $method_pre['statement'] = "";
+        $method_pre['setup'] = "";
+        $method_pre['read'] = "";
 
         $method_pre['list'] = array_combine( Cartes::find()->select( ['id' ] )->indexBy( 'nom' )->column(), Cartes::find()->select( ['nom' ] )->indexBy( 'nom' )->column() );
 
