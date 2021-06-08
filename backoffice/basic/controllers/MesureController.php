@@ -476,8 +476,19 @@ class MesureController extends ActiveController {
 			$l_INT_Mesure = floatval($l_STR_Signe . $l_STR_Avant . "." . $l_STR_Apres);
 			
 			
-			// Initialisaiton du timestamp
-			$timeStampMesure = is_null($timeStamp) ?date("Y/m/d H:i:s", time()) : date("Y/m/d H:i:s", $timeStamp);
+			// Initialisation du timestamp
+			if( is_null($timeStamp)  ) {
+				$timeStampMesure = date("Y/m/d H:i:s", time());
+			} else {
+				// Si le teimstamp passe en parametre est numeric (c'est que c'est un vrai timestamp)
+				if( is_numeric($timeStamp)  ) {
+					$timeStampMesure = date("Y/m/d H:i:s", $timeStamp);
+
+				//... sinon c'est que c'est une date de la forme YYYY/MM/JJ
+				} else {
+					$timeStampMesure = strtotime($timeStamp);
+				}
+			}
 			
 			// Construction de la requète d'insertion en BDD
 			$params = [
