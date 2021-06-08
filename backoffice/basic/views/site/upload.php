@@ -20,7 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<p>	<?php echo tocioRegles::widget(['regle' => 'fichiercsv'])?></p>
 
-	<?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']])?>
+	<?php $form = ActiveForm::begin(
+                        ['action' => ['/site/upload'],
+                         'options' => ['enctype' => 'multipart/form-data']]
+                        );      ?>
 	<?= $form->field($model, 'CSVFile')->fileInput(['multiple' => false]) ?>
 	
 	<?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'Upload']) ?>
