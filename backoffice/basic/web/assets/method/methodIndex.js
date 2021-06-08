@@ -41,3 +41,30 @@ $(document).ready(function() {
 	    return result;
 	}
 });
+
+//______________________________
+/**
+ *
+ */
+$('.TextArea').each(function () 
+{
+    $(this).change(function (e) 
+    {
+    	if(e.target.id.split('_')[0] == "readgrandeur")
+    	{
+    		var test = "";
+    		var elems = document.getElementsByClassName("test_"+e.target.id.split('_')[1]);
+		    //concat all finded textfield value with separator balise
+		    for(var i=0; i<elems.length; i++) 
+		    {
+		    	console.log("test");
+		        test += elems[i].value + "|CutBalise|";
+		    }
+		    console.log(e.target.id.split('_')[0] + " de " + e.target.id.split('_')[1] + " as maintenant la valeur " + test);
+    	}
+    	else
+    	{
+    		console.log(e.target.id.split('_')[0] + " de " + e.target.id.split('_')[1] + " as maintenant la valeur " + e.target.value);
+    	}
+	});
+});

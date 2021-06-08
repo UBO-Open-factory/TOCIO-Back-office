@@ -20,19 +20,20 @@ $(document).on('click', '.switchToogle', function() {
 		url : g_host+ "/module/updateajax",
 		cache : false,
 		dataType : "text",
-		data : {"id": ModuleID, 
-				"attribute": "actif",
-				"value": state},
+		data : {"id": ModuleID, "attribute": "actif","value": state },
 		success : function(results) {
-			 var data = JSON.parse( $.trim(results));
-			 var success = data['success'];
+			var data = JSON.parse( $.trim(results));
+			var success = data['success'];
 			 
-			 // Aucune erreur lors de l'ajout
-			 if( success == "ok"){
+			// Aucune erreur lors de l'ajout
+			if( success == "ok")
+			{
 				 
-			 } else {
-				 alert( 'Modification du status d\'activité du Module "' + ModuleID +"\n"+success+"\n"+error );
-			 }
+			}
+			else 
+			{
+				alert( 'Modification du status d\'activité du Module "' + ModuleID +"\n"+success+"\n"+error );
+			}
 			 
 		}
 	}).done(function() {
