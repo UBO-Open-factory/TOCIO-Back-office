@@ -478,15 +478,25 @@ class MesureController extends ActiveController {
 			
 			// Initialisation du timestamp
 			if( is_null($timeStamp)  ) {
+				// Il n'y a pas de timestamp
 				$timeStampMesure = date("Y/m/d H:i:s", time());
 			} else {
-				// Si le teimstamp passe en parametre est numeric (c'est que c'est un vrai timestamp)
+				// Si le timestamp passe en parametre est numeric (c'est que c'est un vrai timestamp)
 				if( is_numeric($timeStamp)  ) {
 					$timeStampMesure = date("Y/m/d H:i:s", $timeStamp);
 
-				//... sinon c'est que c'est une date de la forme YYYY/MM/JJ
+				//... sinon c'est que c'est une date de la forme YYYY/MM/JJ HH:MM:SS ou autre
 				} else {
-					$timeStampMesure = strtotime($timeStamp);
+					// si on arrive a convertir le timestamp d'un format anglais, on le prend ...
+					if( strtotime($timeStamp) !== false ){
+						$timeStampMesure = strtotime($timeStamp);
+					
+					// sinon on essai de parser la date selon le schema d/m/Y H:i:s
+					} else {
+						$time = date_parse_from_format("d/m/Y H:i:s",$timeStamp);
+						$timeStampMesure = date("Y/m/d H:i:s", mktime($time['hour'], $time['minute'], $time['second'], $time['month'], $time['day'], $time['year']));
+						$l_TIM_timeStamp= mktime($time['hour'], $time['minute'], $time['second'], $time['month'], $time['day'], $time['year']);
+					}
 				}
 			}
 			
@@ -506,7 +516,7 @@ class MesureController extends ActiveController {
 			// Insertion dans Elastic Search
 			// @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/indexing_documents.html
 			if( Yii::getAlias('@elasticsearchindex') != "") {
-				$params['timestamp']	= is_null($timeStamp) ?date(DATE_ATOM, time()) : date(DATE_ATOM, $timeStamp);
+				$params['timestamp']	= is_null($timeStamp) ?date(DATE_ATOM, time()) : date(DATE_ATOM,$l_TIM_timeStamp);
 				$params['Module identifiant reseau'] = $l_TAB_Capteur['identifiantReseau'];
 				$params['Module description'] 		= $l_TAB_Capteur['description'];
 				$params['Module nom'] 				= $l_TAB_Capteur['nom'];
