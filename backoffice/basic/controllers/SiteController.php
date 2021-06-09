@@ -393,6 +393,9 @@ class SiteController extends Controller {
 		if (($handle = fopen($model->fileName, "r")) !== false) {
 			$numLigne 	= 1;
 			
+			// Pour ne pas tomber en timeout avec le serveur
+			// set_time_limit( 60 * 10 ); // 10 minutes
+
 			// lecture ligne par ligne du fichier
 			while (($l_TAB_champs = fgetcsv($handle, 0, ";", "\"")) !== false) {
 				
