@@ -52,19 +52,45 @@ $('.TextArea').each(function ()
     {
     	if(e.target.id.split('_')[0] == "readgrandeur")
     	{
-    		var test = "";
-    		var elems = document.getElementsByClassName("test_"+e.target.id.split('_')[1]);
+    		var drop_data = "";
+    		var elems = document.getElementsByClassName("test_"+ e.target.id.split('_')[1]);
 		    //concat all finded textfield value with separator balise
 		    for(var i=0; i<elems.length; i++) 
 		    {
-		    	console.log("test");
-		        test += elems[i].value + "|CutBalise|";
+		        drop_data += elems[i].value + "|CutBalise|";
 		    }
-		    console.log(e.target.id.split('_')[0] + " de " + e.target.id.split('_')[1] + " as maintenant la valeur " + test);
     	}
     	else
     	{
-    		console.log(e.target.id.split('_')[0] + " de " + e.target.id.split('_')[1] + " as maintenant la valeur " + e.target.value);
+    		var drop_data =  e.target.value;
+    		
     	}
+		// Envoie la requete AJAX
+		$.ajax({
+			type : "POST",
+			url : g_host+ "/method/updateajax",
+			cache : false,
+			dataType : "text",
+			data : {"id": e.target.id.split('_')[1], "attribute": e.target.id.split('_')[0] ,"value": drop_data },
+			success : function(results) 
+			{
+				var data = JSON.parse( $.trim(results));
+				var success = data['success'];
+				 
+				// Aucune erreur lors de l'ajout
+				if( success == "ok")
+				{
+				}
+				else 
+				{
+				}
+				 
+			}
+		}).done(function() 
+		{
+
+		});	
+
 	});
+
 });

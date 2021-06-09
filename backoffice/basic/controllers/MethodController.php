@@ -162,12 +162,28 @@ class MethodController extends Controller
     public function actionUpdateajax() {
         $request = Yii::$app->request;
         // UPDATE FAIT À L'AIDE D'UNE REQUÈTE AJAX -------------------------------------------------
-        if( Yii::$app->request->isAjax && $request->post() ) {
+        if( Yii::$app->request->isAjax && $request->post() ) 
+        {
             $post = $request->post();
             $model = $this->findModel( $post['id'] );
 
             // Récupération de l'attribut à mettre à jour
-            $attributeName = $post['attribute'];
+            if($post['attribute'] == "include")
+            {
+                $attributeName = "method_include";
+            }
+            else if($post['attribute'] == "statement")
+            {
+                $attributeName = "method_statement";
+            }
+            else if($post['attribute'] == "setup")
+            {
+                $attributeName = "method_setup";
+            }
+            else if($post['attribute'] == "readgrandeur")
+            {
+                $attributeName = "method_read";
+            }
 
             // Récupération de la valeur de l'attribut
             $value = $post['value'];

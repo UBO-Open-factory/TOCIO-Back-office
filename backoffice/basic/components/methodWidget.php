@@ -111,11 +111,11 @@ class methodWidget extends Widget
 				$contents[] = 	"</div><br><br><br>";
 				$contents[] = 	"<div class='col-sm-5'>";
 				$contents[] = 		"<label>". $OBJ_method->getAttributeLabel('method_include') ."</label><br> ";
-				$contents[] = 		"<textarea class='TextArea' id='incldue_".$l_STR_IDmethod."' rows='1' cols='40'" . $param_textbox . ">" .$l_OBJ_method['method_include'] . "</textarea> ";
+				$contents[] = 		"<textarea class='TextArea' id='include_".$l_STR_IDmethod."' rows='1' cols='40'" . $param_textbox . ">" .$l_OBJ_method['method_include'] . "</textarea> ";
 				$contents[] = 		"<label>". $OBJ_method->getAttributeLabel('method_statement') ."</label><br> ";
-				$contents[] = 		"<textarea class='TextArea' id='declaration_".$l_STR_IDmethod."' rows='2' cols='40'" . $param_textbox . ">" .$l_OBJ_method['method_statement']. "</textarea> ";
+				$contents[] = 		"<textarea class='TextArea' id='statement_".$l_STR_IDmethod."' rows='2' cols='40'" . $param_textbox . ">" .$l_OBJ_method['method_statement']. "</textarea> ";
 				$contents[] = 		"<label>". $OBJ_method->getAttributeLabel('method_setup') ."</label><br> ";
-				$contents[] = 		"<textarea class='TextArea' id='init_".$l_STR_IDmethod."' rows='2' cols='40'" . $param_textbox . ">" .$l_OBJ_method['method_setup']. "</textarea> ";
+				$contents[] = 		"<textarea class='TextArea' id='setup_".$l_STR_IDmethod."' rows='2' cols='40'" . $param_textbox . ">" .$l_OBJ_method['method_setup']. "</textarea> ";
 				$contents[] = 	"</div>";
 
 				$contents[] = 	"<div class='col-sm-7'>";
@@ -139,11 +139,11 @@ class methodWidget extends Widget
 					}
 					if(count($methode_lecture)-1>$i)
 					{
-						$contents[] = '<textarea class="TextArea" id="readgrandeur_'.$l_STR_IDmethod.' rows="2" cols="70"' . $param_textbox . '>' . $methode_lecture[$i] .'</textarea> ';
+						$contents[] = '<textarea class="TextArea test_'.$l_STR_IDmethod.'" id="readgrandeur_'.$l_STR_IDmethod.'" rows="2" cols="70"' . $param_textbox . '>' . $methode_lecture[$i] .'</textarea> ';
 					}
 					else
 					{
-						$contents[] = '<textarea class="TextArea" id="readgrandeur_'.$l_STR_IDmethod.' rows="2" cols="70"' . $param_textbox . '></textarea> ';
+						$contents[] = '<textarea class="TextArea test_'.$l_STR_IDmethod.'" id="readgrandeur_'.$l_STR_IDmethod.'" rows="2" cols="70"' . $param_textbox . '></textarea> ';
 					}
 					$contents[] = "<br>";
 					$i++;
