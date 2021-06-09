@@ -5,7 +5,8 @@ use yii\base\Widget;
 use yii\bootstrap\Html;
 use yii\helpers\VarDumper;
 use app\models\Relmodulecarte;
-use app\models\carte;
+use app\models\Carte;
+use app\models\Capteur;
 use yii\helpers\Url;
 use app\models\Method;
 /**
@@ -120,7 +121,7 @@ class cartesWidget extends Widget
 				$contents[] = "<div class='col-sm-12'>";	
 				$contents[] = "<div class='row'>";
 				$contents[] = 	"<div class='col'>" . method::find()->where(["id" => $method["id"]])->one()["nom_method"] . "</div>";
-				$contents[] = 	"<div class='col'>" . explode("_",method::find()->where(["id" => $method["id"]])->one()["nom_method"])[0] . "</div>";
+				$contents[] = 	"<div class='col'>" . capteur::find()->where(['id'=> method::find()->where(["id" => $method["id"]])->one()["id_capteur"]])->one()["nom"] . "</div>";
 				$contents[] = "	<div class='col-2'></div>";
 				$contents[] = "	<div class='col-1'>" . $l_STR_BtnModify . "</div>";
 				$contents[] = "	<div class='col-1'>" . $l_STR_BtnDeleteMethod . "</div>";
