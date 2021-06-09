@@ -73,23 +73,9 @@ $('.TextArea').each(function ()
 			dataType : "text",
 			data : {"id": e.target.id.split('_')[1], "attribute": e.target.id.split('_')[0] ,"value": drop_data },
 			success : function(results) 
-			{
-				var data = JSON.parse( $.trim(results));
-				var success = data['success'];
-				 
-				// Aucune erreur lors de l'ajout
-				if( success == "ok")
-				{
-				}
-				else 
-				{
-				}
-				 
+			{				 
 			}
-		}).done(function() 
-		{
-
-		});	
+		})
 
 	});
 

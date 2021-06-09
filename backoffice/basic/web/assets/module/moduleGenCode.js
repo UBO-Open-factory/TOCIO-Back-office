@@ -38,7 +38,6 @@ $(document).ready(function ()
 						var HOST = "yolo";
 						var URL = "yalta";
 						var retour = JSON.parse( $.trim(results) );
-						console.log(retour[1].length);
 						document.getElementById(DisplayBalise).innerHTML = GenerateFullCode(retour[1],retour[1].length,retour[0][1],retour[0][0],Bouchon,debug);
 					}
 				});	

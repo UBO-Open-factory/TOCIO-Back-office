@@ -209,21 +209,26 @@ class modulesWidget extends Widget
 			// CONSTRUCTION DU CONTENU DU MODULE ---------------------------------------------------
 			// Picto si le module est actif ou non
 			$l_STR_Actif = ($l_OBJ_Module->actif == 1) ? $l_STR_BtnModuleActif : $l_STR_BtnModuleDeactif;
-			
 			// formattage des libellés
 			$l_STR_localisationModule	= $this->_toolTip($l_OBJ_Module->localisationModule->description, "Localisation du module");
 			$l_STR_Nom 					= $this->_toolTip($l_OBJ_Module->nom, "Nom du module");
 			//$l_STR_IdentifiantReseau 	= $this->_toolTip($l_OBJ_Module->identifiantReseau, "Identifiant réseau du module");
-			$l_STR_IdentifiantReseau 	= Html::tag("span", $l_OBJ_Module->identifiantReseau, ["data-id" => $l_OBJ_Module->identifiantReseau,
-																						"class" 	=> "dblClick alert-secondary",
-																						"data-url" 	=> Url::to(["/module/updateajax"]),
+			$l_STR_IdentifiantReseau 	= Html::tag("textarea", $l_OBJ_Module->identifiantReseau, ["id" => "identifiantReseau_".$l_OBJ_Module->identifiantReseau,
+																						"class" 	=> "TextArea",
 																						"data-attribute" 	=> "identifiantReseau",
-																				]).$l_STR_iconDoubleClick;
-			$l_STR_Description			= Html::tag("span", $l_OBJ_Module->description, ["data-id" => $l_OBJ_Module->identifiantReseau,
-																						"class" 	=> "dblClick alert-secondary",
-																						"data-url" 	=> Url::to(["/module/updateajax"]),
+																						" spellcheck" => "false",
+																						"style" => 'resize:none',
+																						"rows" => '1',
+																						"cols" => '25',
+																				]);
+			$l_STR_Description			= Html::tag("textarea", $l_OBJ_Module->description, ["id" => "description_".$l_OBJ_Module->identifiantReseau,
+																						"class" 	=> "TextArea",
 																						"data-attribute" 	=> "description",
-											]).$l_STR_iconDoubleClick;
+																						"spellcheck" => "false",
+																						"style" => 'resize:none',
+																						"rows" => '3',
+																						"cols" => '25',																						
+											]);
 
 			
 			// Bouton d'ajout d'un capteur

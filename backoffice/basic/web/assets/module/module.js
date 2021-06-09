@@ -20,20 +20,19 @@ $(document).on('click', '.switchToogle', function() {
 		url : g_host+ "/module/updateajax",
 		cache : false,
 		dataType : "text",
-		data : {"id": ModuleID, "attribute": "actif","value": state },
+		data : {"id": ModuleID, 
+				"attribute": "actif",
+				"value": state},
 		success : function(results) {
-			var data = JSON.parse( $.trim(results));
-			var success = data['success'];
+			 var data = JSON.parse( $.trim(results));
+			 var success = data['success'];
 			 
-			// Aucune erreur lors de l'ajout
-			if( success == "ok")
-			{
+			 // Aucune erreur lors de l'ajout
+			 if( success == "ok"){
 				 
-			}
-			else 
-			{
-				alert( 'Modification du status d\'activité du Module "' + ModuleID +"\n"+success+"\n"+error );
-			}
+			 } else {
+				 alert( 'Modification du status d\'activité du Module "' + ModuleID +"\n"+success+"\n"+error );
+			 }
 			 
 		}
 	}).done(function() {
@@ -235,60 +234,27 @@ $(document).ready(function() {
 
 });
 
-
-
-
-
-// _________________________________________________________________________________________________
+//______________________________
 /**
- * Ajout du double-clique sur les libellés éditables.
+ *
  */
-$(document).ready(function() {
-	// Ajout du double clique pour l'édition
-	$(".dblClick").dblclick(function(e) {
-		e.stopPropagation();
-		var currentEle = $(this);
-		var value = $(this).html();
-		updateVal(currentEle, value); // Edition du contenu
-	});
-
-	function updateVal(currentEle, value) {
-		$(currentEle).html('<input class="thVal" type="text" value="' + value + '" />');
-		$(".thVal").focus();
-		$(".thVal").keyup(function(event) {
-			if (event.keyCode == 13) {
-				var content = $(".thVal").val().trim();
-				$(currentEle).html(content);
-				
-				// Mise à jour du contenu dans la BDD
-				currentEle.data("value", content);
-				sendAjaxUpdate(currentEle);
-			}
-		});
-		// Mise à jour du contenu dans la page
-		$(document).click(function() {
-			var content = $(".thVal").val().trim();
-			$(currentEle).html(content);
-			
-			// Mise à jour du contenu dans la BDD
-			currentEle.data("value", content);
-			sendAjaxUpdate(currentEle);
-		});
-	}
-	function sendAjaxUpdate(elem) {
-	
+$('.TextArea').each(function () 
+{
+    $(this).change(function (e) 
+    {
+    	var drop_data =  e.target.value;
 		// Envoie la requete AJAX
 		$.ajax({
 			type : "POST",
-			url : elem.data('url'),
+			url : g_host+ "/module/updateajax",
 			cache : false,
 			dataType : "text",
-			data : elem.data(),
-			success : function(results) {
-				// var data = JSON.parse( $.trim(results));
+			data : {"id": e.target.id.split('_')[1], "attribute": e.target.id.split('_')[0] ,"value": drop_data },
+			success : function(results) 
+			{				 
 			}
-		}).done(function() {
-			$(this).addClass("done");
-		});
-	}
+		})
+
+	});
+
 });
