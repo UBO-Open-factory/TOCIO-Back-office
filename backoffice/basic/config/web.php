@@ -12,7 +12,7 @@ $config = [
     'bootstrap' => [
         'log'
     ],
-    'version' => '1.2.8',
+    'version' => '1.3.0',
     'aliases' => [
         // Do not define anything here, but in web_local.php
     ],

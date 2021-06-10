@@ -1,6 +1,6 @@
 <?php
 return [
-    'name' => "Branche feuilleDesStyles",
+    'name' => "Branche integration",
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm' => '@vendor/npm-asset',

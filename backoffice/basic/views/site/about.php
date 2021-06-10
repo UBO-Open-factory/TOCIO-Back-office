@@ -149,7 +149,21 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
-<<<<<<< HEAD
+	<h2>V 1.3.0</h2>
+<li>2021-05-27 <b>&bull;</b> Correction of "crash when open carte page"</li>
+<li>2021-05-27 <b>&bull;</b> Change method and cartes button color</li>
+<li>2021-05-27 <b>&bull;</b> Del JS files ignore in github</li>
+<li>2021-05-27 <b>&bull;</b> Change color button to match with application</li>
+<li>2021-05-19 <b>&bull;</b> ModuleWidget can now find all method and push them into JS</li>
+<li>2021-05-19 <b>&bull;</b> Cartes method added</li>
+<li>2021-05-17 <b>&bull;</b> Fixe method visual and create view</li>
+<li>2021-05-12 <b>&bull;</b> Orange warning button</li>
+<li>2021-05-12 <b>&bull;</b> Génération de code</li>
+	
+	<h2>V 1.2.9</h2>
+<li>2021-06-10 <b>&bull;</b> Définition de classes CSS pour les boutons et encadrements des Modules, Capteurs, Grandeurs, Localisaiton, Methodes et Cartes.</li>
+<li>2021-06-10 <b>&bull;</b> Ajout d'une section pour le générateur de code dans la vue d'un Module</li>
+
 	<h2>V 1.2.8</h2>
 	<li>2021-05-18 <b>&bull;</b> Passage de Tocio en version 1.2.8</li>
 <li>2021-05-18 <b>&bull;</b> Passage de Yii en version 2.0.42.1.</li>
@@ -175,27 +189,7 @@ function commentaire($elem){
 <li>2021-04-07 <b>&bull;</b> Mise à jour de Yii en version 2.0.41.1</li>
 <li>2021-04-07 <b>&bull;</b> Protection pour l'export CSV contre non cumul de valeur</li>
 <li>2021-04-07 <b>&bull;</b> Export de Mesures au format CSV</li>
-=======
-	<!-- 
-	<h2>V 1.3.0</h2>
-<li>2021-05-27 <b>&bull;</b> Correction of "crash when open carte page"</li>
-<li>2021-05-27 <b>&bull;</b> Change method and cartes button color</li>
-<li>2021-05-27 <b>&bull;</b> Del JS files ignore in github</li>
-<li>2021-05-27 <b>&bull;</b> Change color button to match with application</li>
-<li>2021-05-19 <b>&bull;</b> ModuleWidget can now find all method and push them into JS</li>
-<li>2021-05-19 <b>&bull;</b> Cartes method added</li>
-<li>2021-05-17 <b>&bull;</b> Fixe method visual and create view</li>
-<li>2021-05-12 <b>&bull;</b> Orange warning button</li>
-<li>2021-05-12 <b>&bull;</b> Génération de code</li>
-	 -->
-	
-	<h2>V 1.2.8</h2>
-<li>2021-06-10 <b>&bull;</b> Définition de classes CSS pour les boutons et encadrements des Modules, Capteurs, Grandeurs, Localisaiton, Methodes et Cartes.</li>
-<li>2021-06-10 <b>&bull;</b> Ajout d'une section pour le générateur de code dans la vue d'un Module</li>
 
-	
->>>>>>> feuillesDeStyles
-	
 	<h2>V 1.2.7</h2>
 	<li>2021-04-26 <b>&bull;</b>Mise à jour de Yii.</li>
 <li>2021-04-26 <b>&bull;</b> Prise en compte du fuseau horaire pour le formattage des dates et de l'heure et affichage à la norme Française.</li>
