@@ -82,13 +82,11 @@ class Alert extends Widget
             $session = Yii::$app->getSession();
             $flashes = $session->getAllFlashes();
 
-
-
             foreach ($flashes as $type => $data) {
                 $data = (array) $data;
                 foreach ($data as $message) {
                     $this->options['type'] = $type;
-                    $this->options['title'][] = $message;
+                    $this->options['title'] = $message;
                 }
                 $session->removeFlash($type);
             }

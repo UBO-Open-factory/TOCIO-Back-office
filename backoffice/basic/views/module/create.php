@@ -29,8 +29,6 @@ echo Alert::widget();
     <h1><?= Html::encode($this->title) ?></h1>
     <?php echo tocioRegles::widget(['regle'=>'moduleDefinition']); ?>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?= $this->render('_form', ['model' => $model,]) ?>
 
 </div>

@@ -4,10 +4,12 @@ use yii\helpers\Html;
 use app\components\messageAlerte;
 use app\components\modulesWidget;
 use app\assets\ModuleAsset;
+use app\assets\ModuleGenCodeAsset;
 use app\components\capteursWidget;
 use yii\data\SqlDataProvider;
 use yii\jui\Draggable;
 use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ModuleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -17,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 // Utilisation des ressources pour les modules (JS + CSS)
 ModuleAsset::register($this);
+ModuleGenCodeAsset::register($this);
 
 // Enregistrement de l'URL courante pour les retours
 Url::remember();
@@ -67,10 +70,10 @@ Url::remember();
     <div class="row">
     	<div class="col-sm-9">
 			<?php
-				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'btn btn-success ']);
+				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'button buttonModule ']);
 				echo Draggable::widget();
 				echo modulesWidget::widget(['dataProvider' => $dataProvider,]);
-				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'btn btn-success pull-right']);
+				echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Module', ['create'], ['class' => 'button buttonModule pull-right']);
 			?>
     	</div>
     	<div class="col-sm-3" id="listeCapteursFix">
@@ -82,7 +85,7 @@ Url::remember();
 		    		]);
 	
 					echo capteursWidget::widget(['dataProvider' => $capteurProvider,]);
-					echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Capteur', ['capteur/create'], ['class' => 'btn btn-info pull-right']);
+					echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer un Capteur', ['capteur/create'], ['class' => 'button buttonCapteur pull-right']);
 		    	?>
     		</div>
     	</div>

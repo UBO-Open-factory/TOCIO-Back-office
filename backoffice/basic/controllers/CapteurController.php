@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Relcapteurgrandeur;
+use app\models\Grandeur;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
 
@@ -183,13 +184,18 @@ class CapteurController extends Controller
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
+
+        /*
         
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	
-//             return $this->redirect(['index', 'id' => $model->id]);
+        
+        */
+        if ($model->load(Yii::$app->request->post()) && $model->save()) 
+        {
+
+            //return $this->redirect(['index', 'id' => $model->id]);
         	return $this->redirect([Url::previous(), 'id' => $model->id]);
         }
-
+        
         return $this->render('update', [
             'model' => $model,
         ]);
@@ -277,5 +283,33 @@ class CapteurController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    // _____________________________________________________________________________________________
+    /**
+     * Finds the Capteur model based on its primary key value.
+     * Renvoie le capteur et ses grandeurs sous forme json
+     * @param int id
+     * @return string[] tab
+     * @version 28 mai 2021
+     */
+    public function actionAjaxgetgrandeur()
+    {
+        // Le retour sera au format JSON
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $request = Yii::$app->request;
+
+        $id = $request->post("id");
+        
+        $model = array();
+        // RECHERCHE DES MODELS DANS LA BASE -------------------------------------------------------
+        foreach(Relcapteurgrandeur::find()->where(["idCapteur"=>$id])->all() as $l_TAB_Capteur_grandeur)
+        {
+            $data = array();
+            $data = Grandeur::find()->where(["id"=>$l_TAB_Capteur_grandeur["idGrandeur"]])->one()["nature"];
+            array_push($model,$data);
+        }
+        return $model;
     }
 }

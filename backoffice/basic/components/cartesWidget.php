@@ -134,7 +134,7 @@ class cartesWidget extends Widget
 			// BOITE DE LA CARTE
 			$carte[] = $this->_cardBox([	"header" 	=> $l_STR_iconDeplacer.$l_STR_nom_CARTE. Html::tag("span",implode(" ", $l_TAB_BtnEditiocarte),['class' => "pull-right"]),
 											"content"	=> implode("", $contents),
-											"class"		=> "border-info mb-3 px-0 methodOriginal",
+											"class"		=> "borderCarte mb-3 px-0 methodOriginal",
 											"data" 		=> $l_STR_nom_CARTE."|".$l_STR_ID_CARTE,
 											"style" 	=> null,
 									]);
@@ -222,4 +222,3 @@ class cartesWidget extends Widget
 	}
 }
 ?>
-	

@@ -30,7 +30,7 @@ use yii\helpers\Url;
     <?= $form->field($model, 'type') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Search', ['class' => 'button buttonGrandeur']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 

@@ -11,9 +11,14 @@ namespace app\components;
 use yii\base\Widget;
 use yii\bootstrap\Html;
 use app\models\Relcapteurgrandeur;
+use app\models\relmodulecapteur;
 use app\models\Capteur;
+use app\models\Grandeur;
+use app\models\Cartes;
+use app\models\Method;
 use function Opis\Closure\serialize;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 class modulesWidget extends Widget
 {
@@ -53,7 +58,6 @@ class modulesWidget extends Widget
 		// L'URL COURANTE --------------------------------------------------------------------------
 		Url::remember(Url::current());
 		
-		
 		// Le bouton pour plier/déplier les boites.
 		$l_STR_BtnPliage 		= Html::tag("span","", ['class'	=> "triangle pull-right glyphicon glyphicon-triangle-bottom"]);
 		$l_STR_BtnDelete 		= Html::tag("span", "", ["class" => "glyphicon glyphicon-trash"]);
@@ -63,13 +67,11 @@ class modulesWidget extends Widget
 		$l_STR_iconDeplacer 	= Html::tag("i", "", ["class" => "glyphicon glyphicon-move"]). " ";
 		$l_STR_ZoneDrop 		= Html::tag("div", "Laches moi là", ["class" => "DropZone"]);
 		
-		
 		// RÉCUPÉRATION DU JEUX DE DONNÉES ---------------------------------------------------------
 		// @see https://www.yiiframework.com/doc/guide/2.0/fr/output-data-providers
 		$models = array_values($this->dataProvider->getModels());
 		$modules = [];
 		
-
 		// PARCOURS DE CHACUN DES MODELS
 		foreach ($models as $index => $l_OBJ_Module) {
 			// FORMATAGE DE LA TRAME (PAYLOAD" ATTENDU POUR CE MODULE ------------------------------
@@ -79,14 +81,12 @@ class modulesWidget extends Widget
 			// L'identification du capteur
 			// @see https://www.yiiframework.com/doc/guide/2.0/fr/helper-html
 			$formatTrameWifi[] = Html::tag("button ",$l_OBJ_Module->identifiantReseau,["type" => "button", "class" => "btn btn-primary disabled"]);
-// 			$formatTrameWifiBrute[] = $l_OBJ_Module->identifiantReseau;
+			//$formatTrameWifiBrute[] = $l_OBJ_Module->identifiantReseau;
 			
 			// Le séparateur
 			$formatTrameWifi[] = Html::tag("button", "/",[	"type" => "button", 
 														"class" => "btn btn-primary disabled",
 														]);
-			
-			
 			
 			// BOUTONS D'ÉDITION DU MODULE ---------------------------------------------------------
 			$l_TAB_BtnEditionModule 	= [];
@@ -97,8 +97,6 @@ class modulesWidget extends Widget
 																	"title" => "Supprimer",
 																	"data-confirm" => "Êtes-vous sûr de vouloir supprimer ce Module ?",
 																	"data-method"=>"post"]);
-			
-		
 			
 			// RECUPERATION DES CAPTEURS RATTACHÉS À CE MODULE -------------------------------------
 			$capteurs = [];
@@ -113,27 +111,29 @@ class modulesWidget extends Widget
 			// PARCOURS DE TOUT LES CAPTEURS DU MODULE----------------------------------------------
 			$l_TAB_CapteursDuModule =  [];
 			$l_TAB_Grandeurs = [];
-			foreach( $l_TAB_Capteurs as $l_OBJ_ModuleCapteur){
+			foreach( $l_TAB_Capteurs as $l_OBJ_ModuleCapteur)
+			{
 				// Boutons d'édition du capteur custom
 				$l_TAB_BtnCustomCapteur	= [];
 
-				
 				// La customisation de ce capteur pour ce module
 				$l_STR_CustomCapteurName	= $l_STR_iconDeplacer.$l_OBJ_ModuleCapteur->nomcapteur;
 
 				// Position du capteur
 				$l_STR_Position = $l_OBJ_ModuleCapteur['x']. "," .$l_OBJ_ModuleCapteur['y']. "," .$l_OBJ_ModuleCapteur['z'];
-				$l_STR_Position = Html::tag("span", $l_STR_Position, ['class'=>"dblClick alert-secondary",
-																	'data' => ["idModule" 	=> $l_OBJ_ModuleCapteur['idModule'], 
-																	"url"		=> Url::to(["/relmodulecapteur/updateajax"]),
-																	"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']]
+				$l_STR_Position = Html::tag("span", $l_STR_Position, [
+																	'class'=>"dblClick alert-secondary",
+																	'data' => 
+																		[
+																		"idModule" 	=> $l_OBJ_ModuleCapteur['idModule'], 
+																		"url"		=> Url::to(["/relmodulecapteur/updateajax"]),
+																		"idCapteur" => $l_OBJ_ModuleCapteur['idCapteur']
+																		]
 																	]);
 				$l_STR_Position .= " ".$l_STR_iconDoubleClick;
 				
 				// Ajout de la légende de la position du capteur
 				$l_STR_Position	= $this->_legende($l_STR_Position, "Coord.");
-				
-				
 				
 				// Bouton d'édition du capteur
 				$l_TAB_BtnCustomCapteur[]	= $this->_btnEditionCustomCapteur("/relmodulecapteur/update", 
@@ -149,12 +149,10 @@ class modulesWidget extends Widget
 													"data-confirm" => "Êtes-vous sûr de vouloir dissocier ce Capteur de ce Module ?",
 													"data-method"=>"post"]);
 
-			
 				// Le nom officiel du capteur
 				$l_OBJ_Capteur				= Capteur::findOne($l_OBJ_ModuleCapteur->idCapteur0);
 				$l_STR_NomCapteur 			= $l_OBJ_ModuleCapteur->nomcapteur;
 				$l_TAB_CapteursDuModule[] 	= $l_OBJ_Capteur->nom;
-				
 				
 				// Contenu de la boite du capteur sur 2 colonnes
 				$contents = []; 					
@@ -165,28 +163,25 @@ class modulesWidget extends Widget
 				$contents[] = "</div>";
 				$contents[] = "<div class='col-md-9'>";
 				$contents[] = "		<div class='row'>";
-		
-						
+				
 				// Recuperation de chacune des grandeurs rattachées à ce capteur
 				foreach( Relcapteurgrandeur::find()->where(["idCapteur" => $l_OBJ_ModuleCapteur->idCapteur])->all() as $l_OBJ_Grandeurs){
 					// Formattage des libellés de la grandeur
 					$format = $l_OBJ_Grandeurs->idGrandeur0['formatCapteur'];
 					$l_STR_Nature		= $this->_toolTip($l_OBJ_Grandeurs->idGrandeur0['nature'], "Nature de la mesure");
-					$l_STR_Format		= $this->_toolTip($format, "Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeur0['nature'].
+					$l_STR_Format		= $this->_toolTip($format, 
+															"Format d'encodage de la ".$l_OBJ_Grandeurs->idGrandeur0['nature'].
 															" du capteur ".$l_STR_NomCapteur.
 															"\nExemple : ".$this->_exempleFormatGrandeur($format));
 					//$l_STR_GrandeurID	= $l_OBJ_Grandeurs->idGrandeurs['id'];
 
-					
 					// Récupération de la date de la dernière données entrée dans la table des mesures
 					$l_STR_LastDate = $this->_LastDateDataEntry($l_OBJ_Grandeurs->idGrandeur0['tablename']);
 					$l_STR_DateLastEntryGrandeur	= $this->_toolTip($l_STR_LastDate, "Date de la dernière données stockée");
 					
-					
 					// Ajout du format dans la trame
 					$formatTrame[] = Html::tag("button ",$l_STR_Format,["type" => "button", "class" => "btn btn-primary disabled"]);
 
-					
 					// Formattage de l'affichage de la grandeur
 					$contents[] = Html::tag("div",$l_STR_Nature,["class" => "col-md-5"]);
 					$contents[] = Html::tag("div",$l_STR_Format,["class" => "col-md-2"]);
@@ -202,42 +197,43 @@ class modulesWidget extends Widget
 				$contents[] = "</div>";
 				$contents[] = "</div>";
 			
-			
-			
 				// Boite autour du capteur
 				$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_CustomCapteurName. " ".implode(" ", $l_TAB_BtnCustomCapteur)." ".$l_STR_BtnPliage,
 												"content"	=> implode("", $contents),
-												"class"		=> "border-info mb-3 px-0 Capteur",
+												"class"		=> "borderCapteur mb-3 px-0 Capteur",
 												"data" 		=> $l_OBJ_ModuleCapteur['idModule']."|".$l_OBJ_ModuleCapteur['idCapteur']."|".$l_OBJ_ModuleCapteur['nomcapteur']."|".$l_OBJ_ModuleCapteur['ordre'],
 												"style" 	=> null,
 										]);
 			}
 
-			
 			// CONSTRUCTION DU CONTENU DU MODULE ---------------------------------------------------
 			// Picto si le module est actif ou non
 			$l_STR_Actif = ($l_OBJ_Module->actif == 1) ? $l_STR_BtnModuleActif : $l_STR_BtnModuleDeactif;
-			
-			
 			// formattage des libellés
 			$l_STR_localisationModule	= $this->_toolTip($l_OBJ_Module->localisationModule->description, "Localisation du module");
 			$l_STR_Nom 					= $this->_toolTip($l_OBJ_Module->nom, "Nom du module");
-// 			$l_STR_IdentifiantReseau 	= $this->_toolTip($l_OBJ_Module->identifiantReseau, "Identifiant réseau du module");
-			$l_STR_IdentifiantReseau 	= Html::tag("span", $l_OBJ_Module->identifiantReseau, ["data-id" => $l_OBJ_Module->identifiantReseau,
-																						"class" 	=> "dblClick alert-secondary",
-																						"data-url" 	=> Url::to(["/module/updateajax"]),
+			//$l_STR_IdentifiantReseau 	= $this->_toolTip($l_OBJ_Module->identifiantReseau, "Identifiant réseau du module");
+			$l_STR_IdentifiantReseau 	= Html::tag("textarea", $l_OBJ_Module->identifiantReseau, ["id" => "identifiantReseau_".$l_OBJ_Module->identifiantReseau,
+																						"class" 	=> "TextArea",
 																						"data-attribute" 	=> "identifiantReseau",
-																				]).$l_STR_iconDoubleClick;
-			$l_STR_Description			= Html::tag("span", $l_OBJ_Module->description, ["data-id" => $l_OBJ_Module->identifiantReseau,
-																						"class" 	=> "dblClick alert-secondary",
-																						"data-url" 	=> Url::to(["/module/updateajax"]),
+																						" spellcheck" => "false",
+																						"style" => 'resize:none',
+																						"rows" => '1',
+																						"cols" => '25',
+																				]);
+			$l_STR_Description			= Html::tag("textarea", $l_OBJ_Module->description, ["id" => "description_".$l_OBJ_Module->identifiantReseau,
+																						"class" 	=> "TextArea",
 																						"data-attribute" 	=> "description",
-											]).$l_STR_iconDoubleClick;
+																						"spellcheck" => "false",
+																						"style" => 'resize:none',
+																						"rows" => '3',
+																						"cols" => '25',																						
+											]);
 
 			
 			// Bouton d'ajout d'un capteur
 			$l_STR_Icon		= Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]);
-			$l_STR_Temp 	= Html::button($l_STR_Icon. " Associer un capteur", ["class" => "btn btn-info pull-right btnAjoutCapteur"]);
+			$l_STR_Temp 	= Html::button($l_STR_Icon. " Associer un capteur", ["class" => "button buttonCapteur pull-right btnAjoutCapteur"]);
 			$l_STR_BtnAjoutCapteur = Html::a($l_STR_Temp, ['/relmodulecapteur/create', 'idModule' => $l_OBJ_Module['identifiantReseau']], ['class' => 'profile-link']);
 			
 			
@@ -253,16 +249,54 @@ class modulesWidget extends Widget
 					"style" 	=> "max-width: 90rem",
 			]);
 
-			// Construction du contenu pour le code Arduino
 			$host = substr(Url::base(''), 2);
-			$l_STR_CodeArduino =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Arduino',
-					"content"	=> Html::tag("h3","Exemple") 
-									.Html::tag("p","Ceci est un exemple de code écrit pour un Arduino pour envoyer une Payload formatée dans la base TOCIO.")
-									.Html::tag("pre", $this->_codeArduino( $host, $l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code Arduino
-					"class"		=> "mb-3 px-0 PythonCode",
+
+			// Construction de la liste déroulante pour la selection des cartes pour la génération du code Arduino
+			//
+			//===================================
+			//
+			//On génère une liste comprennant les noms de toutes les cartes disponible auquelles on associes la valeur de leur ID 
+			//On cherche ensuite toutes les méthodes lié à cette carte qui serait compatible avec un capteur de la liste du module
+			//On génère ensuite des Input Hidden (un pour chaque carte) qui contiennent toutes les informations
+			//pour générer le code des capteurs et qui sera ensuite récupérer par le Java-Script pour générer et afficher le code
+			//
+			//===================================
+
+			//liste contenant toutes les cartes disponible et une fonction Code Test
+			$l_STR_SelectCartes = "";
+			//création de la liste
+			$l_STR_SelectCartes .= "<select class = 'SelectCartesClass button buttonCarte' id = '". $l_OBJ_Module->identifiantReseau ."SelectCartesId'>";
+			$l_STR_SelectCartes .= "  <option value=". $l_OBJ_Module->identifiantReseau .">Select...</option>";	        
+	        $l_STR_SelectCartes .= "  <option value=". $l_OBJ_Module->identifiantReseau .">CodeTest</option>";
+
+	        //=====================================================
+			//fonction pour ajouter toutes les cartes
+			foreach(cartes::find()->all() as $GEN_card_selected)
+			{
+				$l_STR_SelectCartes .= "  <option value=". $l_OBJ_Module->identifiantReseau .">".$GEN_card_selected['nom']."</option>";
+			}
+			$l_STR_SelectCartes .= "</select>";
+
+			$l_STR_CardSelectorContent = "";
+			$l_STR_CardSelectorContent .= 		'<div class="col-md-3">';
+			$l_STR_CardSelectorContent .= 		$l_STR_SelectCartes;
+			$l_STR_CardSelectorContent .= 		'</div>';
+			$l_STR_CardSelectorContent .= 		'<div class="col-md-9">';
+			$l_STR_CardSelectorContent .= 			'<input class="col-md-1 btn" type="checkbox" id="bouchon'. $l_OBJ_Module->identifiantReseau .'">';
+			$l_STR_CardSelectorContent .= 			'<label class="col-md-11">Appliquer un bouchon pour simuler la lecture des données</label>';
+			$l_STR_CardSelectorContent .= 		'</div>';
+			$l_STR_CardSelectorContent .= 		'<div class="col-md-9">';
+			$l_STR_CardSelectorContent .= 			'<input class="col-md-1 btn" type="checkbox" id="debug'. $l_OBJ_Module->identifiantReseau .'">';
+			$l_STR_CardSelectorContent .= 			'<label class="col-md-11">Afficher les traces de debugs</label>';
+			$l_STR_CardSelectorContent .= 		'</div>';
+
+			// Construction de l'afficheur de code (celui-ci est modifiable par le JS pendant l'utilisation)
+			$l_STR_GenCodeDisplay =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code pour Cartes micro-controlleurs',
+					"content"	=> $l_STR_CardSelectorContent . Html::tag("pre class='". $l_OBJ_Module->identifiantReseau ."GenCodeDisplay' id = '". $l_OBJ_Module->identifiantReseau ."GenCodeDisplay'", "Aucune carte sélectionné"),
+					"class"		=> " mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
 			]);
-			
+
 			// Construction du contenu pour le code dans un fichier CSV
 			$l_STR_CodeCSV =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Formattage d\'un fichier CSV',
 					"content"	=> Html::tag("h3","Exemple") 
@@ -275,8 +309,6 @@ class modulesWidget extends Widget
 					"class"		=> "mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
 			]);
-			
-			
 			
 			// Construction du contenu de la boite sur 3 colonnes.
 			$l_STR_ModuleActivationStatus = $l_OBJ_Module->actif == "0" ? "checked": "";
@@ -310,8 +342,17 @@ class modulesWidget extends Widget
 			$contents[] = 		Html::tag("legend", "Format pour transmission Wifi");
 			$contents[] = 		"Url pour ajouter les données de ce Module:<br/><code>".Url::toRoute('/mesure/add/[payload]', "https")."</code>";
 			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
+			$contents[] = 	"</fieldset>";
+			$contents[] = "</div>";
+			$contents[] = "<div class='col-md-12'>";
+			$contents[] = 	"<fieldset>";
+			$contents[] = 		Html::tag("legend", "Exemple de code");
+			
+			// Select des cartes
+			$contents[] = 		$l_STR_GenCodeDisplay;
+			
+
 			$contents[] = 		Html::tag("p", $l_STR_CodePython);
-			$contents[] = 		Html::tag("p", $l_STR_CodeArduino);
 			$contents[] = 		Html::tag("p", $l_STR_CodeCSV);
 			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
@@ -335,7 +376,7 @@ class modulesWidget extends Widget
 											"titre" 	=> $l_STR_Description,
 											"content"	=> implode("", $contents),
 											"id"		=> $l_OBJ_Module->identifiantReseau,
-											"class"		=> "card border-success  mb-3 px-0 Module",
+											"class"		=> "card borderModule  mb-3 px-0 Module",
 											"data"		=> $l_OBJ_Module->identifiantReseau ,
 											"style" 	=> "max-width: 90rem",
 										]);
@@ -713,155 +754,7 @@ class modulesWidget extends Widget
 		$ligne[] = 'print( url, response.json() )';
 		return implode("<br/>",$ligne);
 	}
-	
-	// _____________________________________________________________________________________________
-	/**
-	 * Formattage de code Arduino (C++) pour envoyer la trame WIFI.
-	 *
-	 * @param string $url : URL sur laquelle envoyer la payload.
-	 * @param string $id : l'ID du module (son identifiant réseau)
-	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
-	 * @return string
-	 * 
-	 * @version 12 févr. 2021	: APE	- protection contre les noms de Granndeur n'ayant pas d'espaces.
-	 */
-	private function _codeArduino($url, $id, $params ){
-		$ligne = [];
-		
-		$format = [];
-		$natures = [];
-		$compteur = 0;
-		$ligne[] = 'const String host = "'.$url.'";';
-		$ligne[] = 'const String url  = "'. \Yii::getAlias('@urlbehindproxy').'/mesure/add/'.$id.'";';
-		$ligne[] = "";
-		$ligne[] = 'void loop() {';
-		$ligne[] = "";
-		$ligne[] = '	// Concatenation des mesures .............................';
-		$ligne[] = '	String Mesures = "";';
-		foreach ( $params as $grandeur ){
-			// Si le nom de la Grandeur a pas un espace
-			if( stripos( $grandeur['nature']," ") !== false){
-				list($nature, $null) = explode(" ", $grandeur['nature']);
-			} else {
-				$nature = $grandeur['nature'];
-			}
-			$natureValue = $nature.$compteur++;
-			$natures[] = strtolower($this->_stripAccents($natureValue));
-			
-			$ligne[] = "";
-			$ligne[] = "	// ".strtolower($this->_stripAccents($natureValue))." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
-			$ligne[] = "	float ".$this->_stripAccents($natureValue)." = \"\"; // <- Your code to read value from sensor goes here ";
-			$ligne[] = '	Mesures.concat(formatString('.$this->_stripAccents($natureValue).', "'.$grandeur['format'].'"));';
-		}
-		$ligne[] = "";
-		$ligne[] = '	// Envoie des données vers TOCIO .........................';
-		$ligne[] = '	sendDataInHTTPSRequest( url, Mesures );';
-		$ligne[] = "";
-		$ligne[] = '	// Pause .................................................';
-		$ligne[] = '	delay(60 * 1000);';
-		$ligne[] = '}';
-		$ligne[] = "";
-		$ligne[] = "";
-		$ligne[] = "";
-		
-		
-		// Partie pour le formattage de la mesure
-		$ligne[] = '// --------------------------------------------------------------------------------';
-		$ligne[] = '// Formattage d\'une chaine de caractères "chaine" selon le format "formattage".';
-		$ligne[] = '// @param chaine : Chainbe de caractère à formater.';
-		$ligne[] = '// @param formattage : Formattage d\'une valeur selon la règle [-]chiffreAvantLaVirgule.chiffreApresLaVirgule';
-		$ligne[] = 'String formatString(float p_valeur, String p_formattage) {';
-		$ligne[] = '	int delimiterPosition, lenghtAvant;';
-		$ligne[] = '	String data = "";  // The string we need to format';
-		$ligne[] = '	String chaine = String(p_valeur);';
-		$ligne[] = '';
-		$ligne[] = '	delimiterPosition = chaine.indexOf(".");  // Read the delimiter positon in "chaine".';
-		$ligne[] = '	String avant = chaine.substring(0, delimiterPosition);';
-		$ligne[] = '	String apres = chaine.substring(delimiterPosition + 1);';
-		$ligne[] = '';
-		$ligne[] = '	delimiterPosition = p_formattage.indexOf(".");           // Read the delimiter position in "formattage".';
-		$ligne[] = '	if ( p_formattage.substring(0, 1) == "-" ) {';
-		$ligne[] = '		lenghtAvant = p_formattage.substring(1, delimiterPosition).toInt();';
-		$ligne[] = '	} else {';
-		$ligne[] = '		lenghtAvant = p_formattage.substring(0, delimiterPosition).toInt();';
-		$ligne[] = '	}';
-		$ligne[] = '	int lenghtApres = p_formattage.substring(delimiterPosition + 1).toInt();';
-		$ligne[] = '';
-		$ligne[] = '	// Si on a besoin d\'un signe .................................';
-		$ligne[] = '	if ( p_formattage.substring(0, 1) == "-" ) {';
-		$ligne[] = '		if (p_valeur < 0) {';
-		$ligne[] = '			data.concat("-");';
-		$ligne[] = '		} else {';
-		$ligne[] = '			data.concat("+");';
-		$ligne[] = '		}';
-		$ligne[] = '	}';
-		$ligne[] = '';
-		$ligne[] = '	// Padding with 0 for the "avant" part ........................';
-		$ligne[] = '	String temp = "";';
-		$ligne[] = '	for (int i = 0; i <= lenghtAvant; i++) {';
-		$ligne[] = '		// Concatenation de tout les 0';
-		$ligne[] = '		temp.concat("0");';
-		$ligne[] = '	}';
-		$ligne[] = '	temp.concat(avant);';
-		$ligne[] = '	data.concat(temp.substring( temp.length() - lenghtAvant ));';
-		$ligne[] = '';
-		$ligne[] = '	// Formattage de la partie apres la virgule ....................';
-		$ligne[] = '	for (int i = 0; i <= apres.length(); i++) {';
-		$ligne[] = '		apres.concat("0");';
-		$ligne[] = '	}';
-		$ligne[] = '	apres = apres.substring(0, lenghtApres);';
-		$ligne[] = '	data.concat(apres);';
-		$ligne[] = '';
-		$ligne[] = '	return data;';
-		$ligne[] = '}';
-		$ligne[] = '';
-		$ligne[] = '';
-		$ligne[] = '';
-		$ligne[] = '// --------------------------------------------------------------------------------';
-		$ligne[] = '// Envoi au serveur TOCIO les mesures ("data") passées en paramètre.';
-		$ligne[] = '// @param data : String contenant les mesures formatée selon la payload défini dans le Back Office de Tocio';
-		$ligne[] = 'String sendDataInHTTPSRequest(String data) {';
-		$ligne[] = '';
-		$ligne[] = '	// If we are connecte to the WIFI';
-		$ligne[] = '	if (WiFi.status() == WL_CONNECTED) {';
-		$ligne[] = '';
-		$ligne[] = '		//  Create an https client';
-		$ligne[] = '		WiFiClientSecure client;';
-		$ligne[] = '';
-		$ligne[] = '		// Don\'t validate the certificat (and avoid fingerprint).';
-		$ligne[] = '		client.setInsecure();';
-		$ligne[] = '';
-		$ligne[] = '		// We don\'t validate the certificat, buit we use https (port 443 of the server).';
-		$ligne[] = '		int port = 443;';
-		$ligne[] = '		if (!client.connect(host, port)) {';
-		$ligne[] = '			Serial.println("connection failed");';
-		$ligne[] = '			return "nok";';
-		$ligne[] = '		}';
-		$ligne[] = '';
-		$ligne[] = '		// Send data to the client with a GET method';
-		$ligne[] = '		String request = url + "/" + data;';
-		$ligne[] = '		client.print(String("GET ") + request + " HTTP/1.1\r\n" +';
-		$ligne[] = '				"Host: " + host + "\r\n" +';
-		$ligne[] = '				"Connection: close\r\n\r\n");';
-		$ligne[] = '';
-		$ligne[] = '		// Lecture de ce qui est renvoyée par le serveur';
-		$ligne[] = '		while (client.available()) {';
-		$ligne[] = '			String line = client.readStringUntil(\'\r\');';
-		$ligne[] = '			Serial.print(line);';
-		$ligne[] = '		}';
-		$ligne[] = '';
-		$ligne[] = '		client.stop();';
-		$ligne[] = '		return "ok";';
-		$ligne[] = '';
-		$ligne[] = '	} else {';
-		$ligne[] = '		return "nok";';
-		$ligne[] = '	}';
-		$ligne[] = '';
-		$ligne[] = '}';
 
-		return implode("<br/>",$ligne);
-	}
-	
 	// _____________________________________________________________________________________________
 	/**
 	 * Entete de fichier pour Formattage d'un fichier journal au format CSV.

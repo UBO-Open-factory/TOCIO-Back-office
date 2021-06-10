@@ -107,13 +107,7 @@ class graphiquesWidget extends Widget
 		}
 		return $l_STR_Retour;
 	}
-	
-
-	
-	
-	
-	
-	
+		
 	// _____________________________________________________________________________________________
 	/**
 	 * Renvoie le paramétrage pour formatter l'affichage des graphiques d'uns serie

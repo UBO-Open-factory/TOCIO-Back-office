@@ -27,7 +27,7 @@ use yii\helpers\Url;
 		</div>
 	</div>
     <div class="form-group">
-        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-primary pull-right']) ?>
+        <?= Html::submitButton('Enregistrer', ['class' => 'button buttonLocalisation pull-right']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

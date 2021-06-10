@@ -172,14 +172,15 @@ class ModuleController extends Controller
      * @return json array
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateajax() {
+    public function actionUpdateajax() 
+    {
     	$request = Yii::$app->request;
-    	
     	// UPDATE FAIT À L'AIDE D'UNE REQUÈTE AJAX -------------------------------------------------
-    	if (Yii::$app->request->isAjax && $request->post()) {
+    	if (Yii::$app->request->isAjax && $request->post()) 
+        {
     		$post 	= $request->post();
 	    	$model 	= $this->findModel($post['id']);
-	    	
+
 	    	// Récupération de l'attribut à mettre à jour
 	    	$attributeName = $post['attribute'];
 	    	
@@ -193,13 +194,15 @@ class ModuleController extends Controller
 	    	Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 	    	
 	    	// Sauve le model
-	    	if( $model->save() ){
+	    	if( $model->save() )
+            {
 	    		return ["success" => "ok"];
-	    	} else {
+	    	} 
+            else 
+            {
 	    		return ["error" => "ok"];
 	    	}
     	}
-
     }
 
     /**

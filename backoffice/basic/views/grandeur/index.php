@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <p>
 		<?php
 		if( Yii::$app->user->can('createGrandeur') ) {
-			echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une Grandeur', ['create'], ['class' => 'btn btn-primary pull-right']);
+			echo Html::a(Html::tag("span", "", ["class" => "glyphicon glyphicon-plus"]). ' Créer une Grandeur', ['create'], ['class' => 'button buttonGrandeur pull-right']);
 		}
 		?>
 	</p>

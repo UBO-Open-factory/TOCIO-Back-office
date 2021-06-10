@@ -26,15 +26,17 @@ use yii\helpers\Url;
 			<label>Grandeur</label>
 			<div class="input-group">
 				<select class="custom-select" id="capteur-idgrandeurs" name="Capteur[idGrandeurs]">
-					<?php $l_TAB_Options = Grandeur::find()->select(['nature','id'])->indexBy('id')->column();
-					foreach( $l_TAB_Options as $id => $nature){
+					<?php 
+					$l_TAB_Options = Grandeur::find()->select(['nature','id'])->indexBy('id')->column();
+					foreach( $l_TAB_Options as $id => $nature)
+						{
 						echo '<option value="'. $id .'">' . $nature. '</option>';
-					}
+						}
 					?>
 				</select>
 				<div class="input-group-append">
 					<?php echo Html::tag("button", "<i class='glyphicon glyphicon-plus'></i> Associer cette Grandeur", 
-								["class" => "btn btn-secondary",
+								["class" => "button buttonGrandeur",
 									"type" => "button",
 									"id" => "btnAddGrandeur"]);?>
 				</div>
@@ -43,7 +45,7 @@ use yii\helpers\Url;
 		
 	    <div class="col-sm-12 ">
 	    	<p class="pull-right">
-	        	<?= Html::submitButton('Save', ['class' => 'btn btn-info']) ?>
+	        	<?= Html::submitButton('Enregistrer', ['class' => 'button buttonCapteur']) ?>
 	        </p>
 	    </div>
 	</div>

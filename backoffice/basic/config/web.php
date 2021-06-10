@@ -16,16 +16,21 @@ $config = [
     'aliases' => [
         // Do not define anything here, but in web_local.php
     ],
-    'components' => [
+    'components' => 
+    [
         // Gestion des ressources ( les assets )
         // On rajoute un timestamp pour que cette ressource ne soit pas mise en cache
-        'assetManager' => [
+        'assetManager' => 
+        [
             'baseUrl' => "@urlbehindproxy/assets/",
             'appendTimestamp' => true,
-            'converter' => [
+            'converter' => 
+            [
                 'class' => 'yii\web\AssetConverter',
-                'commands' => [
-                    'scss' => [
+                'commands' => 
+                [
+                    'scss' => 
+                    [
                         'css',
                         'sass {from} {to} --sourcemap --style=compressed'
                     ]
@@ -33,8 +38,15 @@ $config = [
             ]
         ],
         // Gestion des authentifications par groupe d'accès.
-        'authManager' => [
+        'authManager' => 
+        [
             'class' => 'yii\rbac\DbManager'
+        ],
+        'formatter' => 
+        [
+            'class' => '\yii\i18n\Formatter',
+
+            'datetimeFormat' => 'MM/dd/yy hh:mm:ss',
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -82,25 +94,23 @@ $config = [
 
         // le composant "log" traite les messages avec un horodatage (timestamp).
         'log' => [
-            'traceLevel' => YII_DEBUG ? 4 : 0,
-            'targets' => [
-                [
-                    'class' => 'yii\log\DbTarget',
-                    'levels' => [
-                        'error'
-                    ],
-                    'categories' => [
-                        'tocio'
-                    ]
-                ],
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => [
-                        'error',
-                        'warning'
-                    ]
-                ]
-            ]
+					'traceLevel' => YII_DEBUG ? 4 : 0,
+					'targets' => [
+							[
+								'class' => 'yii\log\DbTarget',
+								'levels' => [ 'error' ],
+								'categories' => [ 'tocio' ] ],
+							[
+								'class' => 'yii\log\FileTarget',
+								'levels' => [
+										'info',
+										'trace',
+										'error',
+										'warning' ],
+								'categories' => ['tocio' ],
+								'logVars' => [],
+								'logFile' => '/var/log/httpd/Yii2CustomLog.log' ] 
+					] 
         ],
     	// Pour affichage par défault de la date et de l'heure.
     	'localtime'=>array(
@@ -144,7 +154,8 @@ $config = [
                     'pluralize' => false,
                     'patterns' => [
                         'GET getcapteur/<id:\d+>' => 'getcapteur',
-                        'GET,POST getcapteurs' => 'getcapteurs'
+                        'GET,POST getcapteurs' => 'getcapteurs',
+                        'POST ajaxgetgrandeur' => 'ajaxgetgrandeur',
                     ]
                 ],
                 [
@@ -154,7 +165,7 @@ $config = [
                     'patterns' => [
                     	'GET getgrandeur/<id:\d+>' => 'getgrandeur',
                     	'GET getgrandeurs' => 'getgrandeurs',
-                    	'GET export' => 'getexport'
+                    	'GET export' => 'getexport',
                     ]
                 ],
                 [
@@ -165,6 +176,15 @@ $config = [
                     	'GET pwdverif<token:\d+>' => 'pwdverif',
                     ]
                 ],
+            		/*
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'generation',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'POST getdata' => 'getdata',
+                    ]
+                ]*/
             ]
         ]
     ],
