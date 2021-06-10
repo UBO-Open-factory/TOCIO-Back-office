@@ -92,7 +92,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' + '//|_   _| / _ \\  / __||_ _| / _ \\ 	';
 	displayTab += '<br>' + '//  | |  | (_) || (__  | | | (_) |	';
 	displayTab += '<br>' + '//  |_|   \\___/  \\___||___| \\___/ 	';
-	displayTab += '<br>' + '//ARDUINO CODE GENERATOR';
+	displayTab += '<br>' + '//CODE GENERATOR';
 	displayTab += '<br>' + '//SENSOR : ';
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
