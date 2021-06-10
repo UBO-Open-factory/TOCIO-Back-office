@@ -91,25 +91,23 @@ $config = [
 
         // le composant "log" traite les messages avec un horodatage (timestamp).
         'log' => [
-            'traceLevel' => YII_DEBUG ? 4 : 0,
-            'targets' => [
-                [
-                    'class' => 'yii\log\DbTarget',
-                    'levels' => [
-                        'error'
-                    ],
-                    'categories' => [
-                        'tocio'
-                    ]
-                ],
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => [
-                        'error',
-                        'warning'
-                    ]
-                ]
-            ]
+					'traceLevel' => YII_DEBUG ? 4 : 0,
+					'targets' => [
+							[
+								'class' => 'yii\log\DbTarget',
+								'levels' => [ 'error' ],
+								'categories' => [ 'tocio' ] ],
+							[
+								'class' => 'yii\log\FileTarget',
+								'levels' => [
+										'info',
+										'trace',
+										'error',
+										'warning' ],
+								'categories' => ['tocio' ],
+								'logVars' => [],
+								'logFile' => '/var/log/httpd/Yii2CustomLog.log' ] 
+					] 
         ],
     	// Pour affichage par défault de la date et de l'heure.
     	'localtime'=>array(
