@@ -11,7 +11,7 @@ $config = [
     'bootstrap' => [
         'log'
     ],
-    'version' => '1.3.0',
+    'version' => '1.2.8',
     'aliases' => [
         // Do not define anything here, but in web_local.php
     ],
@@ -164,6 +164,7 @@ $config = [
                     	'GET export' => 'getexport'
                     ]
                 ],
+            		/*
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'generation',
@@ -171,7 +172,7 @@ $config = [
                     'patterns' => [
                         'POST getdata' => 'getdata',
                     ]
-                ]
+                ]*/
             ]
         ]
     ],

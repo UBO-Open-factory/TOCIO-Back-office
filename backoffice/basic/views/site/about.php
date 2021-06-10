@@ -149,6 +149,7 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
+	<!-- 
 	<h2>V 1.3.0</h2>
 <li>2021-05-27 <b>&bull;</b> Correction of "crash when open carte page"</li>
 <li>2021-05-27 <b>&bull;</b> Change method and cartes button color</li>
@@ -159,6 +160,12 @@ function commentaire($elem){
 <li>2021-05-17 <b>&bull;</b> Fixe method visual and create view</li>
 <li>2021-05-12 <b>&bull;</b> Orange warning button</li>
 <li>2021-05-12 <b>&bull;</b> Génération de code</li>
+	 -->
+	
+	<h2>V 1.2.8</h2>
+<li>2021-06-10 <b>&bull;</b> Définition de classes CSS pour les boutons et encadrements des Modules, Capteurs, Grandeurs, Localisaiton, Methodes et Cartes.</li>
+<li>2021-06-10 <b>&bull;</b> Ajout d'une section pour le générateur de code dans la vue d'un Module</li>
+
 	
 	
 	<h2>V 1.2.7</h2>
