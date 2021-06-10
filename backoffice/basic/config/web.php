@@ -161,7 +161,7 @@ $config = [
                     'patterns' => [
                     	'GET getgrandeur/<id:\d+>' => 'getgrandeur',
                     	'GET getgrandeurs' => 'getgrandeurs',
-                    	'GET export' => 'getexport'
+                    	'GET export' => 'getexport',
                     ]
                 ],
             		/*
