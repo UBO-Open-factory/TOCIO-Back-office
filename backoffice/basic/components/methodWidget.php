@@ -155,7 +155,7 @@ class methodWidget extends Widget
 			// BOITE DU method
 			$methods[] = $this->_cardBox([	"header" 	=> $l_STR_nom_methodmethod . $l_STR_BtnPliage,
 											"content"	=> Html::tag("span",implode(" ", $l_TAB_BtnEditionmethod),['class' => "pull-right"]) . implode("", $contents),
-											"class"		=> "border-info mb-3 px-0 methodOriginal",
+											"class"		=> "borderMethod mb-3 px-0 methodOriginal",
 											"data" 		=> $l_STR_nom_methodmethod."|".$l_STR_IDmethod,
 											"style" 	=> null,
 									]);

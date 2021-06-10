@@ -119,7 +119,7 @@ class capteursWidget extends Widget
 			// BOITE DU CAPTEUR
 			$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_iconDeplacer.$l_STR_NomCapteur. Html::tag("span",implode(" ", $l_TAB_BtnEditionCapteur),['class' => "pull-right"]),
 											"content"	=> implode("", $contents),
-											"class"		=> "border-info mb-3 px-0 CapteurOriginal",
+											"class"		=> "borderCapteur Capteur-3 px-0 CapteurOriginal",
 											"data" 		=> $l_STR_NomCapteur."|".$l_STR_IDCapteur,
 											"style" 	=> null,
 									]);
@@ -280,7 +280,7 @@ class capteursWidget extends Widget
 		$l_TAB_Content[] = "// NE PAS MODIFIER CE FICHIER À LA MAIN";
 		$l_TAB_Content[] = "// ---------------------------------------------------------------------";
 		$l_TAB_Content[] = "var g_urlbehindproxy = '".\Yii::getAlias("@urlbehindproxy")."/';	// Set in /config/web.php";
-		$l_TAB_Content[] = "var g_host = '".Url::base('http')."';";
+		$l_TAB_Content[] = "var g_host = '".Url::base('https')."';";
 		
 		
 		

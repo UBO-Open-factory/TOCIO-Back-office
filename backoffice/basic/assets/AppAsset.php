@@ -23,6 +23,7 @@ class AppAsset extends AssetBundle
     public $css = [
 		'css/bootstrap-slate.min.css',
 		'css/site.css',
+		'css/button.css',
     	'https://fonts.googleapis.com/css2?family=Raleway:wght@900&display=swap',
     ];
     public $cssOptions = [

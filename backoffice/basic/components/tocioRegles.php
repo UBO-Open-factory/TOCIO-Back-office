@@ -77,8 +77,8 @@ class tocioRegles extends Widget {
 									    		</ul>
 									    Cette méthode n'est élaborée que pour relier un capteur à un processeur, éventuellement elle pourra être associée à d'autres processeurs au fonctionnement similaire.<br><br>",
 
-				"cartesdefinition" => "<p> Une <i>Carte</i> est un microcontrôleur auquel sont associées des <i>Méthodes</i> pour piloter les <i>Capteurs</i>.</p>
-									    <p>La liste des <i>Cartes</i>  est disponible dans le menu <i>Module</i>, dans la section 'Génération de code'</p>",
+				"cartesdefinition" => "<p> Une <i>Carte</i> est un microcontrôleur auquel est associé des <i>Méthodes</i> pour piloter les <i>Capteurs</i>.</p>
+									    <p>La liste des <i>Cartes</i> est disponible pour chacun des <i>Modules</i> (dans la section 'Génération de code')</p>",
 
 
 		];
