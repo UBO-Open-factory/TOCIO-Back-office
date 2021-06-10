@@ -200,7 +200,7 @@ class modulesWidget extends Widget
 				// Boite autour du capteur
 				$capteurs[] = $this->_cardBox([	"header" 	=> $l_STR_CustomCapteurName. " ".implode(" ", $l_TAB_BtnCustomCapteur)." ".$l_STR_BtnPliage,
 												"content"	=> implode("", $contents),
-												"class"		=> "border-info mb-3 px-0 Capteur",
+												"class"		=> "borderCapteur mb-3 px-0 Capteur",
 												"data" 		=> $l_OBJ_ModuleCapteur['idModule']."|".$l_OBJ_ModuleCapteur['idCapteur']."|".$l_OBJ_ModuleCapteur['nomcapteur']."|".$l_OBJ_ModuleCapteur['ordre'],
 												"style" 	=> null,
 										]);
@@ -277,22 +277,22 @@ class modulesWidget extends Widget
 			}
 			$l_STR_SelectCartes .= "</select>";
 
-			$card_selector_content = "";
-			$card_selector_content .= 		'<div class="col-md-3">';
-			$card_selector_content .= 		$l_STR_SelectCartes;
-			$card_selector_content .= 		'</div>';
-			$card_selector_content .= 		'<div class="col-md-9">';
-			$card_selector_content .= 			'<input class="col-md-1 btn" type="checkbox" id="bouchon'. $l_OBJ_Module->identifiantReseau .'">';
-			$card_selector_content .= 			'<label class="col-md-11">Appliquer un bouchon pour simuler la lecture des données</label>';
-			$card_selector_content .= 		'</div>';
-			$card_selector_content .= 		'<div class="col-md-9">';
-			$card_selector_content .= 			'<input class="col-md-1 btn" type="checkbox" id="debug'. $l_OBJ_Module->identifiantReseau .'">';
-			$card_selector_content .= 			'<label class="col-md-11">Afficher les traces de debugs</label>';
-			$card_selector_content .= 		'</div>';
+			$l_STR_CardSelectorContent = "";
+			$l_STR_CardSelectorContent .= 		'<div class="col-md-3">';
+			$l_STR_CardSelectorContent .= 		$l_STR_SelectCartes;
+			$l_STR_CardSelectorContent .= 		'</div>';
+			$l_STR_CardSelectorContent .= 		'<div class="col-md-9">';
+			$l_STR_CardSelectorContent .= 			'<input class="col-md-1 btn" type="checkbox" id="bouchon'. $l_OBJ_Module->identifiantReseau .'">';
+			$l_STR_CardSelectorContent .= 			'<label class="col-md-11">Appliquer un bouchon pour simuler la lecture des données</label>';
+			$l_STR_CardSelectorContent .= 		'</div>';
+			$l_STR_CardSelectorContent .= 		'<div class="col-md-9">';
+			$l_STR_CardSelectorContent .= 			'<input class="col-md-1 btn" type="checkbox" id="debug'. $l_OBJ_Module->identifiantReseau .'">';
+			$l_STR_CardSelectorContent .= 			'<label class="col-md-11">Afficher les traces de debugs</label>';
+			$l_STR_CardSelectorContent .= 		'</div>';
 
 			// Construction de l'afficheur de code (celui-ci est modifiable par le JS pendant l'utilisation)
-			$l_STR_GenCodeDisplay =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Arduino',
-					"content"	=> $card_selector_content . Html::tag("pre class='". $l_OBJ_Module->identifiantReseau ."GenCodeDisplay' id = '". $l_OBJ_Module->identifiantReseau ."GenCodeDisplay'", "Aucune carte sélectionné"),
+			$l_STR_GenCodeDisplay =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code pour Cartes micro-controlleurs',
+					"content"	=> $l_STR_CardSelectorContent . Html::tag("pre class='". $l_OBJ_Module->identifiantReseau ."GenCodeDisplay' id = '". $l_OBJ_Module->identifiantReseau ."GenCodeDisplay'", "Aucune carte sélectionné"),
 					"class"		=> " mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
 			]);
@@ -342,7 +342,12 @@ class modulesWidget extends Widget
 			$contents[] = 		Html::tag("legend", "Format pour transmission Wifi");
 			$contents[] = 		"Url pour ajouter les données de ce Module:<br/><code>".Url::toRoute('/mesure/add/[payload]', "https")."</code>";
 			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
-
+			$contents[] = 	"</fieldset>";
+			$contents[] = "</div>";
+			$contents[] = "<div class='col-md-12'>";
+			$contents[] = 	"<fieldset>";
+			$contents[] = 		Html::tag("legend", "Exemple de code");
+			
 			// Select des cartes
 			$contents[] = 		$l_STR_GenCodeDisplay;
 			
@@ -371,7 +376,7 @@ class modulesWidget extends Widget
 											"titre" 	=> $l_STR_Description,
 											"content"	=> implode("", $contents),
 											"id"		=> $l_OBJ_Module->identifiantReseau,
-											"class"		=> "card border-success  mb-3 px-0 Module",
+											"class"		=> "card borderModule  mb-3 px-0 Module",
 											"data"		=> $l_OBJ_Module->identifiantReseau ,
 											"style" 	=> "max-width: 90rem",
 										]);
