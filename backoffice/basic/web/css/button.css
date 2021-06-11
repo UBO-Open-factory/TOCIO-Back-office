@@ -8,8 +8,6 @@
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-}
-=======
   color: white;
   display: inline-block;
   font-weight: 400;
@@ -22,7 +20,8 @@
   font-size: 1rem;
   line-height: 2;
   border-radius: .25rem;
-  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; }
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; 
+}
 
 .buttonModule {
   background-color: #19a822; }
@@ -67,4 +66,3 @@
   border-color: #004C4F; }
 
 /*# sourceMappingURL=button.css.map */
->>>>>>> feuillesDeStyles

@@ -282,11 +282,11 @@ class modulesWidget extends Widget
 			$l_STR_CardSelectorContent .= 		$l_STR_SelectCartes;
 			$l_STR_CardSelectorContent .= 		'</div>';
 			$l_STR_CardSelectorContent .= 		'<div class="col-md-9">';
-			$l_STR_CardSelectorContent .= 			'<input class="col-md-1 btn" type="checkbox" id="bouchon'. $l_OBJ_Module->identifiantReseau .'">';
+			$l_STR_CardSelectorContent .= 			'<input class="col-md-1 btn bouchonCarteClass" value="'. $l_OBJ_Module->identifiantReseau .'" type="checkbox" id="'. $l_OBJ_Module->identifiantReseau .'bouchon">';
 			$l_STR_CardSelectorContent .= 			'<label class="col-md-11">Appliquer un bouchon pour simuler la lecture des données</label>';
 			$l_STR_CardSelectorContent .= 		'</div>';
 			$l_STR_CardSelectorContent .= 		'<div class="col-md-9">';
-			$l_STR_CardSelectorContent .= 			'<input class="col-md-1 btn" type="checkbox" id="debug'. $l_OBJ_Module->identifiantReseau .'">';
+			$l_STR_CardSelectorContent .= 			'<input class="col-md-1 btn debugCarteClass" value="'. $l_OBJ_Module->identifiantReseau .'" type="checkbox" id="'. $l_OBJ_Module->identifiantReseau .'debug">';
 			$l_STR_CardSelectorContent .= 			'<label class="col-md-11">Afficher les traces de debugs</label>';
 			$l_STR_CardSelectorContent .= 		'</div>';
 
