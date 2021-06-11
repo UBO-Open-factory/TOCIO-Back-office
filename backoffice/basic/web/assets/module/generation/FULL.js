@@ -137,9 +137,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
     displayTab += '<br>' +  '//....................................';
 	displayTab += '<br>' +  '//INCLUDE LIST';
 	displayTab += '<br>';
-	displayTab += Color("green");
 	displayTab += '<br>' + '#include "WIFI.h"';
-	displayTab += ColorEnd();
 	displayTab += Generate_INCLUDE(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool);
 	displayTab += '<br>';
 
@@ -189,7 +187,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	
 	//if user need "bouchon" option
 	//setup a randomNumber generator
-	displayTab += '<br>' +  '	Serial.begin(' + Color("steelblue") + '9600' + ColorEnd() +');';
+	displayTab += '<br>' +  '	Serial.begin(9600);';
 	if(bouchon_bool)
 	{
 		displayTab += '<br>' +  '	randomSeed(analogRead(0));';
@@ -231,7 +229,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	}
 	displayTab += '<br>' +  '	sendDataInHTTPSRequest(Mesures);';
 	displayTab += '<br>' +  '	// Pause of 1 minute .....................................';
-	displayTab += '<br>' +  '	delay('+ Color("steelblue") +'60 * 1000' + ColorEnd() + ');';
+	displayTab += '<br>' +  '	delay(60 * 1000);';
 	displayTab += '<br>' +  '}';
 	displayTab += '<br>';
 
@@ -244,13 +242,13 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '// Read all data from all sensor setup in TOCIO.';
 	displayTab += '<br>' +  '// no parameter , this function is independent';
 	displayTab += '<br>' +  '// -----------------------------------------------------------';
-	displayTab += '<br>' +  'String ' + Color("b0f2b6") + 'Read_Concat_Data' + ColorEnd() + '()';
+	displayTab += '<br>' +  'String Read_Concat_Data()';
 	displayTab += '<br>' +  '{';
 	displayTab += '<br>' +  '	//create data_string save and concat data';
 	displayTab += '<br>' +  '	String Mesures = "";';
 	displayTab += '<br>' +  '	//create temp variable saving and form data from sensor';
-	displayTab += '<br>' +  '	char data[' + Color("steelblue") + '100' + ColorEnd() +'];';
-	displayTab += '<br>' +  '	int i = ' + Color("steelblue") + '0' + ColorEnd() + ';';
+	displayTab += '<br>' +  '	char data[100];';
+	displayTab += '<br>' +  '	int i = 0;';
 	displayTab += '<br>';
 	displayTab += Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bool);
 	displayTab += '<br>' +  '	return Mesures;';
@@ -266,7 +264,7 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '// Send to TOCIO serveur data giving in parameter.';
 	displayTab += '<br>' +  '// @param data : string concatenation by the website payload';
 	displayTab += '<br>' +  '// -----------------------------------------------------------';
-	displayTab += '<br>' +  'String + ' + Color("b0f2b6") + 'sendDataInHTTPSRequest' + ColorEnd() + '(String data)';
+	displayTab += '<br>' +  'String sendDataInHTTPSRequest(String data)';
 	displayTab += '<br>' +  '{';
 	displayTab += '<br>' +  '	//If we are connecte to the WIFI';
 	displayTab += '<br>' +  '	if (WiFi.status() == WL_CONNECTED)';
@@ -302,41 +300,95 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 	displayTab += '<br>' +  '	}';
 	displayTab += '<br>' +  '}';
 
+	return Colorisation(displayTab);
+}
+
+//__________________________________________________________________________________________
+/**
+ * Colorised a string by cutting it for each <br>
+ * @param string displayTab
+ * @return string
+ * @version 11 june 2021
+ */
+function Colorisation(data)
+{
+	var displayTab = data;
 	//setup color scheme in programm
 	//all type (int,float,string,char,void,const...) will have blue color
 	displayTab = displayTab.split("<br>void ").join(Color("#0f056b")+"<br>void "+ColorEnd());
-	//displayTab = displayTab.split("String ").join(Color("turquoise")+"String "+ColorEnd());#FBF2B7
-	displayTab = displayTab.split("int ").join(Color("deepskyblue")+"int "+ColorEnd());
+
+
+	//====================================
+	//
+	//		ALL TYPE OF DECLARATION
+	//
+	//====================================
+
+	//COLOR FOR STRING 
+	displayTab = displayTab.split(" String ").join(Color("deepskyblue")+" String "+ColorEnd());
+	displayTab = displayTab.split("<br>String ").join(Color("deepskyblue")+"<br>String "+ColorEnd());
+	displayTab = displayTab.split("(String)").join( '(' + Color("deepskyblue")+"String"+ColorEnd() + ')');
+
+	//COLOR FOR INT 
+	displayTab = displayTab.split(" int ").join(Color("deepskyblue")+" int "+ColorEnd());
+	displayTab = displayTab.split("<br>int ").join(Color("deepskyblue")+"<br>int "+ColorEnd());
 	displayTab = displayTab.split("(int)").join( '(' + Color("deepskyblue")+"int"+ColorEnd() + ')');
-	displayTab = displayTab.split("float ").join(Color("deepskyblue")+"float "+ColorEnd());
-	displayTab = displayTab.split("const ").join(Color("deepskyblue")+"const "+ColorEnd());
-	displayTab = displayTab.split("char ").join(Color("deepskyblue")+"char "+ColorEnd());
 
-	//all loop declaration would haev red color
-	displayTab = displayTab.split("if(").join(Color("#EE82EE")+"if"+ColorEnd()+"(");
-	displayTab = displayTab.split("if (").join(Color("#EE82EE")+"if "+ColorEnd()+"(");
+	//COLOR FOR FLOAT
+	displayTab = displayTab.split(" float ").join(Color("deepskyblue")+" float "+ColorEnd());
+	displayTab = displayTab.split("<br>float ").join(Color("deepskyblue")+"<br>float "+ColorEnd());
+	displayTab = displayTab.split("(float)").join( '(' + Color("deepskyblue")+"float"+ColorEnd() + ')');
 
-	displayTab = displayTab.split("for(").join(Color("#EE82EE")+"for"+ColorEnd()+"(");
-	displayTab = displayTab.split("for (").join(Color("#EE82EE")+"for "+ColorEnd()+"(");
+	//COLOR FOR CONST
+	displayTab = displayTab.split(" const ").join(Color("deepskyblue")+" const "+ColorEnd());
+	displayTab = displayTab.split("<br>const ").join(Color("deepskyblue")+"<br>const "+ColorEnd());
 
-	displayTab = displayTab.split("while(").join(Color("#EE82EE")+"while"+ColorEnd()+"(");
-	displayTab = displayTab.split("while (").join(Color("#EE82EE")+"while "+ColorEnd()+"(");
+	//COLOR FOR CHAR
+	displayTab = displayTab.split(" char ").join(Color("deepskyblue")+" char "+ColorEnd());
+	displayTab = displayTab.split("<br>char ").join(Color("deepskyblue")+"<br>char "+ColorEnd());
+	displayTab = displayTab.split("(char)").join( '(' + Color("deepskyblue")+"char"+ColorEnd() + ')');
 
-	displayTab = displayTab.split("else<br>").join(Color("#EE82EE")+"else"+ColorEnd()+'<br>');
-	displayTab = displayTab.split("else ").join(Color("#EE82EE")+"else "+ColorEnd());
+	//====================================
+	//
+	//		ALL TYPE OF LOOP
+	//
+	//====================================
+
+	//COLOR FOR FOR
+	displayTab = displayTab.split(" for(").join(Color("#EE82EE")+" for"+ColorEnd()+"(");
+	displayTab = displayTab.split("<br>for(").join(Color("#EE82EE")+"<br>for"+ColorEnd()+"(");
+	displayTab = displayTab.split(" for (").join(Color("#EE82EE")+" for "+ColorEnd()+"(");
+	displayTab = displayTab.split("<br>for (").join(Color("#EE82EE")+"<br>for "+ColorEnd()+"(");
+
+	//COLOR FOR WHILE
+	displayTab = displayTab.split(" while(").join(Color("#EE82EE")+" while"+ColorEnd()+"(");
+	displayTab = displayTab.split("<br>while(").join(Color("#EE82EE")+"<br>while"+ColorEnd()+"(");
+	displayTab = displayTab.split(" while (").join(Color("#EE82EE")+" while "+ColorEnd()+"(");
+	displayTab = displayTab.split("<br>while (").join(Color("#EE82EE")+"<br>while "+ColorEnd()+"(");
+
+	//COLOR FOR IF
+	displayTab = displayTab.split(" if(").join(Color("#EE82EE")+" if"+ColorEnd()+"(");
+	displayTab = displayTab.split("<br>if(").join(Color("#EE82EE")+"<br>if"+ColorEnd()+"(");
+	displayTab = displayTab.split(" if (").join(Color("#EE82EE")+" if "+ColorEnd()+"(");
+	displayTab = displayTab.split("<br>if (").join(Color("#EE82EE")+"<br>if "+ColorEnd()+"(");
+
+	//COLOR FOR ELSE
+	displayTab = displayTab.split(" else").join(Color("#EE82EE")+"else "+ColorEnd());
+	displayTab = displayTab.split("<br>else").join(Color("#EE82EE")+"else"+ColorEnd()+'<br>');
+	displayTab = displayTab.split("}else").join("}" + Color("#EE82EE")+"else "+ColorEnd());
 
 	//return is in red too
-	displayTab = displayTab.split("return ").join(Color("#EE82EE")+"return "+ColorEnd());
+	displayTab = displayTab.split(" return ").join(Color("#EE82EE")+" return "+ColorEnd());
+	displayTab = displayTab.split("<br>return ").join(Color("#EE82EE")+"<br>return "+ColorEnd());
 
 	//bracket in red too
 	displayTab = displayTab.split("{").join(Color("red")+"{"+ColorEnd());
 	displayTab = displayTab.split("}").join(Color("red")+"}"+ColorEnd());
-
-	var end = "";
-
-	//find all comments and setup their line in light blue
+	end = "";	
+	//cut around every <br>
 	for(i=0;i<displayTab.split('<br>').length;i++)
 	{
+		//find out if the line is a comment
 		if(displayTab.split('<br>')[i].split('//').length>1)
 		{
 			if(displayTab.split('<br>')[i].split('//')[0].split("\"").length < 2 ||  displayTab.split('<br>')[i].split('//')[0].split("\"").length > 3)
@@ -355,6 +407,26 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 				}
 			}
 		}
+		//find out if the line is a special comment
+		else if(displayTab.split('<br>')[i].split('/*').length>1)
+		{
+			if(displayTab.split('<br>')[i].split('/*')[0].split("\"").length < 2 ||  displayTab.split('<br>')[i].split('//')[0].split("\"").length > 3)
+			{
+				end += '<br>' + displayTab.split('<br>')[i].split('/*')[0] + Color("black") + "/*" + displayTab.split('<br>')[i].split('/*')[1] + ColorEnd();
+			}
+			else
+			{
+				if(displayTab.split('<br>')[i].split('\"').length>2)
+				{
+					end += '<br>' + displayTab.split('<br>')[i].split('\"')[0] + Color("coral") + '\"' + displayTab.split('<br>')[i].split('"')[1] + '\"' + ColorEnd() + displayTab.split('<br>')[i].split('"')[2] ;
+				}
+				else
+				{
+					end += '<br>' + displayTab.split('<br>')[i];
+				}
+			}			
+		}
+		//in every other case
 		else
 		{
 			if(displayTab.split('<br>')[i].split('\"').length>2)
@@ -367,7 +439,6 @@ function GenerateFullCode(l_TAB_DATAJSON,l_TAB_DATAJSON_length,URL,HOST,bouchon_
 			}
 		}
 	}
-
 	return end;
 }
 
@@ -390,16 +461,12 @@ function Generate_INCLUDE(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 			{
 				if(l_TAB_DATAJSON[i]["method_include"].charAt(0) != '#')
 				{
-					displayTab += Color("black");
 					displayTab += '<br>' + '/*Erreur dans le code , aucun # trouvé, l\'include de ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' est invalide, code : ';
 					displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"].replace(/</g, '&#8249').replace(/>/g,'&#8250')+ '*/';
-					displayTab += ColorEnd();
 				}
 				else
 				{
-					displayTab += Color("green");
 					displayTab += '<br>' + l_TAB_DATAJSON[i]["method_include"].replace(/</g, '&#8249').replace(/>/g,'&#8250');
-					displayTab += ColorEnd();
 				}
 			}
 		}
@@ -414,7 +481,7 @@ function Generate_PIN(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_bo
 	//created in this form : PIN_"sensor_name"_"sensor_number_in_order"
 	for(i=0;i<l_TAB_DATAJSON_length;i++)
 	{
-		displayTab += '<br>' + Color("blue") + 'int ' + ColorEnd() + 'PIN' + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + ' = ' + Color("steelblue") + ' 000 ;' + ColorEnd();
+		displayTab += '<br>int PIN' + '_' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + ' = 000 ;';
 	}
 	return displayTab;
 }
@@ -434,17 +501,17 @@ function Generate_DECLARATION(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,
 			var method_validation = 1;
 			if(l_TAB_DATAJSON[i]["method_declaration"].split('{{sensorName}}').length < 2)
 			{
-				displayTab += '<br>' +  Color("black") + '/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/' + ColorEnd();
+				displayTab += '<br>/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/';
 				method_validation = 0;
 			}
 			if(l_TAB_DATAJSON[i]["method_declaration"].split("{{sensorPin}}").length < 2)
 			{
-				displayTab += '<br>' + Color("black") + '/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no pin location*/' + ColorEnd();
+				displayTab += '<br>/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no pin location*/';
 				method_validation = 0;
 			}
 			if(l_TAB_DATAJSON[i]["method_declaration"].split(';').length < 2)
 			{
-				displayTab += '<br>' + Color("black") + '/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no terminator*/' + ColorEnd();
+				displayTab += '<br>/* WARNING /!\\ your declaration method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no terminator*/';
 				method_validation = 0;
 			}
 
@@ -452,7 +519,6 @@ function Generate_DECLARATION(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,
 
 			if(method_validation == 0)
 			{
-				displayTab += '<br>' + Color("black") + '/* This method will be set in comment*/' + ColorEnd();
 				displayTab += '<br>' + '//' + DECLARATION_TEMP;
 			}
 			else
@@ -481,12 +547,12 @@ function Generate_SETUP(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_
 			var setup_validation = 1;
 			if(l_TAB_DATAJSON[i]["method_setup"].split('{{sensorName}}').length < 2)
 			{
-				displayTab += '<br>' + Color("black") + '	/* WARNING /!\\ your setup method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/' + ColorEnd();
+				displayTab += '<br>	/* WARNING /!\\ your setup method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/';
 				setup_validation = 0;
 			}
 			if(l_TAB_DATAJSON[i]["method_setup"].split(';').length < 2)
 			{
-				displayTab += '<br>' + Color("black") + '	/* WARNING /!\\ your setup method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no terminator*/' + ColorEnd();
+				displayTab += '<br>	/* WARNING /!\\ your setup method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no terminator*/';
 				setup_validation = 0;
 			}
 
@@ -494,7 +560,6 @@ function Generate_SETUP(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debug_
 
 			if(setup_validation == 0)
 			{
-				displayTab += '<br>' +  Color("black") + '	/* This method will be set in comment*/' + ColorEnd();
 				displayTab += '<br>' +  '	//' + SETUP_TEMP;
 			}
 			else
@@ -588,13 +653,12 @@ function Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 					var grandeur_validation = 1;
 					if(l_TAB_DATAJSON[i]["grandeur"][y][1].split('{{sensorName}}').length < 2)
 					{
-						displayTab += '<br>' +  Color("black") + '	/* WARNING /!\\ your reading method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/';
-						displayTab += ColorEnd();
+						displayTab += '<br>	/* WARNING /!\\ your reading method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no variable location*/';
 						grandeur_validation = 0;
 					}
 					if(l_TAB_DATAJSON[i]["grandeur"][y][1].split(';').length < 2)
 					{
-						displayTab += '<br>' + Color("black") + '	/* WARNING /!\\ your reading method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no terminator*/' + ColorEnd();
+						displayTab += '<br>	/* WARNING /!\\ your reading method for the ' + l_TAB_DATAJSON[i]["nom_capteur"] + ' has no terminator*/';
 						grandeur_validation = 0;
 					}
 
@@ -602,9 +666,8 @@ function Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 
 					if(grandeur_validation == 0)
 					{
-						displayTab += '<br>' + Color("black") + '	/* This method will be set in comment*/' + ColorEnd();
 						displayTab += '<br>' +  '	//' + SETUP_TEMP;
-						displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + Color("steelblue") + '0.0' + ColorEnd() + ';';
+						displayTab += '<br>' + '	float ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = 0.0;';
 					}
 					else
 					{
@@ -629,7 +692,7 @@ function Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 			//create concat function
 			if(parseInt(Math.abs(Low_part)*10) != 0)
 			{
-				displayTab += '<br>' + '	' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + Color("steelblue") + '*' + multi_low_part +';' + ColorEnd();
+				displayTab += '<br>' + '	' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + ' = ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + '_' + y + '*' + multi_low_part +';';
 			}
 			displayTab += '<br>' + '	sprintf(data,"%';
 			if(Hight_part<0)

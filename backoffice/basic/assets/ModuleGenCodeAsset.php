@@ -21,7 +21,14 @@ class ModuleGenCodeAsset extends AssetBundle {
     ];
     public $js = [
         'assets/config.js',
-        'assets/module/moduleGenCode.js',
+        'assets/module/generation/Ajax.js',
+        'assets/module/generation/gen_main.js',
+        'assets/module/generation/gen_include.js',
+        'assets/module/generation/gen_pin.js',
+        'assets/module/generation/gen_declaration.js',
+        'assets/module/generation/gen_setup.js',
+        'assets/module/generation/gen_reading.js',
+        'assets/module/generation/gen_color.js',
     ];
     public $depends = [
     		'\yii\web\JqueryAsset'
