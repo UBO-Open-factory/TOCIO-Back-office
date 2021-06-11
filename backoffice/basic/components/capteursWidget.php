@@ -275,14 +275,6 @@ class capteursWidget extends Widget
 	private function _dumpPaths()
 	{
 		// Génération du contenu
-		if ( (! empty($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https') || (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (! empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443') ) 
-		{
-		    $server_request_scheme = 'https';
-		}
-		else 
-		{
-		    $server_request_scheme = 'http';
-		}
 
 		$l_TAB_Content = [];
 		$l_TAB_Content[] = "// Ceci est un fichier généré dynamiquement par le script :\n// ".__FILE__;
@@ -290,7 +282,7 @@ class capteursWidget extends Widget
 		$l_TAB_Content[] = "// NE PAS MODIFIER CE FICHIER À LA MAIN";
 		$l_TAB_Content[] = "// ---------------------------------------------------------------------";
 		$l_TAB_Content[] = "var g_urlbehindproxy = '".\Yii::getAlias("@urlbehindproxy")."/';	// Set in /config/web.php";
-		$l_TAB_Content[] = "var g_host = '".Url::base($server_request_scheme)."';";
+		$l_TAB_Content[] = "var g_host = '".Url::base("http")."';";
 		
 		
 		
