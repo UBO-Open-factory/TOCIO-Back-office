@@ -72,10 +72,10 @@ class tocioRegles extends Widget {
 									    			<li>un <b>Include</b> qui permet au programme d'importer la bibliothèque correspondant au capteur</i>,</li>
 									    			<li>une <b>déclaration</b> qui permet de déclarer le capteur avant de commencer le programme</i>,</li>
 									    			<li>une <b>initialisation</b> qui permet d'initialiser le capteur</i>,</li>
-									    			<li>une <b>lecture</b> qui est une concaténation des méthodes d'accès aux données de toutes les grandeurs du capteur</i>,</li>
+									    			<li>un groupe <b>d'instruction de lecture</b> qui est une concaténation des méthodes d'accès aux données de toutes les grandeurs du capteur</i>,</li>
 									    			<li>un <b>Nom </b> qui est composé de la concaténation du <b>Nom du capteur </b> et du nom de la <b>Carte </b> pour laquelle la méthode est initialement définie sous la forme : <b> [nom_capteur]_[nom_carte]</b>.</li>
 									    		</ul>
-									    Cette méthode n'est élaborée que pour relier un capteur à un processeur, éventuellement elle pourra être associée à d'autres processeurs au fonctionnement similaire.<br><br>",
+									    Cette méthode n'est élaborée que pour relier un capteur à un microcontrôleur.<br><br>",
 
 				"cartesdefinition" => "<p> Une <i>Carte</i> est un microcontrôleur auquel est associé des <i>Méthodes</i> pour piloter les <i>Capteurs</i>.</p>
 									    <p>La liste des <i>Cartes</i> est disponible pour chacun des <i>Modules</i> (dans la section 'Génération de code')</p>",
