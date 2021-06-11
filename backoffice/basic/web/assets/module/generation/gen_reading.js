@@ -8,7 +8,7 @@ function Generate_READING(l_TAB_DATAJSON,l_TAB_DATAJSON_length,bouchon_bool,debu
 	{
 		//display SENSOR separator 
 		displayTab += '<br>' +  '	//**********************************************************';
-		displayTab += '<br>' +  '	// ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i + ';';
+		displayTab += '<br>' +  '	// ' + l_TAB_DATAJSON[i]["nom_capteur"] + '_' + i;
 		var READ_SENSOR_LENGTH = l_TAB_DATAJSON[i]["grandeur"].length;
 		//select every size in the selected sensor
 		for(y=0;y<READ_SENSOR_LENGTH;y++)

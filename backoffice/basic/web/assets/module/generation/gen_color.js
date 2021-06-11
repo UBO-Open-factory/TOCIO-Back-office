@@ -8,8 +8,6 @@ var superComments = "black";
 var brackets = "red";
 var functionn = "red";
 
-
-
 //__________________________________________________________________________________________
 /**
  * Create a div in selected color
@@ -52,36 +50,36 @@ function Colorisation(data)
 
 	//COLOR FOR VOID 
 	displayTab = displayTab.split(" void ").join(Color(declaration) + " void" + ColorEnd() + " ");
-	displayTab = displayTab.split("<br>void ").join(Color(declaration) + "<br>void" + ColorEnd() + " ");
+	displayTab = displayTab.split("<br>void").join(Color(declaration) + "<br>void" + ColorEnd());
 	displayTab = displayTab.split("(void)").join( '(' + Color(declaration) + "void" + ColorEnd() + ')');
 	displayTab = displayTab.split("	void").join(Color(declaration) + "	void" + ColorEnd());
 
 	//COLOR FOR STRING 
 	displayTab = displayTab.split(" String ").join(Color(declaration) + " String" + ColorEnd() + " ");
-	displayTab = displayTab.split("<br>String ").join(Color(declaration) + "<br>String" + ColorEnd() + " ");
+	displayTab = displayTab.split("<br>String").join(Color(declaration) + "<br>String" + ColorEnd());
 	displayTab = displayTab.split("(String)").join( '(' + Color(declaration) + "String" + ColorEnd() + ')');
 	displayTab = displayTab.split("	String").join(Color(declaration) + "	String" + ColorEnd());
 
 	//COLOR FOR INT 
 	displayTab = displayTab.split(" int ").join(Color(declaration) + " int" + ColorEnd() + " ");
-	displayTab = displayTab.split("<br>int ").join(Color(declaration)+"<br>int" + ColorEnd() + " ");
+	displayTab = displayTab.split("<br>int").join(Color(declaration)+"<br>int" + ColorEnd());
 	displayTab = displayTab.split("(int)").join( '(' + Color(declaration) + "int" + ColorEnd() + ')');
 	displayTab = displayTab.split("	int").join(Color(declaration) + "	int" + ColorEnd());
 
 	//COLOR FOR FLOAT
 	displayTab = displayTab.split(" float ").join(Color(declaration) + " float" + ColorEnd() + " ");
-	displayTab = displayTab.split("<br>float ").join(Color(declaration)+"<br>float" + ColorEnd() + " ");
+	displayTab = displayTab.split("<br>float").join(Color(declaration)+"<br>float" + ColorEnd());
 	displayTab = displayTab.split("(float)").join( '(' + Color(declaration) + "float" + ColorEnd() + ')');
 	displayTab = displayTab.split("	float").join(Color(declaration) + "	float" + ColorEnd());
 
 	//COLOR FOR CONST
 	displayTab = displayTab.split(" const ").join(Color(declaration) + " const" + ColorEnd() + " ");
-	displayTab = displayTab.split("<br>const ").join(Color(declaration) + "<br>const" + ColorEnd() + " ");
+	displayTab = displayTab.split("<br>const").join(Color(declaration) + "<br>const" + ColorEnd());
 	displayTab = displayTab.split("	const").join(Color(declaration) + "	const" + ColorEnd());
 
 	//COLOR FOR CHAR
 	displayTab = displayTab.split(" char ").join(Color(declaration)+" char" + ColorEnd() + " ");
-	displayTab = displayTab.split("<br>char ").join(Color(declaration)+"<br>char" + ColorEnd() + " ");
+	displayTab = displayTab.split("<br>char").join(Color(declaration)+"<br>char" + ColorEnd());
 	displayTab = displayTab.split("(char)").join( '(' + Color(declaration)+"char" + ColorEnd() + ')');
 	displayTab = displayTab.split("	char").join(Color(declaration) + "	char" + ColorEnd());
 
@@ -115,8 +113,9 @@ function Colorisation(data)
 	displayTab = displayTab.split("}else").join("}" + Color(loop) + "else" + ColorEnd() + " ");
 
 	//return is in red too
-	displayTab = displayTab.split(" return ").join(Color(loop) + " return" + ColorEnd() + " ");
-	displayTab = displayTab.split("<br>return ").join(Color(loop) + "<br>return" + ColorEnd() + " ");
+	displayTab = displayTab.split(" return ").join(Color(brackets) + " return" + ColorEnd());
+	displayTab = displayTab.split("<br>return").join(Color(brackets) + "<br>return" + ColorEnd());
+	displayTab = displayTab.split("	return").join(Color(brackets) + "	return" + ColorEnd());
 
 	//bracket in red too
 	displayTab = displayTab.split("{").join(Color(brackets) + "{" + ColorEnd());
@@ -199,7 +198,16 @@ function Colorisation(data)
 					}
 					end += Color(functionn) + displayTab.split('<br>')[i].split('(')[0].split('.')[length_k-1] + ColorEnd() + '(' + displayTab.split('<br>')[i].split('(')[1];
 				}
-				
+				else if(displayTab.split('<br>')[i].split('(')[0].split('	').length>1)
+				{
+					end += '<br>';
+					var length_k = displayTab.split('<br>')[i].split('(')[0].split('	').length
+					for(k=0;k<length_k-1;k++)
+					{
+						end += displayTab.split('<br>')[i].split('(')[0].split('	')[k] + '	';
+					}
+					end += Color(functionn) + displayTab.split('<br>')[i].split('(')[0].split('	')[length_k-1] + ColorEnd() + '(' + displayTab.split('<br>')[i].split('(')[1];
+				}				
 			}
 			else
 			{
