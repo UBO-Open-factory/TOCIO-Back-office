@@ -61,8 +61,8 @@ use app\models\Grandeur;
 		</div>
 		<div class="col-sm-3">
             <label> Ajouter des balises </label><br>
-            <?= Html::Button('Nom capteur', ['class' => 'button buttonBalise','id' => 'variable' ]) ?>
-            <?= Html::Button('Pin capteur', ['class' => 'button buttonBalise','id' => 'pin' ]) ?>
+            <?= Html::Button('sensorName', ['class' => 'button buttonBalise','id' => 'variable' ]) ?>
+            <?= Html::Button('sensorPin', ['class' => 'button buttonBalise','id' => 'pin' ]) ?><br>
             Ces balises permettent au générateur de code de placer les variables et les pins dans le programme.
         </div>
     </div>
