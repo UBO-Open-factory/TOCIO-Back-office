@@ -219,7 +219,7 @@ class modulesWidget extends Widget
 																						" spellcheck" => "false",
 																						"style" => 'resize:none',
 																						"rows" => '2',
-																						"cols" => '60',
+																						"cols" => '20',
 																				]);
 			$l_STR_Description			= Html::tag("textarea", $l_OBJ_Module->description, ["id" => "description_".$l_OBJ_Module->identifiantReseau,
 																						"class" 	=> "TextArea",
@@ -227,7 +227,7 @@ class modulesWidget extends Widget
 																						"spellcheck" => "false",
 																						"style" => 'resize:none',
 																						"rows" => '3',
-																						"cols" => '60',																						
+																						"cols" => '20',																						
 											]);
 
 			
