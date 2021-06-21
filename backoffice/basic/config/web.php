@@ -173,8 +173,19 @@ $config = [
 
 
 // Merge config from other web.php config file
-if( __DIR__ . '/web_local.php') {
+if( is_file( __DIR__ . '/web_local.php')) {
     $config = array_merge($config, require __DIR__ . '/web_local.php');
+} else {
+    $temp = [
+    'name' => "TOCIO : Back Office",
+    'aliases' => [
+        '@bower' => '@vendor/bower-asset',
+        '@npm' => '@vendor/npm-asset',
+        '@urlbehindproxy' => "/",
+        '@elasticsearchindex' => "model-tocio-event-large"
+	    ]
+	];
+     $config = array_merge($config, $temp);
 }
 
 
