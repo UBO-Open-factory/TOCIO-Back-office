@@ -269,9 +269,9 @@ class modulesWidget extends Widget
 									.Html::tag("p","Ceci est un exemple de fichier CSV pouvant être importé pour ce module.")
 									.Html::tag("p",tocioRegles::widget(["regle" => "fichiercsv"]))
 									.Html::tag("p","Ordre des champs :")
-									.Html::tag("ol", $this->_codeCSVEntetes($l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs))
+									.Html::tag("ol", $this->_codeCSVEntetes($l_TAB_Grandeurs))
 									.Html::tag("p","Exemple d'une ligne au format CSV attendu pour ce Module :")
-									.Html::tag("pre", $this->_codeCSVLignes($l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),
+									.Html::tag("pre", $this->_codeCSVLignes($l_TAB_Grandeurs)),
 					"class"		=> "mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
 			]);
@@ -444,7 +444,7 @@ class modulesWidget extends Widget
 	
 	// _____________________________________________________________________________________________
 	/**
-	 * Retourne un exemeple de formattage de grandeur en fonctoin du format fourni en paramètre.
+	 * Retourne un exemple de formattage de grandeur en fonction du format fourni en paramètre.
 	 * @param string $format le format tel que défini dans le BDD pour la grandeur.
 	 * @return string
 	 * 	@version 3 juil. 2020	: APE	- Transformation du formattage de la grandeur avec un point et non plus une virgule.
@@ -472,6 +472,41 @@ class modulesWidget extends Widget
 		}
 		
 		return $l_STR_Signe.implode("", $l_TAB_Avant).implode("", $l_TAB_Apres);
+	}
+	
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Retourne un exemple de grandeur non formattée en foncooin du format fourni en paramètre.
+	 * @param string $format le format tel que défini dans le BDD pour la grandeur.
+	 * @return string
+	 * 	@version 22 juin 2021	: APE	- Création
+	 */
+	private function _exempleUnFormatGrandeur($format){
+		// Extraction de la partie avant et apres le point
+		list($l_STR_Avant, $l_INT_Apres) = explode(".", $format);
+		$l_INT_Avant = abs($l_STR_Avant);	// On prend la valeur absolue de ce qui est avant la virgule.
+
+		
+		// Si ce qui est avant la virgule doit contenir un signe
+		$l_STR_Signe = "";
+		if( strpos($l_STR_Avant, "-") !== false ){
+			$l_STR_Signe = "-";
+		}
+		
+		$l_TAB_Avant = [];
+		for( $i=1; $i <= $l_INT_Avant; $i++){
+			$l_TAB_Avant[] = $i;
+		}
+		$l_TAB_Apres= [];
+		
+		for( $i=1; $i <= $l_INT_Apres; $i++){
+			$l_TAB_Apres[] = $i;
+		}
+		// Si on a besoin d'une virgule
+		$point = count( $l_TAB_Apres ) > 0 ? "." :"";
+		
+		return $l_STR_Signe.implode("", $l_TAB_Avant).$point.implode("", $l_TAB_Apres);
 	}
 	
 	
@@ -866,19 +901,20 @@ class modulesWidget extends Widget
 	/**
 	 * Entete de fichier pour Formattage d'un fichier journal au format CSV.
 	 *
-	 * @param string $id : l'ID du module (son identifiant réseau)
 	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
 	 * @return string
 	 *
 	 *	@version 3 mars 2021	: APE	- Création.
+	 *	@version 21 juin 2021	: APE	- Suppression de l'ID du module ( il est passé dans l'URL ).
+	 *									- Supression des "
+	 *									- Formattage de la date (on ne prends plus un timestamp)
 	 */
-	private function _codeCSVEntetes($id, $params ){
+	private function _codeCSVEntetes( $params ){
 		$ligne 		= [];
 		$natures 	= [];
 		$compteur 	= 0;
 		
-		$ligne[] = '"Identifiant du Module";';
-		$ligne[] = '"Timestamp de la mesure";';
+		$ligne[] = 'Date de la mesure sous la forme YYYY-MM-DD HH:MM:SS;';
 		
 		foreach ( $params as $grandeur ){
 			// Si le nom de la Grandeur n'a pas d'espace
@@ -888,7 +924,7 @@ class modulesWidget extends Widget
 				$nature = $grandeur['nature'];
 			}
 			
-			$ligne[] = "\"".$nature." (value from your sensor '".$grandeur['nomCapteur']."')\";";
+			$ligne[] = "".$nature." (value from your sensor '".$grandeur['nomCapteur']."');";
 		}
 		
 		return "<li>".implode("</li><li>",$ligne)."</li>";
@@ -897,23 +933,23 @@ class modulesWidget extends Widget
 	/**
 	 * Exemple de formattage d'une ligne pour un fichier journal au format CSV.
 	 *
-	 * @param string $id : l'ID du module (son identifiant réseau)
 	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
 	 * @return string
 	 *
 	 *	@version 3 mars 2021	: APE	- Création.
+	 *	@version 21 juin 2021	: APE	- Suppression de l'ID du module ( il est passé dans l'URL ).
 	 */
-	private function _codeCSVLignes($id, $params ){
+	private function _codeCSVLignes( $params ){
 		$ligne 		= [];
 		$champs		= [];
 		
-		$champs[] 	= "\"".$id."\"";
-		$champs[]	= "\"". time()."\"";
+		// $champs[]	= "\"". time()."\"";
+		$champs[]	= "". date("Y-m-d H:i:s", time())."";
 		
 		// Construction des champs des mesures dans l'ordre imposé.
 		foreach ( $params as $grandeur ){
 			
-			$champs[] = "\"".$this->_exempleFormatGrandeur($grandeur['format'])."\"";
+			$champs[] = "".$this->_exempleUnFormatGrandeur($grandeur['format'])."";
 		}
 		
 		// Creation de lignes contenant les champs concaténés avec un ;

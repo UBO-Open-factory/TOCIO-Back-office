@@ -16,6 +16,7 @@ use yii2tech\csvgrid\CsvGrid;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use app\models\LoginForm;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class SiteController extends Controller {
 	/**
@@ -380,13 +381,18 @@ class SiteController extends Controller {
 	 * Si tout se passe bien on renvoie true, False sinon.
 	 *
 	 * On lit chacune des lignes pour reconstruire la payload qui sera envoyée dans l'API.
+	 * 
+	 * Temps de traitement : 
+	 * 762 ligne insérée en 8:23
 	 *
+	 * @param object $model : A UploadedFile model.
+	 * @param string  $moduleID : The module ID as define in the BackOffice.
 	 * @return boolean containing error. False (default) if every line have been insert in data base
 	 */
-	public function insertDataFromFile($model) {
+	public function insertDataFromFile($model, $moduleID) {
 		$error 		= false;
 		// Autodetection des fins de lignes
-		// Ceci est sencé améliorer la compatibilité de lecture avec les fichiers de sources Unix ou MAC.
+		// Ceci est sencé améliorer la compatibilité de lecture avec les fichiers de source Unix ou MAC.
 		ini_set('auto_detect_line_endings',TRUE);
 		
 		//  Ouverture du fichier CSV en lecture
@@ -394,35 +400,53 @@ class SiteController extends Controller {
 			$numLigne 	= 1;
 			
 			// lecture ligne par ligne du fichier
-			while (($l_TAB_champs = fgetcsv($handle, 0, ";", "\"")) !== false) {
+			// avec des ; comme séparateur de champs
+			//while (($l_TAB_champs = fgetcsv($handle, 0, ";", "\"")) !== false) {
+			while (($l_TAB_champs = fgetcsv($handle, 0, ";")) !== false) {
 				
 				if( is_array($l_TAB_champs)){
-					// Séparation des champs de la ligne
-					$idModule 	= $l_TAB_champs[0];
-					$timeStamp 	= $l_TAB_champs[1];
-					$payload 	= "";
+					// Extraction du timestamp de la ligne
+					$timeStampOriginal 	= array_shift($l_TAB_champs);
+					$l_TAB_Retour = MesureController::enregistreMesureBrute($moduleID, $timeStampOriginal, $l_TAB_champs);
 					
-					// Concaténation de la Payload Champ par champ
-					// On fait une concaténation avec un caractère vide pour avoir une chaine de
-					// caractère et non pas des integer, car sinon on peut perdre le 0 devant le
-					// nombre, ce qui va provoquer une erreur sur la taille de la chaine attendu.
-					for ($c=2; $c < count($l_TAB_champs); $c++) {
-						$payload .= $l_TAB_champs[$c];
+					/*
+					// Initialisation du timestamp
+					// Si on a une chaine numeric, on la convertie en date sous la forme YYYY-MM-DD HH:MM:SS, 
+					// sinon on essai de convertir la chaine en timestamp (si ça ne marche pas, on a false) puis sous la forme YYYY-MM-DD HH:MM:SS
+					if (is_numeric($timeStampOriginal)) {
+						$timeStamp =  date("Y-m-d H:i:s", $timeStampOriginal);
+
+						// Insertion des mesures de la ligne dans la base (via le controleur des Mesures)
+						$l_TAB_Retour = MesureController::enregistreMesureBrute($moduleID, $timeStamp, $l_TAB_champs);
+						
+					} else {
+						if( strtotime($timeStampOriginal) !== false){
+							$timeStamp =  date("Y-m-d H:i:s", strtotime($timeStampOriginal));
+							
+							// Insertion des mesures de la ligne dans la base (via le controleur des Mesures)
+							$l_TAB_Retour = MesureController::enregistreMesureBrute($moduleID, $timeStamp, $l_TAB_champs);
+						} else {
+							$error = true;
+							$model->ErrorMessages[] = ['error' => "Error in line $numLigne : $timeStampOriginal,". implode(",", $l_TAB_champs),
+														'message' => "No english date or no timestamp found in first field (Date should be formatted as YYYY-MM-DD HH:MM:SS)."];
+						}
 					}
+					*/
 					
-					// Insertion des mesures de la ligne dans la base (via le controleur des Mesures)
-					$l_TAB_Retour = MesureController::enregistreMesure($idModule, $payload, $timeStamp);
+
 					
 					// Si on a une erreur à l'insertion.
 					if( isset($l_TAB_Retour['error']) and $l_TAB_Retour['error'] != ""){
 						$error = true;
-						$model->ErrorMessages[] = "Problème à l'enregistrement de la ligne $numLigne : <b><br/>". implode(",", $l_TAB_champs)."</b><br/><span class='error'>". $l_TAB_Retour['error']."</span>";
+						$model->ErrorMessages[] = ['error' => "Error in line $numLigne : ". implode(",", $l_TAB_champs),
+								"message" => $l_TAB_Retour['error']];
 					}
 					
 					// La ligne lue est vide
 				} else {
 					$error = true;
-					$model->ErrorMessages[] = "Impossible de trouver les champs de la ligne $numLigne, est-ce vraiment un fichier CSV correctement formaté ?";
+					$model->ErrorMessages[] =  ['error' => "No fields found in line $numLigne",
+												'message' => "Is it a CSV file ?"];
 				}
 				$numLigne++;
 			}

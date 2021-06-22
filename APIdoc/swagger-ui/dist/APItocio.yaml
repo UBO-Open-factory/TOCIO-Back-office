@@ -69,10 +69,12 @@ paths:
         - Mesures
       summary: "Enregistre les mesures d'un module provenant du réseau LORA."
 
-  /mesure/uploadcsv:
+  /mesure/uploadcsv/[moduleid]:
       put:
         description: |-
-          This allow you  to upload a csv file with recorded data, for that you have to call the url with a PUT method and pass your CSV file in the *file* parameter.
+          This allow you  to upload a csv file with recorded data, for that you have to call the url with a PUT method and pass your CSV file in the *file* parameter and "moduleID" in the URL.
+          
+          **moduleID** : The module ID you define in the Module settings. All the data will be attached to this module.
 
           Every line in the CSV file must have a Module's data recorded at a specific time (one line per Module). You can have as many line you want.
 
@@ -80,20 +82,16 @@ paths:
 
           Each line is build regarding the above pattern :
 
-          **"moduleID";"timestamp";data**
+          **"timestamp";data**
            
-          **moduleID** : The module ID you define in the Module settiings.
-
           **timestamp** : the timestamp the data have been collected.
 
           **data** : Sensor's data (all sensors you attach to this Module)  collected at this **timestamp**. Every sensor' data have to be in a seprataed field.
 
-          For exemple,  let's imagine you have 2 Modules (*module1* and *module2*) that have 1 sensor for module1 and 3 sensors for module2. You muste send a CSV file like : 
+          For exemple,  let's imagine you have ModuleID1 that have 1 sensor. You must send a CSV file like : 
             
-              "module2";"1618307702";"-01234";"012";"-01201"
-              "module1";"1618307703";"-01234"
-              "module1";"1618307704";"-01235
-              "module2";"1618307703";"-01234";"012";"-01201"
+              "1618307702";"-1.234";"12";"-1201"
+              "1618307703";"12.34";"13";"-1202"
         parameters: 
           - name: file
             in: query
