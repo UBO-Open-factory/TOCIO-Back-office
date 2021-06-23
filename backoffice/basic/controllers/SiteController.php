@@ -15,7 +15,9 @@ use app\models\Module;
 use yii2tech\csvgrid\CsvGrid;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
+use yii\db\Query;
 use app\models\LoginForm;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class SiteController extends Controller {
 	/**
@@ -380,59 +382,164 @@ class SiteController extends Controller {
 	 * Si tout se passe bien on renvoie true, False sinon.
 	 *
 	 * On lit chacune des lignes pour reconstruire la payload qui sera envoyée dans l'API.
+	 * 
+	 * Temps de traitement : 
+	 * 762 ligne insérée en 8:23
+	 * 791 en 8:21
+	 * 1124 sans les test elastic search.
 	 *
+	 * @param object $model : A UploadedFile model.
+	 * @param string  $moduleID : The module ID as define in the BackOffice.
 	 * @return boolean containing error. False (default) if every line have been insert in data base
 	 */
-	public function insertDataFromFile($model) {
+	public function insertDataFromFile($model, $moduleID) {
+		// On récupère le nombre de données attendu pour ce module
+		$l_OBJ_Query= new Query();
+		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom as capteurnom, g.nature, g.tablename, g.type, rmc.x, rmc.y, rmc.z, rmc.nomcapteur, rmc.ordre')
+			->from('module as m')
+			->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
+			->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
+			->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
+			->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
+			->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
+			->orderBy(['rmc.ordre'=> SORT_ASC])
+			->all();
+		$l_INT_CountNbChamps = count( $l_TAB_Results );
+
+		
 		$error 		= false;
 		// Autodetection des fins de lignes
-		// Ceci est sencé améliorer la compatibilité de lecture avec les fichiers de sources Unix ou MAC.
+		// Ceci est sencé améliorer la compatibilité de lecture avec les fichiers de source Unix ou MAC.
 		ini_set('auto_detect_line_endings',TRUE);
 		
 		//  Ouverture du fichier CSV en lecture
 		if (($handle = fopen($model->fileName, "r")) !== false) {
 			$numLigne 	= 1;
 			
-			// Pour ne pas tomber en timeout avec le serveur
-			// set_time_limit( 60 * 10 ); // 10 minutes
-
 			// lecture ligne par ligne du fichier
-			while (($l_TAB_champs = fgetcsv($handle, 0, ";", "\"")) !== false) {
+			// avec des ; comme séparateur de champs
+			//while (($l_TAB_champs = fgetcsv($handle, 0, ";", "\"")) !== false) {
+			$l_TAB_Data = array();
+			while (($l_TAB_champs = fgetcsv($handle, 0, ";")) !== false) {
 				
-				if( is_array($l_TAB_champs)){
-					// Séparation des champs de la ligne
-					$idModule 	= $l_TAB_champs[0];
-					$timeStamp 	= $l_TAB_champs[1];
-					$payload 	= "";
+				// Si on a bien le bon nombre de champs par ligne
+				if( is_array($l_TAB_champs) and count( $l_TAB_champs) -1 == $l_INT_CountNbChamps ){
 					
-					// Concaténation de la Payload Champ par champ
-					// On fait une concaténation avec un caractère vide pour avoir une chaine de
-					// caractère et non pas des integer, car sinon on peut perdre le 0 devant le
-					// nombre, ce qui va provoquer une erreur sur la taille de la chaine attendu.
-					for ($c=2; $c < count($l_TAB_champs); $c++) {
-						$payload .= $l_TAB_champs[$c];
+					// Extraction du timestamp de la ligne (le premier champ) 
+					$timeStampOriginal 	= array_shift($l_TAB_champs);
+					
+					// Si le premier champ n'est pas une date, on n'insert pas la donnée
+					if( strtotime($timeStampOriginal) === false){
+						$error = true;
+						$model->ErrorMessages[] = ['error' => "Date is missing in line $numLigne :'$timeStampOriginal' is an unformated date",
+								'message' => "This field must be an english date (Date should be formatted as YYYY-MM-DD HH:MM:SS)."];
+						continue;
 					}
 					
-					// Insertion des mesures de la ligne dans la base (via le controleur des Mesures)
-					$l_TAB_Retour = MesureController::enregistreMesure($idModule, $payload, $timeStamp);
+					
+					// Si le premier champs a bien une valeur numérique
+					if (is_numeric($l_TAB_champs[0])) {
+						
+						// Parcours de chacun des champs de la ligne courante
+						foreach ($l_TAB_Results as $l_INT_Indice => $l_TAB_Champ) {
+							// Vérification du type de la mesure en fonction de ce qui est défini dans sa table
+							if( $l_TAB_Champ['type'] != "text" and is_numeric($l_TAB_champs[$l_INT_Indice]) ) {
+								
+								// Stockage des données dans la structure temporaire
+								$l_TAB_Data[$l_TAB_Champ['tablename']][] = ['date'	=> $timeStampOriginal,
+																			'value'	=> $l_TAB_champs[$l_INT_Indice],
+																			'x'	=> $l_TAB_Champ['x'],
+																			'y'	=> $l_TAB_Champ['y'],
+																			'z'	=> $l_TAB_Champ['z'],
+																	]; 
+							// On a une chaine de caractère au lieux d'une valeur numérique
+							} else {
+								$error = true;
+								$model->ErrorMessages[] =  ['error' => "Incorrect field in line $numLigne",
+										'message' => "This field must be ".$l_TAB_Champ['type']." but found '".$l_TAB_champs[$l_INT_Indice]."'"];
+								
+								continue;
+							}
+							
+						}
+						
+						
+						// On enregistre les données toutes les 100 lignes lu 
+						if( $numLigne % 100 == 0 ){
+							// Enregistrements des lignes	
+							MesureController::enregistreMesureBrute($moduleID, $l_TAB_Data);
+
+	
+							// Réinitialisation de la structure
+							$l_TAB_Data = array();
+						}
+					
+						// La ligne ne contient pas une valeur numérique dans son premier champ
+					} else {
+						$error = true;
+						$model->ErrorMessages[] =  ['error' => "Incorrect field in line $numLigne",
+								'message' => "This field must be numeric."];
+					}
+					
+					
+					
+					/*
+					// Initialisation du timestamp
+					// Si on a une chaine numeric, on la convertie en date sous la forme YYYY-MM-DD HH:MM:SS, 
+					// sinon on essai de convertir la chaine en timestamp (si ça ne marche pas, on a false) puis sous la forme YYYY-MM-DD HH:MM:SS
+					if (is_numeric($timeStampOriginal)) {
+						$timeStamp =  date("Y-m-d H:i:s", $timeStampOriginal);
+
+						// Insertion des mesures de la ligne dans la base (via le controleur des Mesures)
+						$l_TAB_Retour = MesureController::enregistreMesureBrute($moduleID, $timeStamp, $l_TAB_champs);
+						
+					} else {
+						if( strtotime($timeStampOriginal) !== false){
+							$timeStamp =  date("Y-m-d H:i:s", strtotime($timeStampOriginal));
+							
+							// Insertion des mesures de la ligne dans la base (via le controleur des Mesures)
+							$l_TAB_Retour = MesureController::enregistreMesureBrute($moduleID, $timeStamp, $l_TAB_champs);
+						} else {
+							$error = true;
+							
+						}
+					}
+					
+
 					
 					// Si on a une erreur à l'insertion.
 					if( isset($l_TAB_Retour['error']) and $l_TAB_Retour['error'] != ""){
 						$error = true;
-						$model->ErrorMessages[] = "Problème à l'enregistrement de la ligne $numLigne : <b><br/>". implode(",", $l_TAB_champs)."</b><br/><span class='error'>". $l_TAB_Retour['error']."</span>";
+						$model->ErrorMessages[] = ['error' => "Error in line $numLigne : ". implode(",", $l_TAB_champs),
+								"message" => $l_TAB_Retour['error']];
 					}
+					*/
 					
-					// La ligne lue est vide
+					// La ligne lue est incorrecte
 				} else {
 					$error = true;
-					$model->ErrorMessages[] = "Impossible de trouver les champs de la ligne $numLigne, est-ce vraiment un fichier CSV correctement formaté ?";
+					$model->ErrorMessages[] =  ['error' => "Incorrect field number found in line $numLigne",
+												'message' => "Line must have $l_INT_CountNbChamps fields, but ".count( $l_TAB_champs)." found."];
 				}
 				$numLigne++;
 			}
 			fclose($handle);
 		}
 		
-		// Suppression du fichier CSV
+		
+		
+		// S'IL RESTE DES DONNÉES NON ENREGISTRÉ DANS LA STRUCTURE TEMPORAIRE ------------
+		// ( ca peut arriver à cause du modulo)
+		if( count( $l_TAB_Data ) > 0){
+			// Enregistrements des lignes
+			MesureController::enregistreMesureBrute($moduleID, $l_TAB_Data);
+			
+			// Réinitialisation de la structure
+			$l_TAB_Data = array();
+		}
+		
+		
+		// SUPPRESSION DU FICHIER CSV ----------------------------------------------------
 		if( is_file($model->fileName)) {
 			unlink($model->fileName);
 		}

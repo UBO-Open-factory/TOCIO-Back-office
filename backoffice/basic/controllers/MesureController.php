@@ -10,6 +10,7 @@ use function GuzzleHttp\Psr7\str;
 use Elasticsearch\ClientBuilder;
 use yii\web\UploadedFile;
 use app\models\UploadImageForm;
+use PHPUnit\Exception;
 
 
 
@@ -27,15 +28,15 @@ class MesureController extends ActiveController {
 	//==============================================================================================
 	/**
 	 * This allow to upload a csv file with Mesure data according to something like :
-	 * "TEST_1";"1618307702";"-01234";"012";"-01201"
+	 * "1618307702";"-01234";"012";"-01201"
 	 * where :
-	 *     field 1 is module ID
-	 *     field 2 is timestamp when Data have been take.
-	 *     field 3 and next are data formatted as describ in Grandeur format.
+	 *     field 1 is timestamp when Data have been take.
+	 *     field 2 and next are data formatted as describ in Grandeur format.
 	 *     
+	 *	@param string $id : The module ID as define in the BackOffice.
 	 * @return array in JSON with success, error, parse error 
 	 */
-	public function actionUploadcsv(){
+	public function actionUploadcsv($id){
 		// DISABLE CSRF VALIDATION (?)
 		yii::$app->request->enableCsrfValidation = false;
 		Yii::$app->request->getBodyParams();
@@ -63,7 +64,7 @@ class MesureController extends ActiveController {
 			if ($model->upload()) {
 				
 				// Insert data from file in data base
-				if( ! SiteController::insertDataFromFile($model)) {
+				if( ! SiteController::insertDataFromFile($model, $id)) {
 					
 					$l_TAB_Retour = ["success" => "ok"];
 				
@@ -99,7 +100,7 @@ class MesureController extends ActiveController {
 		// SEND RESULT IN JSON -----------------------------------------------------------
 		// Le format de l'affichage du message sera en JSON
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		return json_encode( $l_TAB_Retour );
+		return $l_TAB_Retour;
 		
 	}
 	
@@ -350,15 +351,15 @@ class MesureController extends ActiveController {
 	 * @param $timeStamp le timestamp des mesures. S'il existe on le prend pour la sauvegarde des mesures, sinon
 	 * 						on met l'heure actuelle.
 	 * @return vide ou message au format JSON
-	 * 
+	 *
 	 * @version 17 juin 2020	: APE	- Remplacement des points dans la mesure par des virgules.
 	 * 	@version 3 juil. 2020	: APE	- Remplacement des virgules dans le formattage de mesure par des points.
 	 * 	@version 3 juil. 2020	: APE	- Implémentation de l'ajout dans Elasticsearch
 	 * 	@version 17 sept. 2020	: APE	- Suppression de l'utilisation de json_encode pour le retour de la fonction.
 	 * 									- Affichage des data inséréés dans ElasticSearch.
-	 * 	@version 14 oct. 2020	: APE	- Prise en compte de l'ordre des capteurs (ajout du "orderBy") 
+	 * 	@version 14 oct. 2020	: APE	- Prise en compte de l'ordre des capteurs (ajout du "orderBy")
 	 * 										lors de la récupéraiton de la liste des capteurs rattachés au module.
-	 * 	@version 3 mars 2021	: APE	- Ajout du paramètre "timeStamp qui est null par défaut pour 
+	 * 	@version 3 mars 2021	: APE	- Ajout du paramètre "timeStamp qui est null par défaut pour
 	 * 										garder une rétrocomptabilité.
 	 */
 	private function _storeMesure($moduleID, $mesures, $timeStamp = null){
@@ -377,21 +378,21 @@ class MesureController extends ActiveController {
 		 */
 		$l_OBJ_Query= new Query();
 		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom as capteurnom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z, rmc.nomcapteur, rmc.ordre')
-									->from('module as m')
-									->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
-									->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
-									->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
-									->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
-									->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
-									->orderBy(['rmc.ordre'=> SORT_ASC])
-									->all();
-
+		->from('module as m')
+		->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
+		->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
+		->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
+		->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
+		->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
+		->orderBy(['rmc.ordre'=> SORT_ASC])
+		->all();
 		
-									
-									
-									
-									
-									
+		
+		
+		
+		
+		
+		
 		// CALCUL DU NOMBRE DE CARACTÈRES ATTENDU DANS LA TRAME --------------------------
 		$l_INT_LongeurAttendu = 0;
 		foreach( $l_TAB_Results as $l_INT_Key => $l_TAB_Format){
@@ -424,8 +425,8 @@ class MesureController extends ActiveController {
 		}
 		$l_TAB_Retour['Nb caractere attendu']	= $l_INT_LongeurAttendu;
 		
-
-
+		
+		
 		
 		
 		// TEST SI LA TRAME FAIT LE BON NOMBRE DE CARACTÈRES -----------------------------
@@ -510,8 +511,8 @@ class MesureController extends ActiveController {
 					'identifiantModule' => $moduleID,
 			];
 			Yii::$app->db->createCommand()
-							->insert($l_TAB_Capteur['tablename'], $params)
-							->execute();
+			->insert($l_TAB_Capteur['tablename'], $params)
+			->execute();
 			
 			// Insertion dans Elastic Search
 			// @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/indexing_documents.html
@@ -524,12 +525,12 @@ class MesureController extends ActiveController {
 				$params['Capteur nom'] 				= $l_TAB_Capteur['capteurnom'];
 				$params['Mesure nature'] 			= $l_TAB_Capteur['nature'];
 				$elasticData		= ['index' 	=> Yii::getAlias('@elasticsearchindex'),
-										'body'	=> $params
-										];
+						'body'	=> $params
+				];
 				$respons 			= $l_OBJ_ClientElastic->index($elasticData);
 				$elasticRespons[] 	= $respons;
-			
-			// No index defined in setting
+				
+				// No index defined in setting
 			} else  {
 				$elasticData = "";
 				$elasticRespons[] 	= ['warning' => "No Elasticsearch's index defined in config/web_local.php file. No document store in ElasticSearch."];
@@ -541,7 +542,7 @@ class MesureController extends ActiveController {
 		
 		// RETOUR ------------------------------------------------------------------------
 		// Le format de l'affichage du message sera en JSON
-// 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		// 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		
 		$l_TAB_Retour['error']	= "";
 		$l_TAB_Retour['success']	= "ok";
@@ -549,6 +550,83 @@ class MesureController extends ActiveController {
 		$l_TAB_Retour['ElasticSearchReturn'] = $elasticRespons;
 		
 		return $l_TAB_Retour;
+	}
+	
+	
+	//==============================================================================================
+	/**
+	 * Enregistre en base une liste des mesures envoyées par les capteurs d'un module.
+	 * Les mesures n'ont pas besoin d'être formattées, 
+	 * 		aucune vérification faite sur le format des mesures
+	 * 
+	 * @param  $p_STR_moduleID l'ID du module pour lequel enregistrer la mesure.
+	 * @param $p_TAB_Data un tableau contenant les mesures faite pour chaque capteur du module.
+	 * 
+	 * 	@version 21 juin 2021	: APE	- Création. 
+	 * @todo : insérer les data dans elasticSearch.
+	 */
+	function enregistreMesureBrute($p_STR_moduleID, $p_TAB_Data){
+		
+		
+		
+		// ENREGISTREMENT DES MESURES DANS LES TABLES DE MESURES -------------------------
+		foreach ( $p_TAB_Data as $tableMesure => $l_TAB_data){
+			
+			// Concatenation des valeurs à insérer dans la table des mesures
+			$values	= array();
+			foreach( $l_TAB_data as $data){
+				$values[] = [
+						'timestamp' => $data['date'] ,
+						'valeur' => $data['value'],
+						'posX' => $data['x'],
+						'posY' => $data['y'],
+						'posZ' => $data['z'],
+						'identifiantModule' => $p_STR_moduleID,
+				];
+			}
+
+		
+			// Insertion dans la table
+			Yii::$app->db->createCommand()
+				->batchInsert($tableMesure, 
+						['timestamp','valeur','posX','posY','posZ','identifiantModule'],
+						$values)
+				->execute();
+		}
+		
+			/*
+		 // CREATION DU CLIENT ELASTIC SEARCH ---------------------------------------------
+		 // Pour la configuration du client elastic @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/configuration.html
+		 if( Yii::getAlias('@elasticsearchindex') != "") {
+		 $l_OBJ_ClientElastic = ClientBuilder::create()->build();
+		 }
+		 $elasticRespons		= array();
+		 */
+		
+							/*
+		// Insertion dans Elastic Search
+		// @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/indexing_documents.html
+		if( Yii::getAlias('@elasticsearchindex') != "") {
+			$params['timestamp']	= $p_STR_date;
+			$params['Module identifiant reseau'] = $l_TAB_Capteur['identifiantReseau'];
+			$params['Module description'] 		= $l_TAB_Capteur['description'];
+			$params['Module nom'] 				= $l_TAB_Capteur['nom'];
+			$params['Capteur nom custom'] 		= $l_TAB_Capteur['nomcapteur'];
+			$params['Capteur nom'] 				= $l_TAB_Capteur['capteurnom'];
+			$params['Mesure nature'] 			= $l_TAB_Capteur['nature'];
+			$elasticData		= ['index' 	=> Yii::getAlias('@elasticsearchindex'),
+									'body'	=> $params
+									];
+			$respons 			= $l_OBJ_ClientElastic->index($elasticData);
+			$elasticRespons[] 	= $respons;
+		
+		// No index defined in setting
+		} else  {
+			$elasticData = "";
+			$elasticRespons[] 	= ['warning' => "No Elasticsearch's index defined in config/web_local.php file. No document store in ElasticSearch."];
+		}
+		*/
+
 	}
 	
 	

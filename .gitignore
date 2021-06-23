@@ -4,4 +4,5 @@
 *.sass-cache/
 *package-lock.json
 *.lock
+config/web_local.php
 composer.lock

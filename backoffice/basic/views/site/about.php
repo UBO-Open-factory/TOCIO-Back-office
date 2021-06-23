@@ -150,17 +150,22 @@ function commentaire($elem){
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.2.8</h2>
-	<li>2021-05-18 <b>&bull;</b> Passage de Tocio en version 1.2.8</li>
-<li>2021-05-18 <b>&bull;</b> Passage de Yii en version 2.0.42.1.</li>
 <li>2021-05-18 <b>&bull;</b> Les utilisateurs peuvent changer eux-même leur mot de passe</li>
 <li>2021-04-30 <b>&bull;</b> Suppression de fichiers inutiles</li>
 <li>2021-04-26 <b>&bull;</b> Utilisation du timezone défini dans le php.ini</li>
 <li>2021-04-26 <b>&bull;</b> Fusion de la branche CSVFile</li>
 <li>2021-04-26 <b>&bull;</b> Mis en place de l'export des données au format CSV</li>
-<li>2021-04-14 <b>&bull;</b> Mise à jour du ficheir about</li>
 <li>2021-04-14 <b>&bull;</b> Documentation de l'API pour pouvoir envoyer un fichier CSV</li>
 <li>2021-04-14 <b>&bull;</b> Protection contre un champ 'file' vide.</li>
 <li>2021-04-14 <b>&bull;</b> Upload d'un fichier par une méthode PUT via l'API</li>
+<li>2021-06-23 <b>&bull;</b> Optimisation de l'insertion des données dans la base lorsqu'elles sont envoyées via un fichier CSV</li>
+<li>2021-06-22 <b>&bull;</b> Changement de mode d'import de journaux CSV : Il est maintenant possible de ne plus formatter les données envoyées</li>
+<li>2021-04-14 <b>&bull;</b> Documentation de l'API pour pouvoir envoyer un ficheir CSV</li>
+<li>2021-04-14 <b>&bull;</b> Protection contre un champ 'file' vide.</li>
+
+	
+	<h2>V 1.2.7</h2>
+	<li>2021-04-14 <b>&bull;</b> Documentation de l'API pour pouvoir envoyer un ficheir CSV</li>
 <li>2021-04-14 <b>&bull;</b> Mise à jour du gitignore pour ne pas versionner le répertoire des uploads</li>
 <li>2021-04-14 <b>&bull;</b> Ajout du parser pour pouvoir uploader un fichier via l'API en PUT</li>
 <li>2021-04-14 <b>&bull;</b> On enregistre pas dans ElasticSearch s'il n'y a pas d'index de défini dans le fichier de configuration local config/(web_local.php)</li>
