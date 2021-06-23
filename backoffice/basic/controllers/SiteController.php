@@ -142,31 +142,50 @@ class SiteController extends Controller {
 	 * 
 	 * @return void|string
 	 * @see https://www.tutorialspoint.com/yii/yii_files_upload.htm
+	 * 	@version 23 juin 2021	: APE	- Ajout de la selection d'un module.
 	 */
 	public function actionUpload() {
+		// RÉCUPÉRATION DE LA LISTE DES MODULES ------------------------------------------
+		$listModules	= ArrayHelper::map( Module::find()->all(), 	'identifiantReseau', 'nom' );
+		
+		
+		
+		// CRÉATION D'UN MODEL POUR STOCKER LE FICHIER -----------------------------------
 		$model = new UploadImageForm();
 		
+		
+		
+		// SI ON A LE RÉSULTAT D'UN POST DE FORMULAIRE ------------------------------------
 		if (Yii::$app->request->isPost) {
+			
+			
+			// enregistrement des saisie dans le modèle
+			$model->load( Yii::$app->request->post());
+
 			
 			// On fait l'upload du fichier CSV
 			// Et on rattache le fichier au model UploadImageForm
-			$model->CSVFile = UploadedFile::getInstance($model, 'CSVFile');
+			$model->CSVFile 	= UploadedFile::getInstance($model, 'CSVFile');
 			
 			
 			// file is uploaded successfully
 			if ($model->upload()) {
 				
 				// Traitement du fichier
-				if( ! $this->insertDataFromFile($model)) {
+				if( ! $this->insertDataFromFile($model, $model->moduleID)) {
 					
 					// Redirectiopn sur la page d'affichage des données
 					return $this->redirect(['/grandeur/index']);
 				}
 			}
 		}
-		return $this->render('upload', ['model' => $model]);
+		return $this->render('upload', ['model' => $model,
+				'listModules' 	=> $listModules,
+		]);
 	}
 
+	
+	
 	
 	public function actionExportDownload(){
 		

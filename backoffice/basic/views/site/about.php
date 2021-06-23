@@ -144,7 +144,7 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.2.8..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>'
+		git log v1.2.9..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>'
 	 * 
 	 */
 	?>

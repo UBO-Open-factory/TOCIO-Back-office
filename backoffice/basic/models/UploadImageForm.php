@@ -13,10 +13,16 @@ class UploadImageForm extends Model {
 	// Le nom complet du fichier CSV (une fois uploadé) 
 	public $fileName;
 	
+	/**
+	 * @var l'ID du module dont le fichier CSV contient les mesures.
+	 */
+	public $moduleID;
 	
 	public function rules() {
-		return [[	['CSVFile'], 'file', 'skipOnEmpty' => false,
-				]];
+		return [
+					[['CSVFile'], 'file', 'skipOnEmpty' => false],
+					[['moduleID'], 'string', 'max' => 50],
+				];
 	}
 
 	// _____________________________________________________________________________________________
@@ -27,7 +33,8 @@ class UploadImageForm extends Model {
 	 */
 	public function attributeLabels(){
 		return [
-				'CSVFile' => 'Fichier journal au format CSV',
+				'CSVFile' 	=> 'Fichier journal au format CSV',
+				'moduleID'	=> 'Module dans lequel importer les mesures du fichier'
 		];
 	}
 	
@@ -40,6 +47,8 @@ class UploadImageForm extends Model {
 	public function upload() {
 		// Sauvegarde le fichier uploadé dans le répertoire local
 		if( $this->validate() ) {
+
+			
 			
 			// Construction du nom du fichier (il doit être unique)
 			$timestamp = time();
@@ -47,6 +56,7 @@ class UploadImageForm extends Model {
 			$this->fileName =  '../uploads/'.$timestamp."-".$this->CSVFile->baseName.'.'.$this->CSVFile->extension;
 			$this->CSVFile->saveAs( $this->fileName );
 			
+
 			return true;
 		} else {
 			return false;
