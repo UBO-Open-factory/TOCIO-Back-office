@@ -10,6 +10,7 @@ use function GuzzleHttp\Psr7\str;
 use Elasticsearch\ClientBuilder;
 use yii\web\UploadedFile;
 use app\models\UploadImageForm;
+use PHPUnit\Exception;
 
 
 
@@ -533,134 +534,78 @@ class MesureController extends ActiveController {
 	
 	//==============================================================================================
 	/**
-	 * Enregistre en base une liste de mesures envoyées par les capteurs d'un module.
+	 * Enregistre en base une liste des mesures envoyées par les capteurs d'un module.
 	 * Les mesures n'ont pas besoin d'être formattées, 
-	 * 		aucune vérification faite sur le format des mesures, seul le nombre de mesures peut 
-	 * 		entrainer un rejet de la trame.
+	 * 		aucune vérification faite sur le format des mesures
 	 * 
 	 * @param  $p_STR_moduleID l'ID du module pour lequel enregistrer la mesure.
-	 * @param $p_STR_date la tdate à) laquelle à été faite la mesure (sous la forma YYYY-MM-DD HH:MM:SS )
-	 * @param $p_TAB_Mesures un tableau contenant les mesures faite pour chaque capteur du module.
-	 * @return vide ou message au format JSON
+	 * @param $p_TAB_Data un tableau contenant les mesures faite pour chaque capteur du module.
 	 * 
 	 * 	@version 21 juin 2021	: APE	- Création. 
+	 * @todo : insérer les data dans elasticSearch.
 	 */
-	function enregistreMesureBrute($p_STR_moduleID, $p_STR_date, $p_TAB_Mesures){
-		$l_TAB_Retour = array();
-		// CONSTRUCTION DE LA REQUETE POUR RÉCUPERER LE NOM DES TABLES OU STOCKER LES DATA A PARTIR DE L'ID DU MODULE
-		/*	Select m.nom, m.identifiantReseau, m.description, c.nom, g.nature, g.tablename, rmc.x, rmc.y, rmc.z
-		 FROM module as m
-		 INNER JOIN rel_modulecapteur as rmc ON m.identifiantReseau = rmc.idModule
-		 INNER JOIN capteur as c ON rmc.idCapteur = c.id
-		 INNER JOIN rel_capteurgrandeur as rcg ON rcg.idCapteur = c.id
-		 INNER JOIN grandeur as g ON g.id = rcg.idGrandeur
-		 INNER JOIN position as p ON p.id = c.idPosition
-		 WHERE m.identifiantReseau = "70B3D54999F0552D"
-		 
-		 @see https://www.yiiframework.com/doc/guide/2.0/fr/db-query-builder
-		 */
-		$l_OBJ_Query= new Query();
-		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom as capteurnom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z, rmc.nomcapteur, rmc.ordre')
-									->from('module as m')
-									->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
-									->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
-									->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
-									->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
-									->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $p_STR_moduleID])
-									->orderBy(['rmc.ordre'=> SORT_ASC])
-									->all();
-
+	function enregistreMesureBrute($p_STR_moduleID, $p_TAB_Data){
 		
-									
-									
-		// VERFICATION QU'ON A BIEN LE BON NOMBRE DE CHAMPS ------------------------------
-		if( count( $l_TAB_Results ) != count( $p_TAB_Mesures)){
-			$l_TAB_Retour['error']	= "Line ignored. Line must have ".count( $l_TAB_Results )." field, but ".count( $p_TAB_Mesures)." found.";
-			
-			// RENVOIE LE RÉSULTAT
-			return $l_TAB_Retour;
-		}
-		
-		
-		// VERIFICAITON QUE LES CHAMPS SONT BIEN DES VALEURS ENTIERE ET PAS DES STRING ---
-		foreach( $p_TAB_Mesures as $field ){
-			
-			// Si la valeur du champ n'est pas numeric, on la rejete
-			if( !is_numeric( $field )) {
-				
-				$l_TAB_Retour['error']	= "Line ignored : ".$field." is not a numerical value in line ".implode(",", $p_TAB_Mesures);
-				
-				// RENVOIE LE RÉSULTAT
-				return $l_TAB_Retour;
-			}
-		}
-
-									
-
-
-		/*
-		// CREATION DU CLIENT ELASTIC SEARCH ---------------------------------------------
-		// Pour la configuration du client elastic @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/configuration.html
-		if( Yii::getAlias('@elasticsearchindex') != "") {
-			$l_OBJ_ClientElastic = ClientBuilder::create()->build();
-		}
-		$elasticRespons		= array();
-		*/
 		
 		
 		// ENREGISTREMENT DES MESURES DANS LES TABLES DE MESURES -------------------------
-		foreach ( $l_TAB_Results as $l_INT_IndiceMesure => $l_TAB_Capteur){
-			// Construction de la requète d'insertion en BDD
-			$params = [
-					'timestamp' => $p_STR_date ,
-					'valeur' => $p_TAB_Mesures[$l_INT_IndiceMesure],
-					'posX' => $l_TAB_Capteur['x'],
-					'posY' => $l_TAB_Capteur['y'],
-					'posZ' => $l_TAB_Capteur['z'],
-					'identifiantModule' => $p_STR_moduleID,
-			];
-			Yii::$app->db->createCommand()
-							->insert($l_TAB_Capteur['tablename'], $params)
-							->execute();
-
-							/*
-			// Insertion dans Elastic Search
-			// @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/indexing_documents.html
-			if( Yii::getAlias('@elasticsearchindex') != "") {
-				$params['timestamp']	= $p_STR_date;
-				$params['Module identifiant reseau'] = $l_TAB_Capteur['identifiantReseau'];
-				$params['Module description'] 		= $l_TAB_Capteur['description'];
-				$params['Module nom'] 				= $l_TAB_Capteur['nom'];
-				$params['Capteur nom custom'] 		= $l_TAB_Capteur['nomcapteur'];
-				$params['Capteur nom'] 				= $l_TAB_Capteur['capteurnom'];
-				$params['Mesure nature'] 			= $l_TAB_Capteur['nature'];
-				$elasticData		= ['index' 	=> Yii::getAlias('@elasticsearchindex'),
-										'body'	=> $params
-										];
-				$respons 			= $l_OBJ_ClientElastic->index($elasticData);
-				$elasticRespons[] 	= $respons;
+		foreach ( $p_TAB_Data as $tableMesure => $l_TAB_data){
 			
-			// No index defined in setting
-			} else  {
-				$elasticData = "";
-				$elasticRespons[] 	= ['warning' => "No Elasticsearch's index defined in config/web_local.php file. No document store in ElasticSearch."];
+			// Concatenation des valeurs à insérer dans la table des mesures
+			$values	= array();
+			foreach( $l_TAB_data as $data){
+				$values[] = [
+						'timestamp' => $data['date'] ,
+						'valeur' => $data['value'],
+						'posX' => $data['x'],
+						'posY' => $data['y'],
+						'posZ' => $data['z'],
+						'identifiantModule' => $p_STR_moduleID,
+				];
 			}
-			*/
+
+		
+			// Insertion dans la table
+			Yii::$app->db->createCommand()
+				->batchInsert($tableMesure, 
+						['timestamp','valeur','posX','posY','posZ','identifiantModule'],
+						$values)
+				->execute();
 		}
 		
+			/*
+		 // CREATION DU CLIENT ELASTIC SEARCH ---------------------------------------------
+		 // Pour la configuration du client elastic @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/configuration.html
+		 if( Yii::getAlias('@elasticsearchindex') != "") {
+		 $l_OBJ_ClientElastic = ClientBuilder::create()->build();
+		 }
+		 $elasticRespons		= array();
+		 */
 		
+							/*
+		// Insertion dans Elastic Search
+		// @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/indexing_documents.html
+		if( Yii::getAlias('@elasticsearchindex') != "") {
+			$params['timestamp']	= $p_STR_date;
+			$params['Module identifiant reseau'] = $l_TAB_Capteur['identifiantReseau'];
+			$params['Module description'] 		= $l_TAB_Capteur['description'];
+			$params['Module nom'] 				= $l_TAB_Capteur['nom'];
+			$params['Capteur nom custom'] 		= $l_TAB_Capteur['nomcapteur'];
+			$params['Capteur nom'] 				= $l_TAB_Capteur['capteurnom'];
+			$params['Mesure nature'] 			= $l_TAB_Capteur['nature'];
+			$elasticData		= ['index' 	=> Yii::getAlias('@elasticsearchindex'),
+									'body'	=> $params
+									];
+			$respons 			= $l_OBJ_ClientElastic->index($elasticData);
+			$elasticRespons[] 	= $respons;
 		
-		
-		// RETOUR ------------------------------------------------------------------------
-		// Le format de l'affichage du message sera en JSON
-// 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		
-		$l_TAB_Retour['error']	= "";
-		$l_TAB_Retour['success']	= "ok";
-		//$l_TAB_Retour['ElasticSearchDataInsertion'] = $elasticData;
-		//$l_TAB_Retour['ElasticSearchReturn'] = $elasticRespons;
-		
-		return $l_TAB_Retour;
+		// No index defined in setting
+		} else  {
+			$elasticData = "";
+			$elasticRespons[] 	= ['warning' => "No Elasticsearch's index defined in config/web_local.php file. No document store in ElasticSearch."];
+		}
+		*/
+
 	}
 	
 	
