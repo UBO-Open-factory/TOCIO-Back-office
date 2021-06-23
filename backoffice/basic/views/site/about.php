@@ -149,6 +149,15 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.2.8</h2>
+	<li>2021-06-23 <b>&bull;</b> Optimisation de l'insertion des données dans la base lorsqu'elles sont envoyées via un fichier CSV</li>
+<li>2021-06-22 <b>&bull;</b> Changement de mode d'import de journaux CSV : Il est maintenant possible de ne plus formatter les données envoyées</li>
+<li>2021-04-14 <b>&bull;</b> Documentation de l'API pour pouvoir envoyer un ficheir CSV</li>
+<li>2021-04-14 <b>&bull;</b> Protection contre un champ 'file' vide.</li>
+<li>2021-04-14 <b>&bull;</b> Upload d'un fichier par une méthode PUT via l'API</li>
+<li>2021-04-14 <b>&bull;</b> Ajout du parser pour pouvoir uploader un fichier via l'API en PUT</li>
+
+	
 	<h2>V 1.2.7</h2>
 	<li>2021-04-14 <b>&bull;</b> Documentation de l'API pour pouvoir envoyer un ficheir CSV</li>
 <li>2021-04-14 <b>&bull;</b> Mise à jour du gitignore pour ne pas versionner le répertoire des uploads</li>
