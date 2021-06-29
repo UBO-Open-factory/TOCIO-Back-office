@@ -11,6 +11,7 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
 use app\models\User;
+use app\controllers\LogController;
 
 AppAsset::register($this);
 ?>
@@ -61,6 +62,13 @@ AppAsset::register($this);
     	$menuItems[] = ['label' => 'Localisations', 'url' => ['/localisationmodule/index'], 'linkOptions' => ['class' => 'nav-link'] ];
     }
     
+    // Liens sur les fichiers de logs des imports CSV ------------------------------------
+    if( LogController::ExisteLogimports()){
+    	$itemLogImportsCSV = [ 'label' => 'Voir les log des imports automatiques de journaux CSV', 'url' => ['/log/logimports'], 'linkOptions' => ['class' => 'nav-link'] ];
+    } else {
+    	$itemLogImportsCSV = "";
+    }
+    
 	// OUTILS --------------------------------------------------------------------------------------
     if( ! Yii::$app->user->isGuest ) {
 		$menuItems[] = [ 
@@ -71,7 +79,8 @@ AppAsset::register($this);
 				[ 'label' => 'Traces de débug', 'url' => ['/log/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Tables des données', 'url' => ['/grandeur/index'], 'linkOptions' => ['class' => 'nav-link'] ],
 				[ 'label' => 'Exports de données', 'url' => ['/site/export'], 'linkOptions' => ['class' => 'nav-link'] ],
-				[ 'label' => 'Import de journaux CSV', 'url' => ['/site/upload'], 'linkOptions' => ['class' => 'nav-link'] ],
+				$itemLogImportsCSV
+				
 			],
 		];
     } else {

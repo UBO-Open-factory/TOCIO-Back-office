@@ -9,6 +9,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\FileHelper;
+use yii\data\ArrayDataProvider;
+use yii\helpers\Url;
 
 /**
  * LogController implements the CRUD actions for Log model.
@@ -41,6 +44,70 @@ class LogController extends Controller
             ],
         ];
     }
+
+	// ___________________________________________________________________________________
+	/**
+	 * Lists all CSV import Logs.
+	 * CSV import are made with a curl request and Logs files are in a special directory (next to imported files)
+	 *
+	 * @return mixed
+	 */
+	public function actionLogimports() {
+
+		// Récupération de tout les fichiers dans le répertoire d'archives des imports CSV
+		$files = FileHelper::findFiles( Yii::$app->basePath.Yii::getAlias( "@CSVIimportDirectory" ) );
+		
+		
+		// s'il n'existe pas de fichiers de logs (le répertoire est vide)
+		if( count( $files ) == 0 ){
+			// Redirection sur la page d'acceuil
+			$this->redirect("/");
+		}
+		
+		// Transformation de la liste des fichiers en structure pour affichage dans la page 
+		// sous forme d'un dataprovider
+		$l_TAB_Files = [];
+		foreach ($files as $file){
+			// extraction de la date du nom du fichier (moduleID_AAAAMMJJ_HH.csv.log ou moduleID_AAAAMMJJ_HH.csv)
+			$date = substr(strrchr($file,'.'),1) =="log" ? substr($file, -8 -11, 11) : substr($file, -4 -11, 11);
+			$date = date("Y-m-d H:i", mktime(substr($date, -2,2), 0, 0,
+									substr($date,4,2 ),	// month
+									substr($date,6,2 ),	// day
+									substr($date,0,4 )	// year
+					));
+			
+			$l_TAB_Files[] = [
+					'file'	=> $file,
+					'url'	=> Url::to([basename(Yii::getAlias( "@CSVIimportDirectory" ))."/".basename($file)]),
+					'name'	=> basename($file),
+					'type'	=> substr(strrchr($file,'.'),1) =="log" ? "Log" : "Source",
+					'date'	=> $date,
+			];
+		}
+
+
+		// Envoie des data à la vue
+		$dataProvider = new ArrayDataProvider([
+				'allModels'	=>  $l_TAB_Files,
+		]);
+		return $this->render( 'logimports', [
+				'dataProvider' => $dataProvider ] );
+	}
+	
+	
+	// ___________________________________________________________________________________
+	/**
+	 * Renvoie s'il existe des fichiers de log dans le répertoire des imports des fichiers CSV
+	 * @return boolean 
+	 * 
+	 */
+	public function ExisteLogimports(){
+		// Récupération de tout les fichiers dans le répertoire d'archives des imports CSV
+		$files = FileHelper::findFiles( Yii::$app->basePath.Yii::getAlias( "@CSVIimportDirectory" ) );
+		
+		return count( $files ) != 0;
+	}
+	
 
     /**
      * Lists all Log models.
