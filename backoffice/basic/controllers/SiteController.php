@@ -433,13 +433,14 @@ class SiteController extends Controller {
 		
 		//  Ouverture du fichier CSV en lecture
 		if (($handle = fopen($model->fileName, "r")) !== false) {
-			$numLigne 	= 1;
+			$numLigne 	= 0;
 			
 			// lecture ligne par ligne du fichier
 			// avec des ; comme séparateur de champs
 			//while (($l_TAB_champs = fgetcsv($handle, 0, ";", "\"")) !== false) {
 			$l_TAB_Data = array();
 			while (($l_TAB_champs = fgetcsv($handle, 0, ";")) !== false) {
+				$numLigne++;
 				
 				// Si on a bien le bon nombre de champs par ligne
 				if( is_array($l_TAB_champs) and count( $l_TAB_champs) -1 == $l_INT_CountNbChamps ){
@@ -540,7 +541,6 @@ class SiteController extends Controller {
 					$model->ErrorMessages[] =  ['error' => "Incorrect field number found in line $numLigne",
 												'message' => "Line must have $l_INT_CountNbChamps fields, but ".count( $l_TAB_champs)." found."];
 				}
-				$numLigne++;
 			}
 			fclose($handle);
 		}

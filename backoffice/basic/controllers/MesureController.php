@@ -37,6 +37,9 @@ class MesureController extends ActiveController {
 	 * @return array in JSON with success, error, parse error 
 	 */
 	public function actionUploadcsv($id){
+		// Le format de l'affichage du message sera en JSON
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		
 		// DISABLE CSRF VALIDATION (?)
 		yii::$app->request->enableCsrfValidation = false;
 		Yii::$app->request->getBodyParams();
@@ -44,16 +47,16 @@ class MesureController extends ActiveController {
 		// GET THE UPLOADED FILE
 		$uploadedFile	= UploadedFile::getInstancesByName('file');
 
-		// we didn't have the "file" param
+		
+		// Upload didn't success (we got an empty array)
 		if( sizeof($uploadedFile) ==0) {
-			return ["error" => "Invalid file transfert. Pleas use PUT method with file=<YourCSFFile.csv> parameter."];
+			return ["error" => "Invalid file transfert (filesize=0). Please use PUT method with file=<YourCSFFile.csv> parameter with 'Content-Type:multipart/form-data'."];
 		}
 		$uploadedFile	= $uploadedFile[0];
 		
 		
-		
 		// WE NEED A REAL CSV FILE (ACCORDING TO MIME TYPE) ------------------------------
-		if ($uploadedFile->type == "text/csv" ){
+		if ($uploadedFile->type == "application/octet-stream" ){
 			
 
 			// Attach the uploaded file to UploadImageForm model
@@ -92,14 +95,12 @@ class MesureController extends ActiveController {
 			
 		// THIS IS NOT A CSV FILE, RETURN AN ERROR ---------------------------------------
 		} else {
-			$l_TAB_Retour = ["error" => "Need a csv file"];
+			$l_TAB_Retour = ["error" => "This file, is not a CSV file. Mimetype should be application/octet-stream"];
 		}
 		
 		
 		
 		// SEND RESULT IN JSON -----------------------------------------------------------
-		// Le format de l'affichage du message sera en JSON
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		return $l_TAB_Retour;
 		
 	}
