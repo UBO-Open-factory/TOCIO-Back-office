@@ -149,6 +149,9 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.3.0</h2>
+	<li>2021-08-31 <b>&bull;</b> Générateur de code pour les graphiques Grafana</li>
+	
 	<h2>V 1.2.9</h2>
 	<li>2021-06-30 <b>&bull;</b> Script d'import de fichier journaux locaux a partir du repertoire FTP</li>
 <li>2021-06-29 <b>&bull;</b> Ajout d'une page pour visualiser les logs des imports automatique des fichiers CSV</li>
