@@ -12,7 +12,7 @@ $config = [
     'bootstrap' => [
         'log'
     ],
-    'version' => '1.2.9',
+    'version' => '1.3.0',
     'aliases' => [
         // Do not define anything here, but in web_local.php
     ],
@@ -163,6 +163,14 @@ $config = [
                     'pluralize' => false,
                     'patterns' => [
                     	'GET pwdverif<token:\d+>' => 'pwdverif',
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'codegenerator',
+                    'pluralize' => false,
+                    'patterns' => [
+                   		'GET grafana<id:\d+>' => 'grafana',
                     ]
                 ],
             ]

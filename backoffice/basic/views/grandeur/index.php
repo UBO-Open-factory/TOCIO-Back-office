@@ -40,6 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				        				return $model->NbDataTable;
 				        			}
         	],
+        	['attribute' => 'Grafana JSON',
+			'format' => 'html',
+        	'label' => "",
+        	'value' => function($model){
+        					return '<a href="'.Url::toRoute("/codegenerator/grafana?id=".$model->id).'" title="Grafana : pannel\'s JSON definition"><i class="glyphicon glyphicon-export"></i></a>';
+				        		}
+        	],
         	['attribute' => 'Graphique',
 			'format' => 'html',
         	'label' => "",
