@@ -97,7 +97,8 @@ return [
         '@bower' => '@vendor/bower-asset',
         '@npm' => '@vendor/npm-asset',
         '@urlbehindproxy' => "/",
-        '@elasticsearchindex' => "model-tocio-event-large"
+        '@elasticsearchindex' => "model-tocio-event-large",
+        '@CSVIimportDirectory' => "/web/downloads/",       
     ]
 ];
 ```
@@ -105,3 +106,5 @@ return [
 | -------------------- | --------------- |
 | @urlbehindproxy      | If your TOCIO's back office is behind a revers-proxy you need this params to define your base server.(This part will be add in front of every URL that Yii2 generate.) |
 | @elasticsearchindex  | This is the ElasticSearch index under wich your documents will be stored. If you don't use ELK, let this params to empty. |
+| @CSVIimportDirectory | Absolute path to the directory where uploads will be stored. Path should be rootable from Yii (started with /web/....) |
+
