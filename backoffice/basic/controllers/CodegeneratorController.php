@@ -8,6 +8,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Codeception\Lib\Connector\Yii2;
 use app\models\Grandeur;
+use app\models\GrandeurSearch;
 
 /**
  * GrafanaController implements the CRUD actions for Grandeur model.
@@ -29,6 +30,10 @@ class CodegeneratorController extends Controller {
 		// Search for the Grandeur with it's ID
 		$model = Grandeur::findOne( $id );
 		
+		// Récupération des autres Grandeurs disponibles
+		$searchModel = new GrandeurSearch(); 
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		
 		// Get the JSON code for pannel
 		$panell = $this->_getGrafanaPanellCode( $model->id, $model->tablename, $model->nature );
 
@@ -37,6 +42,7 @@ class CodegeneratorController extends Controller {
 				'code' => json_encode($panell) . ",",
 				'tablename' => $model->tablename,
 				'title' => $model->nature,
+				'dataProvider' => $dataProvider
 		]);
 	}
 
