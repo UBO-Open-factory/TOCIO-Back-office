@@ -300,23 +300,31 @@ class UtilisateurController extends Controller {
 					Yii::$app->session->setFlash('forgot', 'A link to reset your password has been sent to your email' );
 				
 					
-				// Create email content
-// 				$name = '=?UTF-8?B?'.base64_encode( $emailSenderName ).'?=';
-// 				$subject = '=?UTF-8?B?'.base64_encode( $emailSubject ).'?=';
-// 				$headers = "From: $name <{$emailsSenderEmail}>\r\n"."Reply-To: {$emailsSenderEmail}\r\n"."MIME-Version: 1.0\r\n"."Content-type: text/html; charset=UTF-8";
+				// Initiate the email sender
+				$emailSenderName 	= Yii::$app->params['senderName'];
+				$emailSubject		= "TOCIO : Reset Your password";
+				$emailsSenderEmail	= Yii::$app->params['senderEmail'];
+
 				
-// 				$emailSenderName 	= "Administration TOCIO";
-// 				$emailsSenderEmail 	= "no_reply_tocio@univ-brest.fr";
-// 				$emailSubject 		= "Reset Password";
-// 				$emailContent 		= "You ask to reset your password<br/>
-// 	                    <a href='$url'>Click Here to Reset Password</a>";
+				
+				
+				// Create email content
+				$name = '=?UTF-8?B?'.base64_encode( $emailSenderName ).'?=';
+				$subject = '=?UTF-8?B?'.base64_encode( $emailSubject ).'?=';
+				$headers = "From: $name <{$emailsSenderEmail}>\r\n"."Reply-To: {$emailsSenderEmail}\r\n"."MIME-Version: 1.0\r\n"."Content-type: text/html; charset=UTF-8";
+				
+				$emailSenderName 	= "Administration TOCIO";
+				$emailsSenderEmail 	= "no_reply_tocio@univ-brest.fr";
+				$emailSubject 		= "Reset Password";
+				$emailContent 		= "You ask to reset your password<br/>
+	                    <a href='$url'>Click Here to Reset Password</a>";
 
 				// Send email
-// 				mail( $userEmail, $subject, $emailContent, $headers );
-// 				$this->refresh();
+				mail( $userEmail, $subject, $emailContent, $headers );
+				$this->refresh();
 				
 				// Redirection to the verification page
-					return $this->redirect($url);
+				// return $this->redirect($url);
 				
 				}
 			}
