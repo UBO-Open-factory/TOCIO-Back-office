@@ -88,7 +88,26 @@ Listen 8888
 
 
 # TOCIO Back Office Config
-To save your local config, you need to create a __config/web_local.php__ file with this :
+To save your local config, you need to create 2 files __params.php__ and __web_local.php__ in __basic/config/__ directory:
+## __config/params.php__ ##
+This file store everything about your mailer of TOCIO backoffice.
+```
+<?php
+return [
+		'adminEmail' => '<yourAdmin@email>',
+		'senderEmail' => 'noreply@tocio.com',
+		'senderName' => 'Admin TOCIO',
+		
+		// If you don't need SMTP, please change components.mailer.useFileTransport to true (in config/web.php)
+		'SMTP_host' 	=> "YourHost",
+		'SMTP_port' 	=> "YourPort",
+		'SMTP_username'	=> "YourUserName",
+		'SMTP_password' => "YourUserPassword",
+];
+```
+
+## __config/web_local.php__ ##
+This file store everything about your instance of TOCIO backoffice.
 ```
 <?php
 return [
