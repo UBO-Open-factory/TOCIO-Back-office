@@ -66,9 +66,7 @@ class CodegeneratorController extends Controller {
 			"datasource" => null,
 			"fieldConfig" => [
 				"defaults" => [
-					"color" => [
-						"mode" => "palette-classic"
-					],
+					"color" => ["mode" => "palette-classic"],
 					"custom" => [
 						"axisLabel" => "",
 						"axisPlacement" => "auto",
@@ -121,28 +119,27 @@ class CodegeneratorController extends Controller {
 					"displayMode" => "list",
 					"placement" => "bottom"
 				],
-				"tooltip" => [
-					"mode" => "single"
-				]
+				"tooltip" => ["mode" => "single"]
 			],
 			"targets" => [
 				[
 					"format" => "time_series",
-					"group" => [
-					],
+					"group" => [],
 					"metricColumn" => "valeur",
 					"rawQuery" => false,
-					"rawSql" => "SELECT  timestamp AS \"time\",  valeur AS metric,  valeur FROM ".$tableName." ORDER BY timestamp",
+					"rawSql" => "SELECT  timestamp AS \"time\",  valeur AS \"$title\" FROM ".$tableName." ORDER BY timestamp",
 					"refId" => "A",
 					"select" => [
 						[
 							[
-								"params" => [
-									"valeur"
-								],
+								"params" => ["valeur"],
 								"type" => "column"
+							],
+							[
+								"params" => ["$title"],
+								"type" => "alias"
 							]
-						]
+						] 
 					],
 					"table" => $tableName,
 					"timeColumn" => "timestamp",
