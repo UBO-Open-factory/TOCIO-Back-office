@@ -324,8 +324,8 @@ class UtilisateurController extends Controller {
 				mail( $userEmail, $subject, $emailContent, $headers );
 				$this->refresh();
 				
-				// Redirection to the login page
-				return $this->render( \yii\helpers\Url::toRoute(['site/login']), array( 'model' => "" ));
+				// Redirection to the home page
+				return $this->goHome();
 				}
 			}
 		}
