@@ -32,12 +32,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
 
 
-	<a href="/utilisateur/pwdforgot">Mot de passe oublié ?</a>
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-            </div>
-        </div>
+	<?= Html::a('Mot de passe oublié ?', ['/"/utilisateur/pwdforgot"'], ['class'=>'btn btn-primary']) ?>
+	<div class="form-group">
+		<div class="col-lg-offset-1 col-lg-11">
+			<?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+		</div>
+	</div>
 
     <?php ActiveForm::end(); ?>
 </div>
