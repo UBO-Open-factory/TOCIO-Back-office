@@ -318,8 +318,10 @@ class UtilisateurController extends Controller {
 				$emailsSenderEmail 	= "no_reply_tocio@univ-brest.fr";
 				$emailSubject 		= "Reset Password";
 				$emailContent 		= "You ask to reset your password<br/>
-	                    <a href='$url'>Click Here to Reset Password</a>";
+	                    <a href=\"".$url."\">Click Here to Reset Password</a>";
 
+				$emailContent .= $url;
+				
 				// Send email
 				mail( $userEmail, $subject, $emailContent, $headers );
 				$this->refresh();
