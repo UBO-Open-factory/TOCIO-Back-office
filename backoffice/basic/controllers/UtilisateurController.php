@@ -325,7 +325,7 @@ class UtilisateurController extends Controller {
 				$this->refresh();
 				
 				// Redirection to the home page
-				return $this->goHome();
+				return $this->render( '/site/login', []);
 				}
 			}
 		}
