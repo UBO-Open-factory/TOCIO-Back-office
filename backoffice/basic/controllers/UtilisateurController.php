@@ -287,7 +287,8 @@ class UtilisateurController extends Controller {
 				$model->accessToken = md5( rand( 0, 99999 ).date( "H:i:s" ) );
 	
 				// Create URL with the token
-				$url = \yii\helpers\Url::toRoute(['utilisateur/pwdverif', "token" => $model->accessToken]);
+				$url = Yii::$app->createAbsoluteUrl('utilisateur/pwdverif', ["token" => $model->accessToken], 'https');
+// 				$url = \yii\helpers\Url::toRoute(['utilisateur/pwdverif', "token" => $model->accessToken]);
 				
 				
 				
