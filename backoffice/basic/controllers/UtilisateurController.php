@@ -14,6 +14,7 @@ use app\models\LoginForm;
 use PharIo\Manifest\Url;
 use yii\web\UrlManager;
 use Elasticsearch\Endpoints\Cat\Aliases;
+use phpDocumentor\Reflection\Types\Null_;
 
 /**
  * UtilisateurController implements the CRUD actions for Utilisateur model.
@@ -323,9 +324,8 @@ class UtilisateurController extends Controller {
 				mail( $userEmail, $subject, $emailContent, $headers );
 				$this->refresh();
 				
-				// Redirection to the verification page
-				// return $this->redirect($url);
-				
+				// Redirection to the login page
+				return $this->render( \yii\helpers\Url::toRoute(['site/login']), array( 'model' => "" ));
 				}
 			}
 		}
