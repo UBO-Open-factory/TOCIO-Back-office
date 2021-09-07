@@ -325,6 +325,9 @@ class UtilisateurController extends Controller {
 				$this->refresh();
 				
 				// Redirection to the login page
+				$model = new LoginForm();
+				$model->password = '';
+				return $this->redirect(array( '/site/login', 'model' => $model ) );
 				}
 			}
 		}
