@@ -149,6 +149,12 @@ function commentaire($elem){
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.3.1</h2>
+	<li>2021-09-07 <b>&bull;</b> Passage de la configuraiton du serveur SMTP dans le fichier config/params.php (qui n'est du coup plus versionné)</li>
+<li>2021-09-07 <b>&bull;</b> Correction génération de code, le nom de la Grandeur apprait maintenant dans la légénde du graphique.</li>
+<li>2021-09-01 <b>&bull;</b> Ajout du passage de variable pour initialiser un dataProvider dans la vue</li>
+<li>2021-09-01 <b>&bull;</b> Ajout du controleur de generateur de code pour Grafana</li>
+	
 	<h2>V 1.3.0</h2>
 	<li>2021-08-31 <b>&bull;</b> Générateur de code pour les graphiques Grafana</li>
 	
