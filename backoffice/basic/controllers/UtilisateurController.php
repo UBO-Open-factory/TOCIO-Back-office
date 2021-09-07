@@ -324,16 +324,15 @@ class UtilisateurController extends Controller {
 				mail( $userEmail, $subject, $emailContent, $headers );
 				$this->refresh();
 				
-				// Redirection to the home page
-				return $this->render( '/site/login', []);
+				// Redirection to the login page
+				return $this->render( '/site/login', array('model' => $model ));
 				}
 			}
 		}
 		$model = new Utilisateur();
 		
 		// Send Utilisateur modele to the "pwdforgot" page
-		return $this->render( 'pwdforgot', array(
-				'model' => $model ));
+		return $this->render( 'pwdforgot', array('model' => $model ));
 	}
 	
 	// _____________________________________________________________________________________________
