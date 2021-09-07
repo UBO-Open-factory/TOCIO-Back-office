@@ -325,7 +325,8 @@ class UtilisateurController extends Controller {
 				$this->refresh();
 				
 				// Redirection to the login page
-				return $this->render( '/site/login', array('model' => $model ));
+				$redirect = Yii::$app->createController();
+				return $redirect->actionLogin();
 				}
 			}
 		}
