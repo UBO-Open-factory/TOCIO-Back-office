@@ -1,3 +1,4 @@
 web/assets/*
 assets/*
 config/web_local.php
+config/params.php
