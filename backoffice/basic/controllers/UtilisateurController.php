@@ -287,8 +287,7 @@ class UtilisateurController extends Controller {
 				$model->accessToken = md5( rand( 0, 99999 ).date( "H:i:s" ) );
 	
 				// Create URL with the token
-				$url = Yii::$app->createAbsoluteUrl('utilisateur/pwdverif', ["token" => $model->accessToken], 'https');
-// 				$url = \yii\helpers\Url::toRoute(['utilisateur/pwdverif', "token" => $model->accessToken]);
+ 				$url = \yii\helpers\Url::to(['utilisateur/pwdverif', "token" => $model->accessToken], true);
 				
 				
 				
@@ -321,7 +320,6 @@ class UtilisateurController extends Controller {
 				$emailContent 		= "You ask to reset your password<br/>
 	                    <a href=\"".$url."\">Click Here to Reset Password</a>";
 
-				$emailContent .= $url;
 				
 				// Send email
 				mail( $userEmail, $subject, $emailContent, $headers );
@@ -365,7 +363,7 @@ class UtilisateurController extends Controller {
 			
 		// redirect to the login page
 		$model = new LoginForm();
-		return $this->render( \yii\helpers\Url::toRoute(['site/login']), array(
-				'model' => $model ));
+		$model->password = '';
+		return $this->redirect(array( '/site/login', 'model' => $model ) );
 	}
 }
