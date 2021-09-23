@@ -13,7 +13,7 @@
 # @author : 29/06/2021 Alexandre PERETJATKO 
 # ________________________________________________________________________________________
 
-REP_FTP="/var/www/ftp/depot/"
+REP_FTP="/var/www/ftp/"
 REP_ARCHIVES="/var/www/html/data/backoffice/basic/imports_CSV/"
 API="http://localhost:8888/mesure/uploadcsv/"
 
