@@ -16,6 +16,15 @@ You have 2 main directories :
 
 
 ## MySQL Data base
+First, create a database **data** with user **5EFEMzGZALn8nYBV** :
+```
+mysql -u root
+CREATE DATABASE data  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+grant usage on *.* to userdata @localhost identified by '5EFEMzGZALn8nYBV';
+quit
+```
+
+Then import structure and some data in database.
 You can found the data base structure in the __basic/migrations__ directory. 
 You need first to create a data base named _data_, then to import TOCIO's data base structure run:
 
