@@ -20,7 +20,7 @@ You can found the data base structure in the __basic/migrations__ directory.
 You need first to create a data base named _data_, then to import TOCIO's data base structure run:
 
 ```
-cd basic
+cd data/backoffice/basic/
 mysql -u root -p data < migrations/DataBaseStructure.sql
 
 ```
