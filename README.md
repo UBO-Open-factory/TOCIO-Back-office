@@ -3,12 +3,11 @@ If you need an ElasticSearch data base you need to install it by your own.
 This guide doesn't cover this part [you can refer to this official tutorial.](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html)
 
 This documentation explain how to configure Web server's. They will be accessible via URL :
-```
 | URL                   | Description     |
 | --------------------- | --------------- |
 | http://localhost:8888 | Backoffice to configure your TOCIO's hardware network |
 | http://localhost      | REST API o access data from your TOCIO web server |
-```
+
 
 ## Files
 ```
