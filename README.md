@@ -108,6 +108,12 @@ Listen 8888
 </VirtualHost>
 ```
 
+## Firewall
+As you need the 8888 port, you have to open it in your firewall, with :
+```
+sudo firewall-cmd --permanent --zone=public --add-port=8888/tcp
+sudo firewall-cmd --reload
+```
 
 # TOCIO Back Office Config
 To save your local config, you need to create 2 files __params.php__ and __web_local.php__ in __basic/config/__ directory:
