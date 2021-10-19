@@ -9,7 +9,7 @@ This documentation explain how to configure Web server's. They will be accessibl
 | http://localhost      | REST API o access data from your TOCIO web server |
 
 ## Requirements
-  - PHP 7.3 (doesn't work with PHP 8)
+  - PHP 7.2.34 (doesn't work with PHP 8)
   - Mariadb or MySQL
   - Centos 8
 
