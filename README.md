@@ -47,11 +47,6 @@ You need first to create a data base named _data_, then to import TOCIO's data b
 cd data/backoffice/basic/
 mysql -u root -p data < migrations/DataBaseStructure.sql
 ```
-You have to populate your database with samples :
-in __backoffice/basic__ directory :
-```
-php yii migrate
-```
 
 
 You have to create a user __userdata__ with the password __5EFEMzGZALn8nYBV__ that can access this data base and define it in __config/db.php__
