@@ -138,7 +138,11 @@ return [
         '@bower' => '@vendor/bower-asset',
         '@npm' => '@vendor/npm-asset',
         '@urlbehindproxy' => "/",
+	
+	// If you don't need ElasticSearch, set next param to ""
         '@elasticsearchindex' => "model-tocio-event-large",
+	
+	// Absolute path to the directory where uploads will be stored
         '@CSVIimportDirectory' => "/web/downloads/",       
     ]
 ];
