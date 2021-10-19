@@ -192,9 +192,6 @@ CREATE TABLE `utilisateur` (
   `lastAccess` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `utilisateur` (`id`, `username`, `email`, `password`, `authKey`, `accessToken`, `lastAccess`) VALUES
-(1, 'admin', 'admin@server.fr', '$2y$13$E5nJTOVmgqXBxXs/PjlOluX0OrtnSzbX4XInE0KLGVLG.ivXC2bri', NULL, NULL, '');
-
 --
 -- Index pour les tables déchargées
 --
@@ -334,7 +331,7 @@ ALTER TABLE `utilisateur`
 --
 ALTER TABLE `auth_assignment`
   ADD CONSTRAINT `auth_assignment_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE;
- 
+
 --
 -- Contraintes pour la table `auth_item`
 --
@@ -367,3 +364,36 @@ ALTER TABLE `rel_modulecapteur`
   ADD CONSTRAINT `contcapteur` FOREIGN KEY (`idCapteur`) REFERENCES `capteur` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `contmodule` FOREIGN KEY (`idModule`) REFERENCES `module` (`identifiantReseau`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
+
+
+
+--
+-- Populate data base
+--
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`) VALUES
+('Admin', 1, 'Administrateur du Back Office', NULL, NULL, 1617722217, 1617722217),
+('createCapteur', 2, 'Créer un Capteur', NULL, NULL, 1617722216, 1617722216),
+('createGrandeur', 2, 'Créer une Grandeur', NULL, NULL, 1617722216, 1617722216),
+('createLocalisation', 2, 'Créer une Localisation', NULL, NULL, 1617722216, 1617722216),
+('createModule', 2, 'Créer un Module', NULL, NULL, 1617722216, 1617722216),
+('createUser', 2, 'Créer un Utilisateur', NULL, NULL, 1617722216, 1617722216),
+('Utilisateur', 1, 'Simple utilisateur', NULL, NULL, 1617722216, 1617722216);
+
+INSERT INTO `utilisateur` (`id`, `username`, `email`, `password`, `authKey`, `accessToken`, `lastAccess`) VALUES
+(1, 'admin', 'admin@server.fr', '$2y$13$E5nJTOVmgqXBxXs/PjlOluX0OrtnSzbX4XInE0KLGVLG.ivXC2bri', NULL, NULL, '');
+
+
+INSERT INTO `auth_assignment` (`item_name`, `user_id`, `created_at`) VALUES
+('Admin', 1, 1617722217),
+('Utilisateur', 2, 1617722217);
+
+INSERT INTO `auth_item_child` (`parent`, `child`) VALUES
+('Admin', 'createCapteur'),
+('Admin', 'createGrandeur'),
+('Admin', 'createLocalisation'),
+('Admin', 'createModule'),
+('Admin', 'createUser'),
+('Utilisateur', 'createCapteur'),
+('Utilisateur', 'createGrandeur'),
+('Utilisateur', 'createLocalisation'),
+('Utilisateur', 'createModule');
