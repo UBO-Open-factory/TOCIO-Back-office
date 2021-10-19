@@ -193,7 +193,7 @@ CREATE TABLE `utilisateur` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `utilisateur` (`id`, `username`, `email`, `password`, `authKey`, `accessToken`, `lastAccess`) VALUES
-(1, 'admin', 'admin@server.fr', '$2y$13$E5nJTOVmgqXBxXs/PjlOluX0OrtnSzbX4XInE0KLGVLG.ivXC2bri', NULL, NULL, ''),
+(1, 'admin', 'admin@server.fr', '$2y$13$E5nJTOVmgqXBxXs/PjlOluX0OrtnSzbX4XInE0KLGVLG.ivXC2bri', NULL, NULL, '');
 
 --
 -- Index pour les tables déchargées
