@@ -11,6 +11,7 @@ This documentation explain how to configure Web server's. They will be accessibl
 ## Requirements
   - PHP 7.3 (doesn't work with PHP 8)
   - Mariadb or MySQL
+  - Centos 8
 
 ## Files
 ```
@@ -33,7 +34,8 @@ First, create a database **data** with user **5EFEMzGZALn8nYBV** :
 ```
 mysql -u root
 CREATE DATABASE data  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-grant usage on *.* to userdata @localhost identified by '5EFEMzGZALn8nYBV';
+grant usage on *.* to userdata@localhost identified by '5EFEMzGZALn8nYBV';
+GRANT SELECT, INSERT, UPDATE, DELETE, DROP ON `data`.* TO 'userdata'@'localhost';
 quit;
 ```
 
@@ -44,8 +46,14 @@ You need first to create a data base named _data_, then to import TOCIO's data b
 ```
 cd data/backoffice/basic/
 mysql -u root -p data < migrations/DataBaseStructure.sql
-
 ```
+You have to populate your database with samples :
+in __backoffice/basic__ directory :
+```
+php yii migrate
+```
+
+
 You have to create a user __userdata__ with the password __5EFEMzGZALn8nYBV__ that can access this data base and define it in __config/db.php__
 ```
 <?php
@@ -57,6 +65,7 @@ return [
     'charset' => 'utf8',
 ];
 ```
+
 
 
 ## Apache
@@ -159,7 +168,11 @@ return [
 | @elasticsearchindex  | This is the ElasticSearch index under wich your documents will be stored. If you don't use ELK, let this params to empty. |
 | @CSVIimportDirectory | Absolute path to the directory where uploads will be stored. Path should be rootable from Yii (started with /web/....) |
 
-
+Give access to the web server to this files :
+```
+sudo chown apache.apache config/web_local.php
+sudo chown apache.apache config/params.php
+```
 
 ## Configur the CSV import
 TOCIO give you the ability to import CSV file from an ftp server. For that you need to execute __scripts_import_FTP/import.sh__ in a cron as shown bellow :
