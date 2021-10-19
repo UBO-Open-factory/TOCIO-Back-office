@@ -2,13 +2,24 @@
 If you need an ElasticSearch data base you need to install it by your own. 
 This guide doesn't cover this part [you can refer to this official tutorial.](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html)
 
+This documentation explain how to configure Web server's. They will be accessible via URL :
+```
+| URL                   | Description     |
+| --------------------- | --------------- |
+| http://localhost:8888 | Backoffice to configure your TOCIO's hardware network |
+| http://localhost      | REST API o access data from your TOCIO web server |
+```
+
 ## Files
 ```
+cd /var/www/html
 mkdir data
 cd data 
 git clone https://github.com/UBO-Open-factory/TOCIO-Back-office.git ./
-cd ..
+cd /var/www/html
 sudo chown apache.apache -R data/ 
+sudo ln -s data/backoffice/basic/web/ Yii
+sudo ln -s data/APIdoc/swagger-ui/dist/ default
 ```
 You have 2 main directories :
 * APIDoc (the swagger API's description)
@@ -47,7 +58,7 @@ return [
 
 
 ## Apache
-You need to configur 2 apache VirtualHost for :
+You need to set 2 apache VirtualHost for :
 - Swagger API access (on port 80 or wathever)
 - TOCIO BackOffice access (on port 8888 or wathever)
 
