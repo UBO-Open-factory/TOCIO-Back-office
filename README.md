@@ -146,3 +146,10 @@ return [
 | @elasticsearchindex  | This is the ElasticSearch index under wich your documents will be stored. If you don't use ELK, let this params to empty. |
 | @CSVIimportDirectory | Absolute path to the directory where uploads will be stored. Path should be rootable from Yii (started with /web/....) |
 
+
+
+## Configur the CSV import
+TOCIO give you the ability to import CSV file from an ftp server. For that you need to execute __scripts_import_FTP/import.sh__ in a cron as shown bellow :
+```
+0/30 * * * * sh /var/www/html/data/backoffice/basic/scripts_import_FTP/import.sh
+```
