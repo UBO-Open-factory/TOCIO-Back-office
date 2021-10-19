@@ -363,7 +363,7 @@ ALTER TABLE `rel_capteurgrandeur`
 ALTER TABLE `rel_modulecapteur`
   ADD CONSTRAINT `contcapteur` FOREIGN KEY (`idCapteur`) REFERENCES `capteur` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `contmodule` FOREIGN KEY (`idModule`) REFERENCES `module` (`identifiantReseau`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
+
 
 
 
@@ -397,3 +397,5 @@ INSERT INTO `auth_item_child` (`parent`, `child`) VALUES
 ('Utilisateur', 'createGrandeur'),
 ('Utilisateur', 'createLocalisation'),
 ('Utilisateur', 'createModule');
+
+COMMIT;
