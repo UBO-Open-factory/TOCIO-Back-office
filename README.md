@@ -34,7 +34,7 @@ First, create a database **data** with user **5EFEMzGZALn8nYBV** :
 mysql -u root
 CREATE DATABASE data  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 grant usage on *.* to userdata @localhost identified by '5EFEMzGZALn8nYBV';
-quit
+quit;
 ```
 
 Then import structure and some data in database.
