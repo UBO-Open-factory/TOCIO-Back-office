@@ -2,13 +2,26 @@
 If you need an ElasticSearch data base you need to install it by your own. 
 This guide doesn't cover this part [you can refer to this official tutorial.](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html)
 
+This documentation explain how to configure Web server's. They will be accessible via URL :
+| URL                   | Description     |
+| --------------------- | --------------- |
+| http://localhost:8888 | Backoffice to configure your TOCIO's hardware network |
+| http://localhost      | REST API o access data from your TOCIO web server |
+
+## Requirements
+  - PHP 7.3 (doesn't work with PHP 8)
+  - Mariadb or MySQL
+
 ## Files
 ```
+cd /var/www/html
 mkdir data
 cd data 
 git clone https://github.com/UBO-Open-factory/TOCIO-Back-office.git ./
-cd ..
+cd /var/www/html
 sudo chown apache.apache -R data/ 
+sudo ln -s data/backoffice/basic/web/ Yii
+sudo ln -s data/APIdoc/swagger-ui/dist/ default
 ```
 You have 2 main directories :
 * APIDoc (the swagger API's description)
@@ -21,7 +34,7 @@ First, create a database **data** with user **5EFEMzGZALn8nYBV** :
 mysql -u root
 CREATE DATABASE data  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 grant usage on *.* to userdata @localhost identified by '5EFEMzGZALn8nYBV';
-quit
+quit;
 ```
 
 Then import structure and some data in database.
@@ -47,7 +60,7 @@ return [
 
 
 ## Apache
-You need to configur 2 apache VirtualHost for :
+You need to set 2 apache VirtualHost for :
 - Swagger API access (on port 80 or wathever)
 - TOCIO BackOffice access (on port 8888 or wathever)
 
@@ -136,3 +149,10 @@ return [
 | @elasticsearchindex  | This is the ElasticSearch index under wich your documents will be stored. If you don't use ELK, let this params to empty. |
 | @CSVIimportDirectory | Absolute path to the directory where uploads will be stored. Path should be rootable from Yii (started with /web/....) |
 
+
+
+## Configur the CSV import
+TOCIO give you the ability to import CSV file from an ftp server. For that you need to execute __scripts_import_FTP/import.sh__ in a cron as shown bellow :
+```
+0/30 * * * * sh /var/www/html/data/backoffice/basic/scripts_import_FTP/import.sh
+```
