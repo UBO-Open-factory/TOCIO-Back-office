@@ -4,7 +4,7 @@
  * @package   yii2-krajee-base
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2021
- * @version   2.0.6
+ * @version   3.0.1
  */
 
 namespace kartik\base;
@@ -43,9 +43,19 @@ interface BootstrapInterface
     const SIZE_LARGE = 'lg';
 
     /**
-     * @var string bootstrap **large** size modifier
+     * @var string bootstrap **extra large** size modifier
      */
     const SIZE_X_LARGE = 'xl';
+
+    /**
+     * @var string bootstrap **extra extra large** size modifier
+     */
+    const SIZE_XX_LARGE = 'xxl';
+
+    /**
+     * @var string Bootstrap panel
+     */
+    const BS_SR_ONLY = 'sr-only';
 
     /**
      * @var string Bootstrap panel
@@ -71,6 +81,11 @@ interface BootstrapInterface
      * @var string Bootstrap panel footer
      */
     const BS_PANEL_FOOTER = 'panel-footer';
+
+    /**
+     * @var string Bootstrap panel default contextual color
+     */
+    const BS_PANEL_DARK = 'panel-dark';
 
     /**
      * @var string Bootstrap panel default contextual color
@@ -116,6 +131,16 @@ interface BootstrapInterface
      * @var string Bootstrap label
      */
     const BS_LABEL = 'label';
+
+    /**
+     * @var string Bootstrap label default contextual color
+     */
+    const BS_LABEL_LIGHT = 'label-light';
+
+    /**
+     * @var string Bootstrap label default contextual color
+     */
+    const BS_LABEL_DARK = 'label-dark';
 
     /**
      * @var string Bootstrap label default contextual color

@@ -4,13 +4,12 @@
  * @package   yii2-krajee-base
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2021
- * @version   2.0.6
+ * @version   3.0.1
  */
 
 namespace kartik\base;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
@@ -102,7 +101,6 @@ class Html5Input extends InputWidget
 
     /**
      * @inheritdoc
-     * @throws InvalidConfigException
      */
     public function run()
     {
@@ -111,7 +109,6 @@ class Html5Input extends InputWidget
 
     /**
      * Initializes the input.
-     * @throws InvalidConfigException
      */
     protected function initInput()
     {
@@ -143,32 +140,31 @@ class Html5Input extends InputWidget
 
     /**
      * Renders the special HTML5 input. Mainly useful for the color and range inputs
-     * @throws InvalidConfigException
      */
     protected function renderInput()
     {
         Html::addCssClass($this->options, 'form-control');
-        $css = $this->isBs4() ? 'is-bs4' : 'is-bs3';
+        $isBs3 = $this->isBs(3);
+        $n = $isBs3 ? 3 : 4;
         Html::addCssClass($this->containerOptions,
-            ['input-group', 'input-group-html5', 'kv-type-' . $this->type, $css]);
+            ['input-group', 'input-group-html5', "kv-type-{$this->type}", "is-bs{$n}"]);
         if (!empty($this->size)) {
             Html::addCssClass($this->containerOptions, "input-group-{$this->size}");
         }
-        $isBs4 = $this->isBs4();
-        $prepend = $this->getAddonContent('prepend', $isBs4);
-        $preCaption = $this->getAddonContent('preCaption', $isBs4);
-        $append = $this->getAddonContent('append', $isBs4);
+        $prepend = $this->getAddonContent('prepend');
+        $preCaption = $this->getAddonContent('preCaption');
+        $append = $this->getAddonContent('append');
         $caption = $this->getInput('textInput');
         $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
         Html::addCssClass($this->html5Options, 'form-control-' . $this->type);
         $input = Html::input($this->type, $this->html5Options['id'], $value, $this->html5Options);
-        if ($this->isBs4()) {
-            Html::addCssClass($this->html5Container, 'input-group-text');
-            $out = Html::tag('span', $input, $this->html5Container);
-            $prepend .= Html::tag('span', $out, ['class' => 'input-group-prepend']);
-        } else {
+        if ($isBs3) {
             Html::addCssClass($this->html5Container, ['input-group-addon']);
             $prepend .= Html::tag('span', $input, $this->html5Container);
+        } else {
+            Html::addCssClass($this->html5Container, 'input-group-text');
+            $out = Html::tag('span', $input, $this->html5Container);
+            $prepend .= $this->isBs(4) ? Html::tag('span', $out, ['class' => 'input-group-prepend']) : $out;
         }
         $content = Html::tag('div', $prepend . $preCaption . $caption . $append, $this->containerOptions);
         Html::addCssClass($this->noSupportOptions, 'alert alert-warning');
