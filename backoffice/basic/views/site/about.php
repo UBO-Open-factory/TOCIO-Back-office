@@ -144,11 +144,14 @@ function commentaire($elem){
 	<?php 
 	/**
 	 * Les lignes suivantes sont générées avec la commande :
-		git log v1.2.9..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>'
+		git log v1.3.2..HEAD --date=short --pretty=format:'<li>%ad <b>&bull;</b> %s</li>'
 	 * 
 	 */
 	?>
 	<h1>Modifications</h1>
+	<h2>V 1.3.2</h2>
+	<li>2021-11-16 <b>&bull;</b> Licences overview change</li>
+	
 	<h2>V 1.3.1</h2>
 	<li>2021-09-07 <b>&bull;</b> Passage de la configuraiton du serveur SMTP dans le fichier config/params.php (qui n'est du coup plus versionné)</li>
 <li>2021-09-07 <b>&bull;</b> Correction génération de code, le nom de la Grandeur apprait maintenant dans la légénde du graphique.</li>
