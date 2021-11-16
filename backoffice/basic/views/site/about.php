@@ -150,7 +150,7 @@ function commentaire($elem){
 	?>
 	<h1>Modifications</h1>
 	<h2>V 1.3.2</h2>
-	<li>2021-11-16 <b>&bull;</b> Licences overview change</li>
+	<li>2021-11-16 <b>&bull;</b> Licence overview change</li>
 	
 	<h2>V 1.3.1</h2>
 	<li>2021-09-07 <b>&bull;</b> Passage de la configuraiton du serveur SMTP dans le fichier config/params.php (qui n'est du coup plus versionné)</li>
