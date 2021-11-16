@@ -148,11 +148,11 @@ AppAsset::register($this);
 		}
 		?>
         <div class="col">
-        	<a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"><img alt="Licence Creative Commons" style="border-width:0" src="<?php echo Url::to(['/assets/licence_CCbySA.png']); ?>" /></a><br />
+        	<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img alt="Licence Creative Commons" style="border-width:0" src="<?php echo Url::to(['/assets/licence_CCbySA-NC.png']); ?>" /></a><br />
         </div>
         <?php if( Yii::$app->user->isGuest ){ ?>
         <div class="col-6 text-center">
-	        Ce site est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Licence Creative Commons Attribution -  Partage dans les Mêmes Conditions 4.0 International</a>.
+	        Ce site est mise à disposition selon les termes de la <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">Licence Creative Commons Attribution -  Partage dans les Mêmes Conditions 4.0 International</a>.
         </div >
         <?php }?>
         <div class="col">
