@@ -3,8 +3,8 @@
 /**
  * @package   yii2-krajee-base
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2021
- * @version   3.0.1
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
+ * @version   3.0.4
  */
 
 namespace kartik\base;
@@ -39,6 +39,7 @@ class InputWidget extends YiiInputWidget implements BootstrapInterface
 {
     use TranslationTrait;
     use WidgetTrait;
+    use BootstrapTrait;
 
     /**
      * @var string the HTML markup for widget loading indicator
@@ -177,12 +178,12 @@ class InputWidget extends YiiInputWidget implements BootstrapInterface
         $s = DIRECTORY_SEPARATOR;
         if ($assetPath === null) {
             $assetPath = "{$pwd}{$s}assets{$s}";
-        } elseif (substr($assetPath, -1) != $s) {
+        } elseif (Lib::substr($assetPath, -1) != $s) {
             $assetPath .= $s;
         }
         if ($filePath === null) {
             $filePath = "js{$s}locales{$s}";
-        } elseif (substr($filePath, -1) != $s) {
+        } elseif (Lib::substr($filePath, -1) != $s) {
             $filePath .= $s;
         }
         $full = $filePath . $prefix . $this->language . $suffix;
@@ -200,7 +201,7 @@ class InputWidget extends YiiInputWidget implements BootstrapInterface
         } else {
             $this->_langFile = '';
         }
-        $this->_langFile = str_replace($s, '/', $this->_langFile);
+        $this->_langFile = Lib::str_replace($s, '/', $this->_langFile);
     }
 
     /**
@@ -248,7 +249,7 @@ class InputWidget extends YiiInputWidget implements BootstrapInterface
      */
     protected static function convertDateFormat($format)
     {
-        return strtr($format, [
+        return Lib::strtr($format, [
             // meridian lowercase
             'a' => 'p',
             // meridian uppercase
@@ -301,17 +302,17 @@ class InputWidget extends YiiInputWidget implements BootstrapInterface
         }
         if (isset($this->pluginOptions['format'])) {
             $format = $this->pluginOptions['format'];
-            $format = strncmp($format, 'php:', 4) === 0 ? substr($format, 4) :
+            $format = Lib::strncmp($format, 'php:', 4) === 0 ? Lib::substr($format, 4) :
                 FormatConverter::convertDateIcuToPhp($format, $type);
             $this->pluginOptions['format'] = static::convertDateFormat($format);
             return;
         }
         $attrib = $type . 'Format';
-        $format = Yii::$app->formatter->$attrib ?? '';
+        $format = isset(Yii::$app->formatter->$attrib) ? Yii::$app->formatter->$attrib : '';
         if (empty($format)) {
             throw new InvalidConfigException("Error parsing '{$type}' format.");
         }
-        $format = strncmp($format, 'php:', 4) === 0 ? substr($format, 4) :
+        $format = Lib::strncmp($format, 'php:', 4) === 0 ? Lib::substr($format, 4) :
             FormatConverter::convertDateIcuToPhp($format, $type);
         $this->pluginOptions['format'] = static::convertDateFormat($format);
     }

@@ -4,9 +4,10 @@ import moment from '../../moment';
 localeModule('sr');
 
 test('parse', function (assert) {
-    var tests = 'januar jan._februar feb._mart mar._april apr._maj maj_jun jun_jul jul_avgust avg._septembar sep._oktobar okt._novembar nov._decembar dec.'.split(
-            '_'
-        ),
+    var tests =
+            'januar jan._februar feb._mart mar._april apr._maj maj_jun jun_jul jul_avgust avg._septembar sep._oktobar okt._novembar nov._decembar dec.'.split(
+                '_'
+            ),
         i;
 
     function equalTest(input, mmm, i) {
@@ -119,9 +120,10 @@ test('format ordinal', function (assert) {
 });
 
 test('format month', function (assert) {
-    var expected = 'januar jan._februar feb._mart mar._april apr._maj maj_jun jun_jul jul_avgust avg._septembar sep._oktobar okt._novembar nov._decembar dec.'.split(
-            '_'
-        ),
+    var expected =
+            'januar jan._februar feb._mart mar._april apr._maj maj_jun jun_jul jul_avgust avg._septembar sep._oktobar okt._novembar nov._decembar dec.'.split(
+                '_'
+            ),
         i;
     for (i = 0; i < expected.length; i++) {
         assert.equal(
@@ -133,9 +135,10 @@ test('format month', function (assert) {
 });
 
 test('format week', function (assert) {
-    var expected = 'nedelja ned. ne_ponedeljak pon. po_utorak uto. ut_sreda sre. sr_četvrtak čet. če_petak pet. pe_subota sub. su'.split(
-            '_'
-        ),
+    var expected =
+            'nedelja ned. ne_ponedeljak pon. po_utorak uto. ut_sreda sre. sr_četvrtak čet. če_petak pet. pe_subota sub. su'.split(
+                '_'
+            ),
         i;
     for (i = 0; i < expected.length; i++) {
         assert.equal(
@@ -165,7 +168,7 @@ test('from', function (assert) {
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ s: 90 }), true),
-        '2 minute',
+        '2 minuta',
         '90 seconds = 2 minutes'
     );
     assert.equal(
@@ -195,17 +198,17 @@ test('from', function (assert) {
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ h: 21 }), true),
-        '21 sati',
+        '21 sat',
         '21 hours = 21 hours'
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ h: 22 }), true),
-        'dan',
+        'jedan dan',
         '22 hours = a day'
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ h: 35 }), true),
-        'dan',
+        'jedan dan',
         '35 hours = a day'
     );
     assert.equal(
@@ -215,7 +218,7 @@ test('from', function (assert) {
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ d: 1 }), true),
-        'dan',
+        'jedan dan',
         '1 day = a day'
     );
     assert.equal(
@@ -230,17 +233,17 @@ test('from', function (assert) {
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ d: 26 }), true),
-        'mesec',
+        'jedan mesec',
         '26 days = a month'
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ d: 30 }), true),
-        'mesec',
+        'jedan mesec',
         '30 days = a month'
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ d: 43 }), true),
-        'mesec',
+        'jedan mesec',
         '43 days = a month'
     );
     assert.equal(
@@ -260,7 +263,7 @@ test('from', function (assert) {
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ M: 1 }), true),
-        'mesec',
+        'jedan mesec',
         '1 month = a month'
     );
     assert.equal(
@@ -270,7 +273,7 @@ test('from', function (assert) {
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ d: 345 }), true),
-        'godinu',
+        'jedna godina',
         '345 days = a year'
     );
     assert.equal(
@@ -280,7 +283,7 @@ test('from', function (assert) {
     );
     assert.equal(
         start.from(moment([2007, 1, 28]).add({ y: 1 }), true),
-        'godinu',
+        'jedna godina',
         '1 year = a year'
     );
     assert.equal(

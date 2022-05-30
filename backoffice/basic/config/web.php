@@ -65,7 +65,7 @@ $config = [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
 
-            'useFileTransport' => false,
+            'useFileTransport' => true,
             // if set to "true" -> send all mails to a file
             // if set to "false" -> send email to your transport configuration (you have to configure it)
             'transport' => [
