@@ -24,6 +24,25 @@ class MesureController extends ActiveController {
 	public $modelClass = 'app\models\mesure';
 	
 	
+
+	//==============================================================================================
+	/**
+	 * This allow to insert mesure to a moduleID in the database from a json input.
+	 * Json should be like :
+	 *  {'capteurID': '5', 'ordre': '1', 'IdGrandeur': '6', 'value': '18', 'timestamp': '1655240695'}
+	 */
+	public function actionPostfrommqtt($id){
+		//on recupere les données du json envoyé
+		$json 	= \Yii::$app->request->getRawBody();
+
+
+		$request = Yii::$app->request;
+		
+		$post		= $request->post();
+		$moduleID = $post['moduleid'];
+		$mesures = $post['mesures'];
+
+	}
 	
 	//==============================================================================================
 	/**

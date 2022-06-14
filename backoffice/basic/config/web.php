@@ -9,9 +9,7 @@ $config = [
     'language' => 'fr-FR',
     'sourceLanguage' => 'fr-FR',
 	'timeZone' => 'Europe/Paris',
-    'bootstrap' => [
-        'log'
-    ],
+    'bootstrap' => ['log'],
     'version' => '1.3.2',
     'aliases' => [
         // Do not define anything here, but in web_local.php
@@ -131,11 +129,12 @@ $config = [
                     'controller' => 'mesure',
                     'pluralize' => false,
                     'patterns' => [
-                    	'PUT uploadcsv/<id>' => 'uploadcsv',
-                    	'POST addlora' => 'addlora',
-                        'GET addlora' => 'addloraget',
-                        'GET add/<moduleid>/<mesures>' => 'add',
-                        'GET get/<moduleid>' => 'get'
+                        'POST add/mqtt/<moduleid>'      => 'postfrommqtt',
+                    	'POST addlora'                  => 'addlora',
+                        'GET addlora'                   => 'addloraget',
+                    	'PUT uploadcsv/<id>'            => 'uploadcsv',
+                        'GET add/<moduleid>/<mesures>'  => 'add',
+                        'GET get/<moduleid>'            => 'get'
                     ]
                 ],
                 [

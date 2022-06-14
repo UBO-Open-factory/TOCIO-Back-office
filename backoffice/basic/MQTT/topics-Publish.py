@@ -35,7 +35,7 @@ def connect_mqtt():
 
 def publish(client, topic, message ):
     # Publish message on topic
-    result = client.publish(topic, message )
+    result = client.publish(topic=topic, payload=message, qos=1 )
 
     # result: [0, 1]
     status = result[0]
@@ -60,10 +60,13 @@ if __name__ == '__main__':
     capteurOrder   = 1
     grandeurID     = 6
     timestamp      = time.time()
-    topic = "grandeur/add/" + str(moduleID) + "/" + str(capteurID) + "/" + str(capteurOrder) + "/" + str(grandeurID)
+    topic = "tocio/mesure/add/" + str(moduleID) + "/" + str(capteurID) + "/" + str(capteurOrder) + "/" + str(grandeurID)
 
     # Message
     value = str(18) + ";" + str(int(timestamp))
 
     # Publication
     publish(client, topic, value)
+
+    # Deconnection
+    client.disconnect()
