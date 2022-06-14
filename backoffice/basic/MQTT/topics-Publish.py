@@ -1,14 +1,21 @@
+'''
+Ce script permet de publier un messge contenant une valeur d'un cpateur sur un topic pour 
+qu'il soit enregistré dans le Back Office TOCIO
+
+Dépendances : 
+pip3 install paho-mqtt
+__________________________________________________________________________________________'''
 from logging import captureWarnings
 import random
 import time
 from paho.mqtt import client as mqtt_client
 
 
-broker = 'mqtt-uof.univ-brest.fr'
-port = 1883
-client_id = f'TOCIO-mqtt-{random.randint(0, 1000)}'
-username = 'fablab'
-password = 'fablab'
+MQTT_broker = 'mqtt-uof.univ-brest.fr'
+MQTT_port = 1883
+MQTT_client_id = f'TOCIO-mqtt-{random.randint(0, 1000)}'
+MQTT_username = 'fablab'
+MQTT_password = 'Youpi-Tralala_socMEwlI9SH9'
 
 
 def connect_mqtt():
@@ -19,10 +26,10 @@ def connect_mqtt():
             print("Failed to connect, return code %d\n", rc)
     
     # Set Connecting Client ID
-    client = mqtt_client.Client(client_id)
-    client.username_pw_set(username, password)
+    client = mqtt_client.Client(MQTT_client_id)
+    client.username_pw_set(MQTT_username, MQTT_password)
     client.on_connect = on_connect
-    client.connect(broker, port)
+    client.connect(MQTT_broker, MQTT_port)
     return client
 
 
