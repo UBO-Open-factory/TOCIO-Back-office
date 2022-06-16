@@ -29,19 +29,24 @@ class MesureController extends ActiveController {
 	/**
 	 * This allow to insert mesure to a moduleID in the database from a json input.
 	 * Json should be like :
-	 *  {'capteurID': '5', 'ordre': '1', 'IdGrandeur': '6', 'value': '18', 'timestamp': '1655240695'}
+	 *  {"moduleID": "TESTALEX", "capteurID": "5", "ordre": "1", "IdGrandeur": "6", "value": "18", "timestamp": "1655301249"}
 	 */
-	public function actionPostfrommqtt($id){
-		//on recupere les données du json envoyé
+	public function actionPostfrommqtt(){
+		// Recuperation du moduleID passé dans l"URL
+		$get	= \Yii::$app->request->get();
+		$moduleID 	= $get['moduleid'];
+
+
+		// Get data in json format
 		$json 	= \Yii::$app->request->getRawBody();
+		$params	= json_decode( $json , true);	// Convertion dans un tableau de valeur indexées
 
 
-		$request = Yii::$app->request;
+		// Get the mysql table to store the data we just received
+
 		
-		$post		= $request->post();
-		$moduleID = $post['moduleid'];
-		$mesures = $post['mesures'];
-
+		// Return a result from the insert in database
+		return var_dump($params);
 	}
 	
 	//==============================================================================================
@@ -283,7 +288,6 @@ class MesureController extends ActiveController {
 		
 		// ENREGISTRE LA MESURE ----------------------------------------------------------
 		return $this->_storeMesure($moduleID, $mesures);
-		
 	}
 	
 	

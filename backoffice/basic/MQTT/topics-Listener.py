@@ -9,6 +9,7 @@ import requests
 from requests.structures import CaseInsensitiveDict
 from paho.mqtt import client as mqtt
 import socket
+import json
 
 
 serverTOCIOLocal = "http://localhost:8888/mesure/add/mqtt/"
@@ -51,8 +52,11 @@ def jsonConstruuct(topic, message):
 
 # ----------------------------------------------------------------------------------------
 ''' send data (in JSON ofmrat) to the TOCIO's API
+@bug : Le JSON doit être avec des doubles cotte et en UTF-8
 '''
-def sendDataToAPI(dataJson):
+def sendDataToAPI(dataDict):
+    dataJson = json.dumps(dataDict)
+
     print("dataJson:", dataJson)
 
     # Construct the header
@@ -60,8 +64,8 @@ def sendDataToAPI(dataJson):
     headers["Content-Type"] = "application/json"
     
     # send the request in post format
-    print("Try to post to ", serverTOCIOLocal +  dataJson['moduleID'])
-    resp = requests.get(serverTOCIOLocal +  dataJson['moduleID'], headers=headers, data=dataJson)
+    print("Try to post to ", serverTOCIOLocal +  dataDict['moduleID'])
+    resp = requests.post(serverTOCIOLocal +  dataDict['moduleID'], headers=headers, data=dataJson)
     print(resp.status_code)
 
 
