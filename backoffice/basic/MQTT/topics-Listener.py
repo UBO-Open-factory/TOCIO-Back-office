@@ -2,8 +2,9 @@
 Ce script permet de s'abonner aux topics MQTT pour enregistrer les messges contenant une valeur
 d'un cpateur
 
-Dépendances : 
-pip3 install paho-mqtt
+Install dependencies in virtual env :
+python3 -m venv venv
+pip3 install -r ./requirements.txt
 __________________________________________________________________________________________'''
 import requests
 from requests.structures import CaseInsensitiveDict
