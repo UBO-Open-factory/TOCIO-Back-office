@@ -66,7 +66,8 @@ def sendDataToAPI(dataDict):
     # send the request in post format
     print("Try to post to ", serverTOCIOLocal +  dataDict['moduleID'])
     resp = requests.post(serverTOCIOLocal +  dataDict['moduleID'], headers=headers, data=dataJson)
-    print(resp.status_code)
+    print("Retour du serveur : ",resp.status_code)
+    print("text du Retour du serveur : ",resp.text)
 
 
 
