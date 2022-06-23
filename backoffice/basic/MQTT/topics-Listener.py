@@ -13,7 +13,7 @@ import socket
 import json
 
 
-serverTOCIOLocal = "http://localhost:8888/mesure/add/mqtt/"
+serverTOCIOLocal = "http://localhost:8888/mesure/add/mqtt"
 
 MQTT_broker     = 'mqtt-uof.univ-brest.fr'
 MQTT_port       = 1883
@@ -27,46 +27,16 @@ MQTT_password   = 'Youpi-Tralala_socMEwlI9SH9'
 
 
 # ----------------------------------------------------------------------------------------
-''' split a topic in differents parts, constrcut json structure an return it.
-
-    topic should looks like: tocio/mesure/add/TESTALEX/5/1/6
-                            ignore   0    1    2      3 4 5
+''' Send data to the API
 '''
-def jsonConstruuct(topic, message):
-    values = message.split(";")
-
-    # extract elements from the topic
-    elems = topic.split("/")[-6:]  # last 6 elements from the begining
-
-    # construct the json structure from elements
-    return {
-            "moduleID"      : elems[2],
-            "capteurID"     : elems[3],
-            "ordre"         : elems[4],
-            "IdGrandeur"    : elems[5],
-            "value"         : values[0],
-            "timestamp"     : values[1]
-    }
-
-
-
-
-# ----------------------------------------------------------------------------------------
-''' send data (in JSON ofmrat) to the TOCIO's API
-@bug : Le JSON doit être avec des doubles cotte et en UTF-8
-'''
-def sendDataToAPI(dataDict):
-    dataJson = json.dumps(dataDict)
-
-    print("dataJson:", dataJson)
-
+def sendDataToAPI(payload, moduleID):
     # Construct the header
     headers = CaseInsensitiveDict()
     headers["Content-Type"] = "application/json"
     
     # send the request in post format
-    print("Try to post to ", serverTOCIOLocal +  dataDict['moduleID'])
-    resp = requests.post(serverTOCIOLocal +  dataDict['moduleID'], headers=headers, data=dataJson)
+    print("Try to post to ", serverTOCIOLocal + "/" + moduleID)
+    resp = requests.post(serverTOCIOLocal +  "/" + moduleID, headers=headers, data=payload)
     print("Retour du serveur : ",resp.status_code)
     print("text du Retour du serveur : ",resp.text)
 
@@ -104,11 +74,11 @@ def on_message(client, userdata, message):
     # Payload decode
     payload = message.payload.decode('utf-8')
     
-    # split message and payload to json structure
-    data = jsonConstruuct( message.topic, message.payload.decode('utf-8'))
+    # Extract moduleID from topic like tocio/mesure/add/TEST_2
+    moduleID = message.topic.split("/")[-1]
 
     # Send json structure to TOCIO API
-    sendDataToAPI(data)
+    sendDataToAPI(payload, moduleID)
 
 
         

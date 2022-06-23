@@ -1,72 +1,75 @@
 '''
-Ce script permet de publier un messge contenant une valeur d'un cpateur sur un topic pour 
-qu'il soit enregistré dans le Back Office TOCIO
+This Python3 programme is provided as sample from
+_|_|_|_|_|                    _|           
+    _|      _|_|      _|_|_|        _|_|   
+    _|    _|    _|  _|        _|  _|    _| 
+    _|    _|    _|  _|        _|  _|    _| 
+    _|      _|_|      _|_|_|  _|    _|_|   
+to send data to an MQTT brocker for module TEST_2
+This module have sensor :
+- Humidité (%)
+- Température (°C)
+- Humidité (%)
+- Température (°C)
+- TestGrand1
+___________________________________________________
+'''
 
-Dépendances : 
-pip3 install paho-mqtt
-__________________________________________________________________________________________'''
-from logging import captureWarnings
-import random
-import time
+
 from paho.mqtt import client as mqtt_client
+from time import time
+import random
 
-
-MQTT_broker = 'mqtt-uof.univ-brest.fr'
-MQTT_port = 1883
+MQTT_topic     = "tocio/mesure/add/TEST_2";
+MQTT_brocker   = "mqtt-uof.univ-brest.fr";
+MQTT_port      = 1883;
+MQTT_username  = "fablab";
+MQTT_password  = "Youpi-Tralala_socMEwlI9SH9";
 MQTT_client_id = f'TOCIO-mqtt-{random.randint(0, 1000)}'
-MQTT_username = 'fablab'
-MQTT_password = 'Youpi-Tralala_socMEwlI9SH9'
 
-
+# Set Connecting Client ID
 def connect_mqtt():
-    def on_connect(client, userdata, flags, rc):
-        if rc == 0:
-            print("Connected to MQTT Broker!")
-        else:
-            print("Failed to connect, return code %d\n", rc)
-    
-    # Set Connecting Client ID
-    client = mqtt_client.Client(MQTT_client_id)
-    client.username_pw_set(MQTT_username, MQTT_password)
-    client.on_connect = on_connect
-    client.connect(MQTT_broker, MQTT_port)
-    return client
+	client = mqtt_client.Client(MQTT_client_id)
+	client.username_pw_set(MQTT_username, MQTT_password)
+	client.connect(MQTT_brocker, MQTT_port)
+	return client
+
+# Module TEST_2 have 5 sensor(s),
+# so you need to send all the related mesures in same order as defined in TOCIO's Back Office
+def getPayload():
+	# humidite0 is the 'Humidité' value from your sensor 'DHT11' (as float)
+	humidite0 = 0000.00 # <- Your code to read value from sensor goes here 
+
+	# temperature1 is the 'Température' value from your sensor 'DHT11' (as float)
+	temperature1 = 0000.00 # <- Your code to read value from sensor goes here 
+
+	# humidite2 is the 'Humidité' value from your sensor 'DHT22' (as float)
+	humidite2 = 0000.00 # <- Your code to read value from sensor goes here 
+
+	# temperature3 is the 'Température' value from your sensor 'DHT22' (as float)
+	temperature3 = 0000.00 # <- Your code to read value from sensor goes here 
+
+	# testgrand14 is the 'TestGrand1' value from your sensor 'Capttest' (as float)
+	testgrand14 = 0000.00 # <- Your code to read value from sensor goes here 
+
+	payload = "{:03.0f}{:+07.2f}{:03.0f}{:+07.2f}{:02.0f}".format(humidite0,temperature1,humidite2,temperature3,testgrand14)
+	return payload
 
 
-def publish(client, topic, message ):
-    # Publish message on topic
-    result = client.publish(topic=topic, payload=message, qos=1 )
-
-    # result: [0, 1]
-    status = result[0]
-    if status == 0:
-        print(f"Send `{message}` to topic `{topic}`")
-    else:
-        print(f"Failed to send message to topic {topic}")
-
-
-
-
-# ----------------------------------------------------------------------------------------
 if __name__ == '__main__':
+	# MQTT Broker Connection
+	client = connect_mqtt()
+	client.loop_start()
 
-    # Broker Connection
-    client = connect_mqtt()
-    client.loop_start()
+	# Data
+	timestamp = time()
+	payload   = getPayload()
 
-    # Topic
-    moduleID       = "TESTALEX"
-    capteurID      = 5
-    capteurOrder   = 1
-    grandeurID     = 6
-    timestamp      = time.time()
-    topic = "tocio/mesure/add/" + str(moduleID) + "/" + str(capteurID) + "/" + str(capteurOrder) + "/" + str(grandeurID)
+	# MQTT Message
+	message = payload + ";" + str(int(timestamp))
 
-    # Message
-    value = str(18) + ";" + str(int(timestamp))
+	# MQTT Publish
+	client.publish(topic=MQTT_topic, payload=message, qos=1 )
 
-    # Publication
-    publish(client, topic, value)
-
-    # Deconnection
-    client.disconnect()
+	# MQTT Deconnection
+	client.disconnect()

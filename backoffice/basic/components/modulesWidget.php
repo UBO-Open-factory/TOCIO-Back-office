@@ -247,7 +247,7 @@ class modulesWidget extends Widget
 			// Construction du contenu pour le code python
 			$l_STR_CodePython =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Python',
 					"content"	=> Html::tag("h3","Exemple") 
-									.Html::tag("p","Ceci est un exemple de code écrit en Python pour envoyer une Payload formatée dans la base TOCIO.")
+									.Html::tag("p","Exemple de code écrit en Python pour envoyer une Payload formatée dans la base TOCIO.")
 									.Html::tag("pre", $this->_codePython( Url::toRoute('/mesure/add/', "https"), $l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code Python
 					"class"		=> "mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
@@ -255,18 +255,32 @@ class modulesWidget extends Widget
 
 			// Construction du contenu pour le code Arduino
 			$host = substr(Url::base(''), 2);
-			$l_STR_CodeArduino =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Arduino',
+			$l_STR_CodeArduino =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code Arduino (C++)',
 					"content"	=> Html::tag("h3","Exemple") 
-									.Html::tag("p","Ceci est un exemple de code écrit pour un Arduino pour envoyer une Payload formatée dans la base TOCIO.")
+									.Html::tag("p","Exemple de code écrit pour un Arduino pour envoyer une Payload formatée dans la base TOCIO.")
 									.Html::tag("pre", $this->_codeArduino( $host, $l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code Arduino
 					"class"		=> "mb-3 px-0 PythonCode",
 					"style" 	=> "max-width: 90rem",
 			]);
-			
+
+			// Construction du code pour l'envoie via MQTT
+			$l_STR_CodeMQTT = "";
+			if( isset(\Yii::$app->params['MQTT']) ){
+				$l_STR_CodeMQTT = $this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Code MQTT (python3)',
+				"content"	=> Html::tag("h3","Exemple") 
+								.Html::tag("p","Exemple de code Python écrit pour un envoie sur un broker MQTT.")
+								.Html::tag("pre", $this->_codeMQTT( $host, $l_OBJ_Module->identifiantReseau, $l_TAB_Grandeurs)),	# Code MQTT
+				"class"		=> "mb-3 px-0 PythonCode",
+				"style" 	=> "max-width: 90rem"
+				]);
+			}
+
+
+
 			// Construction du contenu pour le code dans un fichier CSV
 			$l_STR_CodeCSV =$this->_cardBox(["header" 	=> '<i class="glyphicon glyphicon-eye-open"></i> Formattage d\'un fichier CSV',
 					"content"	=> Html::tag("h3","Exemple") 
-									.Html::tag("p","Ceci est un exemple de fichier CSV pouvant être importé pour ce module.")
+									.Html::tag("p","Exemple de fichier CSV pouvant être importé pour ce module.")
 									.Html::tag("p",tocioRegles::widget(["regle" => "fichiercsv"]))
 									.Html::tag("p","Ordre des champs :")
 									.Html::tag("ol", $this->_codeCSVEntetes($l_TAB_Grandeurs))
@@ -312,6 +326,7 @@ class modulesWidget extends Widget
 			$contents[] = 		Html::tag("p", $this->_legende(implode("", $formatTrameWifi).implode("", $formatTrame), "Format attendu de la payload WIFI <span class='TramePayload'></span>"));
 			$contents[] = 		Html::tag("p", $l_STR_CodePython);
 			$contents[] = 		Html::tag("p", $l_STR_CodeArduino);
+			$contents[] = 		Html::tag("p", $l_STR_CodeMQTT);
 			$contents[] = 		Html::tag("p", $l_STR_CodeCSV);
 			$contents[] = 	"</fieldset>";
 			$contents[] = "</div>";
@@ -716,6 +731,10 @@ class modulesWidget extends Widget
 	 */
 	private function _codePython($url, $id, $params ){
 		$ligne = [];
+
+		$ligne[] = "'''This programme is provided as sample from";
+		$ligne[] = $this->_TOCIOinAsciArt();
+		$ligne[] = "'''";
 		
 		$format = [];
 		$natures = [];
@@ -956,6 +975,124 @@ class modulesWidget extends Widget
 		$ligne[]	= implode(";", $champs);
 		
 		
+		return implode("<br/>",$ligne);
+	}
+
+
+
+
+	// _____________________________________________________________________________________________
+	/**
+	 * Formattage de code Python pour envoyer la trame sur un brocker MQTT.
+	 *
+	 * @param string $url : URL sur laquelle envoyer la payload.
+	 * @param string $id : l'ID du module (son identifiant réseau)
+	 * @param array $params : tableau contenant les grandeurs à envoyer dans la payload. Tableau indexé sous la forme ['nature' => ....., 'format'=> ....]
+	 * @return string
+	 * 
+	 * @version 23 juin 2022	: APE - Création.
+	 */
+	private function _codeMQTT($url, $id, $params){
+		$MQTT_Conf = \Yii::$app->params['MQTT'];
+
+		$ligne = [];
+		$ligne[] = "'''";
+		$ligne[] = "This Python3 programme is provided as sample from";
+		$ligne[] = $this->_TOCIOinAsciArt();
+		$ligne[] = "to send data to an MQTT brocker for module ".$id;
+		$ligne[] = "This module have sensor :";
+		foreach ( $params as $grandeur ){$ligne[] = "- ".$grandeur['nature'];}
+		$ligne[] = "___________________________________________________";
+		$ligne[] = "'''";
+		$ligne[] = "";
+		$ligne[] = "";
+
+		$ligne[] = "from paho.mqtt import client as mqtt_client";
+		$ligne[] = "from time import time";
+		$ligne[] = "import random";
+		$ligne[] = "";
+		$ligne[] = "MQTT_topic     = \"".$MQTT_Conf['topic']."mesure/add/".$id."\";";
+		$ligne[] = "MQTT_brocker   = \"".$MQTT_Conf['brocker']."\";";
+		$ligne[] = "MQTT_port      = ".$MQTT_Conf['port'].";";
+		$ligne[] = "MQTT_username  = \"".$MQTT_Conf['username']."\";";
+		$ligne[] = "MQTT_password  = \"".$MQTT_Conf['password']."\";";
+		$ligne[] = "MQTT_client_id = f'TOCIO-mqtt-{random.randint(0, 1000)}'";
+		$ligne[] = "";
+		
+
+		// Connection au brocker MQTT ----------------------------------------
+		$ligne[] = "# Set Connecting Client ID";
+		$ligne[] = "def connect_mqtt():";
+		$ligne[] = "	client = mqtt_client.Client(MQTT_client_id)";
+		$ligne[] = "	client.username_pw_set(MQTT_username, MQTT_password)";
+		$ligne[] = "	client.connect(MQTT_brocker, MQTT_port)";
+		$ligne[] = "	return client";
+		$ligne[] = "";
+		
+
+
+		// Generation de la payload ----------------------------------------
+		$ligne[] = "# Module ".$id." have ".count($params)." sensor(s),";
+		$ligne[] = "# so you need to send all the related mesures in same order as defined in TOCIO's Back Office";
+		$ligne[] = "def getPayload():";
+		$format = [];
+		$natures = [];
+		$compteur = 0;
+		foreach ( $params as $grandeur ){
+			// Si le nom de la Grandeur a pas un espace
+			if( stripos( $grandeur['nature']," ") !== false){
+				list($nature, $null) = explode(" ", $grandeur['nature']);
+			} else {
+				$nature = $grandeur['nature'];
+			}
+			$natureValue = $nature.$compteur++;
+			$variable = strtolower($this->_stripAccents($natureValue));
+			$natures[] = $variable;
+			
+			$format[] = $this->_codePythonFormatChaine($grandeur['format']);
+			$ligne[] = "	# ".strtolower($this->_stripAccents($natureValue))." is the '".$nature."' value from your sensor '".$grandeur['nomCapteur']."' (as float)";
+			$ligne[] = "	".$variable." = 0000.00 # <- Your code to read value from sensor goes here ";
+			$ligne[] = "";
+		}
+		$ligne[] = '	payload = "'.implode("", $format).'".format('.implode(",", $natures).')';
+		$ligne[] = "	return payload";
+		$ligne[] = "";
+
+		$ligne[] = "";
+
+		// MAIN ----------------------------------------
+		$ligne[] = "if __name__ == '__main__':";
+		$ligne[] = "	# MQTT Broker Connection";
+		$ligne[] = "	client = connect_mqtt()";
+		$ligne[] = "	client.loop_start()";
+		$ligne[] = "";
+		$ligne[] = "	# Data";
+		$ligne[] = "	timestamp = time()";
+		$ligne[] = "	payload   = getPayload()";
+		$ligne[] = "";
+		$ligne[] = "	# MQTT Message";
+		$ligne[] = "	message = payload + \";\" + str(int(timestamp))";
+		$ligne[] = "";
+		$ligne[] = "	# MQTT Publish";
+		$ligne[] = "	client.publish(topic=MQTT_topic, payload=message, qos=1 )";
+		$ligne[] = "";
+		$ligne[] = "	# MQTT Deconnection";
+		$ligne[] = "	client.disconnect()";
+		$ligne[] = "";
+
+
+
+		return implode("<br/>",$ligne);
+	}
+
+	private function _TOCIOinAsciArt(){
+		$ligne = [];
+		$ligne[] = "_|_|_|_|_|                    _|           ";
+		$ligne[] = "    _|      _|_|      _|_|_|        _|_|   ";
+		$ligne[] = "    _|    _|    _|  _|        _|  _|    _| ";
+		$ligne[] = "    _|    _|    _|  _|        _|  _|    _| ";
+		$ligne[] = "    _|      _|_|      _|_|_|  _|    _|_|   ";
+
 		return implode("<br/>",$ligne);
 	}
 }
