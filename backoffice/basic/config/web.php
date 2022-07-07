@@ -166,6 +166,14 @@ $config = [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
+                    'controller' => 'config',
+                    'pluralize' => false,
+                    'patterns' => [
+                    	'GET config' => 'getconfig',
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
                     'controller' => 'codegenerator',
                     'pluralize' => false,
                     'patterns' => [
@@ -216,9 +224,9 @@ if (YII_ENV_DEV) {
         'allowedIPs' => [
             '127.0.0.1',
             '::1',
+            '172.19.105.158',
             '192.168.0.*'
         ]
-        // 'allowedIPs' => ['*'],
     ];
 }
 

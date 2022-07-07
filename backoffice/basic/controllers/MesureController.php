@@ -42,12 +42,38 @@ class MesureController extends ActiveController {
 		$params	= json_decode( $json , true);	// Convertion dans un tableau de valeur indexées
 
 
-		// Get the mysql table to store the data we just received
 
+		// get the module ID from database (or error if moduleID dosen't exist) ----------
+		$ret = $this->_isModuleIDValide($moduleID);
+		// Le retour de la fonction nous pas renvoyé un objet Module (mais un JSON avec l'erreur).
+		if( !($ret instanceof Module) ){
+			return $ret;
+		}
+
+
+		$l_OBJ_Query= new Query();
+		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom as capteurnom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z, rmc.nomcapteur, rmc.ordre')
+		->from('module as m')
+		->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
+		->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
+		->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
+		->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
+		->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
+		->orderBy(['rmc.ordre'=> SORT_ASC])
+		->all();
+
+		return $l_TAB_Results;
+
+
+
+		// Get the tablename from Grandeur with the moduleID
+		return $params;
 		
-		// Return a result from the insert in database
-		return var_dump($params);
+		// ENREGISTRE LA MESURE ----------------------------------------------------------
 	}
+
+
+	
 	
 	//==============================================================================================
 	/**
@@ -259,8 +285,19 @@ class MesureController extends ActiveController {
 		// Recuperation du streamId envoyé par LORA en quise d'ID unique de module.
 		$moduleID 	= $params['metadata']['network']['lora']['devEUI'];
 		
-		
+
+
+		// get the module ID from database (or error if moduleID dosen't exist) ----------
+		$module = $this->_isModuleIDValide($moduleID);
+		// Le retour de la fonction nous a renvoyé un JSON.
+		if( !($module instanceof Module) ){
+			return $module;
+		}
+
+
+
 		// SI L'ID DU MODULE N'EST PAS RÉFÉRENCÉ DANS LA BASE ----------------------------
+		/*
 		if( !$this->_moduleIdIsValid($moduleID)){
 			// On fait une trace dans la base
 			Yii::error("Module <".$moduleID."> inconnu dans la base.", "tocio");
@@ -278,7 +315,7 @@ class MesureController extends ActiveController {
 			
 			// Renvoie un message d'erreur
 			return json_encode( ['error'	=> "Module ".$moduleID." disabled."] );
-		}
+		}*/
 		
 		
 		$timestamp	= $params['timestamp'];
@@ -690,6 +727,39 @@ class MesureController extends ActiveController {
 		$str = '';
 		for($i=0;$i<strlen($hex);$i+=2) $str .= chr(hexdec(substr($hex,$i,2)));
 		return $str;
+	}
+
+
+
+	//==============================================================================================
+	/**
+	 * Test a moduleID.
+	 * @param string moduleID : the ID to test in the module table
+	 * @return json in case of error, module object if everything is ok.
+	 */
+	private function _isModuleIDValide($moduleID){
+		
+		// Check if moduleid is in database 
+		if( !$this->_moduleIdIsValid($moduleID)){
+			// On fait une trace dans la base
+			Yii::error("Module <".$moduleID."> inconnu dans la base.", "tocio");
+			
+			// Renvoie un message d'erreur
+			return json_encode( ['error'	=> "Module ".$moduleID." not declared."] );
+		}
+		
+				
+		// If the module is desactivate
+		$module = Module::findOne($moduleID);
+		if( $module->actif == 0){
+			// On fait une trace dans la base
+			Yii::error("Module <".$moduleID."> désactivé.", "tocio");
+			
+			// Renvoie un message d'erreur
+			return json_encode( ['error'	=> "Module ".$moduleID." disabled."] );
+		}
+
+		return $module;
 	}
 }
 ?>
