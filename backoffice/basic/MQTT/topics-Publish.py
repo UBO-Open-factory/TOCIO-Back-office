@@ -20,7 +20,7 @@ from paho.mqtt import client as mqtt_client
 from time import time
 import random
 
-MQTT_topic     = "tocio/mesure/add/TESTALEX";
+MQTT_topic     = "tocio/Data/mesure/add/TESTALEX";
 MQTT_brocker   = "mqtt-uof.univ-brest.fr";
 MQTT_port      = 1883;
 MQTT_username  = "fablab";

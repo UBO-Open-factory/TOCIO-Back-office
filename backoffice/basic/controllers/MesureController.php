@@ -25,52 +25,7 @@ class MesureController extends ActiveController {
 	
 	
 
-	//==============================================================================================
-	/**
-	 * This allow to insert mesure to a moduleID in the database from a json input.
-	 * Json should be like :
-	 *  {"moduleID": "TESTALEX", "capteurID": "5", "ordre": "1", "IdGrandeur": "6", "value": "18", "timestamp": "1655301249"}
-	 */
-	public function actionPostfrommqtt(){
-		// Recuperation du moduleID passé dans l"URL
-		$get	= \Yii::$app->request->get();
-		$moduleID 	= $get['moduleid'];
 
-
-		// Get data in json format
-		$json 	= \Yii::$app->request->getRawBody();
-		$params	= json_decode( $json , true);	// Convertion dans un tableau de valeur indexées
-
-
-
-		// get the module ID from database (or error if moduleID dosen't exist) ----------
-		$ret = $this->_isModuleIDValide($moduleID);
-		// Le retour de la fonction nous pas renvoyé un objet Module (mais un JSON avec l'erreur).
-		if( !($ret instanceof Module) ){
-			return $ret;
-		}
-
-
-		$l_OBJ_Query= new Query();
-		$l_TAB_Results = $l_OBJ_Query->select('m.nom, m.identifiantReseau, m.description, c.nom as capteurnom, g.nature, g.tablename, g.formatCapteur, rmc.x, rmc.y, rmc.z, rmc.nomcapteur, rmc.ordre')
-		->from('module as m')
-		->innerJoin('rel_modulecapteur as rmc', 'm.identifiantReseau = rmc.idModule')
-		->innerJoin('capteur as c', 'rmc.idCapteur = c.id')
-		->innerJoin('rel_capteurgrandeur as rcg', 'rcg.idCapteur = c.id')
-		->innerJoin('grandeur as g', 'g.id = rcg.idGrandeur')
-		->where('m.identifiantReseau = :identifiantReseau', ['identifiantReseau' => $moduleID])
-		->orderBy(['rmc.ordre'=> SORT_ASC])
-		->all();
-
-		return $l_TAB_Results;
-
-
-
-		// Get the tablename from Grandeur with the moduleID
-		return $params;
-		
-		// ENREGISTRE LA MESURE ----------------------------------------------------------
-	}
 
 
 	

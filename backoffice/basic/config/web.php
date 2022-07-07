@@ -129,7 +129,6 @@ $config = [
                     'controller' => 'mesure',
                     'pluralize' => false,
                     'patterns' => [
-                        'POST add/mqtt/<moduleid>'      => 'postfrommqtt',
                     	'POST addlora'                  => 'addlora',
                         'GET addlora'                   => 'addloraget',
                     	'PUT uploadcsv/<id>'            => 'uploadcsv',

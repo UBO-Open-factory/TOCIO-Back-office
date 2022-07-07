@@ -1,6 +1,9 @@
 '''
 Ce script permet de s'abonner aux topics MQTT pour enregistrer les messges contenant une valeur
-d'un cpateur
+d'un capteur.
+
+La configuration du topic utilisé se fait à partir de l'API du Back Office (une requète est 
+envoyé au BO pour récupérer son nom).
 
 Install dependencies in virtual env :
 python3 -m venv venv
@@ -13,11 +16,11 @@ import socket
 import json
 
 
-serverTOCIOLocal = "http://localhost:8888/mesure/add/mqtt"
+serverTOCIOLocal = "http://localhost:8888/mesure/add/"
 
 MQTT_broker     = 'mqtt-uof.univ-brest.fr'
 MQTT_port       = 1883
-MQTT_topic      = "tocio/#"
+MQTT_topic      = "tocio/Data"
 MQTT_client_id  = f'TOCIO-mqtt-{socket.gethostname()}'
 MQTT_username   = 'fablab'
 MQTT_password   = 'Youpi-Tralala_socMEwlI9SH9'
@@ -35,12 +38,11 @@ def sendDataToAPI(payload, moduleID):
     headers["Content-Type"] = "application/json"
     
     # send the request in post format
-    print("Try to post to ", serverTOCIOLocal + "/" + moduleID)
-    resp = requests.post(serverTOCIOLocal +  "/" + moduleID, headers=headers, data=payload)
+    print("Try to post (GET) to ", serverTOCIOLocal + "/" + moduleID)
+    # resp = requests.post(serverTOCIOLocal +  "/" + moduleID, headers=headers, data=payload)
+    resp = requests.get(serverTOCIOLocal +  "/" + moduleID + "/" + payload)
     print("Retour du serveur : ",resp.status_code)
     print("text du Retour du serveur : ",resp.text)
-
-
 
 
 
@@ -74,7 +76,7 @@ def on_message(client, userdata, message):
     # Payload decode
     payload = message.payload.decode('utf-8')
     
-    # Extract moduleID from topic like tocio/mesure/add/TEST_2
+    # Extract moduleID from topic like tocio/<Tocio'sName>/mesure/add/TEST_2
     moduleID = message.topic.split("/")[-1]
 
     # Send json structure to TOCIO API
