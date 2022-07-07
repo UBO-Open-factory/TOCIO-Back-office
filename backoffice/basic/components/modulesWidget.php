@@ -1011,7 +1011,7 @@ class modulesWidget extends Widget
 		$ligne[] = "from time import time";
 		$ligne[] = "import random";
 		$ligne[] = "";
-		$ligne[] = "MQTT_topic     = \"".$MQTT_Conf['topic']."mesure/add/".$id."\";";
+		$ligne[] = "MQTT_topic     = \"".$MQTT_Conf['topic'].\Yii::$app->name."/mesure/add/".$id."\";";
 		$ligne[] = "MQTT_brocker   = \"".$MQTT_Conf['brocker']."\";";
 		$ligne[] = "MQTT_port      = ".$MQTT_Conf['port'].";";
 		$ligne[] = "MQTT_username  = \"".$MQTT_Conf['username']."\";";
