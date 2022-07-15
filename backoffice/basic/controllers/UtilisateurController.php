@@ -303,7 +303,7 @@ class UtilisateurController extends Controller {
 					// Initiate the email sender
 					$emailSenderName 	= Yii::$app->params['senderName'];
 					$emailSubject		= "TOCIO : Reset Your password";
-					$emailsSenderEmail	= Yii::$app->params['senderEmail'];
+					$emailFrom			= Yii::$app->params['senderEmail'];
 
 					
 					
@@ -311,26 +311,25 @@ class UtilisateurController extends Controller {
 					// Create email content
 					$name = '=?UTF-8?B?'.base64_encode( $emailSenderName ).'?=';
 					$subject = '=?UTF-8?B?'.base64_encode( $emailSubject ).'?=';
-					$headers = "From: $name <{$emailsSenderEmail}>\r\n"."Reply-To: {$emailsSenderEmail}\r\n"."MIME-Version: 1.0\r\n"."Content-type: text/html; charset=UTF-8";
+					$headers = "From: $name <{$emailFrom}>\r\n"."Reply-To: {$emailFrom}\r\n"."MIME-Version: 1.0\r\n"."Content-type: text/html; charset=UTF-8";
 					
-					$emailSubject 		= "Reset Password";
 					$emailContent 		= "You ask to reset your password<br/>
 							<a href=\"".$url."\">Click Here to Reset Password</a>";
 
-					/*
 					// Compose email
 					$mail = Yii::$app->mailer->compose()
-						->setFrom($emailsSenderEmail)
+						->setFrom($emailFrom)
 						->setTo($userEmail)
-						->setSubject($emailSubject)
-						->setHtmlBody($emailContent);
-						
+						->setSubject($emailSubject);
+
+					$mail->setHtmlBody($emailContent);
+
+
 					// Send email
 					$mail->send();
-					*/
 
 
-					mail( $userEmail, $subject, $emailContent, $headers ); #	<- Old (obsolete) way to send email
+					//mail( $userEmail, $subject, $emailContent, $headers ); #	<- Old (obsolete) way to send email
 					$this->refresh();
 					
 					// Redirection to the login page

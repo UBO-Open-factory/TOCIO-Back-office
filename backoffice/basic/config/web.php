@@ -63,19 +63,17 @@ $config = [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
 
-            'useFileTransport' => true,
+            'useFileTransport' => false,
             // if set to "true" -> send all mails to a file
             // if set to "false" -> send email to your transport configuration (you have to configure it)
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'encryption' => 'tls',
+                'encryption' => $params['SMTP_encryption'],
                 'host' => $params['SMTP_host'],
             	'port' => $params['SMTP_port'],
             	'username' => $params['SMTP_username'],
             	'password' => $params['SMTP_password'],
             ],
-        	'adminEmail' => "no_reply_tocio@univ-brest.fr",
-        	"adminName" => "Administration TOCIO",
         ],
 
         // le composant "log" traite les messages avec un horodatage (timestamp).
