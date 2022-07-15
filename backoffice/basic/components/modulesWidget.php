@@ -1085,6 +1085,11 @@ class modulesWidget extends Widget
 		return implode("<br/>",$ligne);
 	}
 
+	
+	// _____________________________________________________________________________________________
+	/**
+	 * Renvoie un code Ascii Art pour le nom de l'appli.
+	 */
 	private function _TOCIOinAsciArt(){
 		$ligne = [];
 		$ligne[] = "_|_|_|_|_|                    _|           ";
