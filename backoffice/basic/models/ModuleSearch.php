@@ -48,6 +48,13 @@ class ModuleSearch extends Module
         // @see https://www.yiiframework.com/doc/guide/2.0/fr/output-data-widgets ( section "Travail avec des relations entre modèles" )
         $query->joinWith(['localisationModule AS localisationModule']);
         
+
+        // Création du dataprovider
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => ['pageSize' => 15,],
+            'sort' => ['defaultOrder' => ['nom' => SORT_ASC]],
+        ]);
         
         // POUVOIR TRIER SELON LA LOCALISATION DU MODULE EN TOUTE LETTRES (table locallisationModule)
         $dataProvider->sort->attributes['localisationModule.description'] = [
@@ -62,11 +69,6 @@ class ModuleSearch extends Module
         $query->joinWith(['idCapteurs as idCapteurs']);
 
         
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-			'pagination' => ['pageSize' => 15,],
-        	'sort' => ['defaultOrder' => ['nom' => SORT_ASC]],
-        ]);
 
         $this->load($params);
 
