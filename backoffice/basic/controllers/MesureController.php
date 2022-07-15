@@ -24,6 +24,11 @@ class MesureController extends ActiveController {
 	public $modelClass = 'app\models\mesure';
 	
 	
+
+
+
+
+	
 	
 	//==============================================================================================
 	/**
@@ -235,8 +240,19 @@ class MesureController extends ActiveController {
 		// Recuperation du streamId envoyé par LORA en quise d'ID unique de module.
 		$moduleID 	= $params['metadata']['network']['lora']['devEUI'];
 		
-		
+
+
+		// get the module ID from database (or error if moduleID dosen't exist) ----------
+		$module = $this->_isModuleIDValide($moduleID);
+		// Le retour de la fonction nous a renvoyé un JSON.
+		if( !($module instanceof Module) ){
+			return $module;
+		}
+
+
+
 		// SI L'ID DU MODULE N'EST PAS RÉFÉRENCÉ DANS LA BASE ----------------------------
+		/*
 		if( !$this->_moduleIdIsValid($moduleID)){
 			// On fait une trace dans la base
 			Yii::error("Module <".$moduleID."> inconnu dans la base.", "tocio");
@@ -254,7 +270,7 @@ class MesureController extends ActiveController {
 			
 			// Renvoie un message d'erreur
 			return json_encode( ['error'	=> "Module ".$moduleID." disabled."] );
-		}
+		}*/
 		
 		
 		$timestamp	= $params['timestamp'];
@@ -264,7 +280,6 @@ class MesureController extends ActiveController {
 		
 		// ENREGISTRE LA MESURE ----------------------------------------------------------
 		return $this->_storeMesure($moduleID, $mesures);
-		
 	}
 	
 	
@@ -667,6 +682,39 @@ class MesureController extends ActiveController {
 		$str = '';
 		for($i=0;$i<strlen($hex);$i+=2) $str .= chr(hexdec(substr($hex,$i,2)));
 		return $str;
+	}
+
+
+
+	//==============================================================================================
+	/**
+	 * Test a moduleID.
+	 * @param string moduleID : the ID to test in the module table
+	 * @return json in case of error, module object if everything is ok.
+	 */
+	private function _isModuleIDValide($moduleID){
+		
+		// Check if moduleid is in database 
+		if( !$this->_moduleIdIsValid($moduleID)){
+			// On fait une trace dans la base
+			Yii::error("Module <".$moduleID."> inconnu dans la base.", "tocio");
+			
+			// Renvoie un message d'erreur
+			return json_encode( ['error'	=> "Module ".$moduleID." not declared."] );
+		}
+		
+				
+		// If the module is desactivate
+		$module = Module::findOne($moduleID);
+		if( $module->actif == 0){
+			// On fait une trace dans la base
+			Yii::error("Module <".$moduleID."> désactivé.", "tocio");
+			
+			// Renvoie un message d'erreur
+			return json_encode( ['error'	=> "Module ".$moduleID." disabled."] );
+		}
+
+		return $module;
 	}
 }
 ?>

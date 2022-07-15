@@ -2,11 +2,12 @@
 
 namespace app\controllers;
 
+use yii\rest\ActiveController;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\models\GrandeurExportForm;
 
-class GrandeurexportController extends Controller {
+class GrandeurexportController extends ActiveController {
 	// _____________________________________________________________________________________________
 	/**
 	 *

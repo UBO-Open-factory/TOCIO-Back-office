@@ -16,6 +16,7 @@ use yii\web\UrlManager;
 use Elasticsearch\Endpoints\Cat\Aliases;
 use phpDocumentor\Reflection\Types\Null_;
 
+
 /**
  * UtilisateurController implements the CRUD actions for Utilisateur model.
  */
@@ -290,8 +291,6 @@ class UtilisateurController extends Controller {
  				$url = \yii\helpers\Url::to(['utilisateur/pwdverif', "token" => $model->accessToken], true);
 				
 				
-				
-				
 				if( $model->validate() ) {
 					
 					// Save the model (specially the token)
@@ -301,34 +300,43 @@ class UtilisateurController extends Controller {
 					Yii::$app->session->setFlash('forgot', 'A link to reset your password has been sent to your email' );
 				
 					
-				// Initiate the email sender
-				$emailSenderName 	= Yii::$app->params['senderName'];
-				$emailSubject		= "TOCIO : Reset Your password";
-				$emailsSenderEmail	= Yii::$app->params['senderEmail'];
+					// Initiate the email sender
+					$emailSenderName 	= Yii::$app->params['senderName'];
+					$emailSubject		= "TOCIO : Reset Your password";
+					$emailsSenderEmail	= Yii::$app->params['senderEmail'];
 
-				
-				
-				
-				// Create email content
-				$name = '=?UTF-8?B?'.base64_encode( $emailSenderName ).'?=';
-				$subject = '=?UTF-8?B?'.base64_encode( $emailSubject ).'?=';
-				$headers = "From: $name <{$emailsSenderEmail}>\r\n"."Reply-To: {$emailsSenderEmail}\r\n"."MIME-Version: 1.0\r\n"."Content-type: text/html; charset=UTF-8";
-				
-				$emailSenderName 	= "Administration TOCIO";
-				$emailsSenderEmail 	= "no_reply_tocio@univ-brest.fr";
-				$emailSubject 		= "Reset Password";
-				$emailContent 		= "You ask to reset your password<br/>
-	                    <a href=\"".$url."\">Click Here to Reset Password</a>";
+					
+					
+					
+					// Create email content
+					$name = '=?UTF-8?B?'.base64_encode( $emailSenderName ).'?=';
+					$subject = '=?UTF-8?B?'.base64_encode( $emailSubject ).'?=';
+					$headers = "From: $name <{$emailsSenderEmail}>\r\n"."Reply-To: {$emailsSenderEmail}\r\n"."MIME-Version: 1.0\r\n"."Content-type: text/html; charset=UTF-8";
+					
+					$emailSubject 		= "Reset Password";
+					$emailContent 		= "You ask to reset your password<br/>
+							<a href=\"".$url."\">Click Here to Reset Password</a>";
 
-				
-				// Send email
-				mail( $userEmail, $subject, $emailContent, $headers );
-				$this->refresh();
-				
-				// Redirection to the login page
-				$model = new LoginForm();
-				$model->password = '';
-				return $this->redirect(array( '/site/login', 'model' => $model ) );
+					/*
+					// Compose email
+					$mail = Yii::$app->mailer->compose()
+						->setFrom($emailsSenderEmail)
+						->setTo($userEmail)
+						->setSubject($emailSubject)
+						->setHtmlBody($emailContent);
+						
+					// Send email
+					$mail->send();
+					*/
+
+
+					mail( $userEmail, $subject, $emailContent, $headers ); #	<- Old (obsolete) way to send email
+					$this->refresh();
+					
+					// Redirection to the login page
+					$model = new LoginForm();
+					$model->password = '';
+					return $this->redirect(array( '/site/login', 'model' => $model ) );
 				}
 			}
 		}

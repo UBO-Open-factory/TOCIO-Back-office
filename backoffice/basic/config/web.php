@@ -9,9 +9,7 @@ $config = [
     'language' => 'fr-FR',
     'sourceLanguage' => 'fr-FR',
 	'timeZone' => 'Europe/Paris',
-    'bootstrap' => [
-        'log'
-    ],
+    'bootstrap' => ['log'],
     'version' => '1.3.2',
     'aliases' => [
         // Do not define anything here, but in web_local.php
@@ -131,11 +129,11 @@ $config = [
                     'controller' => 'mesure',
                     'pluralize' => false,
                     'patterns' => [
-                    	'PUT uploadcsv/<id>' => 'uploadcsv',
-                    	'POST addlora' => 'addlora',
-                        'GET addlora' => 'addloraget',
-                        'GET add/<moduleid>/<mesures>' => 'add',
-                        'GET get/<moduleid>' => 'get'
+                    	'POST addlora'                  => 'addlora',
+                        'GET addlora'                   => 'addloraget',
+                    	'PUT uploadcsv/<id>'            => 'uploadcsv',
+                        'GET add/<moduleid>/<mesures>'  => 'add',
+                        'GET get/<moduleid>'            => 'get'
                     ]
                 ],
                 [
@@ -163,6 +161,14 @@ $config = [
                     'pluralize' => false,
                     'patterns' => [
                     	'GET pwdverif<token:\d+>' => 'pwdverif',
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'config',
+                    'pluralize' => false,
+                    'patterns' => [
+                    	'GET config' => 'getconfig',
                     ]
                 ],
                 [
@@ -217,9 +223,9 @@ if (YII_ENV_DEV) {
         'allowedIPs' => [
             '127.0.0.1',
             '::1',
+            '172.19.105.158',
             '192.168.0.*'
         ]
-        // 'allowedIPs' => ['*'],
     ];
 }
 
