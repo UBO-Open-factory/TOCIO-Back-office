@@ -10,7 +10,7 @@ $config = [
     'sourceLanguage' => 'fr-FR',
 	'timeZone' => 'Europe/Paris',
     'bootstrap' => ['log'],
-    'version' => '1.3.2',
+    'version' => '1.3.3',
     'aliases' => [
         // Do not define anything here, but in web_local.php
     ],
